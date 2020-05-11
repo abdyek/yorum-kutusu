@@ -652,8 +652,31 @@ var DislikeButton = function (_React$Component22) {
     return DislikeButton;
 }(React.Component);
 
-var Categories = function (_React$Component23) {
-    _inherits(Categories, _React$Component23);
+var ComplaintButton = function (_React$Component23) {
+    _inherits(ComplaintButton, _React$Component23);
+
+    function ComplaintButton() {
+        _classCallCheck(this, ComplaintButton);
+
+        return _possibleConstructorReturn(this, (ComplaintButton.__proto__ || Object.getPrototypeOf(ComplaintButton)).apply(this, arguments));
+    }
+
+    _createClass(ComplaintButton, [{
+        key: "render",
+        value: function render() {
+            return React.createElement(
+                "button",
+                { "class": "ui basic button" },
+                React.createElement("i", { id: "exclamation", "class": "fa fa-exclamation", "aria-hidden": "true" })
+            );
+        }
+    }]);
+
+    return ComplaintButton;
+}(React.Component);
+
+var Categories = function (_React$Component24) {
+    _inherits(Categories, _React$Component24);
 
     function Categories() {
         _classCallCheck(this, Categories);
@@ -709,8 +732,8 @@ var Categories = function (_React$Component23) {
     return Categories;
 }(React.Component);
 
-var App = function (_React$Component24) {
-    _inherits(App, _React$Component24);
+var App = function (_React$Component25) {
+    _inherits(App, _React$Component25);
 
     function App(props) {
         _classCallCheck(this, App);
@@ -734,8 +757,8 @@ var App = function (_React$Component24) {
     return App;
 }(React.Component);
 
-var Header = function (_React$Component25) {
-    _inherits(Header, _React$Component25);
+var Header = function (_React$Component26) {
+    _inherits(Header, _React$Component26);
 
     function Header() {
         _classCallCheck(this, Header);
@@ -800,8 +823,8 @@ var Header = function (_React$Component25) {
     return Header;
 }(React.Component);
 
-var Content = function (_React$Component26) {
-    _inherits(Content, _React$Component26);
+var Content = function (_React$Component27) {
+    _inherits(Content, _React$Component27);
 
     function Content() {
         _classCallCheck(this, Content);
@@ -825,8 +848,8 @@ var Content = function (_React$Component26) {
     return Content;
 }(React.Component);
 
-var Product = function (_React$Component27) {
-    _inherits(Product, _React$Component27);
+var Product = function (_React$Component28) {
+    _inherits(Product, _React$Component28);
 
     function Product() {
         _classCallCheck(this, Product);
@@ -857,8 +880,8 @@ var Product = function (_React$Component27) {
     return Product;
 }(React.Component);
 
-var Comments = function (_React$Component28) {
-    _inherits(Comments, _React$Component28);
+var Comments = function (_React$Component29) {
+    _inherits(Comments, _React$Component29);
 
     function Comments() {
         _classCallCheck(this, Comments);
@@ -903,8 +926,8 @@ var Comments = function (_React$Component28) {
     return Comments;
 }(React.Component);
 
-var Comment = function (_React$Component29) {
-    _inherits(Comment, _React$Component29);
+var Comment = function (_React$Component30) {
+    _inherits(Comment, _React$Component30);
 
     function Comment() {
         _classCallCheck(this, Comment);
@@ -948,7 +971,8 @@ var Comment = function (_React$Component29) {
                                     FloatRight,
                                     null,
                                     React.createElement(LikeButton, { value: this.props.likeValue }),
-                                    React.createElement(DislikeButton, { value: this.props.dislikeValue })
+                                    React.createElement(DislikeButton, { value: this.props.dislikeValue }),
+                                    React.createElement(ComplaintButton, null)
                                 )
                             )
                         )
@@ -961,8 +985,8 @@ var Comment = function (_React$Component29) {
     return Comment;
 }(React.Component);
 
-var Footer = function (_React$Component30) {
-    _inherits(Footer, _React$Component30);
+var Footer = function (_React$Component31) {
+    _inherits(Footer, _React$Component31);
 
     function Footer() {
         _classCallCheck(this, Footer);

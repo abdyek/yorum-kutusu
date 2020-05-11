@@ -28,6 +28,10 @@ header > div {
     width:500px;
 }
 
+#exclamation {
+    color:#d83900;
+}
+
 #logo h1 {
     line-height:60px;
     font-family: 'Dancing Script', cursive;

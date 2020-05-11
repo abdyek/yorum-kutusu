@@ -297,6 +297,18 @@ class DislikeButton extends React.Component {
     }
 }
 
+
+class ComplaintButton extends React.Component {
+    render() {
+        return (
+            <button class="ui basic button">
+                <i id="exclamation" class="fa fa-exclamation" aria-hidden="true"></i>
+            </button>
+        )
+    }
+}
+
+
 class Categories extends React.Component {
     render(){
         return(
@@ -440,6 +452,8 @@ class Comment extends React.Component {
                                 <FloatRight>
                                     <LikeButton value={this.props.likeValue}/>
                                     <DislikeButton value={this.props.dislikeValue}/>
+                                    <ComplaintButton />
+                                    
                                 </FloatRight>
                             </Column>
                         </Row>
