@@ -32,6 +32,14 @@ header > div {
     color:#d83900;
 }
 
+.likedComment {
+    color:#2185d0;
+}
+
+.dislikedComment {
+    color:#db2828;
+}
+
 #logo h1 {
     line-height:60px;
     font-family: 'Dancing Script', cursive;

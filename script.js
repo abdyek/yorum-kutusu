@@ -599,10 +599,17 @@ var Example = function (_React$Component20) {
 var LikeButton = function (_React$Component21) {
     _inherits(LikeButton, _React$Component21);
 
-    function LikeButton() {
+    function LikeButton(props) {
         _classCallCheck(this, LikeButton);
 
-        return _possibleConstructorReturn(this, (LikeButton.__proto__ || Object.getPrototypeOf(LikeButton)).apply(this, arguments));
+        var _this21 = _possibleConstructorReturn(this, (LikeButton.__proto__ || Object.getPrototypeOf(LikeButton)).call(this, props));
+
+        if (_this21.props.likeOrDislike == "like") {
+            _this21.liked = " likedComment";
+        } else {
+            _this21.liked = " ";
+        }
+        return _this21;
     }
 
     _createClass(LikeButton, [{
@@ -614,7 +621,7 @@ var LikeButton = function (_React$Component21) {
                 React.createElement(
                     "i",
                     { "class": "icon" },
-                    React.createElement("i", { "class": "fa fa-thumbs-up", "aria-hidden": "true" })
+                    React.createElement("i", { "class": "fa fa-thumbs-up" + this.liked, "aria-hidden": "true" })
                 ),
                 this.props.value
             );
@@ -627,10 +634,17 @@ var LikeButton = function (_React$Component21) {
 var DislikeButton = function (_React$Component22) {
     _inherits(DislikeButton, _React$Component22);
 
-    function DislikeButton() {
+    function DislikeButton(props) {
         _classCallCheck(this, DislikeButton);
 
-        return _possibleConstructorReturn(this, (DislikeButton.__proto__ || Object.getPrototypeOf(DislikeButton)).apply(this, arguments));
+        var _this22 = _possibleConstructorReturn(this, (DislikeButton.__proto__ || Object.getPrototypeOf(DislikeButton)).call(this, props));
+
+        if (_this22.props.likeOrDislike == "dislike") {
+            _this22.liked = " dislikedComment";
+        } else {
+            _this22.liked = " ";
+        }
+        return _this22;
     }
 
     _createClass(DislikeButton, [{
@@ -642,7 +656,7 @@ var DislikeButton = function (_React$Component22) {
                 React.createElement(
                     "i",
                     { "class": "icon" },
-                    React.createElement("i", { "class": "fa fa-thumbs-down", "aria-hidden": "true" })
+                    React.createElement("i", { "class": "fa fa-thumbs-down" + this.liked, "aria-hidden": "true" })
                 ),
                 this.props.value
             );
@@ -899,13 +913,15 @@ var Comments = function (_React$Component29) {
                     commentOwner: "R\u0131dvan T\xFClemen",
                     commentText: "Yinelenen bir sayfa i\xE7eri\u011Finin okuyucunun dikkatini da\u011F\u0131tt\u0131\u011F\u0131 bilinen bir ger\xE7ektir. Lorem Ipsum kullanman\u0131n amac\u0131, s\xFCrekli 'buraya metin gelecek, buraya metin gelecek' yazmaya k\u0131yasla daha dengeli bir harf da\u011F\u0131l\u0131m\u0131 sa\u011Flayarak okunurlu\u011Fu art\u0131rmas\u0131d\u0131r. \u015Eu anda bir\xE7ok masa\xFCst\xFC yay\u0131nc\u0131l\u0131k paketi ve web sayfa d\xFCzenleyicisi, varsay\u0131lan m\u0131g\u0131r metinler olarak Lorem Ipsum kullanmaktad\u0131r. Ayr\u0131ca arama motorlar\u0131nda 'lorem ipsum' anahtar s\xF6zc\xFCkleri ile arama yap\u0131ld\u0131\u011F\u0131nda hen\xFCz tasar\u0131m a\u015Famas\u0131nda olan \xE7ok say\u0131da site listelenir. Y\u0131llar i\xE7inde, bazen kazara, bazen bilin\xE7li olarak (\xF6rne\u011Fin mizah kat\u0131larak), \xE7e\u015Fitli s\xFCr\xFCmleri geli\u015Ftirilmi\u015Ftir.",
                     likeValue: "312",
-                    dislikeValue: "31"
+                    dislikeValue: "31",
+                    likeOrDislike: "like"
                 }),
                 React.createElement(Comment, {
                     commentOwner: "RTE_53",
                     commentText: "Eyyy k\u0131l\u0131\xE7dar sen kimsin yaa!!",
                     likeValue: "9912312312",
-                    dislikeValue: "912"
+                    dislikeValue: "912",
+                    likeOrDislike: "dislike"
                 }),
                 React.createElement(Comment, {
                     commentOwner: "ByKemal31",
@@ -929,10 +945,10 @@ var Comments = function (_React$Component29) {
 var Comment = function (_React$Component30) {
     _inherits(Comment, _React$Component30);
 
-    function Comment() {
+    function Comment(props) {
         _classCallCheck(this, Comment);
 
-        return _possibleConstructorReturn(this, (Comment.__proto__ || Object.getPrototypeOf(Comment)).apply(this, arguments));
+        return _possibleConstructorReturn(this, (Comment.__proto__ || Object.getPrototypeOf(Comment)).call(this, props));
     }
 
     _createClass(Comment, [{
@@ -970,8 +986,8 @@ var Comment = function (_React$Component30) {
                                 React.createElement(
                                     FloatRight,
                                     null,
-                                    React.createElement(LikeButton, { value: this.props.likeValue }),
-                                    React.createElement(DislikeButton, { value: this.props.dislikeValue }),
+                                    React.createElement(LikeButton, { value: this.props.likeValue, likeOrDislike: this.props.likeOrDislike }),
+                                    React.createElement(DislikeButton, { value: this.props.dislikeValue, likeOrDislike: this.props.likeOrDislike }),
                                     React.createElement(ComplaintButton, null)
                                 )
                             )
