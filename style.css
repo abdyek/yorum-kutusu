@@ -1,0 +1,73 @@
+header {
+    margin-bottom:30px;
+    background-color: #01BAEF;
+    box-shadow: 0 1rem 1rem #00000080;
+}
+
+header > div {
+    margin:0 !important;
+}
+
+#headerContent {
+    padding:10px;
+    padding-left:0;
+}
+
+.floatRight {
+    float:right;
+}
+
+.commentHeader {
+    padding:10px;
+}
+.commentText {
+    padding:20px;
+}
+
+#productImg {
+    width:500px;
+}
+
+#logo h1 {
+    line-height:60px;
+    font-family: 'Dancing Script', cursive;
+    color:#eee;
+    padding-left:25px;
+}
+
+#menu {
+    margin-top:9px;
+}
+
+#menu .item {
+    color:#FBFBFF;
+}
+
+#hesap {
+    background-color:#1391c3;
+    color:#eee;
+}
+
+#categories button{
+    color:#FBFBFF !important;
+    margin-left:15px;
+    background-color:#01BAEF;
+}
+
+#active {
+    color:eee;
+    background-color:#20BF55 !important;
+}
+
+#search {
+    margin-top:9px;
+}
+
+#search input {
+    width:100%;
+}
+
+#galleryButtons {
+    width:auto;
+}
+
