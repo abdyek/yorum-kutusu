@@ -167,6 +167,30 @@ class Image extends React.Component {
     }
 }
 
+class MiniImage extends React.Component {
+    render() {
+        return (
+            <div className="ui small image">
+                <img src={this.props.src} />
+            </div>
+        )
+    }
+}
+
+class MiniImagesWrapper extends React.Component {
+    render() {
+        return(
+            <Center>
+                <MiniImage src="https://cdn.shoplightspeed.com/shops/613622/files/8420157/image.jpg" />
+                <MiniImage src="http://3.bp.blogspot.com/-uC4SEk9v07I/UyVCeORCsdI/AAAAAAAAA-k/6xZx0EVnCMc/s1600/iphone+5s+rep.jpg" />
+                <MiniImage src="https://i.ytimg.com/vi/2jDd8iPIuEc/maxresdefault.jpg" />
+                <MiniImage src="https://i.ytimg.com/vi/kLg__oZYfG8/maxresdefault.jpg" />
+                <MiniImage src="http://3.bp.blogspot.com/-uC4SEk9v07I/UyVCeORCsdI/AAAAAAAAA-k/6xZx0EVnCMc/s1600/iphone+5s+rep.jpg" />
+            </Center>
+        )
+    }
+}
+
 
 class Menu extends React.Component {
     render() {
@@ -407,9 +431,24 @@ class Product extends React.Component {
             <Row size="one">
                 <Column>
                     <Center>
-                        <H type="2" textAlign="center" text="iphone 5s"/>
+                        <H type="1" textAlign="center" text="iphone 5s"/>
                         <Image />
                     </Center>
+                </Column>
+                <Column>
+                    <MiniImagesWrapper />
+                </Column>
+            </Row>
+        )
+    }
+}
+
+class YorumlarHeader extends React.Component {
+    render() {
+        return(
+            <Row>
+                <Column>
+                    <H type="1" textAlign="center" text="Yorumlar"/>
                 </Column>
             </Row>
         )
@@ -420,6 +459,7 @@ class Comments extends React.Component {
     render() {
         return(
             <div>
+                <YorumlarHeader />
                 <Comment
                     commentOwner="Rıdvan Tülemen"
                     commentText="Yinelenen bir sayfa içeriğinin okuyucunun dikkatini dağıttığı bilinen bir gerçektir. Lorem Ipsum kullanmanın amacı, sürekli 'buraya metin gelecek, buraya metin gelecek' yazmaya kıyasla daha dengeli bir harf dağılımı sağlayarak okunurluğu artırmasıdır. Şu anda birçok masaüstü yayıncılık paketi ve web sayfa düzenleyicisi, varsayılan mıgır metinler olarak Lorem Ipsum kullanmaktadır. Ayrıca arama motorlarında 'lorem ipsum' anahtar sözcükleri ile arama yapıldığında henüz tasarım aşamasında olan çok sayıda site listelenir. Yıllar içinde, bazen kazara, bazen bilinçli olarak (örneğin mizah katılarak), çeşitli sürümleri geliştirilmiştir."

@@ -364,58 +364,8 @@ var Image = function (_React$Component13) {
     return Image;
 }(React.Component);
 
-var MiniImage = function (_React$Component14) {
-    _inherits(MiniImage, _React$Component14);
-
-    function MiniImage() {
-        _classCallCheck(this, MiniImage);
-
-        return _possibleConstructorReturn(this, (MiniImage.__proto__ || Object.getPrototypeOf(MiniImage)).apply(this, arguments));
-    }
-
-    _createClass(MiniImage, [{
-        key: "render",
-        value: function render() {
-            return React.createElement(
-                "div",
-                { className: "ui small image" },
-                React.createElement("img", { src: this.props.src })
-            );
-        }
-    }]);
-
-    return MiniImage;
-}(React.Component);
-
-var MiniImagesWrapper = function (_React$Component15) {
-    _inherits(MiniImagesWrapper, _React$Component15);
-
-    function MiniImagesWrapper() {
-        _classCallCheck(this, MiniImagesWrapper);
-
-        return _possibleConstructorReturn(this, (MiniImagesWrapper.__proto__ || Object.getPrototypeOf(MiniImagesWrapper)).apply(this, arguments));
-    }
-
-    _createClass(MiniImagesWrapper, [{
-        key: "render",
-        value: function render() {
-            return React.createElement(
-                Center,
-                null,
-                React.createElement(MiniImage, { src: "https://cdn.shoplightspeed.com/shops/613622/files/8420157/image.jpg" }),
-                React.createElement(MiniImage, { src: "http://3.bp.blogspot.com/-uC4SEk9v07I/UyVCeORCsdI/AAAAAAAAA-k/6xZx0EVnCMc/s1600/iphone+5s+rep.jpg" }),
-                React.createElement(MiniImage, { src: "https://i.ytimg.com/vi/2jDd8iPIuEc/maxresdefault.jpg" }),
-                React.createElement(MiniImage, { src: "https://i.ytimg.com/vi/kLg__oZYfG8/maxresdefault.jpg" }),
-                React.createElement(MiniImage, { src: "http://3.bp.blogspot.com/-uC4SEk9v07I/UyVCeORCsdI/AAAAAAAAA-k/6xZx0EVnCMc/s1600/iphone+5s+rep.jpg" })
-            );
-        }
-    }]);
-
-    return MiniImagesWrapper;
-}(React.Component);
-
-var Menu = function (_React$Component16) {
-    _inherits(Menu, _React$Component16);
+var Menu = function (_React$Component14) {
+    _inherits(Menu, _React$Component14);
 
     function Menu() {
         _classCallCheck(this, Menu);
@@ -451,8 +401,8 @@ var Menu = function (_React$Component16) {
     return Menu;
 }(React.Component);
 
-var Menu2 = function (_React$Component17) {
-    _inherits(Menu2, _React$Component17);
+var Menu2 = function (_React$Component15) {
+    _inherits(Menu2, _React$Component15);
 
     function Menu2() {
         _classCallCheck(this, Menu2);
@@ -500,8 +450,8 @@ var Menu2 = function (_React$Component17) {
     return Menu2;
 }(React.Component);
 
-var Menu3 = function (_React$Component18) {
-    _inherits(Menu3, _React$Component18);
+var Menu3 = function (_React$Component16) {
+    _inherits(Menu3, _React$Component16);
 
     function Menu3() {
         _classCallCheck(this, Menu3);
@@ -528,8 +478,8 @@ var Menu3 = function (_React$Component18) {
     return Menu3;
 }(React.Component);
 
-var Logo = function (_React$Component19) {
-    _inherits(Logo, _React$Component19);
+var Logo = function (_React$Component17) {
+    _inherits(Logo, _React$Component17);
 
     function Logo() {
         _classCallCheck(this, Logo);
@@ -551,8 +501,8 @@ var Logo = function (_React$Component19) {
     return Logo;
 }(React.Component);
 
-var SearchBar = function (_React$Component20) {
-    _inherits(SearchBar, _React$Component20);
+var SearchBar = function (_React$Component18) {
+    _inherits(SearchBar, _React$Component18);
 
     function SearchBar() {
         _classCallCheck(this, SearchBar);
@@ -574,8 +524,8 @@ var SearchBar = function (_React$Component20) {
     return SearchBar;
 }(React.Component);
 
-var BreadCrumb = function (_React$Component21) {
-    _inherits(BreadCrumb, _React$Component21);
+var BreadCrumb = function (_React$Component19) {
+    _inherits(BreadCrumb, _React$Component19);
 
     function BreadCrumb() {
         _classCallCheck(this, BreadCrumb);
@@ -623,8 +573,8 @@ var BreadCrumb = function (_React$Component21) {
 }(React.Component);
 //<div className="ui right floated button">Butoncuk</div>
 
-var Example = function (_React$Component22) {
-    _inherits(Example, _React$Component22);
+var Example = function (_React$Component20) {
+    _inherits(Example, _React$Component20);
 
     function Example() {
         _classCallCheck(this, Example);
@@ -646,20 +596,13 @@ var Example = function (_React$Component22) {
     return Example;
 }(React.Component);
 
-var LikeButton = function (_React$Component23) {
-    _inherits(LikeButton, _React$Component23);
+var LikeButton = function (_React$Component21) {
+    _inherits(LikeButton, _React$Component21);
 
-    function LikeButton(props) {
+    function LikeButton() {
         _classCallCheck(this, LikeButton);
 
-        var _this23 = _possibleConstructorReturn(this, (LikeButton.__proto__ || Object.getPrototypeOf(LikeButton)).call(this, props));
-
-        if (_this23.props.likeOrDislike == "like") {
-            _this23.liked = " likedComment";
-        } else {
-            _this23.liked = " ";
-        }
-        return _this23;
+        return _possibleConstructorReturn(this, (LikeButton.__proto__ || Object.getPrototypeOf(LikeButton)).apply(this, arguments));
     }
 
     _createClass(LikeButton, [{
@@ -671,7 +614,7 @@ var LikeButton = function (_React$Component23) {
                 React.createElement(
                     "i",
                     { "class": "icon" },
-                    React.createElement("i", { "class": "fa fa-thumbs-up" + this.liked, "aria-hidden": "true" })
+                    React.createElement("i", { "class": "fa fa-thumbs-up", "aria-hidden": "true" })
                 ),
                 this.props.value
             );
@@ -681,20 +624,13 @@ var LikeButton = function (_React$Component23) {
     return LikeButton;
 }(React.Component);
 
-var DislikeButton = function (_React$Component24) {
-    _inherits(DislikeButton, _React$Component24);
+var DislikeButton = function (_React$Component22) {
+    _inherits(DislikeButton, _React$Component22);
 
-    function DislikeButton(props) {
+    function DislikeButton() {
         _classCallCheck(this, DislikeButton);
 
-        var _this24 = _possibleConstructorReturn(this, (DislikeButton.__proto__ || Object.getPrototypeOf(DislikeButton)).call(this, props));
-
-        if (_this24.props.likeOrDislike == "dislike") {
-            _this24.liked = " dislikedComment";
-        } else {
-            _this24.liked = " ";
-        }
-        return _this24;
+        return _possibleConstructorReturn(this, (DislikeButton.__proto__ || Object.getPrototypeOf(DislikeButton)).apply(this, arguments));
     }
 
     _createClass(DislikeButton, [{
@@ -706,7 +642,7 @@ var DislikeButton = function (_React$Component24) {
                 React.createElement(
                     "i",
                     { "class": "icon" },
-                    React.createElement("i", { "class": "fa fa-thumbs-down" + this.liked, "aria-hidden": "true" })
+                    React.createElement("i", { "class": "fa fa-thumbs-down", "aria-hidden": "true" })
                 ),
                 this.props.value
             );
@@ -716,31 +652,8 @@ var DislikeButton = function (_React$Component24) {
     return DislikeButton;
 }(React.Component);
 
-var ComplaintButton = function (_React$Component25) {
-    _inherits(ComplaintButton, _React$Component25);
-
-    function ComplaintButton() {
-        _classCallCheck(this, ComplaintButton);
-
-        return _possibleConstructorReturn(this, (ComplaintButton.__proto__ || Object.getPrototypeOf(ComplaintButton)).apply(this, arguments));
-    }
-
-    _createClass(ComplaintButton, [{
-        key: "render",
-        value: function render() {
-            return React.createElement(
-                "button",
-                { "class": "ui basic button" },
-                React.createElement("i", { id: "exclamation", "class": "fa fa-exclamation", "aria-hidden": "true" })
-            );
-        }
-    }]);
-
-    return ComplaintButton;
-}(React.Component);
-
-var Categories = function (_React$Component26) {
-    _inherits(Categories, _React$Component26);
+var Categories = function (_React$Component23) {
+    _inherits(Categories, _React$Component23);
 
     function Categories() {
         _classCallCheck(this, Categories);
@@ -795,312 +708,3 @@ var Categories = function (_React$Component26) {
 
     return Categories;
 }(React.Component);
-
-var App = function (_React$Component27) {
-    _inherits(App, _React$Component27);
-
-    function App(props) {
-        _classCallCheck(this, App);
-
-        return _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
-    }
-
-    _createClass(App, [{
-        key: "render",
-        value: function render() {
-            return React.createElement(
-                "div",
-                null,
-                React.createElement(Header, null),
-                React.createElement(Content, null),
-                React.createElement(Footer, null)
-            );
-        }
-    }]);
-
-    return App;
-}(React.Component);
-
-var Header = function (_React$Component28) {
-    _inherits(Header, _React$Component28);
-
-    function Header() {
-        _classCallCheck(this, Header);
-
-        return _possibleConstructorReturn(this, (Header.__proto__ || Object.getPrototypeOf(Header)).apply(this, arguments));
-    }
-
-    _createClass(Header, [{
-        key: "render",
-        value: function render() {
-            return React.createElement(
-                "header",
-                null,
-                React.createElement(
-                    Row,
-                    { withoutContainer: true, size: "one" },
-                    React.createElement(
-                        Column,
-                        null,
-                        React.createElement(
-                            Row,
-                            null,
-                            React.createElement(
-                                WideColumn,
-                                { size: "four" },
-                                React.createElement(Logo, null)
-                            ),
-                            React.createElement(
-                                WideColumn,
-                                { size: "eight" },
-                                React.createElement(SearchBar, null)
-                            ),
-                            React.createElement(
-                                WideColumn,
-                                { size: "four" },
-                                React.createElement(
-                                    FloatRight,
-                                    null,
-                                    React.createElement(Menu3, null)
-                                )
-                            )
-                        )
-                    )
-                ),
-                React.createElement(
-                    Row,
-                    { withoutContainer: true, size: "one" },
-                    React.createElement(
-                        Column,
-                        null,
-                        React.createElement(
-                            Center,
-                            { size: "sixteen" },
-                            React.createElement(Categories, null)
-                        )
-                    )
-                )
-            );
-        }
-    }]);
-
-    return Header;
-}(React.Component);
-
-var Content = function (_React$Component29) {
-    _inherits(Content, _React$Component29);
-
-    function Content() {
-        _classCallCheck(this, Content);
-
-        return _possibleConstructorReturn(this, (Content.__proto__ || Object.getPrototypeOf(Content)).apply(this, arguments));
-    }
-
-    _createClass(Content, [{
-        key: "render",
-        value: function render() {
-            return React.createElement(
-                "div",
-                { id: "content" },
-                React.createElement(BreadCrumb, null),
-                React.createElement(Product, null),
-                React.createElement(Comments, null)
-            );
-        }
-    }]);
-
-    return Content;
-}(React.Component);
-
-var Product = function (_React$Component30) {
-    _inherits(Product, _React$Component30);
-
-    function Product() {
-        _classCallCheck(this, Product);
-
-        return _possibleConstructorReturn(this, (Product.__proto__ || Object.getPrototypeOf(Product)).apply(this, arguments));
-    }
-
-    _createClass(Product, [{
-        key: "render",
-        value: function render() {
-            return React.createElement(
-                Row,
-                { size: "one" },
-                React.createElement(
-                    Column,
-                    null,
-                    React.createElement(
-                        Center,
-                        null,
-                        React.createElement(H, { type: "1", textAlign: "center", text: "iphone 5s" }),
-                        React.createElement(Image, null)
-                    )
-                ),
-                React.createElement(
-                    Column,
-                    null,
-                    React.createElement(MiniImagesWrapper, null)
-                )
-            );
-        }
-    }]);
-
-    return Product;
-}(React.Component);
-
-var YorumlarHeader = function (_React$Component31) {
-    _inherits(YorumlarHeader, _React$Component31);
-
-    function YorumlarHeader() {
-        _classCallCheck(this, YorumlarHeader);
-
-        return _possibleConstructorReturn(this, (YorumlarHeader.__proto__ || Object.getPrototypeOf(YorumlarHeader)).apply(this, arguments));
-    }
-
-    _createClass(YorumlarHeader, [{
-        key: "render",
-        value: function render() {
-            return React.createElement(
-                Row,
-                null,
-                React.createElement(
-                    Column,
-                    null,
-                    React.createElement(H, { type: "1", textAlign: "center", text: "Yorumlar" })
-                )
-            );
-        }
-    }]);
-
-    return YorumlarHeader;
-}(React.Component);
-
-var Comments = function (_React$Component32) {
-    _inherits(Comments, _React$Component32);
-
-    function Comments() {
-        _classCallCheck(this, Comments);
-
-        return _possibleConstructorReturn(this, (Comments.__proto__ || Object.getPrototypeOf(Comments)).apply(this, arguments));
-    }
-
-    _createClass(Comments, [{
-        key: "render",
-        value: function render() {
-            return React.createElement(
-                "div",
-                null,
-                React.createElement(YorumlarHeader, null),
-                React.createElement(Comment, {
-                    commentOwner: "R\u0131dvan T\xFClemen",
-                    commentText: "Yinelenen bir sayfa i\xE7eri\u011Finin okuyucunun dikkatini da\u011F\u0131tt\u0131\u011F\u0131 bilinen bir ger\xE7ektir. Lorem Ipsum kullanman\u0131n amac\u0131, s\xFCrekli 'buraya metin gelecek, buraya metin gelecek' yazmaya k\u0131yasla daha dengeli bir harf da\u011F\u0131l\u0131m\u0131 sa\u011Flayarak okunurlu\u011Fu art\u0131rmas\u0131d\u0131r. \u015Eu anda bir\xE7ok masa\xFCst\xFC yay\u0131nc\u0131l\u0131k paketi ve web sayfa d\xFCzenleyicisi, varsay\u0131lan m\u0131g\u0131r metinler olarak Lorem Ipsum kullanmaktad\u0131r. Ayr\u0131ca arama motorlar\u0131nda 'lorem ipsum' anahtar s\xF6zc\xFCkleri ile arama yap\u0131ld\u0131\u011F\u0131nda hen\xFCz tasar\u0131m a\u015Famas\u0131nda olan \xE7ok say\u0131da site listelenir. Y\u0131llar i\xE7inde, bazen kazara, bazen bilin\xE7li olarak (\xF6rne\u011Fin mizah kat\u0131larak), \xE7e\u015Fitli s\xFCr\xFCmleri geli\u015Ftirilmi\u015Ftir.",
-                    likeValue: "312",
-                    dislikeValue: "31",
-                    likeOrDislike: "like"
-                }),
-                React.createElement(Comment, {
-                    commentOwner: "RTE_53",
-                    commentText: "Eyyy k\u0131l\u0131\xE7dar sen kimsin yaa!!",
-                    likeValue: "9912312312",
-                    dislikeValue: "912",
-                    likeOrDislike: "dislike"
-                }),
-                React.createElement(Comment, {
-                    commentOwner: "ByKemal31",
-                    commentText: "Derhal buray\u0131 terket karde\u015Fim",
-                    likeValue: "321312412",
-                    dislikeValue: "91"
-                }),
-                React.createElement(Comment, {
-                    commentOwner: "Deniz_Baykal_07",
-                    commentText: "Benim ne i\u015Fim var burda amq",
-                    likeValue: "999999999999",
-                    dislikeValue: "-1231"
-                })
-            );
-        }
-    }]);
-
-    return Comments;
-}(React.Component);
-
-var Comment = function (_React$Component33) {
-    _inherits(Comment, _React$Component33);
-
-    function Comment(props) {
-        _classCallCheck(this, Comment);
-
-        return _possibleConstructorReturn(this, (Comment.__proto__ || Object.getPrototypeOf(Comment)).call(this, props));
-    }
-
-    _createClass(Comment, [{
-        key: "render",
-        value: function render() {
-            return React.createElement(
-                Row,
-                null,
-                React.createElement(
-                    Column,
-                    null,
-                    React.createElement(
-                        RaisedSegment,
-                        null,
-                        React.createElement(
-                            "div",
-                            { className: "commentHeader" },
-                            React.createElement(H, { type: "4", text: this.props.commentOwner })
-                        ),
-                        React.createElement(
-                            "div",
-                            { className: "commentText" },
-                            React.createElement(
-                                "p",
-                                null,
-                                this.props.commentText
-                            )
-                        ),
-                        React.createElement(
-                            Row,
-                            { size: "one" },
-                            React.createElement(
-                                Column,
-                                null,
-                                React.createElement(
-                                    FloatRight,
-                                    null,
-                                    React.createElement(LikeButton, { value: this.props.likeValue, likeOrDislike: this.props.likeOrDislike }),
-                                    React.createElement(DislikeButton, { value: this.props.dislikeValue, likeOrDislike: this.props.likeOrDislike }),
-                                    React.createElement(ComplaintButton, null)
-                                )
-                            )
-                        )
-                    )
-                )
-            );
-        }
-    }]);
-
-    return Comment;
-}(React.Component);
-
-var Footer = function (_React$Component34) {
-    _inherits(Footer, _React$Component34);
-
-    function Footer() {
-        _classCallCheck(this, Footer);
-
-        return _possibleConstructorReturn(this, (Footer.__proto__ || Object.getPrototypeOf(Footer)).apply(this, arguments));
-    }
-
-    _createClass(Footer, [{
-        key: "render",
-        value: function render() {
-            return React.createElement("div", null);
-        }
-    }]);
-
-    return Footer;
-}(React.Component);
-
-ReactDOM.render(React.createElement(App, null), document.getElementById('root'));
