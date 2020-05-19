@@ -1017,7 +1017,8 @@ var Comments = function (_React$Component32) {
                     commentText: "Benim ne i\u015Fim var burda amq",
                     likeValue: "999999999999",
                     dislikeValue: "-1231"
-                })
+                }),
+                React.createElement(WriteComment, null)
             );
         }
     }]);
@@ -1084,8 +1085,96 @@ var Comment = function (_React$Component33) {
     return Comment;
 }(React.Component);
 
-var Footer = function (_React$Component34) {
-    _inherits(Footer, _React$Component34);
+var SendButton = function (_React$Component34) {
+    _inherits(SendButton, _React$Component34);
+
+    function SendButton() {
+        _classCallCheck(this, SendButton);
+
+        return _possibleConstructorReturn(this, (SendButton.__proto__ || Object.getPrototypeOf(SendButton)).apply(this, arguments));
+    }
+
+    _createClass(SendButton, [{
+        key: "render",
+        value: function render() {
+            return React.createElement(
+                "button",
+                { "class": "ui primary button" },
+                "G\xF6nder"
+            );
+        }
+    }]);
+
+    return SendButton;
+}(React.Component);
+
+var WriteComment = function (_React$Component35) {
+    _inherits(WriteComment, _React$Component35);
+
+    function WriteComment() {
+        _classCallCheck(this, WriteComment);
+
+        return _possibleConstructorReturn(this, (WriteComment.__proto__ || Object.getPrototypeOf(WriteComment)).apply(this, arguments));
+    }
+
+    _createClass(WriteComment, [{
+        key: "render",
+        value: function render() {
+            return React.createElement(
+                Row,
+                null,
+                React.createElement(
+                    Column,
+                    null,
+                    React.createElement(
+                        Segment,
+                        null,
+                        React.createElement(
+                            Row,
+                            null,
+                            React.createElement(
+                                Column,
+                                null,
+                                React.createElement(
+                                    "div",
+                                    { className: "ui form" },
+                                    React.createElement(
+                                        "div",
+                                        { className: "field" },
+                                        React.createElement(
+                                            "label",
+                                            null,
+                                            "Yorum Yaz"
+                                        ),
+                                        React.createElement("textarea", { rows: "5" })
+                                    )
+                                )
+                            )
+                        ),
+                        React.createElement(
+                            Row,
+                            null,
+                            React.createElement(
+                                Column,
+                                null,
+                                React.createElement(
+                                    FloatRight,
+                                    null,
+                                    React.createElement(SendButton, null)
+                                )
+                            )
+                        )
+                    )
+                )
+            );
+        }
+    }]);
+
+    return WriteComment;
+}(React.Component);
+
+var Footer = function (_React$Component36) {
+    _inherits(Footer, _React$Component36);
 
     function Footer() {
         _classCallCheck(this, Footer);

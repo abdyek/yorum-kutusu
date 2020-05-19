@@ -486,6 +486,7 @@ class Comments extends React.Component {
                     likeValue="999999999999"
                     dislikeValue="-1231"
                 />
+                <WriteComment />
             </div>
         )
     }
@@ -518,6 +519,46 @@ class Comment extends React.Component {
                             </Column>
                         </Row>
                     </RaisedSegment>
+                </Column>
+            </Row>
+        )
+    }
+}
+
+class SendButton extends React.Component {
+    render() {
+        return (
+            <button class="ui primary button">
+                Gönder
+            </button>
+        )
+    }
+}
+
+class WriteComment extends React.Component {
+    render() {
+        return (
+            <Row>
+                <Column>
+                    <Segment>
+                        <Row>
+                            <Column>
+                                <div className="ui form">
+                                    <div className="field">
+                                        <label>Yorum Yaz</label>
+                                        <textarea rows="5"></textarea>
+                                    </div>
+                                </div>
+                            </Column>
+                        </Row>
+                        <Row>
+                            <Column>
+                                <FloatRight>
+                                    <SendButton />
+                                </FloatRight>
+                            </Column>
+                        </Row>
+                    </Segment>
                 </Column>
             </Row>
         )
