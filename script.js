@@ -957,21 +957,52 @@ var Product = function (_React$Component31) {
         value: function render() {
             return React.createElement(
                 Row,
-                { size: "one" },
+                { size: "sixteen" },
                 React.createElement(
-                    Column,
-                    null,
+                    WideColumn,
+                    { size: "ten" },
                     React.createElement(
-                        Center,
-                        null,
-                        React.createElement(H, { type: "1", textAlign: "center", text: "iphone 5s" }),
-                        React.createElement(Image, null)
+                        Row,
+                        { size: "one" },
+                        React.createElement(
+                            Column,
+                            null,
+                            React.createElement(
+                                Center,
+                                null,
+                                React.createElement(H, { type: "1", textAlign: "center", text: "iphone 5s" }),
+                                React.createElement(Image, null)
+                            )
+                        ),
+                        React.createElement(
+                            Column,
+                            null,
+                            React.createElement(MiniImagesWrapper, null)
+                        )
                     )
                 ),
                 React.createElement(
-                    Column,
-                    null,
-                    React.createElement(MiniImagesWrapper, null)
+                    WideColumn,
+                    { size: "six" },
+                    React.createElement(
+                        FloatRight,
+                        null,
+                        React.createElement(
+                            "div",
+                            { className: "ui labeled button", tabindex: "0" },
+                            React.createElement(
+                                "div",
+                                { className: "ui red button" },
+                                React.createElement("i", { className: "heart icon" }),
+                                " Takip Et"
+                            ),
+                            React.createElement(
+                                "a",
+                                { className: "ui basic red left pointing label" },
+                                "1,048"
+                            )
+                        )
+                    )
                 )
             );
         }

@@ -444,16 +444,35 @@ class Content extends React.Component {
 class Product extends React.Component {
     render() {
         return(
-            <Row size="one">
-                <Column>
-                    <Center>
-                        <H type="1" textAlign="center" text="iphone 5s"/>
-                        <Image />
-                    </Center>
-                </Column>
-                <Column>
-                    <MiniImagesWrapper />
-                </Column>
+            <Row size="sixteen">
+                <WideColumn size="ten">
+                    <Row size="one">
+                        <Column>
+                            <Center>
+                                <H type="1" textAlign="center" text="iphone 5s"/>
+                                <Image />
+                            </Center>
+                        </Column>
+                        <Column>
+                            <MiniImagesWrapper />
+                        </Column>
+                    </Row>
+                </WideColumn>
+                <WideColumn size="six">
+                    {/*
+                        takip etmediği zaman classNamedeki "red" i kaldırıcaz
+                    */}
+                    <FloatRight>
+                        <div className="ui labeled button" tabindex="0">
+                            <div className="ui red button">
+                                <i className="heart icon"></i> Takip Et
+                            </div>
+                            <a className="ui basic red left pointing label">
+                                1,048
+                            </a>
+                        </div>
+                    </FloatRight>
+                </WideColumn>
             </Row>
         )
     }
