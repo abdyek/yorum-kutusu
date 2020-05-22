@@ -472,9 +472,14 @@ class YorumlarHeader extends React.Component {
 }
 
 class PageNumber extends React.Component {
+    /*
+        ortadaki html select'i masaüstü ve tabletlerde görünümünü daha küçük yapmak için size'ını 'two', ilk ve sonrakini de 'seven'
+        yapabiliriz. ancak mobil (iphone 6s) görünümünde html select sığmıyor. Bu durumu kurtarmak için mobilde şöyle görün normalde
+        şöyle görün diyebiliriz. şimdilik buraya not düşüyorum. ileride bu kısmı yaparım.
+    */
     render() {
         return(
-            <Row size="sixteen">
+            <Row size="sixteen" nonStackable={true}>
                 <WideColumn size="seven">
                     <button className="ui disabled labeled icon button">
                         <i className="left arrow icon"></i>
@@ -485,9 +490,9 @@ class PageNumber extends React.Component {
                     <div className="ui form">
                         <div className="field">
                             <select>
-                                <option value="">1</option>
-                                <option value="1">2</option>
-                                <option value="0">3</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
                             </select>
                         </div>
                     </div>

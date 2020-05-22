@@ -1018,10 +1018,16 @@ var PageNumber = function (_React$Component33) {
 
     _createClass(PageNumber, [{
         key: "render",
+
+        /*
+            ortadaki html select'i masaüstü ve tabletlerde görünümünü daha küçük yapmak için size'ını 'two', ilk ve sonrakini de 'seven'
+            yapabiliriz. ancak mobil (iphone 6s) görünümünde html select sığmıyor. Bu durumu kurtarmak için mobilde şöyle görün normalde
+            şöyle görün diyebiliriz. şimdilik buraya not düşüyorum. ileride bu kısmı yaparım.
+        */
         value: function render() {
             return React.createElement(
                 Row,
-                { size: "sixteen" },
+                { size: "sixteen", nonStackable: true },
                 React.createElement(
                     WideColumn,
                     { size: "seven" },
@@ -1046,17 +1052,17 @@ var PageNumber = function (_React$Component33) {
                                 null,
                                 React.createElement(
                                     "option",
-                                    { value: "" },
+                                    { value: "1" },
                                     "1"
                                 ),
                                 React.createElement(
                                     "option",
-                                    { value: "1" },
+                                    { value: "2" },
                                     "2"
                                 ),
                                 React.createElement(
                                     "option",
-                                    { value: "0" },
+                                    { value: "3" },
                                     "3"
                                 )
                             )
