@@ -290,7 +290,23 @@ class BreadCrumb extends React.Component {
 class Example extends React.Component {
     render() {
         return(
-            <div className="floatRight">Butoncuk</div>
+            <Row size="">
+                <Column>
+                    <div className="overflowX">
+                        Lorem Ipsum, dizgi ve baskı endüstrisinde kullanılan mıgır metinlerdir. Lorem Ipsum, adı bilinmeyen bir matbaacının bir hurufat numune kitabı oluşturmak üzere bir yazı galerisini alarak karıştırdığı 1500'lerden beri endüstri standardı sahte metinler olarak kullanılmıştır. Beşyüz yıl boyunca varlığını sürdürmekle kalmamış, aynı zamanda pek değişmeden elektronik dizgiye de sıçramıştır. 1960'larda Lorem Ipsum pasajları da içeren Letraset yapraklarının yayınlanması ile ve yakın zamanda Aldus PageMaker gibi Lorem Ipsum sürümleri içeren masaüstü yayıncılık yazılımları ile popüler olmuştur.
+                    </div>
+                </Column>
+            </Row>
+        )
+    }
+}
+
+class OverfloX extends React.Component {
+    render() {
+        return(
+            <div className="overflowX">
+                {this.props.children}
+            </div>
         )
     }
 }
@@ -455,11 +471,46 @@ class YorumlarHeader extends React.Component {
     }
 }
 
+class PageNumber extends React.Component {
+    render() {
+        return(
+            <Row size="sixteen">
+                <WideColumn size="seven">
+                    <button className="ui disabled labeled icon button">
+                        <i className="left arrow icon"></i>
+                            Önceki Sayfa
+                    </button>
+                </WideColumn>
+                <WideColumn size="two">
+                    <div className="ui form">
+                        <div className="field">
+                            <select>
+                                <option value="">1</option>
+                                <option value="1">2</option>
+                                <option value="0">3</option>
+                            </select>
+                        </div>
+                    </div>
+                </WideColumn>
+                <WideColumn size="seven">
+                    <FloatRight>
+                        <button className="ui right labeled icon button">
+                            <i className="right arrow icon"></i>
+                                Sonraki Sayfa
+                        </button>
+                    </FloatRight>
+                </WideColumn>
+            </Row>
+        )
+    }
+}
+
 class Comments extends React.Component {
     render() {
         return(
             <div>
                 <YorumlarHeader />
+                <PageNumber />
                 <Comment
                     commentOwner="Rıdvan Tülemen"
                     commentText="Yinelenen bir sayfa içeriğinin okuyucunun dikkatini dağıttığı bilinen bir gerçektir. Lorem Ipsum kullanmanın amacı, sürekli 'buraya metin gelecek, buraya metin gelecek' yazmaya kıyasla daha dengeli bir harf dağılımı sağlayarak okunurluğu artırmasıdır. Şu anda birçok masaüstü yayıncılık paketi ve web sayfa düzenleyicisi, varsayılan mıgır metinler olarak Lorem Ipsum kullanmaktadır. Ayrıca arama motorlarında 'lorem ipsum' anahtar sözcükleri ile arama yapıldığında henüz tasarım aşamasında olan çok sayıda site listelenir. Yıllar içinde, bazen kazara, bazen bilinçli olarak (örneğin mizah katılarak), çeşitli sürümleri geliştirilmiştir."
@@ -486,6 +537,7 @@ class Comments extends React.Component {
                     likeValue="999999999999"
                     dislikeValue="-1231"
                 />
+                <PageNumber />
                 <WriteComment />
             </div>
         )

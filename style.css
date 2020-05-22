@@ -83,3 +83,7 @@ header > div {
     width:auto;
 }
 
+.overflowX {
+    overflow-y:auto;
+    white-space:nowrap;
+}

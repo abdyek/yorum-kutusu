@@ -636,9 +636,17 @@ var Example = function (_React$Component22) {
         key: "render",
         value: function render() {
             return React.createElement(
-                "div",
-                { className: "floatRight" },
-                "Butoncuk"
+                Row,
+                { size: "" },
+                React.createElement(
+                    Column,
+                    null,
+                    React.createElement(
+                        "div",
+                        { className: "overflowX" },
+                        "Lorem Ipsum, dizgi ve bask\u0131 end\xFCstrisinde kullan\u0131lan m\u0131g\u0131r metinlerdir. Lorem Ipsum, ad\u0131 bilinmeyen bir matbaac\u0131n\u0131n bir hurufat numune kitab\u0131 olu\u015Fturmak \xFCzere bir yaz\u0131 galerisini alarak kar\u0131\u015Ft\u0131rd\u0131\u011F\u0131 1500'lerden beri end\xFCstri standard\u0131 sahte metinler olarak kullan\u0131lm\u0131\u015Ft\u0131r. Be\u015Fy\xFCz y\u0131l boyunca varl\u0131\u011F\u0131n\u0131 s\xFCrd\xFCrmekle kalmam\u0131\u015F, ayn\u0131 zamanda pek de\u011Fi\u015Fmeden elektronik dizgiye de s\u0131\xE7ram\u0131\u015Ft\u0131r. 1960'larda Lorem Ipsum pasajlar\u0131 da i\xE7eren Letraset yapraklar\u0131n\u0131n yay\u0131nlanmas\u0131 ile ve yak\u0131n zamanda Aldus PageMaker gibi Lorem Ipsum s\xFCr\xFCmleri i\xE7eren masa\xFCst\xFC yay\u0131nc\u0131l\u0131k yaz\u0131l\u0131mlar\u0131 ile pop\xFCler olmu\u015Ftur."
+                    )
+                )
             );
         }
     }]);
@@ -646,20 +654,43 @@ var Example = function (_React$Component22) {
     return Example;
 }(React.Component);
 
-var LikeButton = function (_React$Component23) {
-    _inherits(LikeButton, _React$Component23);
+var OverfloX = function (_React$Component23) {
+    _inherits(OverfloX, _React$Component23);
+
+    function OverfloX() {
+        _classCallCheck(this, OverfloX);
+
+        return _possibleConstructorReturn(this, (OverfloX.__proto__ || Object.getPrototypeOf(OverfloX)).apply(this, arguments));
+    }
+
+    _createClass(OverfloX, [{
+        key: "render",
+        value: function render() {
+            return React.createElement(
+                "div",
+                { className: "overflowX" },
+                this.props.children
+            );
+        }
+    }]);
+
+    return OverfloX;
+}(React.Component);
+
+var LikeButton = function (_React$Component24) {
+    _inherits(LikeButton, _React$Component24);
 
     function LikeButton(props) {
         _classCallCheck(this, LikeButton);
 
-        var _this23 = _possibleConstructorReturn(this, (LikeButton.__proto__ || Object.getPrototypeOf(LikeButton)).call(this, props));
+        var _this24 = _possibleConstructorReturn(this, (LikeButton.__proto__ || Object.getPrototypeOf(LikeButton)).call(this, props));
 
-        if (_this23.props.likeOrDislike == "like") {
-            _this23.liked = " likedComment";
+        if (_this24.props.likeOrDislike == "like") {
+            _this24.liked = " likedComment";
         } else {
-            _this23.liked = " ";
+            _this24.liked = " ";
         }
-        return _this23;
+        return _this24;
     }
 
     _createClass(LikeButton, [{
@@ -681,20 +712,20 @@ var LikeButton = function (_React$Component23) {
     return LikeButton;
 }(React.Component);
 
-var DislikeButton = function (_React$Component24) {
-    _inherits(DislikeButton, _React$Component24);
+var DislikeButton = function (_React$Component25) {
+    _inherits(DislikeButton, _React$Component25);
 
     function DislikeButton(props) {
         _classCallCheck(this, DislikeButton);
 
-        var _this24 = _possibleConstructorReturn(this, (DislikeButton.__proto__ || Object.getPrototypeOf(DislikeButton)).call(this, props));
+        var _this25 = _possibleConstructorReturn(this, (DislikeButton.__proto__ || Object.getPrototypeOf(DislikeButton)).call(this, props));
 
-        if (_this24.props.likeOrDislike == "dislike") {
-            _this24.liked = " dislikedComment";
+        if (_this25.props.likeOrDislike == "dislike") {
+            _this25.liked = " dislikedComment";
         } else {
-            _this24.liked = " ";
+            _this25.liked = " ";
         }
-        return _this24;
+        return _this25;
     }
 
     _createClass(DislikeButton, [{
@@ -716,8 +747,8 @@ var DislikeButton = function (_React$Component24) {
     return DislikeButton;
 }(React.Component);
 
-var ComplaintButton = function (_React$Component25) {
-    _inherits(ComplaintButton, _React$Component25);
+var ComplaintButton = function (_React$Component26) {
+    _inherits(ComplaintButton, _React$Component26);
 
     function ComplaintButton() {
         _classCallCheck(this, ComplaintButton);
@@ -739,8 +770,8 @@ var ComplaintButton = function (_React$Component25) {
     return ComplaintButton;
 }(React.Component);
 
-var Categories = function (_React$Component26) {
-    _inherits(Categories, _React$Component26);
+var Categories = function (_React$Component27) {
+    _inherits(Categories, _React$Component27);
 
     function Categories() {
         _classCallCheck(this, Categories);
@@ -796,8 +827,8 @@ var Categories = function (_React$Component26) {
     return Categories;
 }(React.Component);
 
-var App = function (_React$Component27) {
-    _inherits(App, _React$Component27);
+var App = function (_React$Component28) {
+    _inherits(App, _React$Component28);
 
     function App(props) {
         _classCallCheck(this, App);
@@ -821,8 +852,8 @@ var App = function (_React$Component27) {
     return App;
 }(React.Component);
 
-var Header = function (_React$Component28) {
-    _inherits(Header, _React$Component28);
+var Header = function (_React$Component29) {
+    _inherits(Header, _React$Component29);
 
     function Header() {
         _classCallCheck(this, Header);
@@ -887,8 +918,8 @@ var Header = function (_React$Component28) {
     return Header;
 }(React.Component);
 
-var Content = function (_React$Component29) {
-    _inherits(Content, _React$Component29);
+var Content = function (_React$Component30) {
+    _inherits(Content, _React$Component30);
 
     function Content() {
         _classCallCheck(this, Content);
@@ -912,8 +943,8 @@ var Content = function (_React$Component29) {
     return Content;
 }(React.Component);
 
-var Product = function (_React$Component30) {
-    _inherits(Product, _React$Component30);
+var Product = function (_React$Component31) {
+    _inherits(Product, _React$Component31);
 
     function Product() {
         _classCallCheck(this, Product);
@@ -949,8 +980,8 @@ var Product = function (_React$Component30) {
     return Product;
 }(React.Component);
 
-var YorumlarHeader = function (_React$Component31) {
-    _inherits(YorumlarHeader, _React$Component31);
+var YorumlarHeader = function (_React$Component32) {
+    _inherits(YorumlarHeader, _React$Component32);
 
     function YorumlarHeader() {
         _classCallCheck(this, YorumlarHeader);
@@ -976,8 +1007,85 @@ var YorumlarHeader = function (_React$Component31) {
     return YorumlarHeader;
 }(React.Component);
 
-var Comments = function (_React$Component32) {
-    _inherits(Comments, _React$Component32);
+var PageNumber = function (_React$Component33) {
+    _inherits(PageNumber, _React$Component33);
+
+    function PageNumber() {
+        _classCallCheck(this, PageNumber);
+
+        return _possibleConstructorReturn(this, (PageNumber.__proto__ || Object.getPrototypeOf(PageNumber)).apply(this, arguments));
+    }
+
+    _createClass(PageNumber, [{
+        key: "render",
+        value: function render() {
+            return React.createElement(
+                Row,
+                { size: "sixteen" },
+                React.createElement(
+                    WideColumn,
+                    { size: "seven" },
+                    React.createElement(
+                        "button",
+                        { className: "ui disabled labeled icon button" },
+                        React.createElement("i", { className: "left arrow icon" }),
+                        "\xD6nceki Sayfa"
+                    )
+                ),
+                React.createElement(
+                    WideColumn,
+                    { size: "two" },
+                    React.createElement(
+                        "div",
+                        { className: "ui form" },
+                        React.createElement(
+                            "div",
+                            { className: "field" },
+                            React.createElement(
+                                "select",
+                                null,
+                                React.createElement(
+                                    "option",
+                                    { value: "" },
+                                    "1"
+                                ),
+                                React.createElement(
+                                    "option",
+                                    { value: "1" },
+                                    "2"
+                                ),
+                                React.createElement(
+                                    "option",
+                                    { value: "0" },
+                                    "3"
+                                )
+                            )
+                        )
+                    )
+                ),
+                React.createElement(
+                    WideColumn,
+                    { size: "seven" },
+                    React.createElement(
+                        FloatRight,
+                        null,
+                        React.createElement(
+                            "button",
+                            { className: "ui right labeled icon button" },
+                            React.createElement("i", { className: "right arrow icon" }),
+                            "Sonraki Sayfa"
+                        )
+                    )
+                )
+            );
+        }
+    }]);
+
+    return PageNumber;
+}(React.Component);
+
+var Comments = function (_React$Component34) {
+    _inherits(Comments, _React$Component34);
 
     function Comments() {
         _classCallCheck(this, Comments);
@@ -992,6 +1100,7 @@ var Comments = function (_React$Component32) {
                 "div",
                 null,
                 React.createElement(YorumlarHeader, null),
+                React.createElement(PageNumber, null),
                 React.createElement(Comment, {
                     commentOwner: "R\u0131dvan T\xFClemen",
                     commentText: "Yinelenen bir sayfa i\xE7eri\u011Finin okuyucunun dikkatini da\u011F\u0131tt\u0131\u011F\u0131 bilinen bir ger\xE7ektir. Lorem Ipsum kullanman\u0131n amac\u0131, s\xFCrekli 'buraya metin gelecek, buraya metin gelecek' yazmaya k\u0131yasla daha dengeli bir harf da\u011F\u0131l\u0131m\u0131 sa\u011Flayarak okunurlu\u011Fu art\u0131rmas\u0131d\u0131r. \u015Eu anda bir\xE7ok masa\xFCst\xFC yay\u0131nc\u0131l\u0131k paketi ve web sayfa d\xFCzenleyicisi, varsay\u0131lan m\u0131g\u0131r metinler olarak Lorem Ipsum kullanmaktad\u0131r. Ayr\u0131ca arama motorlar\u0131nda 'lorem ipsum' anahtar s\xF6zc\xFCkleri ile arama yap\u0131ld\u0131\u011F\u0131nda hen\xFCz tasar\u0131m a\u015Famas\u0131nda olan \xE7ok say\u0131da site listelenir. Y\u0131llar i\xE7inde, bazen kazara, bazen bilin\xE7li olarak (\xF6rne\u011Fin mizah kat\u0131larak), \xE7e\u015Fitli s\xFCr\xFCmleri geli\u015Ftirilmi\u015Ftir.",
@@ -1018,6 +1127,7 @@ var Comments = function (_React$Component32) {
                     likeValue: "999999999999",
                     dislikeValue: "-1231"
                 }),
+                React.createElement(PageNumber, null),
                 React.createElement(WriteComment, null)
             );
         }
@@ -1026,8 +1136,8 @@ var Comments = function (_React$Component32) {
     return Comments;
 }(React.Component);
 
-var Comment = function (_React$Component33) {
-    _inherits(Comment, _React$Component33);
+var Comment = function (_React$Component35) {
+    _inherits(Comment, _React$Component35);
 
     function Comment(props) {
         _classCallCheck(this, Comment);
@@ -1085,8 +1195,8 @@ var Comment = function (_React$Component33) {
     return Comment;
 }(React.Component);
 
-var SendButton = function (_React$Component34) {
-    _inherits(SendButton, _React$Component34);
+var SendButton = function (_React$Component36) {
+    _inherits(SendButton, _React$Component36);
 
     function SendButton() {
         _classCallCheck(this, SendButton);
@@ -1108,8 +1218,8 @@ var SendButton = function (_React$Component34) {
     return SendButton;
 }(React.Component);
 
-var WriteComment = function (_React$Component35) {
-    _inherits(WriteComment, _React$Component35);
+var WriteComment = function (_React$Component37) {
+    _inherits(WriteComment, _React$Component37);
 
     function WriteComment() {
         _classCallCheck(this, WriteComment);
@@ -1173,8 +1283,8 @@ var WriteComment = function (_React$Component35) {
     return WriteComment;
 }(React.Component);
 
-var Footer = function (_React$Component36) {
-    _inherits(Footer, _React$Component36);
+var Footer = function (_React$Component38) {
+    _inherits(Footer, _React$Component38);
 
     function Footer() {
         _classCallCheck(this, Footer);
