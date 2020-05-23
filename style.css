@@ -87,3 +87,7 @@ header > div {
     overflow-y:auto;
     white-space:nowrap;
 }
+
+#imageSliderImg {
+    height:500px;
+}

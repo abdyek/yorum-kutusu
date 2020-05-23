@@ -157,11 +157,11 @@ class Buttons extends React.Component {
 }
 
 // şimdilik bu kısım component tarzı değil, sonradan düzeltirim
-class Image extends React.Component {
+class Img extends React.Component {
     render() {
         return(
             <div>
-                <img id="productImg" className=" ui image" src="https://gigaom.com/wp-content/uploads/sites/1/2013/09/iphone5s_3color_ios7_print-2.jpg"></img>
+                <img id="productImg" className="ui image" src={this.props.src}></img>
             </div>
         )
     }
@@ -285,6 +285,16 @@ class BreadCrumb extends React.Component {
         )
     }
 }
+
+/*
+class FollowButton extends React.Component {
+    render() {
+        return(
+            <div> takip etme butonu </div>
+        )
+    }
+}
+*/
             //<div className="ui right floated button">Butoncuk</div>
 
 class Example extends React.Component {
@@ -441,6 +451,85 @@ class Content extends React.Component {
     }
 }
 
+class DirectlyButtons extends React.Component {
+    constructor(props) {
+        super(props);
+        this.buttons = [];
+        this.state = {
+            selectedIndex:0
+        }
+        for(let i=0;i<4; i++) {
+            if(this.props.selectedIndex==i+1) {
+                this.buttons.push(
+                    <button class="disabled ui button">{i + 1}</button>
+                )
+            } else {
+                this.buttons.push(
+                    <button class="ui button">{i + 1}</button>
+                )
+            }
+        }
+    }
+    render() {
+        return(
+            <div class="small blue ui buttons">
+                {this.buttons}
+            </div>
+        )
+    }
+}
+
+class ImageSlider extends React.Component {
+    constructor(props) {
+        super(props);
+        this.nextIndex = 0;
+        this.state = {
+            src: this.props.srcs[0],
+            index: 0
+        }
+        this.change = this.change.bind(this);
+    }
+    change(id) {
+        this.nextIndex = this.state.index + id;
+        if(this.nextIndex==this.props.srcs.length) {
+            this.nextIndex= 0;
+        } else if(this.nextIndex==-1) {
+            this.nextIndex = this.props.srcs.length - 1;
+        }
+        this.setState({
+            index: this.nextIndex,
+            src: this.props.srcs[this.nextIndex]
+        });
+        console.log(this.nextIndex);
+    }
+    render() {
+        return(
+            <div id="imageSlider">
+                <div id="imageSliderImg">
+                    <Img src={this.state.src} />
+                </div>
+                <div id="imageSliderButtons">
+                    <Row size="one">
+                        <Column>
+                            <DirectlyButtons selectedIndex={this.state.index+1}/>
+                        </Column>
+                    </Row>
+                    <Row size="one" nonStackable={true}>
+                        <Column>
+                            <button className="mini ui icon button" onClick={() => this.change(-1)}>
+                                <i className="left arrow icon"></i>
+                            </button> 
+                                <button className="mini ui icon button" onClick={() => this.change(+1)}>
+                                    <i className="right arrow icon"></i>
+                                </button> 
+                        </Column>
+                    </Row>
+                </div>
+            </div>
+        )
+    }
+}
+
 class Product extends React.Component {
     render() {
         return(
@@ -450,11 +539,14 @@ class Product extends React.Component {
                         <Column>
                             <Center>
                                 <H type="1" textAlign="center" text="iphone 5s"/>
-                                <Image />
+                                <ImageSlider srcs={[
+                                    "https://cdn.shoplightspeed.com/shops/613622/files/8420157/image.jpg",
+                                    "http://3.bp.blogspot.com/-uC4SEk9v07I/UyVCeORCsdI/AAAAAAAAA-k/6xZx0EVnCMc/s1600/iphone+5s+rep.jpg",
+                                    "https://i.ytimg.com/vi/2jDd8iPIuEc/maxresdefault.jpg",
+                                    "https://i.ytimg.com/vi/kLg__oZYfG8/maxresdefault.jpg",
+                                    "http://3.bp.blogspot.com/-uC4SEk9v07I/UyVCeORCsdI/AAAAAAAAA-k/6xZx0EVnCMc/s1600/iphone+5s+rep.jpg"
+                                ]}/>
                             </Center>
-                        </Column>
-                        <Column>
-                            <MiniImagesWrapper />
                         </Column>
                     </Row>
                 </WideColumn>

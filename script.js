@@ -341,27 +341,27 @@ var Buttons = function (_React$Component12) {
 // şimdilik bu kısım component tarzı değil, sonradan düzeltirim
 
 
-var Image = function (_React$Component13) {
-    _inherits(Image, _React$Component13);
+var Img = function (_React$Component13) {
+    _inherits(Img, _React$Component13);
 
-    function Image() {
-        _classCallCheck(this, Image);
+    function Img() {
+        _classCallCheck(this, Img);
 
-        return _possibleConstructorReturn(this, (Image.__proto__ || Object.getPrototypeOf(Image)).apply(this, arguments));
+        return _possibleConstructorReturn(this, (Img.__proto__ || Object.getPrototypeOf(Img)).apply(this, arguments));
     }
 
-    _createClass(Image, [{
+    _createClass(Img, [{
         key: "render",
         value: function render() {
             return React.createElement(
                 "div",
                 null,
-                React.createElement("img", { id: "productImg", className: " ui image", src: "https://gigaom.com/wp-content/uploads/sites/1/2013/09/iphone5s_3color_ios7_print-2.jpg" })
+                React.createElement("img", { id: "productImg", className: "ui image", src: this.props.src })
             );
         }
     }]);
 
-    return Image;
+    return Img;
 }(React.Component);
 
 var MiniImage = function (_React$Component14) {
@@ -621,6 +621,16 @@ var BreadCrumb = function (_React$Component21) {
 
     return BreadCrumb;
 }(React.Component);
+
+/*
+class FollowButton extends React.Component {
+    render() {
+        return(
+            <div> takip etme butonu </div>
+        )
+    }
+}
+*/
 //<div className="ui right floated button">Butoncuk</div>
 
 var Example = function (_React$Component22) {
@@ -943,8 +953,139 @@ var Content = function (_React$Component30) {
     return Content;
 }(React.Component);
 
-var Product = function (_React$Component31) {
-    _inherits(Product, _React$Component31);
+var DirectlyButtons = function (_React$Component31) {
+    _inherits(DirectlyButtons, _React$Component31);
+
+    function DirectlyButtons(props) {
+        _classCallCheck(this, DirectlyButtons);
+
+        var _this31 = _possibleConstructorReturn(this, (DirectlyButtons.__proto__ || Object.getPrototypeOf(DirectlyButtons)).call(this, props));
+
+        _this31.buttons = [];
+        _this31.state = {
+            selectedIndex: 0
+        };
+        for (var i = 0; i < 4; i++) {
+            if (_this31.props.selectedIndex == i + 1) {
+                _this31.buttons.push(React.createElement(
+                    "button",
+                    { "class": "disabled ui button" },
+                    i + 1
+                ));
+            } else {
+                _this31.buttons.push(React.createElement(
+                    "button",
+                    { "class": "ui button" },
+                    i + 1
+                ));
+            }
+        }
+        return _this31;
+    }
+
+    _createClass(DirectlyButtons, [{
+        key: "render",
+        value: function render() {
+            return React.createElement(
+                "div",
+                { "class": "small blue ui buttons" },
+                this.buttons
+            );
+        }
+    }]);
+
+    return DirectlyButtons;
+}(React.Component);
+
+var ImageSlider = function (_React$Component32) {
+    _inherits(ImageSlider, _React$Component32);
+
+    function ImageSlider(props) {
+        _classCallCheck(this, ImageSlider);
+
+        var _this32 = _possibleConstructorReturn(this, (ImageSlider.__proto__ || Object.getPrototypeOf(ImageSlider)).call(this, props));
+
+        _this32.nextIndex = 0;
+        _this32.state = {
+            src: _this32.props.srcs[0],
+            index: 0
+        };
+        _this32.change = _this32.change.bind(_this32);
+        return _this32;
+    }
+
+    _createClass(ImageSlider, [{
+        key: "change",
+        value: function change(id) {
+            this.nextIndex = this.state.index + id;
+            if (this.nextIndex == this.props.srcs.length) {
+                this.nextIndex = 0;
+            } else if (this.nextIndex == -1) {
+                this.nextIndex = this.props.srcs.length - 1;
+            }
+            this.setState({
+                index: this.nextIndex,
+                src: this.props.srcs[this.nextIndex]
+            });
+            console.log(this.nextIndex);
+        }
+    }, {
+        key: "render",
+        value: function render() {
+            var _this33 = this;
+
+            return React.createElement(
+                "div",
+                { id: "imageSlider" },
+                React.createElement(
+                    "div",
+                    { id: "imageSliderImg" },
+                    React.createElement(Img, { src: this.state.src })
+                ),
+                React.createElement(
+                    "div",
+                    { id: "imageSliderButtons" },
+                    React.createElement(
+                        Row,
+                        { size: "one" },
+                        React.createElement(
+                            Column,
+                            null,
+                            React.createElement(DirectlyButtons, { selectedIndex: this.state.index + 1 })
+                        )
+                    ),
+                    React.createElement(
+                        Row,
+                        { size: "one", nonStackable: true },
+                        React.createElement(
+                            Column,
+                            null,
+                            React.createElement(
+                                "button",
+                                { className: "mini ui icon button", onClick: function onClick() {
+                                        return _this33.change(-1);
+                                    } },
+                                React.createElement("i", { className: "left arrow icon" })
+                            ),
+                            React.createElement(
+                                "button",
+                                { className: "mini ui icon button", onClick: function onClick() {
+                                        return _this33.change(+1);
+                                    } },
+                                React.createElement("i", { className: "right arrow icon" })
+                            )
+                        )
+                    )
+                )
+            );
+        }
+    }]);
+
+    return ImageSlider;
+}(React.Component);
+
+var Product = function (_React$Component33) {
+    _inherits(Product, _React$Component33);
 
     function Product() {
         _classCallCheck(this, Product);
@@ -971,13 +1112,8 @@ var Product = function (_React$Component31) {
                                 Center,
                                 null,
                                 React.createElement(H, { type: "1", textAlign: "center", text: "iphone 5s" }),
-                                React.createElement(Image, null)
+                                React.createElement(ImageSlider, { srcs: ["https://cdn.shoplightspeed.com/shops/613622/files/8420157/image.jpg", "http://3.bp.blogspot.com/-uC4SEk9v07I/UyVCeORCsdI/AAAAAAAAA-k/6xZx0EVnCMc/s1600/iphone+5s+rep.jpg", "https://i.ytimg.com/vi/2jDd8iPIuEc/maxresdefault.jpg", "https://i.ytimg.com/vi/kLg__oZYfG8/maxresdefault.jpg", "http://3.bp.blogspot.com/-uC4SEk9v07I/UyVCeORCsdI/AAAAAAAAA-k/6xZx0EVnCMc/s1600/iphone+5s+rep.jpg"] })
                             )
-                        ),
-                        React.createElement(
-                            Column,
-                            null,
-                            React.createElement(MiniImagesWrapper, null)
                         )
                     )
                 ),
@@ -1011,8 +1147,8 @@ var Product = function (_React$Component31) {
     return Product;
 }(React.Component);
 
-var YorumlarHeader = function (_React$Component32) {
-    _inherits(YorumlarHeader, _React$Component32);
+var YorumlarHeader = function (_React$Component34) {
+    _inherits(YorumlarHeader, _React$Component34);
 
     function YorumlarHeader() {
         _classCallCheck(this, YorumlarHeader);
@@ -1038,8 +1174,8 @@ var YorumlarHeader = function (_React$Component32) {
     return YorumlarHeader;
 }(React.Component);
 
-var PageNumber = function (_React$Component33) {
-    _inherits(PageNumber, _React$Component33);
+var PageNumber = function (_React$Component35) {
+    _inherits(PageNumber, _React$Component35);
 
     function PageNumber() {
         _classCallCheck(this, PageNumber);
@@ -1121,8 +1257,8 @@ var PageNumber = function (_React$Component33) {
     return PageNumber;
 }(React.Component);
 
-var Comments = function (_React$Component34) {
-    _inherits(Comments, _React$Component34);
+var Comments = function (_React$Component36) {
+    _inherits(Comments, _React$Component36);
 
     function Comments() {
         _classCallCheck(this, Comments);
@@ -1173,8 +1309,8 @@ var Comments = function (_React$Component34) {
     return Comments;
 }(React.Component);
 
-var Comment = function (_React$Component35) {
-    _inherits(Comment, _React$Component35);
+var Comment = function (_React$Component37) {
+    _inherits(Comment, _React$Component37);
 
     function Comment(props) {
         _classCallCheck(this, Comment);
@@ -1232,8 +1368,8 @@ var Comment = function (_React$Component35) {
     return Comment;
 }(React.Component);
 
-var SendButton = function (_React$Component36) {
-    _inherits(SendButton, _React$Component36);
+var SendButton = function (_React$Component38) {
+    _inherits(SendButton, _React$Component38);
 
     function SendButton() {
         _classCallCheck(this, SendButton);
@@ -1255,8 +1391,8 @@ var SendButton = function (_React$Component36) {
     return SendButton;
 }(React.Component);
 
-var WriteComment = function (_React$Component37) {
-    _inherits(WriteComment, _React$Component37);
+var WriteComment = function (_React$Component39) {
+    _inherits(WriteComment, _React$Component39);
 
     function WriteComment() {
         _classCallCheck(this, WriteComment);
@@ -1320,8 +1456,8 @@ var WriteComment = function (_React$Component37) {
     return WriteComment;
 }(React.Component);
 
-var Footer = function (_React$Component38) {
-    _inherits(Footer, _React$Component38);
+var Footer = function (_React$Component40) {
+    _inherits(Footer, _React$Component40);
 
     function Footer() {
         _classCallCheck(this, Footer);
