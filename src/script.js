@@ -286,15 +286,37 @@ class BreadCrumb extends React.Component {
     }
 }
 
-/*
-class FollowButton extends React.Component {
+class ProductHeader extends React.Component {
     render() {
-        return(
-            <div> takip etme butonu </div>
+        return (
+            <H type="1" textAlign="center" text="iphone 5s"/>
         )
     }
 }
-*/
+
+class FollowButton extends React.Component {
+    render() {
+        return(
+            <Row size="one">
+                <Column>
+                    <FloatRight>
+                        {/*
+                            takip etmediği zaman classNamedeki "red" i kaldırıcaz
+                        */}
+                        <div className="ui labeled button" tabindex="0">
+                            <div className="ui red button">
+                                <i className="heart icon"></i> Takip Et
+                            </div>
+                            <a className="ui basic red left pointing label">
+                                1,048
+                            </a>
+                        </div>
+                    </FloatRight>
+                </Column>
+            </Row>
+        )
+    }
+}
             //<div className="ui right floated button">Butoncuk</div>
 
 class Example extends React.Component {
@@ -444,6 +466,8 @@ class Content extends React.Component {
         return(
             <div id="content">
                 <BreadCrumb />
+                <ProductHeader />
+                <FollowButton />
                 <Product />
                 <Comments />
             </div>
@@ -534,11 +558,10 @@ class Product extends React.Component {
     render() {
         return(
             <Row size="sixteen">
-                <WideColumn size="ten">
+                <WideColumn size="eight">
                     <Row size="one">
                         <Column>
                             <Center>
-                                <H type="1" textAlign="center" text="iphone 5s"/>
                                 <ImageSlider srcs={[
                                     "https://cdn.shoplightspeed.com/shops/613622/files/8420157/image.jpg",
                                     "http://3.bp.blogspot.com/-uC4SEk9v07I/UyVCeORCsdI/AAAAAAAAA-k/6xZx0EVnCMc/s1600/iphone+5s+rep.jpg",
@@ -550,20 +573,8 @@ class Product extends React.Component {
                         </Column>
                     </Row>
                 </WideColumn>
-                <WideColumn size="six">
-                    {/*
-                        takip etmediği zaman classNamedeki "red" i kaldırıcaz
-                    */}
-                    <FloatRight>
-                        <div className="ui labeled button" tabindex="0">
-                            <div className="ui red button">
-                                <i className="heart icon"></i> Takip Et
-                            </div>
-                            <a className="ui basic red left pointing label">
-                                1,048
-                            </a>
-                        </div>
-                    </FloatRight>
+                <WideColumn size="eight">
+                    burası rating alanı
                 </WideColumn>
             </Row>
         )
