@@ -174,6 +174,11 @@ var H = function (_React$Component7) {
         if (_this7.props.textAlign == "center") {
             _this7.textAlign = " center aligned ";
         }
+        if (!_this7.props.optional) {
+            _this7.optional = "";
+        } else {
+            _this7.optional = _this7.props.optional;
+        }
         return _this7;
     }
 
@@ -183,31 +188,31 @@ var H = function (_React$Component7) {
             if (this.props.type == "1") {
                 return React.createElement(
                     "h1",
-                    { className: "ui " + this.textAlign + " header" },
+                    { className: "ui " + this.textAlign + " header " + this.optional },
                     this.props.text
                 );
             } else if (this.props.type == "2") {
                 return React.createElement(
                     "h2",
-                    { className: "ui " + this.textAlign + " header" },
+                    { className: "ui " + this.textAlign + " header " + this.optional },
                     this.props.text
                 );
             } else if (this.props.type == "3") {
                 return React.createElement(
                     "h3",
-                    { className: "ui " + this.textAlign + " header" },
+                    { className: "ui " + this.textAlign + " header " + this.optional },
                     this.props.text
                 );
             } else if (this.props.type == "4") {
                 return React.createElement(
                     "h4",
-                    { className: "ui " + this.textAlign + "header" },
+                    { className: "ui " + this.textAlign + "header " + this.optional },
                     this.props.text
                 );
             } else if (this.props.type == "5") {
                 return React.createElement(
                     "h5",
-                    { className: "ui " + this.textAlign + "header" },
+                    { className: "ui " + this.textAlign + "header " + this.optional },
                     this.props.text
                 );
             }
@@ -588,11 +593,10 @@ var BreadCrumb = function (_React$Component21) {
         value: function render() {
             return React.createElement(
                 Row,
-                null,
-                React.createElement(WideColumn, { size: "one" }),
+                { size: "one" },
                 React.createElement(
-                    WideColumn,
-                    { size: "fourteen" },
+                    Column,
+                    null,
                     React.createElement(
                         "div",
                         { className: "ui breadcrumb" },
@@ -634,7 +638,19 @@ var ProductHeader = function (_React$Component22) {
     _createClass(ProductHeader, [{
         key: "render",
         value: function render() {
-            return React.createElement(H, { type: "1", textAlign: "center", text: "iphone 5s" });
+            return React.createElement(
+                Row,
+                { size: "one" },
+                React.createElement(
+                    Column,
+                    null,
+                    React.createElement(
+                        "div",
+                        { id: "productHeader" },
+                        React.createElement(H, { type: "1", textAlign: "center", text: "iphone 5s" })
+                    )
+                )
+            );
         }
     }]);
 
@@ -664,17 +680,21 @@ var FollowButton = function (_React$Component23) {
                         null,
                         React.createElement(
                             "div",
-                            { className: "ui labeled button", tabindex: "0" },
+                            { id: "followButton" },
                             React.createElement(
                                 "div",
-                                { className: "ui red button" },
-                                React.createElement("i", { className: "heart icon" }),
-                                " Takip Et"
-                            ),
-                            React.createElement(
-                                "a",
-                                { className: "ui basic red left pointing label" },
-                                "1,048"
+                                { className: "ui labeled button", tabindex: "0" },
+                                React.createElement(
+                                    "div",
+                                    { className: "ui red button" },
+                                    React.createElement("i", { className: "heart icon" }),
+                                    " Takip Et"
+                                ),
+                                React.createElement(
+                                    "a",
+                                    { className: "ui basic red left pointing label" },
+                                    "1,048"
+                                )
                             )
                         )
                     )
@@ -1140,8 +1160,148 @@ var ImageSlider = function (_React$Component34) {
     return ImageSlider;
 }(React.Component);
 
-var Product = function (_React$Component35) {
-    _inherits(Product, _React$Component35);
+var DrawCircle = function (_React$Component35) {
+    _inherits(DrawCircle, _React$Component35);
+
+    function DrawCircle(props) {
+        _classCallCheck(this, DrawCircle);
+
+        var _this36 = _possibleConstructorReturn(this, (DrawCircle.__proto__ || Object.getPrototypeOf(DrawCircle)).call(this, props));
+
+        _this36.percent = _this36.props.percentValue * 10;
+        _this36.limitColor = {
+            0: {
+                min: 0,
+                max: 5,
+                color: "#db2828"
+            },
+            1: {
+                min: 5,
+                max: 7,
+                color: "#f2711c"
+            },
+            2: {
+                min: 7,
+                max: 10,
+                color: "#21ba45"
+            }
+        };
+        _this36.color = _this36.limitColor[0].color;
+        for (var i = 0; i < Object.keys(_this36.limitColor).length; i++) {
+            if (_this36.limitColor[i].min <= _this36.props.percentValue && _this36.props.percentValue < _this36.limitColor[i].max) {
+                _this36.color = _this36.limitColor[i].color;
+                break;
+            }
+        }
+        return _this36;
+    }
+
+    _createClass(DrawCircle, [{
+        key: "render",
+        value: function render() {
+            return React.createElement(
+                "div",
+                { className: "c100 p" + this.percent + " small" },
+                React.createElement(
+                    "span",
+                    null,
+                    this.props.percentValue
+                ),
+                React.createElement(
+                    "div",
+                    { className: "slice" },
+                    React.createElement("div", { className: "bar", style: { borderColor: this.color } }),
+                    React.createElement("div", { className: "fill", style: { borderColor: this.color } })
+                )
+            );
+        }
+    }]);
+
+    return DrawCircle;
+}(React.Component);
+
+var ProductAttributeName = function (_React$Component36) {
+    _inherits(ProductAttributeName, _React$Component36);
+
+    function ProductAttributeName() {
+        _classCallCheck(this, ProductAttributeName);
+
+        return _possibleConstructorReturn(this, (ProductAttributeName.__proto__ || Object.getPrototypeOf(ProductAttributeName)).apply(this, arguments));
+    }
+
+    _createClass(ProductAttributeName, [{
+        key: "render",
+        value: function render() {
+            return React.createElement(H, { type: "3", textAlign: "center", text: this.props.name, optional: "lineHeight80px" });
+        }
+    }]);
+
+    return ProductAttributeName;
+}(React.Component);
+
+var ProductAttribute = function (_React$Component37) {
+    _inherits(ProductAttribute, _React$Component37);
+
+    function ProductAttribute() {
+        _classCallCheck(this, ProductAttribute);
+
+        return _possibleConstructorReturn(this, (ProductAttribute.__proto__ || Object.getPrototypeOf(ProductAttribute)).apply(this, arguments));
+    }
+
+    _createClass(ProductAttribute, [{
+        key: "render",
+        value: function render() {
+            return React.createElement(
+                Row,
+                { size: "two", nonStackable: true },
+                React.createElement(
+                    Column,
+                    null,
+                    React.createElement(ProductAttributeName, { name: this.props.name })
+                ),
+                React.createElement(
+                    Column,
+                    null,
+                    React.createElement(
+                        Center,
+                        null,
+                        React.createElement(DrawCircle, { percentValue: this.props.percentValue })
+                    )
+                )
+            );
+        }
+    }]);
+
+    return ProductAttribute;
+}(React.Component);
+
+var Rating = function (_React$Component38) {
+    _inherits(Rating, _React$Component38);
+
+    function Rating() {
+        _classCallCheck(this, Rating);
+
+        return _possibleConstructorReturn(this, (Rating.__proto__ || Object.getPrototypeOf(Rating)).apply(this, arguments));
+    }
+
+    _createClass(Rating, [{
+        key: "render",
+        value: function render() {
+            return React.createElement(
+                "div",
+                null,
+                React.createElement(ProductAttribute, { name: "Sa\u011Flaml\u0131k", percentValue: "4.9" }),
+                React.createElement(ProductAttribute, { name: "Kullan\u0131\u015Fl\u0131l\u0131k", percentValue: "5.2" }),
+                React.createElement(ProductAttribute, { name: "Pil \xD6mr\xFC", percentValue: "7.2" })
+            );
+        }
+    }]);
+
+    return Rating;
+}(React.Component);
+
+var Product = function (_React$Component39) {
+    _inherits(Product, _React$Component39);
 
     function Product() {
         _classCallCheck(this, Product);
@@ -1175,7 +1335,7 @@ var Product = function (_React$Component35) {
                 React.createElement(
                     WideColumn,
                     { size: "eight" },
-                    "buras\u0131 rating alan\u0131"
+                    React.createElement(Rating, null)
                 )
             );
         }
@@ -1184,8 +1344,8 @@ var Product = function (_React$Component35) {
     return Product;
 }(React.Component);
 
-var YorumlarHeader = function (_React$Component36) {
-    _inherits(YorumlarHeader, _React$Component36);
+var YorumlarHeader = function (_React$Component40) {
+    _inherits(YorumlarHeader, _React$Component40);
 
     function YorumlarHeader() {
         _classCallCheck(this, YorumlarHeader);
@@ -1211,8 +1371,8 @@ var YorumlarHeader = function (_React$Component36) {
     return YorumlarHeader;
 }(React.Component);
 
-var PageNumber = function (_React$Component37) {
-    _inherits(PageNumber, _React$Component37);
+var PageNumber = function (_React$Component41) {
+    _inherits(PageNumber, _React$Component41);
 
     function PageNumber() {
         _classCallCheck(this, PageNumber);
@@ -1294,8 +1454,8 @@ var PageNumber = function (_React$Component37) {
     return PageNumber;
 }(React.Component);
 
-var Comments = function (_React$Component38) {
-    _inherits(Comments, _React$Component38);
+var Comments = function (_React$Component42) {
+    _inherits(Comments, _React$Component42);
 
     function Comments() {
         _classCallCheck(this, Comments);
@@ -1346,8 +1506,8 @@ var Comments = function (_React$Component38) {
     return Comments;
 }(React.Component);
 
-var Comment = function (_React$Component39) {
-    _inherits(Comment, _React$Component39);
+var Comment = function (_React$Component43) {
+    _inherits(Comment, _React$Component43);
 
     function Comment(props) {
         _classCallCheck(this, Comment);
@@ -1405,8 +1565,8 @@ var Comment = function (_React$Component39) {
     return Comment;
 }(React.Component);
 
-var SendButton = function (_React$Component40) {
-    _inherits(SendButton, _React$Component40);
+var SendButton = function (_React$Component44) {
+    _inherits(SendButton, _React$Component44);
 
     function SendButton() {
         _classCallCheck(this, SendButton);
@@ -1428,8 +1588,8 @@ var SendButton = function (_React$Component40) {
     return SendButton;
 }(React.Component);
 
-var WriteComment = function (_React$Component41) {
-    _inherits(WriteComment, _React$Component41);
+var WriteComment = function (_React$Component45) {
+    _inherits(WriteComment, _React$Component45);
 
     function WriteComment() {
         _classCallCheck(this, WriteComment);
@@ -1493,8 +1653,8 @@ var WriteComment = function (_React$Component41) {
     return WriteComment;
 }(React.Component);
 
-var Footer = function (_React$Component42) {
-    _inherits(Footer, _React$Component42);
+var Footer = function (_React$Component46) {
+    _inherits(Footer, _React$Component46);
 
     function Footer() {
         _classCallCheck(this, Footer);

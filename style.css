@@ -91,3 +91,20 @@ header > div {
 #imageSliderImg {
     height:500px;
 }
+
+.lineHeight80px {
+    line-height: 80px !important;
+}
+
+.lineHeight120px {
+    line-height: 120px !important;
+}
+
+#productHeader {
+    margin-top:2rem;
+    margin-bottom:2rem;
+}
+
+#followButton {
+    margin: 3rem 0;
+}

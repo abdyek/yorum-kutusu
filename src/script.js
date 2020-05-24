@@ -81,27 +81,32 @@ class H extends React.Component {
         if(this.props.textAlign=="center") {
             this.textAlign = " center aligned ";
         }
+        if(!this.props.optional) {
+            this.optional = "";
+        } else {
+            this.optional = this.props.optional;
+        }
     }
     render() {
         if(this.props.type=="1") {
             return (
-                <h1 className={"ui "+this.textAlign+" header"}>{this.props.text}</h1>
+                <h1 className={"ui "+this.textAlign+" header " + this.optional}>{this.props.text}</h1>
             )
         } else if(this.props.type=="2") {
             return (
-                <h2 className={"ui "+this.textAlign+" header"}>{this.props.text}</h2>
+                <h2 className={"ui "+this.textAlign+" header " + this.optional}>{this.props.text}</h2>
             )
         } else if(this.props.type=="3") {
             return (
-                <h3 className={"ui "+this.textAlign+" header"}>{this.props.text}</h3>
+                <h3 className={"ui "+this.textAlign+" header " + this.optional}>{this.props.text}</h3>
             )
         } else if(this.props.type=="4") {
             return (
-                <h4 className={"ui "+this.textAlign+"header"}>{this.props.text}</h4>
+                <h4 className={"ui "+this.textAlign+"header " + this.optional}>{this.props.text}</h4>
             )
         } else if(this.props.type=="5") {
             return (
-                <h5 className={"ui "+this.textAlign+"header"}>{this.props.text}</h5>
+                <h5 className={"ui "+this.textAlign+"header " + this.optional}>{this.props.text}</h5>
             )
         }
     }
@@ -270,9 +275,8 @@ class SearchBar extends React.Component {
 class BreadCrumb extends React.Component {
     render() {
         return(
-            <Row>
-                <WideColumn size="one" />
-                <WideColumn size="fourteen">
+            <Row size="one">
+                <Column>
                     <div className="ui breadcrumb">
                         <a className="section">Elektronik</a>
                         <i className="right angle icon divider"></i>
@@ -280,7 +284,7 @@ class BreadCrumb extends React.Component {
                         <i className="right angle icon divider"></i>
                         <div className="active section">Iphone</div>
                     </div>
-                </WideColumn>
+                </Column>
             </Row>
         )
     }
@@ -289,7 +293,13 @@ class BreadCrumb extends React.Component {
 class ProductHeader extends React.Component {
     render() {
         return (
-            <H type="1" textAlign="center" text="iphone 5s"/>
+            <Row size="one">
+                <Column>
+                    <div id="productHeader">
+                        <H type="1" textAlign="center" text="iphone 5s"/>
+                    </div>
+                </Column>
+            </Row>
         )
     }
 }
@@ -303,13 +313,15 @@ class FollowButton extends React.Component {
                         {/*
                             takip etmediği zaman classNamedeki "red" i kaldırıcaz
                         */}
-                        <div className="ui labeled button" tabindex="0">
-                            <div className="ui red button">
-                                <i className="heart icon"></i> Takip Et
+                        <div id="followButton">
+                            <div className="ui labeled button" tabindex="0">
+                                <div className="ui red button">
+                                    <i className="heart icon"></i> Takip Et
+                                </div>
+                                <a className="ui basic red left pointing label">
+                                    1,048
+                                </a>
                             </div>
-                            <a className="ui basic red left pointing label">
-                                1,048
-                            </a>
                         </div>
                     </FloatRight>
                 </Column>
@@ -554,6 +566,85 @@ class ImageSlider extends React.Component {
     }
 }
 
+class DrawCircle extends React.Component {
+    constructor(props) {
+        super(props);
+        this.percent = this.props.percentValue * 10;
+        this.limitColor = {
+            0: {
+                min: 0,
+                max: 5,
+                color: "#db2828"
+            },
+            1: {
+                min: 5,
+                max: 7,
+                color: "#f2711c"
+            },
+            2: {
+                min: 7,
+                max: 10,
+                color: "#21ba45"
+            },
+        }
+        this.color = this.limitColor[0].color;
+        for(let i=0; i<Object.keys(this.limitColor).length; i++) {
+            if(this.limitColor[i].min <= this.props.percentValue && this.props.percentValue < this.limitColor[i].max) {
+                this.color = this.limitColor[i].color;
+                break;
+            }
+        }
+    }
+    render() {
+        return(
+            <div className={"c100 p"+this.percent+" small"}>
+                <span>{this.props.percentValue}</span>
+                <div className="slice">
+                    <div className="bar" style={{borderColor: this.color}}></div>
+                    <div className="fill" style={{borderColor: this.color}}></div>
+                </div>
+            </div>
+        )
+    }
+}
+
+class ProductAttributeName extends React.Component {
+    render() {
+        return (
+            <H type="3" textAlign="center" text={this.props.name} optional="lineHeight80px"/>
+        )
+    }
+}
+
+class ProductAttribute extends React.Component {
+    render() {
+        return(
+            <Row size="two" nonStackable={true}>
+                <Column>
+                    <ProductAttributeName name={this.props.name}/>
+                </Column>
+                <Column>
+                    <Center>
+                        <DrawCircle percentValue={this.props.percentValue} />
+                    </Center>
+                </Column>
+            </Row>
+        )
+    }
+}
+
+class Rating extends React.Component {
+    render() {
+        return(
+            <div>
+                <ProductAttribute name="Sağlamlık" percentValue="4.9"/>
+                <ProductAttribute name="Kullanışlılık" percentValue="5.2"/>
+                <ProductAttribute name="Pil Ömrü" percentValue="7.2"/>
+            </div>
+        )
+    }
+}
+
 class Product extends React.Component {
     render() {
         return(
@@ -574,7 +665,7 @@ class Product extends React.Component {
                     </Row>
                 </WideColumn>
                 <WideColumn size="eight">
-                    burası rating alanı
+                    <Rating />
                 </WideColumn>
             </Row>
         )
