@@ -761,20 +761,43 @@ var OverfloX = function (_React$Component25) {
     return OverfloX;
 }(React.Component);
 
-var LikeButton = function (_React$Component26) {
-    _inherits(LikeButton, _React$Component26);
+var CommentDate = function (_React$Component26) {
+    _inherits(CommentDate, _React$Component26);
+
+    function CommentDate() {
+        _classCallCheck(this, CommentDate);
+
+        return _possibleConstructorReturn(this, (CommentDate.__proto__ || Object.getPrototypeOf(CommentDate)).apply(this, arguments));
+    }
+
+    _createClass(CommentDate, [{
+        key: "render",
+        value: function render() {
+            return React.createElement(
+                "span",
+                { className: "commentDate" },
+                " 12/12/1994"
+            );
+        }
+    }]);
+
+    return CommentDate;
+}(React.Component);
+
+var LikeButton = function (_React$Component27) {
+    _inherits(LikeButton, _React$Component27);
 
     function LikeButton(props) {
         _classCallCheck(this, LikeButton);
 
-        var _this26 = _possibleConstructorReturn(this, (LikeButton.__proto__ || Object.getPrototypeOf(LikeButton)).call(this, props));
+        var _this27 = _possibleConstructorReturn(this, (LikeButton.__proto__ || Object.getPrototypeOf(LikeButton)).call(this, props));
 
-        if (_this26.props.likeOrDislike == "like") {
-            _this26.liked = " likedComment";
+        if (_this27.props.likeOrDislike == "like") {
+            _this27.liked = " likedComment";
         } else {
-            _this26.liked = " ";
+            _this27.liked = " ";
         }
-        return _this26;
+        return _this27;
     }
 
     _createClass(LikeButton, [{
@@ -796,20 +819,20 @@ var LikeButton = function (_React$Component26) {
     return LikeButton;
 }(React.Component);
 
-var DislikeButton = function (_React$Component27) {
-    _inherits(DislikeButton, _React$Component27);
+var DislikeButton = function (_React$Component28) {
+    _inherits(DislikeButton, _React$Component28);
 
     function DislikeButton(props) {
         _classCallCheck(this, DislikeButton);
 
-        var _this27 = _possibleConstructorReturn(this, (DislikeButton.__proto__ || Object.getPrototypeOf(DislikeButton)).call(this, props));
+        var _this28 = _possibleConstructorReturn(this, (DislikeButton.__proto__ || Object.getPrototypeOf(DislikeButton)).call(this, props));
 
-        if (_this27.props.likeOrDislike == "dislike") {
-            _this27.liked = " dislikedComment";
+        if (_this28.props.likeOrDislike == "dislike") {
+            _this28.liked = " dislikedComment";
         } else {
-            _this27.liked = " ";
+            _this28.liked = " ";
         }
-        return _this27;
+        return _this28;
     }
 
     _createClass(DislikeButton, [{
@@ -831,8 +854,8 @@ var DislikeButton = function (_React$Component27) {
     return DislikeButton;
 }(React.Component);
 
-var ComplaintButton = function (_React$Component28) {
-    _inherits(ComplaintButton, _React$Component28);
+var ComplaintButton = function (_React$Component29) {
+    _inherits(ComplaintButton, _React$Component29);
 
     function ComplaintButton() {
         _classCallCheck(this, ComplaintButton);
@@ -854,8 +877,8 @@ var ComplaintButton = function (_React$Component28) {
     return ComplaintButton;
 }(React.Component);
 
-var Categories = function (_React$Component29) {
-    _inherits(Categories, _React$Component29);
+var Categories = function (_React$Component30) {
+    _inherits(Categories, _React$Component30);
 
     function Categories() {
         _classCallCheck(this, Categories);
@@ -911,8 +934,8 @@ var Categories = function (_React$Component29) {
     return Categories;
 }(React.Component);
 
-var App = function (_React$Component30) {
-    _inherits(App, _React$Component30);
+var App = function (_React$Component31) {
+    _inherits(App, _React$Component31);
 
     function App(props) {
         _classCallCheck(this, App);
@@ -936,8 +959,8 @@ var App = function (_React$Component30) {
     return App;
 }(React.Component);
 
-var Header = function (_React$Component31) {
-    _inherits(Header, _React$Component31);
+var Header = function (_React$Component32) {
+    _inherits(Header, _React$Component32);
 
     function Header() {
         _classCallCheck(this, Header);
@@ -1002,8 +1025,8 @@ var Header = function (_React$Component31) {
     return Header;
 }(React.Component);
 
-var Content = function (_React$Component32) {
-    _inherits(Content, _React$Component32);
+var Content = function (_React$Component33) {
+    _inherits(Content, _React$Component33);
 
     function Content() {
         _classCallCheck(this, Content);
@@ -1029,34 +1052,34 @@ var Content = function (_React$Component32) {
     return Content;
 }(React.Component);
 
-var DirectlyButtons = function (_React$Component33) {
-    _inherits(DirectlyButtons, _React$Component33);
+var DirectlyButtons = function (_React$Component34) {
+    _inherits(DirectlyButtons, _React$Component34);
 
     function DirectlyButtons(props) {
         _classCallCheck(this, DirectlyButtons);
 
-        var _this33 = _possibleConstructorReturn(this, (DirectlyButtons.__proto__ || Object.getPrototypeOf(DirectlyButtons)).call(this, props));
+        var _this34 = _possibleConstructorReturn(this, (DirectlyButtons.__proto__ || Object.getPrototypeOf(DirectlyButtons)).call(this, props));
 
-        _this33.buttons = [];
-        _this33.state = {
+        _this34.buttons = [];
+        _this34.state = {
             selectedIndex: 0
         };
         for (var i = 0; i < 4; i++) {
-            if (_this33.props.selectedIndex == i + 1) {
-                _this33.buttons.push(React.createElement(
+            if (_this34.props.selectedIndex == i + 1) {
+                _this34.buttons.push(React.createElement(
                     "button",
                     { "class": "disabled ui button" },
                     i + 1
                 ));
             } else {
-                _this33.buttons.push(React.createElement(
+                _this34.buttons.push(React.createElement(
                     "button",
                     { "class": "ui button" },
                     i + 1
                 ));
             }
         }
-        return _this33;
+        return _this34;
     }
 
     _createClass(DirectlyButtons, [{
@@ -1073,21 +1096,21 @@ var DirectlyButtons = function (_React$Component33) {
     return DirectlyButtons;
 }(React.Component);
 
-var ImageSlider = function (_React$Component34) {
-    _inherits(ImageSlider, _React$Component34);
+var ImageSlider = function (_React$Component35) {
+    _inherits(ImageSlider, _React$Component35);
 
     function ImageSlider(props) {
         _classCallCheck(this, ImageSlider);
 
-        var _this34 = _possibleConstructorReturn(this, (ImageSlider.__proto__ || Object.getPrototypeOf(ImageSlider)).call(this, props));
+        var _this35 = _possibleConstructorReturn(this, (ImageSlider.__proto__ || Object.getPrototypeOf(ImageSlider)).call(this, props));
 
-        _this34.nextIndex = 0;
-        _this34.state = {
-            src: _this34.props.srcs[0],
+        _this35.nextIndex = 0;
+        _this35.state = {
+            src: _this35.props.srcs[0],
             index: 0
         };
-        _this34.change = _this34.change.bind(_this34);
-        return _this34;
+        _this35.change = _this35.change.bind(_this35);
+        return _this35;
     }
 
     _createClass(ImageSlider, [{
@@ -1108,7 +1131,7 @@ var ImageSlider = function (_React$Component34) {
     }, {
         key: "render",
         value: function render() {
-            var _this35 = this;
+            var _this36 = this;
 
             return React.createElement(
                 "div",
@@ -1139,14 +1162,14 @@ var ImageSlider = function (_React$Component34) {
                             React.createElement(
                                 "button",
                                 { className: "mini ui icon button", onClick: function onClick() {
-                                        return _this35.change(-1);
+                                        return _this36.change(-1);
                                     } },
                                 React.createElement("i", { className: "left arrow icon" })
                             ),
                             React.createElement(
                                 "button",
                                 { className: "mini ui icon button", onClick: function onClick() {
-                                        return _this35.change(+1);
+                                        return _this36.change(+1);
                                     } },
                                 React.createElement("i", { className: "right arrow icon" })
                             )
@@ -1160,16 +1183,16 @@ var ImageSlider = function (_React$Component34) {
     return ImageSlider;
 }(React.Component);
 
-var DrawCircle = function (_React$Component35) {
-    _inherits(DrawCircle, _React$Component35);
+var DrawCircle = function (_React$Component36) {
+    _inherits(DrawCircle, _React$Component36);
 
     function DrawCircle(props) {
         _classCallCheck(this, DrawCircle);
 
-        var _this36 = _possibleConstructorReturn(this, (DrawCircle.__proto__ || Object.getPrototypeOf(DrawCircle)).call(this, props));
+        var _this37 = _possibleConstructorReturn(this, (DrawCircle.__proto__ || Object.getPrototypeOf(DrawCircle)).call(this, props));
 
-        _this36.percent = _this36.props.percentValue * 10;
-        _this36.limitColor = {
+        _this37.percent = _this37.props.percentValue * 10;
+        _this37.limitColor = {
             0: {
                 min: 0,
                 max: 5,
@@ -1186,14 +1209,14 @@ var DrawCircle = function (_React$Component35) {
                 color: "#21ba45"
             }
         };
-        _this36.color = _this36.limitColor[0].color;
-        for (var i = 0; i < Object.keys(_this36.limitColor).length; i++) {
-            if (_this36.limitColor[i].min <= _this36.props.percentValue && _this36.props.percentValue < _this36.limitColor[i].max) {
-                _this36.color = _this36.limitColor[i].color;
+        _this37.color = _this37.limitColor[0].color;
+        for (var i = 0; i < Object.keys(_this37.limitColor).length; i++) {
+            if (_this37.limitColor[i].min <= _this37.props.percentValue && _this37.props.percentValue < _this37.limitColor[i].max) {
+                _this37.color = _this37.limitColor[i].color;
                 break;
             }
         }
-        return _this36;
+        return _this37;
     }
 
     _createClass(DrawCircle, [{
@@ -1220,8 +1243,8 @@ var DrawCircle = function (_React$Component35) {
     return DrawCircle;
 }(React.Component);
 
-var ProductAttributeName = function (_React$Component36) {
-    _inherits(ProductAttributeName, _React$Component36);
+var ProductAttributeName = function (_React$Component37) {
+    _inherits(ProductAttributeName, _React$Component37);
 
     function ProductAttributeName() {
         _classCallCheck(this, ProductAttributeName);
@@ -1239,8 +1262,8 @@ var ProductAttributeName = function (_React$Component36) {
     return ProductAttributeName;
 }(React.Component);
 
-var ProductAttribute = function (_React$Component37) {
-    _inherits(ProductAttribute, _React$Component37);
+var ProductAttribute = function (_React$Component38) {
+    _inherits(ProductAttribute, _React$Component38);
 
     function ProductAttribute() {
         _classCallCheck(this, ProductAttribute);
@@ -1275,8 +1298,8 @@ var ProductAttribute = function (_React$Component37) {
     return ProductAttribute;
 }(React.Component);
 
-var Rating = function (_React$Component38) {
-    _inherits(Rating, _React$Component38);
+var Rating = function (_React$Component39) {
+    _inherits(Rating, _React$Component39);
 
     function Rating() {
         _classCallCheck(this, Rating);
@@ -1300,8 +1323,8 @@ var Rating = function (_React$Component38) {
     return Rating;
 }(React.Component);
 
-var Product = function (_React$Component39) {
-    _inherits(Product, _React$Component39);
+var Product = function (_React$Component40) {
+    _inherits(Product, _React$Component40);
 
     function Product() {
         _classCallCheck(this, Product);
@@ -1344,8 +1367,8 @@ var Product = function (_React$Component39) {
     return Product;
 }(React.Component);
 
-var YorumlarHeader = function (_React$Component40) {
-    _inherits(YorumlarHeader, _React$Component40);
+var YorumlarHeader = function (_React$Component41) {
+    _inherits(YorumlarHeader, _React$Component41);
 
     function YorumlarHeader() {
         _classCallCheck(this, YorumlarHeader);
@@ -1371,8 +1394,8 @@ var YorumlarHeader = function (_React$Component40) {
     return YorumlarHeader;
 }(React.Component);
 
-var PageNumber = function (_React$Component41) {
-    _inherits(PageNumber, _React$Component41);
+var PageNumber = function (_React$Component42) {
+    _inherits(PageNumber, _React$Component42);
 
     function PageNumber() {
         _classCallCheck(this, PageNumber);
@@ -1454,60 +1477,71 @@ var PageNumber = function (_React$Component41) {
     return PageNumber;
 }(React.Component);
 
-var Comments = function (_React$Component42) {
-    _inherits(Comments, _React$Component42);
+var RatingBar = function (_React$Component43) {
+    _inherits(RatingBar, _React$Component43);
 
-    function Comments() {
-        _classCallCheck(this, Comments);
+    function RatingBar(props) {
+        _classCallCheck(this, RatingBar);
 
-        return _possibleConstructorReturn(this, (Comments.__proto__ || Object.getPrototypeOf(Comments)).apply(this, arguments));
+        var _this44 = _possibleConstructorReturn(this, (RatingBar.__proto__ || Object.getPrototypeOf(RatingBar)).call(this, props));
+
+        _this44.percent = _this44.props.ratingAverage * 10;
+        // bu kısım drawcircle ile aynı refactor ederken buna bir çare bulabilirsin
+        _this44.limitColor = {
+            0: {
+                min: 0,
+                max: 5,
+                color: "#db2828"
+            },
+            1: {
+                min: 5,
+                max: 7,
+                color: "#f2711c"
+            },
+            2: {
+                min: 7,
+                max: 10,
+                color: "#21ba45"
+            }
+        };
+        _this44.color = _this44.limitColor[0].color;
+        for (var i = 0; i < Object.keys(_this44.limitColor).length; i++) {
+            if (_this44.limitColor[i].min <= _this44.props.ratingAverage && _this44.props.ratingAverage < _this44.limitColor[i].max) {
+                _this44.color = _this44.limitColor[i].color;
+                break;
+            }
+        }
+        // ^^^
+        _this44.widthOfFill = _this44.props.ratingAverage * 15 + "px";
+        return _this44;
     }
 
-    _createClass(Comments, [{
+    _createClass(RatingBar, [{
         key: "render",
         value: function render() {
             return React.createElement(
                 "div",
-                null,
-                React.createElement(YorumlarHeader, null),
-                React.createElement(PageNumber, null),
-                React.createElement(Comment, {
-                    commentOwner: "R\u0131dvan T\xFClemen",
-                    commentText: "Yinelenen bir sayfa i\xE7eri\u011Finin okuyucunun dikkatini da\u011F\u0131tt\u0131\u011F\u0131 bilinen bir ger\xE7ektir. Lorem Ipsum kullanman\u0131n amac\u0131, s\xFCrekli 'buraya metin gelecek, buraya metin gelecek' yazmaya k\u0131yasla daha dengeli bir harf da\u011F\u0131l\u0131m\u0131 sa\u011Flayarak okunurlu\u011Fu art\u0131rmas\u0131d\u0131r. \u015Eu anda bir\xE7ok masa\xFCst\xFC yay\u0131nc\u0131l\u0131k paketi ve web sayfa d\xFCzenleyicisi, varsay\u0131lan m\u0131g\u0131r metinler olarak Lorem Ipsum kullanmaktad\u0131r. Ayr\u0131ca arama motorlar\u0131nda 'lorem ipsum' anahtar s\xF6zc\xFCkleri ile arama yap\u0131ld\u0131\u011F\u0131nda hen\xFCz tasar\u0131m a\u015Famas\u0131nda olan \xE7ok say\u0131da site listelenir. Y\u0131llar i\xE7inde, bazen kazara, bazen bilin\xE7li olarak (\xF6rne\u011Fin mizah kat\u0131larak), \xE7e\u015Fitli s\xFCr\xFCmleri geli\u015Ftirilmi\u015Ftir.",
-                    likeValue: "312",
-                    dislikeValue: "31",
-                    likeOrDislike: "like"
-                }),
-                React.createElement(Comment, {
-                    commentOwner: "RTE_53",
-                    commentText: "Eyyy k\u0131l\u0131\xE7dar sen kimsin yaa!!",
-                    likeValue: "9912312312",
-                    dislikeValue: "912",
-                    likeOrDislike: "dislike"
-                }),
-                React.createElement(Comment, {
-                    commentOwner: "ByKemal31",
-                    commentText: "Derhal buray\u0131 terket karde\u015Fim",
-                    likeValue: "321312412",
-                    dislikeValue: "91"
-                }),
-                React.createElement(Comment, {
-                    commentOwner: "Deniz_Baykal_07",
-                    commentText: "Benim ne i\u015Fim var burda amq",
-                    likeValue: "999999999999",
-                    dislikeValue: "-1231"
-                }),
-                React.createElement(PageNumber, null),
-                React.createElement(WriteComment, null)
+                { className: "ratingBar" },
+                React.createElement(
+                    "span",
+                    { className: "barValue" },
+                    this.props.ratingAverage
+                ),
+                React.createElement(
+                    "div",
+                    { className: "barStickWrapper" },
+                    React.createElement("div", { className: "barStick barStickFull" }),
+                    React.createElement("div", { className: "barStick barStickFill", style: { backgroundColor: this.color, width: this.widthOfFill } })
+                )
             );
         }
     }]);
 
-    return Comments;
+    return RatingBar;
 }(React.Component);
 
-var Comment = function (_React$Component43) {
-    _inherits(Comment, _React$Component43);
+var Comment = function (_React$Component44) {
+    _inherits(Comment, _React$Component44);
 
     function Comment(props) {
         _classCallCheck(this, Comment);
@@ -1528,22 +1562,52 @@ var Comment = function (_React$Component43) {
                         RaisedSegment,
                         null,
                         React.createElement(
-                            "div",
-                            { className: "commentHeader" },
-                            React.createElement(H, { type: "4", text: this.props.commentOwner })
-                        ),
-                        React.createElement(
-                            "div",
-                            { className: "commentText" },
+                            Row,
+                            { size: "two", nonStackable: true },
                             React.createElement(
-                                "p",
+                                Column,
                                 null,
-                                this.props.commentText
+                                React.createElement(RatingBar, { ratingAverage: this.props.ratingAverage })
+                            ),
+                            React.createElement(
+                                Column,
+                                null,
+                                React.createElement(
+                                    FloatRight,
+                                    null,
+                                    React.createElement(CommentDate, null)
+                                )
                             )
                         ),
                         React.createElement(
                             Row,
                             { size: "one" },
+                            React.createElement(
+                                Column,
+                                null,
+                                React.createElement(
+                                    "div",
+                                    { className: "commentText" },
+                                    React.createElement(
+                                        "p",
+                                        null,
+                                        this.props.commentText
+                                    )
+                                )
+                            )
+                        ),
+                        React.createElement(
+                            Row,
+                            { size: "two" },
+                            React.createElement(
+                                Column,
+                                null,
+                                React.createElement(
+                                    "div",
+                                    { className: "commentHeader" },
+                                    React.createElement(H, { type: "5", text: this.props.commentOwner })
+                                )
+                            ),
                             React.createElement(
                                 Column,
                                 null,
@@ -1565,8 +1629,64 @@ var Comment = function (_React$Component43) {
     return Comment;
 }(React.Component);
 
-var SendButton = function (_React$Component44) {
-    _inherits(SendButton, _React$Component44);
+var Comments = function (_React$Component45) {
+    _inherits(Comments, _React$Component45);
+
+    function Comments(props) {
+        _classCallCheck(this, Comments);
+
+        return _possibleConstructorReturn(this, (Comments.__proto__ || Object.getPrototypeOf(Comments)).call(this, props));
+    }
+
+    _createClass(Comments, [{
+        key: "render",
+        value: function render() {
+            return React.createElement(
+                "div",
+                null,
+                React.createElement(YorumlarHeader, null),
+                React.createElement(PageNumber, null),
+                React.createElement(Comment, {
+                    commentOwner: "R\u0131dvan T\xFClemen",
+                    commentText: "Yinelenen bir sayfa i\xE7eri\u011Finin okuyucunun dikkatini da\u011F\u0131tt\u0131\u011F\u0131 bilinen bir ger\xE7ektir. Lorem Ipsum kullanman\u0131n amac\u0131, s\xFCrekli 'buraya metin gelecek, buraya metin gelecek' yazmaya k\u0131yasla daha dengeli bir harf da\u011F\u0131l\u0131m\u0131 sa\u011Flayarak okunurlu\u011Fu art\u0131rmas\u0131d\u0131r. \u015Eu anda bir\xE7ok masa\xFCst\xFC yay\u0131nc\u0131l\u0131k paketi ve web sayfa d\xFCzenleyicisi, varsay\u0131lan m\u0131g\u0131r metinler olarak Lorem Ipsum kullanmaktad\u0131r. Ayr\u0131ca arama motorlar\u0131nda 'lorem ipsum' anahtar s\xF6zc\xFCkleri ile arama yap\u0131ld\u0131\u011F\u0131nda hen\xFCz tasar\u0131m a\u015Famas\u0131nda olan \xE7ok say\u0131da site listelenir. Y\u0131llar i\xE7inde, bazen kazara, bazen bilin\xE7li olarak (\xF6rne\u011Fin mizah kat\u0131larak), \xE7e\u015Fitli s\xFCr\xFCmleri geli\u015Ftirilmi\u015Ftir.",
+                    likeValue: "312",
+                    dislikeValue: "31",
+                    likeOrDislike: "like",
+                    ratingAverage: "7.2"
+                }),
+                React.createElement(Comment, {
+                    commentOwner: "RTE_53",
+                    commentText: "Eyyy k\u0131l\u0131\xE7dar sen kimsin yaa!!",
+                    likeValue: "9912312312",
+                    dislikeValue: "912",
+                    likeOrDislike: "dislike",
+                    ratingAverage: "4.2"
+                }),
+                React.createElement(Comment, {
+                    commentOwner: "ByKemal31",
+                    commentText: "Derhal buray\u0131 terket karde\u015Fim",
+                    likeValue: "321312412",
+                    dislikeValue: "91",
+                    ratingAverage: "6.8"
+                }),
+                React.createElement(Comment, {
+                    commentOwner: "Deniz_Baykal_07",
+                    commentText: "Benim ne i\u015Fim var burda amq",
+                    likeValue: "999999999999",
+                    dislikeValue: "-1231",
+                    ratingAverage: "1.0"
+                }),
+                React.createElement(PageNumber, null),
+                React.createElement(WriteComment, null)
+            );
+        }
+    }]);
+
+    return Comments;
+}(React.Component);
+
+var SendButton = function (_React$Component46) {
+    _inherits(SendButton, _React$Component46);
 
     function SendButton() {
         _classCallCheck(this, SendButton);
@@ -1588,8 +1708,8 @@ var SendButton = function (_React$Component44) {
     return SendButton;
 }(React.Component);
 
-var WriteComment = function (_React$Component45) {
-    _inherits(WriteComment, _React$Component45);
+var WriteComment = function (_React$Component47) {
+    _inherits(WriteComment, _React$Component47);
 
     function WriteComment() {
         _classCallCheck(this, WriteComment);
@@ -1653,8 +1773,8 @@ var WriteComment = function (_React$Component45) {
     return WriteComment;
 }(React.Component);
 
-var Footer = function (_React$Component46) {
-    _inherits(Footer, _React$Component46);
+var Footer = function (_React$Component48) {
+    _inherits(Footer, _React$Component48);
 
     function Footer() {
         _classCallCheck(this, Footer);

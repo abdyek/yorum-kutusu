@@ -355,6 +355,14 @@ class OverfloX extends React.Component {
     }
 }
 
+class CommentDate extends React.Component {
+    render() {
+        return (
+            <span className="commentDate"> 12/12/1994</span>
+        )
+    }
+}
+
 class LikeButton extends React.Component {
     constructor(props) {
         super(props);
@@ -723,40 +731,50 @@ class PageNumber extends React.Component {
     }
 }
 
-class Comments extends React.Component {
+class RatingBar extends React.Component {
+    constructor(props) {
+        super(props);
+        this.percent = this.props.ratingAverage * 10;
+        // bu kısım drawcircle ile aynı refactor ederken buna bir çare bulabilirsin
+        this.limitColor = {
+            0: {
+                min: 0,
+                max: 5,
+                color: "#db2828"
+            },
+            1: {
+                min: 5,
+                max: 7,
+                color: "#f2711c"
+            },
+            2: {
+                min: 7,
+                max: 10,
+                color: "#21ba45"
+            }
+        }
+        this.color = this.limitColor[0].color;
+        for(let i=0; i<Object.keys(this.limitColor).length; i++) {
+            if(this.limitColor[i].min <= this.props.ratingAverage && this.props.ratingAverage< this.limitColor[i].max) {
+                this.color = this.limitColor[i].color;
+                break;
+            }
+        }
+        // ^^^
+        this.widthOfFill = this.props.ratingAverage * 15 + "px";
+    }
     render() {
         return(
-            <div>
-                <YorumlarHeader />
-                <PageNumber />
-                <Comment
-                    commentOwner="Rıdvan Tülemen"
-                    commentText="Yinelenen bir sayfa içeriğinin okuyucunun dikkatini dağıttığı bilinen bir gerçektir. Lorem Ipsum kullanmanın amacı, sürekli 'buraya metin gelecek, buraya metin gelecek' yazmaya kıyasla daha dengeli bir harf dağılımı sağlayarak okunurluğu artırmasıdır. Şu anda birçok masaüstü yayıncılık paketi ve web sayfa düzenleyicisi, varsayılan mıgır metinler olarak Lorem Ipsum kullanmaktadır. Ayrıca arama motorlarında 'lorem ipsum' anahtar sözcükleri ile arama yapıldığında henüz tasarım aşamasında olan çok sayıda site listelenir. Yıllar içinde, bazen kazara, bazen bilinçli olarak (örneğin mizah katılarak), çeşitli sürümleri geliştirilmiştir."
-                    likeValue="312"
-                    dislikeValue="31"
-                    likeOrDislike="like"
-                />
-                <Comment
-                    commentOwner="RTE_53"
-                    commentText="Eyyy kılıçdar sen kimsin yaa!!"
-                    likeValue="9912312312"
-                    dislikeValue="912"
-                    likeOrDislike="dislike"
-                />
-                <Comment
-                    commentOwner="ByKemal31"
-                    commentText="Derhal burayı terket kardeşim"
-                    likeValue="321312412"
-                    dislikeValue="91"
-                />
-                <Comment
-                    commentOwner="Deniz_Baykal_07"
-                    commentText="Benim ne işim var burda amq"
-                    likeValue="999999999999"
-                    dislikeValue="-1231"
-                />
-                <PageNumber />
-                <WriteComment />
+            <div className="ratingBar">
+                <span className="barValue">
+                    {this.props.ratingAverage}
+                </span>
+                <div className="barStickWrapper">
+                    <div className="barStick barStickFull">
+                    </div>
+                    <div className="barStick barStickFill" style={{backgroundColor:this.color, width:this.widthOfFill}}>
+                    </div>
+                </div>
             </div>
         )
     }
@@ -771,15 +789,31 @@ class Comment extends React.Component {
             <Row>
                 <Column>
                     <RaisedSegment>
-                        <div className="commentHeader">
-                            <H type="4" text={this.props.commentOwner} />
-                        </div>
-                        <div className="commentText">
-                            <p>
-                                {this.props.commentText}
-                            </p>
-                        </div>
+                        <Row size="two" nonStackable={true}>
+                            <Column>
+                                <RatingBar ratingAverage={this.props.ratingAverage}/>
+                            </Column>
+                            <Column>
+                                <FloatRight>
+                                    <CommentDate />
+                                </FloatRight>
+                            </Column>
+                        </Row>
                         <Row size="one">
+                            <Column>
+                                <div className="commentText">
+                                    <p>
+                                        {this.props.commentText}
+                                    </p>
+                                </div>
+                            </Column>
+                        </Row>
+                        <Row size="two">
+                            <Column>
+                                <div className="commentHeader">
+                                    <H type="5" text={this.props.commentOwner} />
+                                </div>
+                            </Column>
                             <Column>
                                 <FloatRight>
                                     <LikeButton value={this.props.likeValue} likeOrDislike={this.props.likeOrDislike}/>
@@ -794,6 +828,53 @@ class Comment extends React.Component {
         )
     }
 }
+
+class Comments extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+    render() {
+        return(
+            <div>
+                <YorumlarHeader />
+                <PageNumber />
+                <Comment
+                    commentOwner="Rıdvan Tülemen"
+                    commentText="Yinelenen bir sayfa içeriğinin okuyucunun dikkatini dağıttığı bilinen bir gerçektir. Lorem Ipsum kullanmanın amacı, sürekli 'buraya metin gelecek, buraya metin gelecek' yazmaya kıyasla daha dengeli bir harf dağılımı sağlayarak okunurluğu artırmasıdır. Şu anda birçok masaüstü yayıncılık paketi ve web sayfa düzenleyicisi, varsayılan mıgır metinler olarak Lorem Ipsum kullanmaktadır. Ayrıca arama motorlarında 'lorem ipsum' anahtar sözcükleri ile arama yapıldığında henüz tasarım aşamasında olan çok sayıda site listelenir. Yıllar içinde, bazen kazara, bazen bilinçli olarak (örneğin mizah katılarak), çeşitli sürümleri geliştirilmiştir."
+                    likeValue="312"
+                    dislikeValue="31"
+                    likeOrDislike="like"
+                    ratingAverage="7.2"
+                />
+                <Comment
+                    commentOwner="RTE_53"
+                    commentText="Eyyy kılıçdar sen kimsin yaa!!"
+                    likeValue="9912312312"
+                    dislikeValue="912"
+                    likeOrDislike="dislike"
+                    ratingAverage="4.2"
+                />
+                <Comment
+                    commentOwner="ByKemal31"
+                    commentText="Derhal burayı terket kardeşim"
+                    likeValue="321312412"
+                    dislikeValue="91"
+                    ratingAverage="6.8"
+                />
+                <Comment
+                    commentOwner="Deniz_Baykal_07"
+                    commentText="Benim ne işim var burda amq"
+                    likeValue="999999999999"
+                    dislikeValue="-1231"
+                    ratingAverage="1.0"
+                />
+                <PageNumber />
+                <WriteComment />
+            </div>
+        )
+    }
+}
+
 
 class SendButton extends React.Component {
     render() {
