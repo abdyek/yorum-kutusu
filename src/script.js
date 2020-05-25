@@ -876,6 +876,53 @@ class Comments extends React.Component {
 }
 
 
+class InputRange extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            value:"5"
+        }
+        this.change = this.change.bind(this);
+    }
+    change(event) {
+        this.setState({
+            value: event.target.value
+        })
+    }
+    render() {
+        return(
+            <div className="inputRangeWrapper">
+                <label className="inputRangeLabel">
+                    {this.props.name}
+                </label>
+                <input className="inputRange" type="range" id="" name="" defaultValue="5" value={this.state.value} step="1" min="0" max="10" onChange={this.change}></input>
+                <label className="inputRangeValue">
+                    {this.state.value}
+                </label>
+            </div>
+        )
+    }
+}
+
+class InputRating extends React.Component {
+    render() {
+        return(
+            <div id="inputRating">
+                <InputRange name="Sağlamlık"/>
+                <InputRange name="Kullanışlılık"/>
+                <InputRange name="Pil Ömrü"/>
+                <InputRange name="falan1"/>
+                <InputRange name="falan2"/>
+                <InputRange name="falan3"/>
+                <InputRange name="falan4"/>
+                <InputRange name="falan5"/>
+            </div>
+        )
+    }
+}
+
+
+
 class SendButton extends React.Component {
     render() {
         return (
@@ -892,22 +939,25 @@ class WriteComment extends React.Component {
             <Row>
                 <Column>
                     <Segment>
-                        <Row>
-                            <Column>
+                        <Row size="sixteen">
+                            <WideColumn size="ten">
                                 <div className="ui form">
                                     <div className="field">
                                         <label>Yorum Yaz</label>
-                                        <textarea rows="5"></textarea>
+                                        <textarea rows="10"></textarea>
                                     </div>
                                 </div>
-                            </Column>
+                            </WideColumn>
+                            <WideColumn size="six">
+                                <InputRating />
+                            </WideColumn>
                         </Row>
                         <Row>
-                            <Column>
+                            <WideColumn>
                                 <FloatRight>
                                     <SendButton />
                                 </FloatRight>
-                            </Column>
+                            </WideColumn>
                         </Row>
                     </Segment>
                 </Column>

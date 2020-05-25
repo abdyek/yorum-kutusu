@@ -144,3 +144,29 @@ header > div {
     background-color:#BBB;
     width:150px;
 }
+
+.inputRange {
+    margin-left:1rem;
+}
+
+.inputRangeLabel {
+    display: block;
+    float:left;
+}
+
+.inputRangeValue {
+    display: block;
+    float: right;
+    margin-left:1rem;
+}
+
+.inputRangeWrapper {
+    padding: 1rem;
+    float: right;
+}
+
+#inputRating {
+    margin: 1rem 0;
+    height: 15rem;
+    overflow-y: auto;
+}

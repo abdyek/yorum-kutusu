@@ -1685,8 +1685,84 @@ var Comments = function (_React$Component45) {
     return Comments;
 }(React.Component);
 
-var SendButton = function (_React$Component46) {
-    _inherits(SendButton, _React$Component46);
+var InputRange = function (_React$Component46) {
+    _inherits(InputRange, _React$Component46);
+
+    function InputRange(props) {
+        _classCallCheck(this, InputRange);
+
+        var _this47 = _possibleConstructorReturn(this, (InputRange.__proto__ || Object.getPrototypeOf(InputRange)).call(this, props));
+
+        _this47.state = {
+            value: "5"
+        };
+        _this47.change = _this47.change.bind(_this47);
+        return _this47;
+    }
+
+    _createClass(InputRange, [{
+        key: "change",
+        value: function change(event) {
+            this.setState({
+                value: event.target.value
+            });
+        }
+    }, {
+        key: "render",
+        value: function render() {
+            return React.createElement(
+                "div",
+                { className: "inputRangeWrapper" },
+                React.createElement(
+                    "label",
+                    { className: "inputRangeLabel" },
+                    this.props.name
+                ),
+                React.createElement("input", { className: "inputRange", type: "range", id: "", name: "", defaultValue: "5", value: this.state.value, step: "1", min: "0", max: "10", onChange: this.change }),
+                React.createElement(
+                    "label",
+                    { className: "inputRangeValue" },
+                    this.state.value
+                )
+            );
+        }
+    }]);
+
+    return InputRange;
+}(React.Component);
+
+var InputRating = function (_React$Component47) {
+    _inherits(InputRating, _React$Component47);
+
+    function InputRating() {
+        _classCallCheck(this, InputRating);
+
+        return _possibleConstructorReturn(this, (InputRating.__proto__ || Object.getPrototypeOf(InputRating)).apply(this, arguments));
+    }
+
+    _createClass(InputRating, [{
+        key: "render",
+        value: function render() {
+            return React.createElement(
+                "div",
+                { id: "inputRating" },
+                React.createElement(InputRange, { name: "Sa\u011Flaml\u0131k" }),
+                React.createElement(InputRange, { name: "Kullan\u0131\u015Fl\u0131l\u0131k" }),
+                React.createElement(InputRange, { name: "Pil \xD6mr\xFC" }),
+                React.createElement(InputRange, { name: "falan1" }),
+                React.createElement(InputRange, { name: "falan2" }),
+                React.createElement(InputRange, { name: "falan3" }),
+                React.createElement(InputRange, { name: "falan4" }),
+                React.createElement(InputRange, { name: "falan5" })
+            );
+        }
+    }]);
+
+    return InputRating;
+}(React.Component);
+
+var SendButton = function (_React$Component48) {
+    _inherits(SendButton, _React$Component48);
 
     function SendButton() {
         _classCallCheck(this, SendButton);
@@ -1708,8 +1784,8 @@ var SendButton = function (_React$Component46) {
     return SendButton;
 }(React.Component);
 
-var WriteComment = function (_React$Component47) {
-    _inherits(WriteComment, _React$Component47);
+var WriteComment = function (_React$Component49) {
+    _inherits(WriteComment, _React$Component49);
 
     function WriteComment() {
         _classCallCheck(this, WriteComment);
@@ -1731,10 +1807,10 @@ var WriteComment = function (_React$Component47) {
                         null,
                         React.createElement(
                             Row,
-                            null,
+                            { size: "sixteen" },
                             React.createElement(
-                                Column,
-                                null,
+                                WideColumn,
+                                { size: "ten" },
                                 React.createElement(
                                     "div",
                                     { className: "ui form" },
@@ -1746,16 +1822,21 @@ var WriteComment = function (_React$Component47) {
                                             null,
                                             "Yorum Yaz"
                                         ),
-                                        React.createElement("textarea", { rows: "5" })
+                                        React.createElement("textarea", { rows: "10" })
                                     )
                                 )
+                            ),
+                            React.createElement(
+                                WideColumn,
+                                { size: "six" },
+                                React.createElement(InputRating, null)
                             )
                         ),
                         React.createElement(
                             Row,
                             null,
                             React.createElement(
-                                Column,
+                                WideColumn,
                                 null,
                                 React.createElement(
                                     FloatRight,
@@ -1773,8 +1854,8 @@ var WriteComment = function (_React$Component47) {
     return WriteComment;
 }(React.Component);
 
-var Footer = function (_React$Component48) {
-    _inherits(Footer, _React$Component48);
+var Footer = function (_React$Component50) {
+    _inherits(Footer, _React$Component50);
 
     function Footer() {
         _classCallCheck(this, Footer);
