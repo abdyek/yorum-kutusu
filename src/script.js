@@ -358,7 +358,7 @@ class OverfloX extends React.Component {
 class CommentDate extends React.Component {
     render() {
         return (
-            <span className="commentDate"> 12/12/1994</span>
+            <span className="commentDate">{this.props.date}</span>
         )
     }
 }
@@ -795,7 +795,7 @@ class Comment extends React.Component {
                             </Column>
                             <Column>
                                 <FloatRight>
-                                    <CommentDate />
+                                    <CommentDate date={this.props.date} />
                                 </FloatRight>
                             </Column>
                         </Row>
@@ -845,6 +845,7 @@ class Comments extends React.Component {
                     dislikeValue="31"
                     likeOrDislike="like"
                     ratingAverage="7.2"
+                    date="15/05/2020"
                 />
                 <Comment
                     commentOwner="RTE_53"
@@ -853,6 +854,7 @@ class Comments extends React.Component {
                     dislikeValue="912"
                     likeOrDislike="dislike"
                     ratingAverage="4.2"
+                    date="15-05"
                 />
                 <Comment
                     commentOwner="ByKemal31"
@@ -860,6 +862,7 @@ class Comments extends React.Component {
                     likeValue="321312412"
                     dislikeValue="91"
                     ratingAverage="6.8"
+                    date="15-05-12"
                 />
                 <Comment
                     commentOwner="Deniz_Baykal_07"
@@ -867,6 +870,7 @@ class Comments extends React.Component {
                     likeValue="999999999999"
                     dislikeValue="-1231"
                     ratingAverage="1.0"
+                    date="01-05 12:15"
                 />
                 <PageNumber />
                 <WriteComment />

@@ -776,7 +776,7 @@ var CommentDate = function (_React$Component26) {
             return React.createElement(
                 "span",
                 { className: "commentDate" },
-                " 12/12/1994"
+                this.props.date
             );
         }
     }]);
@@ -1575,7 +1575,7 @@ var Comment = function (_React$Component44) {
                                 React.createElement(
                                     FloatRight,
                                     null,
-                                    React.createElement(CommentDate, null)
+                                    React.createElement(CommentDate, { date: this.props.date })
                                 )
                             )
                         ),
@@ -1652,7 +1652,8 @@ var Comments = function (_React$Component45) {
                     likeValue: "312",
                     dislikeValue: "31",
                     likeOrDislike: "like",
-                    ratingAverage: "7.2"
+                    ratingAverage: "7.2",
+                    date: "15/05/2020"
                 }),
                 React.createElement(Comment, {
                     commentOwner: "RTE_53",
@@ -1660,21 +1661,24 @@ var Comments = function (_React$Component45) {
                     likeValue: "9912312312",
                     dislikeValue: "912",
                     likeOrDislike: "dislike",
-                    ratingAverage: "4.2"
+                    ratingAverage: "4.2",
+                    date: "15-05"
                 }),
                 React.createElement(Comment, {
                     commentOwner: "ByKemal31",
                     commentText: "Derhal buray\u0131 terket karde\u015Fim",
                     likeValue: "321312412",
                     dislikeValue: "91",
-                    ratingAverage: "6.8"
+                    ratingAverage: "6.8",
+                    date: "15-05-12"
                 }),
                 React.createElement(Comment, {
                     commentOwner: "Deniz_Baykal_07",
                     commentText: "Benim ne i\u015Fim var burda amq",
                     likeValue: "999999999999",
                     dislikeValue: "-1231",
-                    ratingAverage: "1.0"
+                    ratingAverage: "1.0",
+                    date: "01-05 12:15"
                 }),
                 React.createElement(PageNumber, null),
                 React.createElement(WriteComment, null)
