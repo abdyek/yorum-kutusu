@@ -305,6 +305,36 @@ class ProductHeader extends React.Component {
 }
 
 class FollowButton extends React.Component {
+    constructor(props) {
+        super(props);
+        this.followToggle = this.followToggle.bind(this);
+        if(this.props.followed) {
+            this.state = {
+                followed:true,
+                class: " red "
+            }
+        } else {
+            this.state = {
+                followed:false,
+                class: " "
+            }
+        }
+    }
+    followToggle() {
+        if(this.state.followed) {
+            // takipten çıkma kodları buraya gelecek
+            this.setState({
+                followed:false,
+                class: " "
+            });
+        } else {
+            // takip etme kodları buraya gelecek
+            this.setState({
+                followed:true,
+                class: " red "
+            });
+        }
+    }
     render() {
         return(
             <Row size="one">
@@ -313,12 +343,12 @@ class FollowButton extends React.Component {
                         {/*
                             takip etmediği zaman classNamedeki "red" i kaldırıcaz
                         */}
-                        <div id="followButton">
+                        <div id="followButton" onClick={this.followToggle}>
                             <div className="ui labeled button" tabindex="0">
-                                <div className="ui red button">
+                                <div className={"ui"+this.state.class+"button"}>
                                     <i className="heart icon"></i> Takip Et
                                 </div>
-                                <a className="ui basic red left pointing label">
+                                <a className={"ui basic"+this.state.class+"left pointing label"}>
                                     1,048
                                 </a>
                             </div>
@@ -487,7 +517,7 @@ class Content extends React.Component {
             <div id="content">
                 <BreadCrumb />
                 <ProductHeader />
-                <FollowButton />
+                <FollowButton followed={true}/>
                 <Product />
                 <Comments />
             </div>

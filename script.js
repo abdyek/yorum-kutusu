@@ -660,13 +660,44 @@ var ProductHeader = function (_React$Component22) {
 var FollowButton = function (_React$Component23) {
     _inherits(FollowButton, _React$Component23);
 
-    function FollowButton() {
+    function FollowButton(props) {
         _classCallCheck(this, FollowButton);
 
-        return _possibleConstructorReturn(this, (FollowButton.__proto__ || Object.getPrototypeOf(FollowButton)).apply(this, arguments));
+        var _this23 = _possibleConstructorReturn(this, (FollowButton.__proto__ || Object.getPrototypeOf(FollowButton)).call(this, props));
+
+        _this23.followToggle = _this23.followToggle.bind(_this23);
+        if (_this23.props.followed) {
+            _this23.state = {
+                followed: true,
+                class: " red "
+            };
+        } else {
+            _this23.state = {
+                followed: false,
+                class: " "
+            };
+        }
+        return _this23;
     }
 
     _createClass(FollowButton, [{
+        key: "followToggle",
+        value: function followToggle() {
+            if (this.state.followed) {
+                // takipten çıkma kodları buraya gelecek
+                this.setState({
+                    followed: false,
+                    class: " "
+                });
+            } else {
+                // takip etme kodları buraya gelecek
+                this.setState({
+                    followed: true,
+                    class: " red "
+                });
+            }
+        }
+    }, {
         key: "render",
         value: function render() {
             return React.createElement(
@@ -680,19 +711,19 @@ var FollowButton = function (_React$Component23) {
                         null,
                         React.createElement(
                             "div",
-                            { id: "followButton" },
+                            { id: "followButton", onClick: this.followToggle },
                             React.createElement(
                                 "div",
                                 { className: "ui labeled button", tabindex: "0" },
                                 React.createElement(
                                     "div",
-                                    { className: "ui red button" },
+                                    { className: "ui" + this.state.class + "button" },
                                     React.createElement("i", { className: "heart icon" }),
                                     " Takip Et"
                                 ),
                                 React.createElement(
                                     "a",
-                                    { className: "ui basic red left pointing label" },
+                                    { className: "ui basic" + this.state.class + "left pointing label" },
                                     "1,048"
                                 )
                             )
@@ -1042,7 +1073,7 @@ var Content = function (_React$Component33) {
                 { id: "content" },
                 React.createElement(BreadCrumb, null),
                 React.createElement(ProductHeader, null),
-                React.createElement(FollowButton, null),
+                React.createElement(FollowButton, { followed: true }),
                 React.createElement(Product, null),
                 React.createElement(Comments, null)
             );
