@@ -265,7 +265,7 @@ var Hx = function (_React$Component9) {
         value: function render() {
             return React.createElement(
                 "div",
-                { "class": "ui " + this.props.size + " header" },
+                { className: "ui " + this.props.size + " header" },
                 this.props.text
             );
         }
@@ -433,21 +433,12 @@ var Menu = function (_React$Component16) {
         value: function render() {
             return React.createElement(
                 "div",
-                { id: "menu", className: "ui teal inverted menu" },
+                { id: "menu", className: "ui secondary  menu" },
                 React.createElement(
-                    "a",
-                    { className: "active item" },
-                    "Ana Sayfa"
-                ),
-                React.createElement(
-                    "a",
-                    { className: "item" },
-                    "Takip"
-                ),
-                React.createElement(
-                    "a",
-                    { className: "item" },
-                    "Hesap"
+                    "div",
+                    { id: "hesap", className: "ui button" },
+                    React.createElement("i", { className: "user icon" }),
+                    " Hesap"
                 )
             );
         }
@@ -456,85 +447,8 @@ var Menu = function (_React$Component16) {
     return Menu;
 }(React.Component);
 
-var Menu2 = function (_React$Component17) {
-    _inherits(Menu2, _React$Component17);
-
-    function Menu2() {
-        _classCallCheck(this, Menu2);
-
-        return _possibleConstructorReturn(this, (Menu2.__proto__ || Object.getPrototypeOf(Menu2)).apply(this, arguments));
-    }
-
-    _createClass(Menu2, [{
-        key: "render",
-        value: function render() {
-            return React.createElement(
-                "div",
-                { id: "menu", "class": "ui icon inverted menu" },
-                React.createElement(
-                    "a",
-                    { "class": "item" },
-                    React.createElement(
-                        "i",
-                        { "class": "icon" },
-                        React.createElement("i", { "class": "fa fa-home", "aria-hidden": "true" })
-                    )
-                ),
-                React.createElement(
-                    "a",
-                    { "class": "item" },
-                    React.createElement(
-                        "i",
-                        { "class": "icon" },
-                        React.createElement("i", { "class": "fa fa-user", "aria-hidden": "true" })
-                    )
-                ),
-                React.createElement(
-                    "a",
-                    { "class": "item" },
-                    React.createElement(
-                        "i",
-                        { "class": "icon" },
-                        React.createElement("i", { "class": "fa fa-bug", "aria-hidden": "true" })
-                    )
-                )
-            );
-        }
-    }]);
-
-    return Menu2;
-}(React.Component);
-
-var Menu3 = function (_React$Component18) {
-    _inherits(Menu3, _React$Component18);
-
-    function Menu3() {
-        _classCallCheck(this, Menu3);
-
-        return _possibleConstructorReturn(this, (Menu3.__proto__ || Object.getPrototypeOf(Menu3)).apply(this, arguments));
-    }
-
-    _createClass(Menu3, [{
-        key: "render",
-        value: function render() {
-            return React.createElement(
-                "div",
-                { id: "menu", className: "ui secondary  menu" },
-                React.createElement(
-                    "div",
-                    { id: "hesap", "class": "ui button" },
-                    React.createElement("i", { "class": "user icon" }),
-                    " Hesap"
-                )
-            );
-        }
-    }]);
-
-    return Menu3;
-}(React.Component);
-
-var Logo = function (_React$Component19) {
-    _inherits(Logo, _React$Component19);
+var Logo = function (_React$Component17) {
+    _inherits(Logo, _React$Component17);
 
     function Logo() {
         _classCallCheck(this, Logo);
@@ -556,8 +470,8 @@ var Logo = function (_React$Component19) {
     return Logo;
 }(React.Component);
 
-var SearchBar = function (_React$Component20) {
-    _inherits(SearchBar, _React$Component20);
+var SearchBar = function (_React$Component18) {
+    _inherits(SearchBar, _React$Component18);
 
     function SearchBar() {
         _classCallCheck(this, SearchBar);
@@ -579,8 +493,8 @@ var SearchBar = function (_React$Component20) {
     return SearchBar;
 }(React.Component);
 
-var BreadCrumb = function (_React$Component21) {
-    _inherits(BreadCrumb, _React$Component21);
+var BreadCrumb = function (_React$Component19) {
+    _inherits(BreadCrumb, _React$Component19);
 
     function BreadCrumb() {
         _classCallCheck(this, BreadCrumb);
@@ -626,8 +540,8 @@ var BreadCrumb = function (_React$Component21) {
     return BreadCrumb;
 }(React.Component);
 
-var ProductHeader = function (_React$Component22) {
-    _inherits(ProductHeader, _React$Component22);
+var ProductHeader = function (_React$Component20) {
+    _inherits(ProductHeader, _React$Component20);
 
     function ProductHeader() {
         _classCallCheck(this, ProductHeader);
@@ -657,27 +571,27 @@ var ProductHeader = function (_React$Component22) {
     return ProductHeader;
 }(React.Component);
 
-var FollowButton = function (_React$Component23) {
-    _inherits(FollowButton, _React$Component23);
+var FollowButton = function (_React$Component21) {
+    _inherits(FollowButton, _React$Component21);
 
     function FollowButton(props) {
         _classCallCheck(this, FollowButton);
 
-        var _this23 = _possibleConstructorReturn(this, (FollowButton.__proto__ || Object.getPrototypeOf(FollowButton)).call(this, props));
+        var _this21 = _possibleConstructorReturn(this, (FollowButton.__proto__ || Object.getPrototypeOf(FollowButton)).call(this, props));
 
-        _this23.followToggle = _this23.followToggle.bind(_this23);
-        if (_this23.props.followed) {
-            _this23.state = {
+        _this21.followToggle = _this21.followToggle.bind(_this21);
+        if (_this21.props.followed) {
+            _this21.state = {
                 followed: true,
                 class: " red "
             };
         } else {
-            _this23.state = {
+            _this21.state = {
                 followed: false,
                 class: " "
             };
         }
-        return _this23;
+        return _this21;
     }
 
     _createClass(FollowButton, [{
@@ -714,7 +628,7 @@ var FollowButton = function (_React$Component23) {
                             { id: "followButton", onClick: this.followToggle },
                             React.createElement(
                                 "div",
-                                { className: "ui labeled button", tabindex: "0" },
+                                { className: "ui labeled button", tabIndex: "0" },
                                 React.createElement(
                                     "div",
                                     { className: "ui" + this.state.class + "button" },
@@ -738,8 +652,8 @@ var FollowButton = function (_React$Component23) {
 }(React.Component);
 //<div className="ui right floated button">Butoncuk</div>
 
-var Example = function (_React$Component24) {
-    _inherits(Example, _React$Component24);
+var Example = function (_React$Component22) {
+    _inherits(Example, _React$Component22);
 
     function Example() {
         _classCallCheck(this, Example);
@@ -769,8 +683,8 @@ var Example = function (_React$Component24) {
     return Example;
 }(React.Component);
 
-var OverfloX = function (_React$Component25) {
-    _inherits(OverfloX, _React$Component25);
+var OverfloX = function (_React$Component23) {
+    _inherits(OverfloX, _React$Component23);
 
     function OverfloX() {
         _classCallCheck(this, OverfloX);
@@ -792,8 +706,8 @@ var OverfloX = function (_React$Component25) {
     return OverfloX;
 }(React.Component);
 
-var CommentDate = function (_React$Component26) {
-    _inherits(CommentDate, _React$Component26);
+var CommentDate = function (_React$Component24) {
+    _inherits(CommentDate, _React$Component24);
 
     function CommentDate() {
         _classCallCheck(this, CommentDate);
@@ -815,20 +729,20 @@ var CommentDate = function (_React$Component26) {
     return CommentDate;
 }(React.Component);
 
-var LikeButton = function (_React$Component27) {
-    _inherits(LikeButton, _React$Component27);
+var LikeButton = function (_React$Component25) {
+    _inherits(LikeButton, _React$Component25);
 
     function LikeButton(props) {
         _classCallCheck(this, LikeButton);
 
-        var _this27 = _possibleConstructorReturn(this, (LikeButton.__proto__ || Object.getPrototypeOf(LikeButton)).call(this, props));
+        var _this25 = _possibleConstructorReturn(this, (LikeButton.__proto__ || Object.getPrototypeOf(LikeButton)).call(this, props));
 
-        if (_this27.props.likeOrDislike == "like") {
-            _this27.liked = " likedComment";
+        if (_this25.props.likeOrDislike == "like") {
+            _this25.liked = " likedComment";
         } else {
-            _this27.liked = " ";
+            _this25.liked = " ";
         }
-        return _this27;
+        return _this25;
     }
 
     _createClass(LikeButton, [{
@@ -836,11 +750,11 @@ var LikeButton = function (_React$Component27) {
         value: function render() {
             return React.createElement(
                 "button",
-                { "class": "ui basic button" },
+                { className: "ui basic button" },
                 React.createElement(
                     "i",
-                    { "class": "icon" },
-                    React.createElement("i", { "class": "fa fa-thumbs-up" + this.liked, "aria-hidden": "true" })
+                    { className: "icon" },
+                    React.createElement("i", { className: "fa fa-thumbs-up" + this.liked, "aria-hidden": "true" })
                 ),
                 this.props.value
             );
@@ -850,20 +764,20 @@ var LikeButton = function (_React$Component27) {
     return LikeButton;
 }(React.Component);
 
-var DislikeButton = function (_React$Component28) {
-    _inherits(DislikeButton, _React$Component28);
+var DislikeButton = function (_React$Component26) {
+    _inherits(DislikeButton, _React$Component26);
 
     function DislikeButton(props) {
         _classCallCheck(this, DislikeButton);
 
-        var _this28 = _possibleConstructorReturn(this, (DislikeButton.__proto__ || Object.getPrototypeOf(DislikeButton)).call(this, props));
+        var _this26 = _possibleConstructorReturn(this, (DislikeButton.__proto__ || Object.getPrototypeOf(DislikeButton)).call(this, props));
 
-        if (_this28.props.likeOrDislike == "dislike") {
-            _this28.liked = " dislikedComment";
+        if (_this26.props.likeOrDislike == "dislike") {
+            _this26.liked = " dislikedComment";
         } else {
-            _this28.liked = " ";
+            _this26.liked = " ";
         }
-        return _this28;
+        return _this26;
     }
 
     _createClass(DislikeButton, [{
@@ -871,11 +785,11 @@ var DislikeButton = function (_React$Component28) {
         value: function render() {
             return React.createElement(
                 "button",
-                { "class": "ui basic button" },
+                { className: "ui basic button" },
                 React.createElement(
                     "i",
-                    { "class": "icon" },
-                    React.createElement("i", { "class": "fa fa-thumbs-down" + this.liked, "aria-hidden": "true" })
+                    { className: "icon" },
+                    React.createElement("i", { className: "fa fa-thumbs-down" + this.liked, "aria-hidden": "true" })
                 ),
                 this.props.value
             );
@@ -885,8 +799,8 @@ var DislikeButton = function (_React$Component28) {
     return DislikeButton;
 }(React.Component);
 
-var ComplaintButton = function (_React$Component29) {
-    _inherits(ComplaintButton, _React$Component29);
+var ComplaintButton = function (_React$Component27) {
+    _inherits(ComplaintButton, _React$Component27);
 
     function ComplaintButton() {
         _classCallCheck(this, ComplaintButton);
@@ -899,8 +813,8 @@ var ComplaintButton = function (_React$Component29) {
         value: function render() {
             return React.createElement(
                 "button",
-                { "class": "ui basic button" },
-                React.createElement("i", { id: "exclamation", "class": "fa fa-exclamation", "aria-hidden": "true" })
+                { className: "ui basic button" },
+                React.createElement("i", { id: "exclamation", className: "fa fa-exclamation", "aria-hidden": "true" })
             );
         }
     }]);
@@ -908,8 +822,8 @@ var ComplaintButton = function (_React$Component29) {
     return ComplaintButton;
 }(React.Component);
 
-var Categories = function (_React$Component30) {
-    _inherits(Categories, _React$Component30);
+var Categories = function (_React$Component28) {
+    _inherits(Categories, _React$Component28);
 
     function Categories() {
         _classCallCheck(this, Categories);
@@ -925,37 +839,37 @@ var Categories = function (_React$Component30) {
                 { id: "categories" },
                 React.createElement(
                     "button",
-                    { "class": " big ui button" },
+                    { className: " big ui button" },
                     "Elektronik"
                 ),
                 React.createElement(
                     "button",
-                    { "class": " big ui  button" },
+                    { className: " big ui  button" },
                     "Giyim"
                 ),
                 React.createElement(
                     "button",
-                    { "class": " big ui  button" },
+                    { className: " big ui  button" },
                     "Mobilya"
                 ),
                 React.createElement(
                     "button",
-                    { "class": " big ui  button" },
+                    { className: " big ui  button" },
                     "G\u0131da"
                 ),
                 React.createElement(
                     "button",
-                    { "class": " big ui  button" },
+                    { className: " big ui  button" },
                     "Ofis"
                 ),
                 React.createElement(
                     "button",
-                    { "class": " big ui  button" },
+                    { className: " big ui  button" },
                     "Kozmetik"
                 ),
                 React.createElement(
                     "button",
-                    { "class": " big ui  button" },
+                    { className: " big ui  button" },
                     "Kitap"
                 )
             );
@@ -965,8 +879,8 @@ var Categories = function (_React$Component30) {
     return Categories;
 }(React.Component);
 
-var App = function (_React$Component31) {
-    _inherits(App, _React$Component31);
+var App = function (_React$Component29) {
+    _inherits(App, _React$Component29);
 
     function App(props) {
         _classCallCheck(this, App);
@@ -990,8 +904,8 @@ var App = function (_React$Component31) {
     return App;
 }(React.Component);
 
-var Header = function (_React$Component32) {
-    _inherits(Header, _React$Component32);
+var Header = function (_React$Component30) {
+    _inherits(Header, _React$Component30);
 
     function Header() {
         _classCallCheck(this, Header);
@@ -1030,7 +944,7 @@ var Header = function (_React$Component32) {
                                 React.createElement(
                                     FloatRight,
                                     null,
-                                    React.createElement(Menu3, null)
+                                    React.createElement(Menu, null)
                                 )
                             )
                         )
@@ -1056,8 +970,8 @@ var Header = function (_React$Component32) {
     return Header;
 }(React.Component);
 
-var Content = function (_React$Component33) {
-    _inherits(Content, _React$Component33);
+var Content = function (_React$Component31) {
+    _inherits(Content, _React$Component31);
 
     function Content() {
         _classCallCheck(this, Content);
@@ -1083,34 +997,34 @@ var Content = function (_React$Component33) {
     return Content;
 }(React.Component);
 
-var DirectlyButtons = function (_React$Component34) {
-    _inherits(DirectlyButtons, _React$Component34);
+var DirectlyButtons = function (_React$Component32) {
+    _inherits(DirectlyButtons, _React$Component32);
 
     function DirectlyButtons(props) {
         _classCallCheck(this, DirectlyButtons);
 
-        var _this34 = _possibleConstructorReturn(this, (DirectlyButtons.__proto__ || Object.getPrototypeOf(DirectlyButtons)).call(this, props));
+        var _this32 = _possibleConstructorReturn(this, (DirectlyButtons.__proto__ || Object.getPrototypeOf(DirectlyButtons)).call(this, props));
 
-        _this34.buttons = [];
-        _this34.state = {
+        _this32.buttons = [];
+        _this32.state = {
             selectedIndex: 0
         };
         for (var i = 0; i < 4; i++) {
-            if (_this34.props.selectedIndex == i + 1) {
-                _this34.buttons.push(React.createElement(
+            if (_this32.props.selectedIndex == i + 1) {
+                _this32.buttons.push(React.createElement(
                     "button",
-                    { "class": "disabled ui button" },
+                    { className: "disabled ui button" },
                     i + 1
                 ));
             } else {
-                _this34.buttons.push(React.createElement(
+                _this32.buttons.push(React.createElement(
                     "button",
-                    { "class": "ui button" },
+                    { className: "ui button" },
                     i + 1
                 ));
             }
         }
-        return _this34;
+        return _this32;
     }
 
     _createClass(DirectlyButtons, [{
@@ -1118,7 +1032,7 @@ var DirectlyButtons = function (_React$Component34) {
         value: function render() {
             return React.createElement(
                 "div",
-                { "class": "small blue ui buttons" },
+                { className: "small blue ui buttons" },
                 this.buttons
             );
         }
@@ -1127,21 +1041,21 @@ var DirectlyButtons = function (_React$Component34) {
     return DirectlyButtons;
 }(React.Component);
 
-var ImageSlider = function (_React$Component35) {
-    _inherits(ImageSlider, _React$Component35);
+var ImageSlider = function (_React$Component33) {
+    _inherits(ImageSlider, _React$Component33);
 
     function ImageSlider(props) {
         _classCallCheck(this, ImageSlider);
 
-        var _this35 = _possibleConstructorReturn(this, (ImageSlider.__proto__ || Object.getPrototypeOf(ImageSlider)).call(this, props));
+        var _this33 = _possibleConstructorReturn(this, (ImageSlider.__proto__ || Object.getPrototypeOf(ImageSlider)).call(this, props));
 
-        _this35.nextIndex = 0;
-        _this35.state = {
-            src: _this35.props.srcs[0],
+        _this33.nextIndex = 0;
+        _this33.state = {
+            src: _this33.props.srcs[0],
             index: 0
         };
-        _this35.change = _this35.change.bind(_this35);
-        return _this35;
+        _this33.change = _this33.change.bind(_this33);
+        return _this33;
     }
 
     _createClass(ImageSlider, [{
@@ -1162,7 +1076,7 @@ var ImageSlider = function (_React$Component35) {
     }, {
         key: "render",
         value: function render() {
-            var _this36 = this;
+            var _this34 = this;
 
             return React.createElement(
                 "div",
@@ -1193,14 +1107,14 @@ var ImageSlider = function (_React$Component35) {
                             React.createElement(
                                 "button",
                                 { className: "mini ui icon button", onClick: function onClick() {
-                                        return _this36.change(-1);
+                                        return _this34.change(-1);
                                     } },
                                 React.createElement("i", { className: "left arrow icon" })
                             ),
                             React.createElement(
                                 "button",
                                 { className: "mini ui icon button", onClick: function onClick() {
-                                        return _this36.change(+1);
+                                        return _this34.change(+1);
                                     } },
                                 React.createElement("i", { className: "right arrow icon" })
                             )
@@ -1214,16 +1128,16 @@ var ImageSlider = function (_React$Component35) {
     return ImageSlider;
 }(React.Component);
 
-var DrawCircle = function (_React$Component36) {
-    _inherits(DrawCircle, _React$Component36);
+var DrawCircle = function (_React$Component34) {
+    _inherits(DrawCircle, _React$Component34);
 
     function DrawCircle(props) {
         _classCallCheck(this, DrawCircle);
 
-        var _this37 = _possibleConstructorReturn(this, (DrawCircle.__proto__ || Object.getPrototypeOf(DrawCircle)).call(this, props));
+        var _this35 = _possibleConstructorReturn(this, (DrawCircle.__proto__ || Object.getPrototypeOf(DrawCircle)).call(this, props));
 
-        _this37.percent = _this37.props.percentValue * 10;
-        _this37.limitColor = {
+        _this35.percent = _this35.props.percentValue * 10;
+        _this35.limitColor = {
             0: {
                 min: 0,
                 max: 5,
@@ -1240,14 +1154,14 @@ var DrawCircle = function (_React$Component36) {
                 color: "#21ba45"
             }
         };
-        _this37.color = _this37.limitColor[0].color;
-        for (var i = 0; i < Object.keys(_this37.limitColor).length; i++) {
-            if (_this37.limitColor[i].min <= _this37.props.percentValue && _this37.props.percentValue < _this37.limitColor[i].max) {
-                _this37.color = _this37.limitColor[i].color;
+        _this35.color = _this35.limitColor[0].color;
+        for (var i = 0; i < Object.keys(_this35.limitColor).length; i++) {
+            if (_this35.limitColor[i].min <= _this35.props.percentValue && _this35.props.percentValue < _this35.limitColor[i].max) {
+                _this35.color = _this35.limitColor[i].color;
                 break;
             }
         }
-        return _this37;
+        return _this35;
     }
 
     _createClass(DrawCircle, [{
@@ -1274,8 +1188,8 @@ var DrawCircle = function (_React$Component36) {
     return DrawCircle;
 }(React.Component);
 
-var ProductAttributeName = function (_React$Component37) {
-    _inherits(ProductAttributeName, _React$Component37);
+var ProductAttributeName = function (_React$Component35) {
+    _inherits(ProductAttributeName, _React$Component35);
 
     function ProductAttributeName() {
         _classCallCheck(this, ProductAttributeName);
@@ -1293,8 +1207,8 @@ var ProductAttributeName = function (_React$Component37) {
     return ProductAttributeName;
 }(React.Component);
 
-var ProductAttribute = function (_React$Component38) {
-    _inherits(ProductAttribute, _React$Component38);
+var ProductAttribute = function (_React$Component36) {
+    _inherits(ProductAttribute, _React$Component36);
 
     function ProductAttribute() {
         _classCallCheck(this, ProductAttribute);
@@ -1329,8 +1243,8 @@ var ProductAttribute = function (_React$Component38) {
     return ProductAttribute;
 }(React.Component);
 
-var Rating = function (_React$Component39) {
-    _inherits(Rating, _React$Component39);
+var Rating = function (_React$Component37) {
+    _inherits(Rating, _React$Component37);
 
     function Rating() {
         _classCallCheck(this, Rating);
@@ -1354,8 +1268,8 @@ var Rating = function (_React$Component39) {
     return Rating;
 }(React.Component);
 
-var Product = function (_React$Component40) {
-    _inherits(Product, _React$Component40);
+var Product = function (_React$Component38) {
+    _inherits(Product, _React$Component38);
 
     function Product() {
         _classCallCheck(this, Product);
@@ -1398,8 +1312,8 @@ var Product = function (_React$Component40) {
     return Product;
 }(React.Component);
 
-var YorumlarHeader = function (_React$Component41) {
-    _inherits(YorumlarHeader, _React$Component41);
+var YorumlarHeader = function (_React$Component39) {
+    _inherits(YorumlarHeader, _React$Component39);
 
     function YorumlarHeader() {
         _classCallCheck(this, YorumlarHeader);
@@ -1425,8 +1339,8 @@ var YorumlarHeader = function (_React$Component41) {
     return YorumlarHeader;
 }(React.Component);
 
-var PageNumber = function (_React$Component42) {
-    _inherits(PageNumber, _React$Component42);
+var PageNumber = function (_React$Component40) {
+    _inherits(PageNumber, _React$Component40);
 
     function PageNumber() {
         _classCallCheck(this, PageNumber);
@@ -1508,17 +1422,17 @@ var PageNumber = function (_React$Component42) {
     return PageNumber;
 }(React.Component);
 
-var RatingBar = function (_React$Component43) {
-    _inherits(RatingBar, _React$Component43);
+var RatingBar = function (_React$Component41) {
+    _inherits(RatingBar, _React$Component41);
 
     function RatingBar(props) {
         _classCallCheck(this, RatingBar);
 
-        var _this44 = _possibleConstructorReturn(this, (RatingBar.__proto__ || Object.getPrototypeOf(RatingBar)).call(this, props));
+        var _this42 = _possibleConstructorReturn(this, (RatingBar.__proto__ || Object.getPrototypeOf(RatingBar)).call(this, props));
 
-        _this44.percent = _this44.props.ratingAverage * 10;
+        _this42.percent = _this42.props.ratingAverage * 10;
         // bu kısım drawcircle ile aynı refactor ederken buna bir çare bulabilirsin
-        _this44.limitColor = {
+        _this42.limitColor = {
             0: {
                 min: 0,
                 max: 5,
@@ -1535,16 +1449,16 @@ var RatingBar = function (_React$Component43) {
                 color: "#21ba45"
             }
         };
-        _this44.color = _this44.limitColor[0].color;
-        for (var i = 0; i < Object.keys(_this44.limitColor).length; i++) {
-            if (_this44.limitColor[i].min <= _this44.props.ratingAverage && _this44.props.ratingAverage < _this44.limitColor[i].max) {
-                _this44.color = _this44.limitColor[i].color;
+        _this42.color = _this42.limitColor[0].color;
+        for (var i = 0; i < Object.keys(_this42.limitColor).length; i++) {
+            if (_this42.limitColor[i].min <= _this42.props.ratingAverage && _this42.props.ratingAverage < _this42.limitColor[i].max) {
+                _this42.color = _this42.limitColor[i].color;
                 break;
             }
         }
         // ^^^
-        _this44.widthOfFill = _this44.props.ratingAverage * 15 + "px";
-        return _this44;
+        _this42.widthOfFill = _this42.props.ratingAverage * 15 + "px";
+        return _this42;
     }
 
     _createClass(RatingBar, [{
@@ -1571,8 +1485,8 @@ var RatingBar = function (_React$Component43) {
     return RatingBar;
 }(React.Component);
 
-var Comment = function (_React$Component44) {
-    _inherits(Comment, _React$Component44);
+var Comment = function (_React$Component42) {
+    _inherits(Comment, _React$Component42);
 
     function Comment(props) {
         _classCallCheck(this, Comment);
@@ -1660,8 +1574,8 @@ var Comment = function (_React$Component44) {
     return Comment;
 }(React.Component);
 
-var Comments = function (_React$Component45) {
-    _inherits(Comments, _React$Component45);
+var Comments = function (_React$Component43) {
+    _inherits(Comments, _React$Component43);
 
     function Comments(props) {
         _classCallCheck(this, Comments);
@@ -1720,19 +1634,19 @@ var Comments = function (_React$Component45) {
     return Comments;
 }(React.Component);
 
-var InputRange = function (_React$Component46) {
-    _inherits(InputRange, _React$Component46);
+var InputRange = function (_React$Component44) {
+    _inherits(InputRange, _React$Component44);
 
     function InputRange(props) {
         _classCallCheck(this, InputRange);
 
-        var _this47 = _possibleConstructorReturn(this, (InputRange.__proto__ || Object.getPrototypeOf(InputRange)).call(this, props));
+        var _this45 = _possibleConstructorReturn(this, (InputRange.__proto__ || Object.getPrototypeOf(InputRange)).call(this, props));
 
-        _this47.state = {
+        _this45.state = {
             value: "5"
         };
-        _this47.change = _this47.change.bind(_this47);
-        return _this47;
+        _this45.change = _this45.change.bind(_this45);
+        return _this45;
     }
 
     _createClass(InputRange, [{
@@ -1766,8 +1680,8 @@ var InputRange = function (_React$Component46) {
     return InputRange;
 }(React.Component);
 
-var InputRating = function (_React$Component47) {
-    _inherits(InputRating, _React$Component47);
+var InputRating = function (_React$Component45) {
+    _inherits(InputRating, _React$Component45);
 
     function InputRating() {
         _classCallCheck(this, InputRating);
@@ -1796,8 +1710,8 @@ var InputRating = function (_React$Component47) {
     return InputRating;
 }(React.Component);
 
-var SendButton = function (_React$Component48) {
-    _inherits(SendButton, _React$Component48);
+var SendButton = function (_React$Component46) {
+    _inherits(SendButton, _React$Component46);
 
     function SendButton() {
         _classCallCheck(this, SendButton);
@@ -1810,7 +1724,7 @@ var SendButton = function (_React$Component48) {
         value: function render() {
             return React.createElement(
                 "button",
-                { "class": "ui primary button" },
+                { className: "ui primary button" },
                 "G\xF6nder"
             );
         }
@@ -1819,8 +1733,8 @@ var SendButton = function (_React$Component48) {
     return SendButton;
 }(React.Component);
 
-var WriteComment = function (_React$Component49) {
-    _inherits(WriteComment, _React$Component49);
+var WriteComment = function (_React$Component47) {
+    _inherits(WriteComment, _React$Component47);
 
     function WriteComment() {
         _classCallCheck(this, WriteComment);
@@ -1889,8 +1803,8 @@ var WriteComment = function (_React$Component49) {
     return WriteComment;
 }(React.Component);
 
-var Footer = function (_React$Component50) {
-    _inherits(Footer, _React$Component50);
+var Footer = function (_React$Component48) {
+    _inherits(Footer, _React$Component48);
 
     function Footer() {
         _classCallCheck(this, Footer);

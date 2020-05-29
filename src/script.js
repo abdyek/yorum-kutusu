@@ -17,6 +17,7 @@ class Segment extends React.Component {
         )
     }
 }
+
 class RaisedSegment extends React.Component {
     render() {
         return(
@@ -26,7 +27,6 @@ class RaisedSegment extends React.Component {
         )
     }
 }
-
 
 class Row extends React.Component {
     constructor(props){
@@ -128,7 +128,7 @@ class Hx extends React.Component {
     // size -> huge, large, medium, small, tiny
     render() {
         return(
-            <div class={"ui "+this.props.size+" header"}>{this.props.text}</div> 
+            <div className={"ui "+this.props.size+" header"}>{this.props.text}</div> 
         )
     }
 }
@@ -200,51 +200,9 @@ class MiniImagesWrapper extends React.Component {
 class Menu extends React.Component {
     render() {
         return(
-            <div id="menu" className="ui teal inverted menu">
-                <a className="active item">
-                    Ana Sayfa
-                </a>
-                <a className="item">
-                    Takip
-                </a>
-                <a className="item">
-                    Hesap
-                </a>
-            </div>
-        )
-    }
-}
-
-class Menu2 extends React.Component {
-    render() {
-        return(
-            <div id="menu" class="ui icon inverted menu">
-  <a class="item">
-    <i class="icon">
-        <i class="fa fa-home" aria-hidden="true"></i>
-    </i>
-  </a>
-  <a class="item">
-    <i class="icon">
-        <i class="fa fa-user" aria-hidden="true"></i>
-    </i>
-  </a>
-  <a class="item">
-    <i class="icon">
-        <i class="fa fa-bug" aria-hidden="true"></i>
-    </i>
-  </a>
-</div>
-        )
-    }
-}
-
-class Menu3 extends React.Component {
-    render() {
-        return(
             <div id="menu" className="ui secondary  menu">
-    <div id="hesap" class="ui button">
-        <i class="user icon"></i> Hesap
+    <div id="hesap" className="ui button">
+        <i className="user icon"></i> Hesap
     </div>
 </div>
         )
@@ -344,7 +302,7 @@ class FollowButton extends React.Component {
                             takip etmediği zaman classNamedeki "red" i kaldırıcaz
                         */}
                         <div id="followButton" onClick={this.followToggle}>
-                            <div className="ui labeled button" tabindex="0">
+                            <div className="ui labeled button" tabIndex="0">
                                 <div className={"ui"+this.state.class+"button"}>
                                     <i className="heart icon"></i> Takip Et
                                 </div>
@@ -404,9 +362,9 @@ class LikeButton extends React.Component {
     }
     render() {
         return(
-            <button class="ui basic button">
-                <i class="icon">
-                    <i class={"fa fa-thumbs-up" + this.liked} aria-hidden="true"></i>
+            <button className="ui basic button">
+                <i className="icon">
+                    <i className={"fa fa-thumbs-up" + this.liked} aria-hidden="true"></i>
                 </i>
                 {this.props.value}
             </button>
@@ -425,9 +383,9 @@ class DislikeButton extends React.Component {
     }
     render() {
         return(
-            <button class="ui basic button">
-                <i class="icon">
-                    <i class={"fa fa-thumbs-down" + this.liked} aria-hidden="true"></i>
+            <button className="ui basic button">
+                <i className="icon">
+                    <i className={"fa fa-thumbs-down" + this.liked} aria-hidden="true"></i>
                 </i>
                 {this.props.value}
             </button>
@@ -439,8 +397,8 @@ class DislikeButton extends React.Component {
 class ComplaintButton extends React.Component {
     render() {
         return (
-            <button class="ui basic button">
-                <i id="exclamation" class="fa fa-exclamation" aria-hidden="true"></i>
+            <button className="ui basic button">
+                <i id="exclamation" className="fa fa-exclamation" aria-hidden="true"></i>
             </button>
         )
     }
@@ -451,13 +409,13 @@ class Categories extends React.Component {
     render(){
         return(
             <div id="categories">
-                <button class=" big ui button">Elektronik</button>
-                <button class=" big ui  button">Giyim</button>
-                <button class=" big ui  button">Mobilya</button>
-                <button class=" big ui  button">Gıda</button>
-                <button class=" big ui  button">Ofis</button>
-                <button class=" big ui  button">Kozmetik</button>
-                <button class=" big ui  button">Kitap</button>
+                <button className=" big ui button">Elektronik</button>
+                <button className=" big ui  button">Giyim</button>
+                <button className=" big ui  button">Mobilya</button>
+                <button className=" big ui  button">Gıda</button>
+                <button className=" big ui  button">Ofis</button>
+                <button className=" big ui  button">Kozmetik</button>
+                <button className=" big ui  button">Kitap</button>
             </div>
         )
     }
@@ -493,7 +451,7 @@ class Header extends React.Component {
                             </WideColumn>
                             <WideColumn size="four">
                                 <FloatRight>
-                                    <Menu3 />
+                                    <Menu />
                                 </FloatRight>
                             </WideColumn>
                         </Row>
@@ -535,18 +493,18 @@ class DirectlyButtons extends React.Component {
         for(let i=0;i<4; i++) {
             if(this.props.selectedIndex==i+1) {
                 this.buttons.push(
-                    <button class="disabled ui button">{i + 1}</button>
+                    <button className="disabled ui button">{i + 1}</button>
                 )
             } else {
                 this.buttons.push(
-                    <button class="ui button">{i + 1}</button>
+                    <button className="ui button">{i + 1}</button>
                 )
             }
         }
     }
     render() {
         return(
-            <div class="small blue ui buttons">
+            <div className="small blue ui buttons">
                 {this.buttons}
             </div>
         )
@@ -960,7 +918,7 @@ class InputRating extends React.Component {
 class SendButton extends React.Component {
     render() {
         return (
-            <button class="ui primary button">
+            <button className="ui primary button">
                 Gönder
             </button>
         )
