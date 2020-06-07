@@ -1,20 +1,24 @@
 {
-  "name": "1",
+  "name": "2",
   "version": "1.0.0",
   "description": "",
   "main": "script.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abdyek/yorumlaa-front-end.git"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "babel-preset-react-app": "^3.1.2",
-    "semantic-ui-css": "^2.4.1",
-    "semantic-ui-react": "^0.88.2"
+  "bugs": {
+    "url": "https://github.com/abdyek/yorumlaa-front-end/issues"
   },
-  "devDependencies": {
-    "babel-cli": "^6.26.0"
+  "homepage": "https://github.com/abdyek/yorumlaa-front-end#readme",
+  "dependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-react-app": "^3.1.2"
   }
 }

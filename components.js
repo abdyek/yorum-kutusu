@@ -6,6 +6,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+/* bu bütün sayfalarda kullanılabilecek bir bileşendir */
 var Container = function (_React$Component) {
     _inherits(Container, _React$Component);
 
@@ -28,6 +29,9 @@ var Container = function (_React$Component) {
 
     return Container;
 }(React.Component);
+
+/* bu bütün sayfalarda kullanılabilecek bir bileşendir */
+
 
 var Segment = function (_React$Component2) {
     _inherits(Segment, _React$Component2);
@@ -52,6 +56,9 @@ var Segment = function (_React$Component2) {
     return Segment;
 }(React.Component);
 
+/* bu bütün sayfalarda kullanılabilecek bir bileşendir */
+
+
 var RaisedSegment = function (_React$Component3) {
     _inherits(RaisedSegment, _React$Component3);
 
@@ -74,6 +81,9 @@ var RaisedSegment = function (_React$Component3) {
 
     return RaisedSegment;
 }(React.Component);
+
+/* bu bütün sayfalarda kullanılabilecek bir bileşendir */
+
 
 var Row = function (_React$Component4) {
     _inherits(Row, _React$Component4);
@@ -116,6 +126,9 @@ var Row = function (_React$Component4) {
     return Row;
 }(React.Component);
 
+/* bu bütün sayfalarda kullanılabilecek bir bileşendir */
+
+
 var Column = function (_React$Component5) {
     _inherits(Column, _React$Component5);
 
@@ -138,6 +151,9 @@ var Column = function (_React$Component5) {
 
     return Column;
 }(React.Component);
+
+/* bu bütün sayfalarda kullanılabilecek bir bileşendir */
+
 
 var WideColumn = function (_React$Component6) {
     _inherits(WideColumn, _React$Component6);
@@ -162,6 +178,9 @@ var WideColumn = function (_React$Component6) {
     return WideColumn;
 }(React.Component);
 
+/* bu bütün sayfalarda kullanılabilecek bir bileşendir */
+
+
 var H = function (_React$Component7) {
     _inherits(H, _React$Component7);
 
@@ -174,6 +193,11 @@ var H = function (_React$Component7) {
         if (_this7.props.textAlign == "center") {
             _this7.textAlign = " center aligned ";
         }
+        if (!_this7.props.optional) {
+            _this7.optional = "";
+        } else {
+            _this7.optional = _this7.props.optional;
+        }
         return _this7;
     }
 
@@ -183,31 +207,31 @@ var H = function (_React$Component7) {
             if (this.props.type == "1") {
                 return React.createElement(
                     "h1",
-                    { className: "ui " + this.textAlign + " header" },
+                    { className: "ui " + this.textAlign + " header " + this.optional },
                     this.props.text
                 );
             } else if (this.props.type == "2") {
                 return React.createElement(
                     "h2",
-                    { className: "ui " + this.textAlign + " header" },
+                    { className: "ui " + this.textAlign + " header " + this.optional },
                     this.props.text
                 );
             } else if (this.props.type == "3") {
                 return React.createElement(
                     "h3",
-                    { className: "ui " + this.textAlign + " header" },
+                    { className: "ui " + this.textAlign + " header " + this.optional },
                     this.props.text
                 );
             } else if (this.props.type == "4") {
                 return React.createElement(
                     "h4",
-                    { className: "ui " + this.textAlign + "header" },
+                    { className: "ui " + this.textAlign + "header " + this.optional },
                     this.props.text
                 );
             } else if (this.props.type == "5") {
                 return React.createElement(
                     "h5",
-                    { className: "ui " + this.textAlign + "header" },
+                    { className: "ui " + this.textAlign + "header " + this.optional },
                     this.props.text
                 );
             }
@@ -216,6 +240,9 @@ var H = function (_React$Component7) {
 
     return H;
 }(React.Component);
+
+/* bu bütün sayfalarda kullanılabilecek bir bileşendir */
+
 
 var Center = function (_React$Component8) {
     _inherits(Center, _React$Component8);
@@ -244,6 +271,9 @@ var Center = function (_React$Component8) {
     return Center;
 }(React.Component);
 
+/* bu bütün sayfalarda kullanılabilecek bir bileşendir */
+
+
 var Hx = function (_React$Component9) {
     _inherits(Hx, _React$Component9);
 
@@ -260,7 +290,7 @@ var Hx = function (_React$Component9) {
         value: function render() {
             return React.createElement(
                 "div",
-                { "class": "ui " + this.props.size + " header" },
+                { className: "ui " + this.props.size + " header" },
                 this.props.text
             );
         }
@@ -268,6 +298,9 @@ var Hx = function (_React$Component9) {
 
     return Hx;
 }(React.Component);
+
+/* bu bütün sayfalarda kullanılabilecek bir bileşendir */
+
 
 var FloatRight = function (_React$Component10) {
     _inherits(FloatRight, _React$Component10);
@@ -292,6 +325,9 @@ var FloatRight = function (_React$Component10) {
     return FloatRight;
 }(React.Component);
 
+/* bu bütün sayfalarda kullanılabilecek bir bileşendir */
+
+
 var Button = function (_React$Component11) {
     _inherits(Button, _React$Component11);
 
@@ -314,6 +350,9 @@ var Button = function (_React$Component11) {
 
     return Button;
 }(React.Component);
+
+/* bu bütün sayfalarda kullanılabilecek bir bileşendir */
+
 
 var Buttons = function (_React$Component12) {
     _inherits(Buttons, _React$Component12);
@@ -338,34 +377,11 @@ var Buttons = function (_React$Component12) {
     return Buttons;
 }(React.Component);
 
-// şimdilik bu kısım component tarzı değil, sonradan düzeltirim
+/* bu bütün sayfalarda kullanılabilecek bir bileşendir */
 
 
-var Image = function (_React$Component13) {
-    _inherits(Image, _React$Component13);
-
-    function Image() {
-        _classCallCheck(this, Image);
-
-        return _possibleConstructorReturn(this, (Image.__proto__ || Object.getPrototypeOf(Image)).apply(this, arguments));
-    }
-
-    _createClass(Image, [{
-        key: "render",
-        value: function render() {
-            return React.createElement(
-                "div",
-                null,
-                React.createElement("img", { id: "productImg", className: " ui image", src: "https://gigaom.com/wp-content/uploads/sites/1/2013/09/iphone5s_3color_ios7_print-2.jpg" })
-            );
-        }
-    }]);
-
-    return Image;
-}(React.Component);
-
-var Menu = function (_React$Component14) {
-    _inherits(Menu, _React$Component14);
+var Menu = function (_React$Component13) {
+    _inherits(Menu, _React$Component13);
 
     function Menu() {
         _classCallCheck(this, Menu);
@@ -378,21 +394,12 @@ var Menu = function (_React$Component14) {
         value: function render() {
             return React.createElement(
                 "div",
-                { id: "menu", className: "ui teal inverted menu" },
+                { id: "menu", className: "ui secondary  menu" },
                 React.createElement(
-                    "a",
-                    { className: "active item" },
-                    "Ana Sayfa"
-                ),
-                React.createElement(
-                    "a",
-                    { className: "item" },
-                    "Takip"
-                ),
-                React.createElement(
-                    "a",
-                    { className: "item" },
-                    "Hesap"
+                    "div",
+                    { id: "hesap", className: "ui button" },
+                    React.createElement("i", { className: "user icon" }),
+                    " Hesap"
                 )
             );
         }
@@ -401,85 +408,11 @@ var Menu = function (_React$Component14) {
     return Menu;
 }(React.Component);
 
-var Menu2 = function (_React$Component15) {
-    _inherits(Menu2, _React$Component15);
+/* bu bütün sayfalarda kullanılabilecek bir bileşendir */
 
-    function Menu2() {
-        _classCallCheck(this, Menu2);
 
-        return _possibleConstructorReturn(this, (Menu2.__proto__ || Object.getPrototypeOf(Menu2)).apply(this, arguments));
-    }
-
-    _createClass(Menu2, [{
-        key: "render",
-        value: function render() {
-            return React.createElement(
-                "div",
-                { id: "menu", "class": "ui icon inverted menu" },
-                React.createElement(
-                    "a",
-                    { "class": "item" },
-                    React.createElement(
-                        "i",
-                        { "class": "icon" },
-                        React.createElement("i", { "class": "fa fa-home", "aria-hidden": "true" })
-                    )
-                ),
-                React.createElement(
-                    "a",
-                    { "class": "item" },
-                    React.createElement(
-                        "i",
-                        { "class": "icon" },
-                        React.createElement("i", { "class": "fa fa-user", "aria-hidden": "true" })
-                    )
-                ),
-                React.createElement(
-                    "a",
-                    { "class": "item" },
-                    React.createElement(
-                        "i",
-                        { "class": "icon" },
-                        React.createElement("i", { "class": "fa fa-bug", "aria-hidden": "true" })
-                    )
-                )
-            );
-        }
-    }]);
-
-    return Menu2;
-}(React.Component);
-
-var Menu3 = function (_React$Component16) {
-    _inherits(Menu3, _React$Component16);
-
-    function Menu3() {
-        _classCallCheck(this, Menu3);
-
-        return _possibleConstructorReturn(this, (Menu3.__proto__ || Object.getPrototypeOf(Menu3)).apply(this, arguments));
-    }
-
-    _createClass(Menu3, [{
-        key: "render",
-        value: function render() {
-            return React.createElement(
-                "div",
-                { id: "menu", className: "ui secondary  menu" },
-                React.createElement(
-                    "div",
-                    { id: "hesap", "class": "ui button" },
-                    React.createElement("i", { "class": "user icon" }),
-                    " Hesap"
-                )
-            );
-        }
-    }]);
-
-    return Menu3;
-}(React.Component);
-
-var Logo = function (_React$Component17) {
-    _inherits(Logo, _React$Component17);
+var Logo = function (_React$Component14) {
+    _inherits(Logo, _React$Component14);
 
     function Logo() {
         _classCallCheck(this, Logo);
@@ -501,8 +434,11 @@ var Logo = function (_React$Component17) {
     return Logo;
 }(React.Component);
 
-var SearchBar = function (_React$Component18) {
-    _inherits(SearchBar, _React$Component18);
+/* bu bütün sayfalarda kullanılabilecek bir bileşendir */
+
+
+var SearchBar = function (_React$Component15) {
+    _inherits(SearchBar, _React$Component15);
 
     function SearchBar() {
         _classCallCheck(this, SearchBar);
@@ -524,136 +460,11 @@ var SearchBar = function (_React$Component18) {
     return SearchBar;
 }(React.Component);
 
-var BreadCrumb = function (_React$Component19) {
-    _inherits(BreadCrumb, _React$Component19);
+/* bu bütün sayfalarda kullanılabilecek bir bileşendir */
 
-    function BreadCrumb() {
-        _classCallCheck(this, BreadCrumb);
 
-        return _possibleConstructorReturn(this, (BreadCrumb.__proto__ || Object.getPrototypeOf(BreadCrumb)).apply(this, arguments));
-    }
-
-    _createClass(BreadCrumb, [{
-        key: "render",
-        value: function render() {
-            return React.createElement(
-                Row,
-                null,
-                React.createElement(WideColumn, { size: "one" }),
-                React.createElement(
-                    WideColumn,
-                    { size: "fourteen" },
-                    React.createElement(
-                        "div",
-                        { className: "ui breadcrumb" },
-                        React.createElement(
-                            "a",
-                            { className: "section" },
-                            "Elektronik"
-                        ),
-                        React.createElement("i", { className: "right angle icon divider" }),
-                        React.createElement(
-                            "a",
-                            { className: "section" },
-                            "Mobil Cihazlar"
-                        ),
-                        React.createElement("i", { className: "right angle icon divider" }),
-                        React.createElement(
-                            "div",
-                            { className: "active section" },
-                            "Iphone"
-                        )
-                    )
-                )
-            );
-        }
-    }]);
-
-    return BreadCrumb;
-}(React.Component);
-//<div className="ui right floated button">Butoncuk</div>
-
-var Example = function (_React$Component20) {
-    _inherits(Example, _React$Component20);
-
-    function Example() {
-        _classCallCheck(this, Example);
-
-        return _possibleConstructorReturn(this, (Example.__proto__ || Object.getPrototypeOf(Example)).apply(this, arguments));
-    }
-
-    _createClass(Example, [{
-        key: "render",
-        value: function render() {
-            return React.createElement(
-                "div",
-                { className: "floatRight" },
-                "Butoncuk"
-            );
-        }
-    }]);
-
-    return Example;
-}(React.Component);
-
-var LikeButton = function (_React$Component21) {
-    _inherits(LikeButton, _React$Component21);
-
-    function LikeButton() {
-        _classCallCheck(this, LikeButton);
-
-        return _possibleConstructorReturn(this, (LikeButton.__proto__ || Object.getPrototypeOf(LikeButton)).apply(this, arguments));
-    }
-
-    _createClass(LikeButton, [{
-        key: "render",
-        value: function render() {
-            return React.createElement(
-                "button",
-                { "class": "ui basic button" },
-                React.createElement(
-                    "i",
-                    { "class": "icon" },
-                    React.createElement("i", { "class": "fa fa-thumbs-up", "aria-hidden": "true" })
-                ),
-                this.props.value
-            );
-        }
-    }]);
-
-    return LikeButton;
-}(React.Component);
-
-var DislikeButton = function (_React$Component22) {
-    _inherits(DislikeButton, _React$Component22);
-
-    function DislikeButton() {
-        _classCallCheck(this, DislikeButton);
-
-        return _possibleConstructorReturn(this, (DislikeButton.__proto__ || Object.getPrototypeOf(DislikeButton)).apply(this, arguments));
-    }
-
-    _createClass(DislikeButton, [{
-        key: "render",
-        value: function render() {
-            return React.createElement(
-                "button",
-                { "class": "ui basic button" },
-                React.createElement(
-                    "i",
-                    { "class": "icon" },
-                    React.createElement("i", { "class": "fa fa-thumbs-down", "aria-hidden": "true" })
-                ),
-                this.props.value
-            );
-        }
-    }]);
-
-    return DislikeButton;
-}(React.Component);
-
-var Categories = function (_React$Component23) {
-    _inherits(Categories, _React$Component23);
+var Categories = function (_React$Component16) {
+    _inherits(Categories, _React$Component16);
 
     function Categories() {
         _classCallCheck(this, Categories);
@@ -669,37 +480,37 @@ var Categories = function (_React$Component23) {
                 { id: "categories" },
                 React.createElement(
                     "button",
-                    { "class": " big ui button" },
+                    { className: " big ui button" },
                     "Elektronik"
                 ),
                 React.createElement(
                     "button",
-                    { "class": " big ui  button" },
+                    { className: " big ui  button" },
                     "Giyim"
                 ),
                 React.createElement(
                     "button",
-                    { "class": " big ui  button" },
+                    { className: " big ui  button" },
                     "Mobilya"
                 ),
                 React.createElement(
                     "button",
-                    { "class": " big ui  button" },
+                    { className: " big ui  button" },
                     "G\u0131da"
                 ),
                 React.createElement(
                     "button",
-                    { "class": " big ui  button" },
+                    { className: " big ui  button" },
                     "Ofis"
                 ),
                 React.createElement(
                     "button",
-                    { "class": " big ui  button" },
+                    { className: " big ui  button" },
                     "Kozmetik"
                 ),
                 React.createElement(
                     "button",
-                    { "class": " big ui  button" },
+                    { className: " big ui  button" },
                     "Kitap"
                 )
             );
@@ -707,4 +518,95 @@ var Categories = function (_React$Component23) {
     }]);
 
     return Categories;
+}(React.Component);
+
+/* bu bütün sayfalarda kullanılabilecek bir bileşendir */
+
+
+var Header = function (_React$Component17) {
+    _inherits(Header, _React$Component17);
+
+    function Header() {
+        _classCallCheck(this, Header);
+
+        return _possibleConstructorReturn(this, (Header.__proto__ || Object.getPrototypeOf(Header)).apply(this, arguments));
+    }
+
+    _createClass(Header, [{
+        key: "render",
+        value: function render() {
+            return React.createElement(
+                "header",
+                null,
+                React.createElement(
+                    Row,
+                    { withoutContainer: true, size: "one" },
+                    React.createElement(
+                        Column,
+                        null,
+                        React.createElement(
+                            Row,
+                            null,
+                            React.createElement(
+                                WideColumn,
+                                { size: "four" },
+                                React.createElement(Logo, null)
+                            ),
+                            React.createElement(
+                                WideColumn,
+                                { size: "eight" },
+                                React.createElement(SearchBar, null)
+                            ),
+                            React.createElement(
+                                WideColumn,
+                                { size: "four" },
+                                React.createElement(
+                                    FloatRight,
+                                    null,
+                                    React.createElement(Menu, null)
+                                )
+                            )
+                        )
+                    )
+                ),
+                React.createElement(
+                    Row,
+                    { withoutContainer: true, size: "one" },
+                    React.createElement(
+                        Column,
+                        null,
+                        React.createElement(
+                            Center,
+                            { size: "sixteen" },
+                            React.createElement(Categories, null)
+                        )
+                    )
+                )
+            );
+        }
+    }]);
+
+    return Header;
+}(React.Component);
+
+/* bu bütün sayfalarda kullanılabilecek bir bileşendir */
+
+
+var Footer = function (_React$Component18) {
+    _inherits(Footer, _React$Component18);
+
+    function Footer() {
+        _classCallCheck(this, Footer);
+
+        return _possibleConstructorReturn(this, (Footer.__proto__ || Object.getPrototypeOf(Footer)).apply(this, arguments));
+    }
+
+    _createClass(Footer, [{
+        key: "render",
+        value: function render() {
+            return React.createElement("div", null);
+        }
+    }]);
+
+    return Footer;
 }(React.Component);

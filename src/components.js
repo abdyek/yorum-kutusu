@@ -1,4 +1,4 @@
-
+/* bu bütün sayfalarda kullanılabilecek bir bileşendir */
 class Container extends React.Component {
     render() {
         return(
@@ -9,6 +9,7 @@ class Container extends React.Component {
     }
 }
 
+/* bu bütün sayfalarda kullanılabilecek bir bileşendir */
 class Segment extends React.Component {
     render() {
         return(
@@ -18,6 +19,8 @@ class Segment extends React.Component {
         )
     }
 }
+
+/* bu bütün sayfalarda kullanılabilecek bir bileşendir */
 class RaisedSegment extends React.Component {
     render() {
         return(
@@ -28,7 +31,7 @@ class RaisedSegment extends React.Component {
     }
 }
 
-
+/* bu bütün sayfalarda kullanılabilecek bir bileşendir */
 class Row extends React.Component {
     constructor(props){
         super(props);
@@ -57,6 +60,7 @@ class Row extends React.Component {
 }
 
 
+/* bu bütün sayfalarda kullanılabilecek bir bileşendir */
 class Column extends React.Component {
     render() {
         return(
@@ -67,6 +71,7 @@ class Column extends React.Component {
     }
 }
 
+/* bu bütün sayfalarda kullanılabilecek bir bileşendir */
 class WideColumn extends React.Component {
     render() {
         return(
@@ -75,6 +80,7 @@ class WideColumn extends React.Component {
     }
 }
 
+/* bu bütün sayfalarda kullanılabilecek bir bileşendir */
 class H extends React.Component {
     constructor(props) {
         super(props);
@@ -82,32 +88,38 @@ class H extends React.Component {
         if(this.props.textAlign=="center") {
             this.textAlign = " center aligned ";
         }
+        if(!this.props.optional) {
+            this.optional = "";
+        } else {
+            this.optional = this.props.optional;
+        }
     }
     render() {
         if(this.props.type=="1") {
             return (
-                <h1 className={"ui "+this.textAlign+" header"}>{this.props.text}</h1>
+                <h1 className={"ui "+this.textAlign+" header " + this.optional}>{this.props.text}</h1>
             )
         } else if(this.props.type=="2") {
             return (
-                <h2 className={"ui "+this.textAlign+" header"}>{this.props.text}</h2>
+                <h2 className={"ui "+this.textAlign+" header " + this.optional}>{this.props.text}</h2>
             )
         } else if(this.props.type=="3") {
             return (
-                <h3 className={"ui "+this.textAlign+" header"}>{this.props.text}</h3>
+                <h3 className={"ui "+this.textAlign+" header " + this.optional}>{this.props.text}</h3>
             )
         } else if(this.props.type=="4") {
             return (
-                <h4 className={"ui "+this.textAlign+"header"}>{this.props.text}</h4>
+                <h4 className={"ui "+this.textAlign+"header " + this.optional}>{this.props.text}</h4>
             )
         } else if(this.props.type=="5") {
             return (
-                <h5 className={"ui "+this.textAlign+"header"}>{this.props.text}</h5>
+                <h5 className={"ui "+this.textAlign+"header " + this.optional}>{this.props.text}</h5>
             )
         }
     }
 }
 
+/* bu bütün sayfalarda kullanılabilecek bir bileşendir */
 class Center extends React.Component {
     render() {
         return(
@@ -120,15 +132,17 @@ class Center extends React.Component {
     }
 }
 
+/* bu bütün sayfalarda kullanılabilecek bir bileşendir */
 class Hx extends React.Component {
     // size -> huge, large, medium, small, tiny
     render() {
         return(
-            <div class={"ui "+this.props.size+" header"}>{this.props.text}</div> 
+            <div className={"ui "+this.props.size+" header"}>{this.props.text}</div> 
         )
     }
 }
 
+/* bu bütün sayfalarda kullanılabilecek bir bileşendir */
 class FloatRight extends React.Component {
     render() {
         return(
@@ -137,6 +151,7 @@ class FloatRight extends React.Component {
     }
 }
 
+/* bu bütün sayfalarda kullanılabilecek bir bileşendir */
 class Button extends React.Component {
     render() {
         return(
@@ -147,6 +162,7 @@ class Button extends React.Component {
     }
 }
 
+/* bu bütün sayfalarda kullanılabilecek bir bileşendir */
 class Buttons extends React.Component {
     render() {
         return (
@@ -157,66 +173,13 @@ class Buttons extends React.Component {
     }
 }
 
-// şimdilik bu kısım component tarzı değil, sonradan düzeltirim
-class Image extends React.Component {
-    render() {
-        return(
-            <div>
-                <img id="productImg" className=" ui image" src="https://gigaom.com/wp-content/uploads/sites/1/2013/09/iphone5s_3color_ios7_print-2.jpg"></img>
-            </div>
-        )
-    }
-}
-
-
+/* bu bütün sayfalarda kullanılabilecek bir bileşendir */
 class Menu extends React.Component {
     render() {
         return(
-            <div id="menu" className="ui teal inverted menu">
-                <a className="active item">
-                    Ana Sayfa
-                </a>
-                <a className="item">
-                    Takip
-                </a>
-                <a className="item">
-                    Hesap
-                </a>
-            </div>
-        )
-    }
-}
-
-class Menu2 extends React.Component {
-    render() {
-        return(
-            <div id="menu" class="ui icon inverted menu">
-  <a class="item">
-    <i class="icon">
-        <i class="fa fa-home" aria-hidden="true"></i>
-    </i>
-  </a>
-  <a class="item">
-    <i class="icon">
-        <i class="fa fa-user" aria-hidden="true"></i>
-    </i>
-  </a>
-  <a class="item">
-    <i class="icon">
-        <i class="fa fa-bug" aria-hidden="true"></i>
-    </i>
-  </a>
-</div>
-        )
-    }
-}
-
-class Menu3 extends React.Component {
-    render() {
-        return(
             <div id="menu" className="ui secondary  menu">
-    <div id="hesap" class="ui button">
-        <i class="user icon"></i> Hesap
+    <div id="hesap" className="ui button">
+        <i className="user icon"></i> Hesap
     </div>
 </div>
         )
@@ -224,6 +187,7 @@ class Menu3 extends React.Component {
 }
 
 
+/* bu bütün sayfalarda kullanılabilecek bir bileşendir */
 class Logo extends React.Component {
     render() {
         return(
@@ -234,6 +198,7 @@ class Logo extends React.Component {
     }
 }
 
+/* bu bütün sayfalarda kullanılabilecek bir bileşendir */
 class SearchBar extends React.Component {
     render() {
         return(
@@ -244,73 +209,65 @@ class SearchBar extends React.Component {
     }
 }
 
-class BreadCrumb extends React.Component {
-    render() {
-        return(
-            <Row>
-                <WideColumn size="one" />
-                <WideColumn size="fourteen">
-                    <div className="ui breadcrumb">
-                        <a className="section">Elektronik</a>
-                        <i className="right angle icon divider"></i>
-                        <a className="section">Mobil Cihazlar</a>
-                        <i className="right angle icon divider"></i>
-                        <div className="active section">Iphone</div>
-                    </div>
-                </WideColumn>
-            </Row>
-        )
-    }
-}
-            //<div className="ui right floated button">Butoncuk</div>
-
-class Example extends React.Component {
-    render() {
-        return(
-            <div className="floatRight">Butoncuk</div>
-        )
-    }
-}
-
-class LikeButton extends React.Component {
-    render() {
-        return(
-            <button class="ui basic button">
-                <i class="icon">
-                    <i class="fa fa-thumbs-up" aria-hidden="true"></i>
-                </i>
-                {this.props.value}
-            </button>
-        )
-    }
-}
-
-class DislikeButton extends React.Component {
-    render() {
-        return(
-            <button class="ui basic button">
-                <i class="icon">
-                    <i class="fa fa-thumbs-down" aria-hidden="true"></i>
-                </i>
-                {this.props.value}
-            </button>
-        )
-    }
-}
-
+/* bu bütün sayfalarda kullanılabilecek bir bileşendir */
 class Categories extends React.Component {
     render(){
         return(
             <div id="categories">
-                <button class=" big ui button">Elektronik</button>
-                <button class=" big ui  button">Giyim</button>
-                <button class=" big ui  button">Mobilya</button>
-                <button class=" big ui  button">Gıda</button>
-                <button class=" big ui  button">Ofis</button>
-                <button class=" big ui  button">Kozmetik</button>
-                <button class=" big ui  button">Kitap</button>
+                <button className=" big ui button">Elektronik</button>
+                <button className=" big ui  button">Giyim</button>
+                <button className=" big ui  button">Mobilya</button>
+                <button className=" big ui  button">Gıda</button>
+                <button className=" big ui  button">Ofis</button>
+                <button className=" big ui  button">Kozmetik</button>
+                <button className=" big ui  button">Kitap</button>
             </div>
         )
     }
 }
 
+
+/* bu bütün sayfalarda kullanılabilecek bir bileşendir */
+class Header extends React.Component {
+    render() {
+        return(
+            <header>
+                <Row withoutContainer={true} size="one">
+                    <Column>
+                        <Row>
+                            <WideColumn size="four">
+                                <Logo />
+                            </WideColumn>
+                            <WideColumn size="eight">
+                                <SearchBar />
+                            </WideColumn>
+                            <WideColumn size="four">
+                                <FloatRight>
+                                    <Menu />
+                                </FloatRight>
+                            </WideColumn>
+                        </Row>
+                    </Column>
+                </Row>
+                <Row withoutContainer={true} size="one">
+                    <Column>
+                        <Center size="sixteen">
+                            <Categories />
+                        </Center>
+                    </Column>
+                </Row>
+            </header>
+        )
+    }
+}
+
+/* bu bütün sayfalarda kullanılabilecek bir bileşendir */
+class Footer extends React.Component {
+    render() {
+        return(
+            <div>
+
+            </div>
+        )
+    }
+}
