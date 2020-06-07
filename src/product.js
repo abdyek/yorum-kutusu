@@ -92,6 +92,13 @@ class App extends React.Component {
                             percentValue: 6.4
                         }
                     ]}
+                    imagesSrcs={[
+                        "https://cdn.shoplightspeed.com/shops/613622/files/8420157/image.jpg",
+                        "http://3.bp.blogspot.com/-uC4SEk9v07I/UyVCeORCsdI/AAAAAAAAA-k/6xZx0EVnCMc/s1600/iphone+5s+rep.jpg",
+                        "https://i.ytimg.com/vi/2jDd8iPIuEc/maxresdefault.jpg",
+                        "https://i.ytimg.com/vi/kLg__oZYfG8/maxresdefault.jpg",
+                        "http://3.bp.blogspot.com/-uC4SEk9v07I/UyVCeORCsdI/AAAAAAAAA-k/6xZx0EVnCMc/s1600/iphone+5s+rep.jpg"
+                    ]}
                 />
                 <Footer /> {/* from components.js */}
             </div>
@@ -110,8 +117,8 @@ class Content extends React.Component {
                 />
                 <ProductHeader />
                 <FollowButton followers={this.props.followers} followed={this.props.followed}/>
-                <Product attributes={this.props.attributes}/>
-                <Comments comments={this.props.comments} />
+                <Product attributes={this.props.attributes} imagesSrcs={this.props.imagesSrcs}/>
+                <Comments comments={this.props.comments} attributes={this.props.attributes}/>
             </div>
         )
     }
@@ -224,13 +231,7 @@ class Product extends React.Component {
                     <Row size="one">
                         <Column>
                             <Center>
-                                <ImageSlider srcs={[
-                                    "https://cdn.shoplightspeed.com/shops/613622/files/8420157/image.jpg",
-                                    "http://3.bp.blogspot.com/-uC4SEk9v07I/UyVCeORCsdI/AAAAAAAAA-k/6xZx0EVnCMc/s1600/iphone+5s+rep.jpg",
-                                    "https://i.ytimg.com/vi/2jDd8iPIuEc/maxresdefault.jpg",
-                                    "https://i.ytimg.com/vi/kLg__oZYfG8/maxresdefault.jpg",
-                                    "http://3.bp.blogspot.com/-uC4SEk9v07I/UyVCeORCsdI/AAAAAAAAA-k/6xZx0EVnCMc/s1600/iphone+5s+rep.jpg"
-                                ]}/>
+                                <ImageSlider srcs={this.props.imagesSrcs} />
                             </Center>
                         </Column>
                     </Row>
@@ -446,7 +447,7 @@ class Comments extends React.Component {
                 <PageNumber />
                     {this.comments}
                 <PageNumber />
-                <WriteComment />
+                <WriteComment attributes={this.props.attributes}/>
             </div>
         )
     }
@@ -671,7 +672,7 @@ class WriteComment extends React.Component {
                                 </div>
                             </WideColumn>
                             <WideColumn size="six">
-                                <InputRating />
+                                <InputRating attributes={this.props.attributes}/>
                             </WideColumn>
                         </Row>
                         <Row>
@@ -688,17 +689,19 @@ class WriteComment extends React.Component {
     }
 }
 class InputRating extends React.Component {
+    constructor(props){
+        super(props);
+        this.inputRanges = [];
+        for(let i=0;i<this.props.attributes.length;i++) {
+            this.inputRanges.push(
+                <InputRange key={this.props.attributes[i].key} name={this.props.attributes[i].name}/>
+            )
+        }
+    }
     render() {
         return(
             <div id="inputRating">
-                <InputRange name="Sağlamlık"/>
-                <InputRange name="Kullanışlılık"/>
-                <InputRange name="Pil Ömrü"/>
-                <InputRange name="falan1"/>
-                <InputRange name="falan2"/>
-                <InputRange name="falan3"/>
-                <InputRange name="falan4"/>
-                <InputRange name="falan5"/>
+                {this.inputRanges}
             </div>
         )
     }

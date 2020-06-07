@@ -94,7 +94,8 @@ var App = function (_React$Component) {
                         key: 5,
                         name: "Fiyat-Performans",
                         percentValue: 6.4
-                    }]
+                    }],
+                    imagesSrcs: ["https://cdn.shoplightspeed.com/shops/613622/files/8420157/image.jpg", "http://3.bp.blogspot.com/-uC4SEk9v07I/UyVCeORCsdI/AAAAAAAAA-k/6xZx0EVnCMc/s1600/iphone+5s+rep.jpg", "https://i.ytimg.com/vi/2jDd8iPIuEc/maxresdefault.jpg", "https://i.ytimg.com/vi/kLg__oZYfG8/maxresdefault.jpg", "http://3.bp.blogspot.com/-uC4SEk9v07I/UyVCeORCsdI/AAAAAAAAA-k/6xZx0EVnCMc/s1600/iphone+5s+rep.jpg"]
                 }),
                 React.createElement(Footer, null),
                 " "
@@ -127,8 +128,8 @@ var Content = function (_React$Component2) {
                 }),
                 React.createElement(ProductHeader, null),
                 React.createElement(FollowButton, { followers: this.props.followers, followed: this.props.followed }),
-                React.createElement(Product, { attributes: this.props.attributes }),
-                React.createElement(Comments, { comments: this.props.comments })
+                React.createElement(Product, { attributes: this.props.attributes, imagesSrcs: this.props.imagesSrcs }),
+                React.createElement(Comments, { comments: this.props.comments, attributes: this.props.attributes })
             );
         }
     }]);
@@ -331,7 +332,7 @@ var Product = function (_React$Component6) {
                             React.createElement(
                                 Center,
                                 null,
-                                React.createElement(ImageSlider, { srcs: ["https://cdn.shoplightspeed.com/shops/613622/files/8420157/image.jpg", "http://3.bp.blogspot.com/-uC4SEk9v07I/UyVCeORCsdI/AAAAAAAAA-k/6xZx0EVnCMc/s1600/iphone+5s+rep.jpg", "https://i.ytimg.com/vi/2jDd8iPIuEc/maxresdefault.jpg", "https://i.ytimg.com/vi/kLg__oZYfG8/maxresdefault.jpg", "http://3.bp.blogspot.com/-uC4SEk9v07I/UyVCeORCsdI/AAAAAAAAA-k/6xZx0EVnCMc/s1600/iphone+5s+rep.jpg"] })
+                                React.createElement(ImageSlider, { srcs: this.props.imagesSrcs })
                             )
                         )
                     )
@@ -685,7 +686,7 @@ var Comments = function (_React$Component14) {
                 React.createElement(PageNumber, null),
                 this.comments,
                 React.createElement(PageNumber, null),
-                React.createElement(WriteComment, null)
+                React.createElement(WriteComment, { attributes: this.props.attributes })
             );
         }
     }]);
@@ -1116,7 +1117,7 @@ var WriteComment = function (_React$Component23) {
                             React.createElement(
                                 WideColumn,
                                 { size: "six" },
-                                React.createElement(InputRating, null)
+                                React.createElement(InputRating, { attributes: this.props.attributes })
                             )
                         ),
                         React.createElement(
@@ -1144,10 +1145,16 @@ var WriteComment = function (_React$Component23) {
 var InputRating = function (_React$Component24) {
     _inherits(InputRating, _React$Component24);
 
-    function InputRating() {
+    function InputRating(props) {
         _classCallCheck(this, InputRating);
 
-        return _possibleConstructorReturn(this, (InputRating.__proto__ || Object.getPrototypeOf(InputRating)).apply(this, arguments));
+        var _this25 = _possibleConstructorReturn(this, (InputRating.__proto__ || Object.getPrototypeOf(InputRating)).call(this, props));
+
+        _this25.inputRanges = [];
+        for (var i = 0; i < _this25.props.attributes.length; i++) {
+            _this25.inputRanges.push(React.createElement(InputRange, { key: _this25.props.attributes[i].key, name: _this25.props.attributes[i].name }));
+        }
+        return _this25;
     }
 
     _createClass(InputRating, [{
@@ -1156,14 +1163,7 @@ var InputRating = function (_React$Component24) {
             return React.createElement(
                 "div",
                 { id: "inputRating" },
-                React.createElement(InputRange, { name: "Sa\u011Flaml\u0131k" }),
-                React.createElement(InputRange, { name: "Kullan\u0131\u015Fl\u0131l\u0131k" }),
-                React.createElement(InputRange, { name: "Pil \xD6mr\xFC" }),
-                React.createElement(InputRange, { name: "falan1" }),
-                React.createElement(InputRange, { name: "falan2" }),
-                React.createElement(InputRange, { name: "falan3" }),
-                React.createElement(InputRange, { name: "falan4" }),
-                React.createElement(InputRange, { name: "falan5" })
+                this.inputRanges
             );
         }
     }]);
