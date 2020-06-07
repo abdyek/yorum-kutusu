@@ -6,7 +6,48 @@ class App extends React.Component {
         return (
             <div>
                 <Header /> {/* from components.js */}
-                <Content />
+                <Content comments={[
+                        {
+                            key:"1",
+                            commentOwner:"Yunus Emre Bulut",
+                            commentText:"Çok güzel bir telefon. Yapanlardan Allah razı olsun.",
+                            likeValue:"455",
+                            dislikeValue:"75",
+                            likeOrDislike:"like",
+                            ratingAverage:"9.8",
+                            date:"07.06"
+                        },
+                        {
+                            key:"2",
+                            commentOwner:"Rıdvan Tülemen",
+                            commentText:"Apple gerçekten güzel ürünler üretiyor. Steve Jobs R.I.P :(",
+                            likeValue:"499",
+                            dislikeValue:"27",
+                            likeOrDislike:"like",
+                            ratingAverage:"8.2",
+                            date:"03.05"
+                        },
+                        {
+                            key:"3",
+                            commentOwner:"Alp_77",
+                            commentText:"Bu tasarım sonraki sürümlerde de sürdürülmeliydi. Bu kadar güzel tasarımlı başka iphone yok.",
+                            likeValue:"999",
+                            dislikeValue:"12",
+                            likeOrDislike:" ",
+                            ratingAverage:"5.4",
+                            date:"13.12"
+                        },
+                        {
+                            key:"4",
+                            commentOwner:"ceza_22",
+                            commentText:"Samzung s3ün gedir götürünü yabar anca.",
+                            likeValue:"13",
+                            dislikeValue:"176",
+                            likeOrDislike:"dislike",
+                            ratingAverage:"1.2",
+                            date:"12.12"
+                        },
+                    ]}/>
                 <Footer /> {/* from components.js */}
             </div>
         )
@@ -21,7 +62,7 @@ class Content extends React.Component {
                 <ProductHeader />
                 <FollowButton followed={true}/>
                 <Product />
-                <Comments />
+                <Comments comments={this.props.comments} />
             </div>
         )
     }
@@ -310,46 +351,28 @@ class DrawCircle extends React.Component {
 class Comments extends React.Component {
     constructor(props) {
         super(props);
+        this.comments = [];
+        for(let i=0;i<this.props.comments.length;i++) {
+            this.comments.push(
+                <Comment
+                    key = {this.props.comments[i].key}
+                    commentOwner= {this.props.comments[i].commentOwner}
+                    commentText= {this.props.comments[i].commentText}
+                    likeValue={this.props.comments[i].likeValue}
+                    dislikeValue={this.props.comments[i].dislikeValue}
+                    likeOrDislike={this.props.comments[i].likeOrDislike}
+                    ratingAverage={this.props.comments[i].ratingAverage}
+                    date={this.props.comments[i].date}
+                />
+            );
+        }
     }
     render() {
         return(
             <div>
                 <YorumlarHeader />
                 <PageNumber />
-                <Comment
-                    commentOwner="Rıdvan Tülemen"
-                    commentText="Yinelenen bir sayfa içeriğinin okuyucunun dikkatini dağıttığı bilinen bir gerçektir. Lorem Ipsum kullanmanın amacı, sürekli 'buraya metin gelecek, buraya metin gelecek' yazmaya kıyasla daha dengeli bir harf dağılımı sağlayarak okunurluğu artırmasıdır. Şu anda birçok masaüstü yayıncılık paketi ve web sayfa düzenleyicisi, varsayılan mıgır metinler olarak Lorem Ipsum kullanmaktadır. Ayrıca arama motorlarında 'lorem ipsum' anahtar sözcükleri ile arama yapıldığında henüz tasarım aşamasında olan çok sayıda site listelenir. Yıllar içinde, bazen kazara, bazen bilinçli olarak (örneğin mizah katılarak), çeşitli sürümleri geliştirilmiştir."
-                    likeValue="312"
-                    dislikeValue="31"
-                    likeOrDislike="like"
-                    ratingAverage="7.2"
-                    date="15/05/2020"
-                />
-                <Comment
-                    commentOwner="RTE_53"
-                    commentText="Eyyy kılıçdar sen kimsin yaa!!"
-                    likeValue="9912312312"
-                    dislikeValue="912"
-                    likeOrDislike="dislike"
-                    ratingAverage="4.2"
-                    date="15-05"
-                />
-                <Comment
-                    commentOwner="ByKemal31"
-                    commentText="Derhal burayı terket kardeşim"
-                    likeValue="321312412"
-                    dislikeValue="91"
-                    ratingAverage="6.8"
-                    date="15-05-12"
-                />
-                <Comment
-                    commentOwner="Deniz_Baykal_07"
-                    commentText="Benim ne işim var burda amq"
-                    likeValue="999999999999"
-                    dislikeValue="-1231"
-                    ratingAverage="1.0"
-                    date="01-05 12:15"
-                />
+                    {this.comments}
                 <PageNumber />
                 <WriteComment />
             </div>

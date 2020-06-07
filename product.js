@@ -23,7 +23,43 @@ var App = function (_React$Component) {
                 null,
                 React.createElement(Header, null),
                 " ",
-                React.createElement(Content, null),
+                React.createElement(Content, { comments: [{
+                        key: "1",
+                        commentOwner: "Yunus Emre Bulut",
+                        commentText: "Çok güzel bir telefon. Yapanlardan Allah razı olsun.",
+                        likeValue: "455",
+                        dislikeValue: "75",
+                        likeOrDislike: "like",
+                        ratingAverage: "9.8",
+                        date: "07.06"
+                    }, {
+                        key: "2",
+                        commentOwner: "Rıdvan Tülemen",
+                        commentText: "Apple gerçekten güzel ürünler üretiyor. Steve Jobs R.I.P :(",
+                        likeValue: "499",
+                        dislikeValue: "27",
+                        likeOrDislike: "like",
+                        ratingAverage: "8.2",
+                        date: "03.05"
+                    }, {
+                        key: "3",
+                        commentOwner: "Alp_77",
+                        commentText: "Bu tasarım sonraki sürümlerde de sürdürülmeliydi. Bu kadar güzel tasarımlı başka iphone yok.",
+                        likeValue: "999",
+                        dislikeValue: "12",
+                        likeOrDislike: " ",
+                        ratingAverage: "5.4",
+                        date: "13.12"
+                    }, {
+                        key: "4",
+                        commentOwner: "ceza_22",
+                        commentText: "Samzung s3ün gedir götürünü yabar anca.",
+                        likeValue: "13",
+                        dislikeValue: "176",
+                        likeOrDislike: "dislike",
+                        ratingAverage: "1.2",
+                        date: "12.12"
+                    }] }),
                 React.createElement(Footer, null),
                 " "
             );
@@ -52,7 +88,7 @@ var Content = function (_React$Component2) {
                 React.createElement(ProductHeader, null),
                 React.createElement(FollowButton, { followed: true }),
                 React.createElement(Product, null),
-                React.createElement(Comments, null)
+                React.createElement(Comments, { comments: this.props.comments })
             );
         }
     }]);
@@ -562,7 +598,22 @@ var Comments = function (_React$Component14) {
     function Comments(props) {
         _classCallCheck(this, Comments);
 
-        return _possibleConstructorReturn(this, (Comments.__proto__ || Object.getPrototypeOf(Comments)).call(this, props));
+        var _this15 = _possibleConstructorReturn(this, (Comments.__proto__ || Object.getPrototypeOf(Comments)).call(this, props));
+
+        _this15.comments = [];
+        for (var i = 0; i < _this15.props.comments.length; i++) {
+            _this15.comments.push(React.createElement(Comment, {
+                key: _this15.props.comments[i].key,
+                commentOwner: _this15.props.comments[i].commentOwner,
+                commentText: _this15.props.comments[i].commentText,
+                likeValue: _this15.props.comments[i].likeValue,
+                dislikeValue: _this15.props.comments[i].dislikeValue,
+                likeOrDislike: _this15.props.comments[i].likeOrDislike,
+                ratingAverage: _this15.props.comments[i].ratingAverage,
+                date: _this15.props.comments[i].date
+            }));
+        }
+        return _this15;
     }
 
     _createClass(Comments, [{
@@ -573,40 +624,7 @@ var Comments = function (_React$Component14) {
                 null,
                 React.createElement(YorumlarHeader, null),
                 React.createElement(PageNumber, null),
-                React.createElement(Comment, {
-                    commentOwner: "R\u0131dvan T\xFClemen",
-                    commentText: "Yinelenen bir sayfa i\xE7eri\u011Finin okuyucunun dikkatini da\u011F\u0131tt\u0131\u011F\u0131 bilinen bir ger\xE7ektir. Lorem Ipsum kullanman\u0131n amac\u0131, s\xFCrekli 'buraya metin gelecek, buraya metin gelecek' yazmaya k\u0131yasla daha dengeli bir harf da\u011F\u0131l\u0131m\u0131 sa\u011Flayarak okunurlu\u011Fu art\u0131rmas\u0131d\u0131r. \u015Eu anda bir\xE7ok masa\xFCst\xFC yay\u0131nc\u0131l\u0131k paketi ve web sayfa d\xFCzenleyicisi, varsay\u0131lan m\u0131g\u0131r metinler olarak Lorem Ipsum kullanmaktad\u0131r. Ayr\u0131ca arama motorlar\u0131nda 'lorem ipsum' anahtar s\xF6zc\xFCkleri ile arama yap\u0131ld\u0131\u011F\u0131nda hen\xFCz tasar\u0131m a\u015Famas\u0131nda olan \xE7ok say\u0131da site listelenir. Y\u0131llar i\xE7inde, bazen kazara, bazen bilin\xE7li olarak (\xF6rne\u011Fin mizah kat\u0131larak), \xE7e\u015Fitli s\xFCr\xFCmleri geli\u015Ftirilmi\u015Ftir.",
-                    likeValue: "312",
-                    dislikeValue: "31",
-                    likeOrDislike: "like",
-                    ratingAverage: "7.2",
-                    date: "15/05/2020"
-                }),
-                React.createElement(Comment, {
-                    commentOwner: "RTE_53",
-                    commentText: "Eyyy k\u0131l\u0131\xE7dar sen kimsin yaa!!",
-                    likeValue: "9912312312",
-                    dislikeValue: "912",
-                    likeOrDislike: "dislike",
-                    ratingAverage: "4.2",
-                    date: "15-05"
-                }),
-                React.createElement(Comment, {
-                    commentOwner: "ByKemal31",
-                    commentText: "Derhal buray\u0131 terket karde\u015Fim",
-                    likeValue: "321312412",
-                    dislikeValue: "91",
-                    ratingAverage: "6.8",
-                    date: "15-05-12"
-                }),
-                React.createElement(Comment, {
-                    commentOwner: "Deniz_Baykal_07",
-                    commentText: "Benim ne i\u015Fim var burda amq",
-                    likeValue: "999999999999",
-                    dislikeValue: "-1231",
-                    ratingAverage: "1.0",
-                    date: "01-05 12:15"
-                }),
+                this.comments,
                 React.createElement(PageNumber, null),
                 React.createElement(WriteComment, null)
             );
