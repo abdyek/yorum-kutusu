@@ -388,13 +388,13 @@ var DirectlyButtons = function (_React$Component9) {
             if (_this10.props.selectedIndex == i + 1) {
                 _this10.buttons.push(React.createElement(
                     "button",
-                    { className: "disabled ui button" },
+                    { key: i, className: "disabled ui button" },
                     i + 1
                 ));
             } else {
                 _this10.buttons.push(React.createElement(
                     "button",
-                    { className: "ui button" },
+                    { key: i, className: "ui button" },
                     i + 1
                 ));
             }
@@ -1127,7 +1127,7 @@ var InputRange = function (_React$Component25) {
                     { className: "inputRangeLabel" },
                     this.props.name
                 ),
-                React.createElement("input", { className: "inputRange", type: "range", id: "", name: "", defaultValue: "5", value: this.state.value, step: "1", min: "0", max: "10", onChange: this.change }),
+                React.createElement("input", { className: "inputRange", type: "range", id: "", name: "", defaultValue: this.state.value, step: "1", min: "0", max: "10", onChange: this.change }),
                 React.createElement(
                     "label",
                     { className: "inputRangeValue" },

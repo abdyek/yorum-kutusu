@@ -213,11 +213,11 @@ class DirectlyButtons extends React.Component {
         for(let i=0;i<4; i++) {
             if(this.props.selectedIndex==i+1) {
                 this.buttons.push(
-                    <button className="disabled ui button">{i + 1}</button>
+                    <button key={i} className="disabled ui button">{i + 1}</button>
                 )
             } else {
                 this.buttons.push(
-                    <button className="ui button">{i + 1}</button>
+                    <button key={i} className="ui button">{i + 1}</button>
                 )
             }
         }
@@ -627,7 +627,7 @@ class InputRange extends React.Component {
                 <label className="inputRangeLabel">
                     {this.props.name}
                 </label>
-                <input className="inputRange" type="range" id="" name="" defaultValue="5" value={this.state.value} step="1" min="0" max="10" onChange={this.change}></input>
+                <input className="inputRange" type="range" id="" name="" defaultValue={this.state.value} step="1" min="0" max="10" onChange={this.change}></input>
                 <label className="inputRangeValue">
                     {this.state.value}
                 </label>
