@@ -23,7 +23,8 @@ var App = function (_React$Component) {
                 null,
                 React.createElement(Header, null),
                 " ",
-                React.createElement(Content, { comments: [{
+                React.createElement(Content, {
+                    comments: [{
                         key: "1",
                         commentOwner: "Yunus Emre Bulut",
                         commentText: "Çok güzel bir telefon. Yapanlardan Allah razı olsun.",
@@ -59,7 +60,42 @@ var App = function (_React$Component) {
                         likeOrDislike: "dislike",
                         ratingAverage: "1.2",
                         date: "12.12"
-                    }] }),
+                    }],
+                    productName: "iphone 5s",
+                    mainCategory: {
+                        name: "Elektronik"
+                    },
+                    categoryChildren: [{
+                        id: "2",
+                        name: "Telefon"
+                    }, {
+                        id: "4",
+                        name: "Akıllı Telefon"
+                    }],
+                    followers: 315,
+                    followed: false,
+                    attributes: [{
+                        key: 1,
+                        name: "Tasarım",
+                        percentValue: 7.8
+                    }, {
+                        key: 2,
+                        name: "Kullanışlılık",
+                        percentValue: 6.9
+                    }, {
+                        key: 3,
+                        name: "Pil Ömrü",
+                        percentValue: 4.6
+                    }, {
+                        key: 4,
+                        name: "Taşınabilirlik",
+                        percentValue: 7.5
+                    }, {
+                        key: 5,
+                        name: "Fiyat-Performans",
+                        percentValue: 6.4
+                    }]
+                }),
                 React.createElement(Footer, null),
                 " "
             );
@@ -84,10 +120,14 @@ var Content = function (_React$Component2) {
             return React.createElement(
                 "div",
                 { id: "content" },
-                React.createElement(BreadCrumb, null),
+                React.createElement(BreadCrumb, {
+                    mainCategory: this.props.mainCategory,
+                    categoryChildren: this.props.categoryChildren,
+                    productName: this.props.productName
+                }),
                 React.createElement(ProductHeader, null),
-                React.createElement(FollowButton, { followed: true }),
-                React.createElement(Product, null),
+                React.createElement(FollowButton, { followers: this.props.followers, followed: this.props.followed }),
+                React.createElement(Product, { attributes: this.props.attributes }),
                 React.createElement(Comments, { comments: this.props.comments })
             );
         }
@@ -99,10 +139,25 @@ var Content = function (_React$Component2) {
 var BreadCrumb = function (_React$Component3) {
     _inherits(BreadCrumb, _React$Component3);
 
-    function BreadCrumb() {
+    function BreadCrumb(props) {
         _classCallCheck(this, BreadCrumb);
 
-        return _possibleConstructorReturn(this, (BreadCrumb.__proto__ || Object.getPrototypeOf(BreadCrumb)).apply(this, arguments));
+        var _this3 = _possibleConstructorReturn(this, (BreadCrumb.__proto__ || Object.getPrototypeOf(BreadCrumb)).call(this, props));
+
+        _this3.categoryChildren = [];
+        for (var i = 0; i < _this3.props.categoryChildren.length; i++) {
+            _this3.categoryChildren.push(React.createElement(
+                "span",
+                { key: _this3.props.categoryChildren[i].id },
+                React.createElement("i", { className: "right angle icon divider" }),
+                React.createElement(
+                    "a",
+                    { className: "section" },
+                    _this3.props.categoryChildren[i].name
+                )
+            ));
+        }
+        return _this3;
     }
 
     _createClass(BreadCrumb, [{
@@ -120,19 +175,14 @@ var BreadCrumb = function (_React$Component3) {
                         React.createElement(
                             "a",
                             { className: "section" },
-                            "Elektronik"
+                            this.props.mainCategory.name
                         ),
-                        React.createElement("i", { className: "right angle icon divider" }),
-                        React.createElement(
-                            "a",
-                            { className: "section" },
-                            "Mobil Cihazlar"
-                        ),
+                        this.categoryChildren,
                         React.createElement("i", { className: "right angle icon divider" }),
                         React.createElement(
                             "div",
                             { className: "active section" },
-                            "Iphone"
+                            this.props.productName
                         )
                     )
                 )
@@ -241,7 +291,7 @@ var FollowButton = function (_React$Component5) {
                                 React.createElement(
                                     "a",
                                     { className: "ui basic" + this.state.class + "left pointing label" },
-                                    "1,048"
+                                    this.props.followers
                                 )
                             )
                         )
@@ -289,7 +339,7 @@ var Product = function (_React$Component6) {
                 React.createElement(
                     WideColumn,
                     { size: "eight" },
-                    React.createElement(Rating, null)
+                    React.createElement(Rating, { attributes: this.props.attributes })
                 )
             );
         }
@@ -455,10 +505,21 @@ var DirectlyButtons = function (_React$Component9) {
 var Rating = function (_React$Component10) {
     _inherits(Rating, _React$Component10);
 
-    function Rating() {
+    function Rating(props) {
         _classCallCheck(this, Rating);
 
-        return _possibleConstructorReturn(this, (Rating.__proto__ || Object.getPrototypeOf(Rating)).apply(this, arguments));
+        var _this11 = _possibleConstructorReturn(this, (Rating.__proto__ || Object.getPrototypeOf(Rating)).call(this, props));
+
+        _this11.attributes = [];
+        for (var i = 0; i < _this11.props.attributes.length; i++) {
+            _this11.attributes.push(React.createElement(ProductAttribute, {
+                key: _this11.props.attributes[i].key,
+                name: _this11.props.attributes[i].name,
+                percentValue: _this11.props.attributes[i].percentValue
+            }));
+        }
+
+        return _this11;
     }
 
     _createClass(Rating, [{
@@ -467,9 +528,7 @@ var Rating = function (_React$Component10) {
             return React.createElement(
                 "div",
                 null,
-                React.createElement(ProductAttribute, { name: "Sa\u011Flaml\u0131k", percentValue: "4.9" }),
-                React.createElement(ProductAttribute, { name: "Kullan\u0131\u015Fl\u0131l\u0131k", percentValue: "5.2" }),
-                React.createElement(ProductAttribute, { name: "Pil \xD6mr\xFC", percentValue: "7.2" })
+                this.attributes
             );
         }
     }]);

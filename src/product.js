@@ -6,7 +6,8 @@ class App extends React.Component {
         return (
             <div>
                 <Header /> {/* from components.js */}
-                <Content comments={[
+                <Content 
+                    comments={[
                         {
                             key:"1",
                             commentOwner:"Yunus Emre Bulut",
@@ -47,7 +48,51 @@ class App extends React.Component {
                             ratingAverage:"1.2",
                             date:"12.12"
                         },
-                    ]}/>
+                    ]}
+                    productName="iphone 5s"
+                    mainCategory={{
+                        name:"Elektronik"
+                    }}
+                    categoryChildren={[
+                        {
+                            id:"2",
+                            name:"Telefon"
+                        },
+                        {
+                            id:"4",
+                            name:"Akıllı Telefon"
+                        }
+                    ]}
+                    followers={315}
+                    followed={false}
+                    attributes={[
+                        {
+                            key:1,
+                            name:"Tasarım",
+                            percentValue: 7.8
+                        },
+                        {
+                            key:2,
+                            name:"Kullanışlılık",
+                            percentValue: 6.9
+                        },
+                        {
+                            key:3,
+                            name:"Pil Ömrü",
+                            percentValue: 4.6
+                        },
+                        {
+                            key:4,
+                            name:"Taşınabilirlik",
+                            percentValue: 7.5
+                        },
+                        {
+                            key:5,
+                            name:"Fiyat-Performans",
+                            percentValue: 6.4
+                        }
+                    ]}
+                />
                 <Footer /> {/* from components.js */}
             </div>
         )
@@ -58,10 +103,14 @@ class Content extends React.Component {
     render() {
         return(
             <div id="content">
-                <BreadCrumb />
+                <BreadCrumb
+                    mainCategory={this.props.mainCategory}
+                    categoryChildren={this.props.categoryChildren}
+                    productName={this.props.productName}
+                />
                 <ProductHeader />
-                <FollowButton followed={true}/>
-                <Product />
+                <FollowButton followers={this.props.followers} followed={this.props.followed}/>
+                <Product attributes={this.props.attributes}/>
                 <Comments comments={this.props.comments} />
             </div>
         )
@@ -69,16 +118,27 @@ class Content extends React.Component {
 }
 
 class BreadCrumb extends React.Component {
+    constructor(props){
+        super(props);
+        this.categoryChildren = [];
+        for(var i=0;i<this.props.categoryChildren.length; i++) {
+            this.categoryChildren.push(
+                <span key={this.props.categoryChildren[i].id}>
+                    <i className="right angle icon divider"></i>
+                    <a className="section">{this.props.categoryChildren[i].name}</a>
+                </span>
+            )
+        }
+    }
     render() {
         return(
             <Row size="one">
                 <Column>
                     <div className="ui breadcrumb">
-                        <a className="section">Elektronik</a>
+                        <a className="section">{this.props.mainCategory.name}</a>
+                        {this.categoryChildren}
                         <i className="right angle icon divider"></i>
-                        <a className="section">Mobil Cihazlar</a>
-                        <i className="right angle icon divider"></i>
-                        <div className="active section">Iphone</div>
+                        <div className="active section">{this.props.productName}</div>
                     </div>
                 </Column>
             </Row>
@@ -145,7 +205,7 @@ class FollowButton extends React.Component {
                                     <i className="heart icon"></i> Takip Et
                                 </div>
                                 <a className={"ui basic"+this.state.class+"left pointing label"}>
-                                    1,048
+                                    {this.props.followers}
                                 </a>
                             </div>
                         </div>
@@ -176,7 +236,7 @@ class Product extends React.Component {
                     </Row>
                 </WideColumn>
                 <WideColumn size="eight">
-                    <Rating />
+                    <Rating attributes={this.props.attributes}/>
                 </WideColumn>
             </Row>
         )
@@ -273,12 +333,24 @@ class DirectlyButtons extends React.Component {
 }
 
 class Rating extends React.Component {
+    constructor(props){
+        super(props);
+        this.attributes = [];
+        for(let i=0;i<this.props.attributes.length;i++) {
+            this.attributes.push(
+                <ProductAttribute
+                    key={this.props.attributes[i].key}
+                    name={this.props.attributes[i].name}
+                    percentValue={this.props.attributes[i].percentValue}
+                />
+            )
+        }
+            
+    }
     render() {
         return(
             <div>
-                <ProductAttribute name="Sağlamlık" percentValue="4.9"/>
-                <ProductAttribute name="Kullanışlılık" percentValue="5.2"/>
-                <ProductAttribute name="Pil Ömrü" percentValue="7.2"/>
+                {this.attributes}
             </div>
         )
     }
