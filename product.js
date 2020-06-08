@@ -739,9 +739,7 @@ var Comments = function (_React$Component14) {
                 "div",
                 null,
                 React.createElement(YorumlarHeader, null),
-                React.createElement(PageNumber, { pageLen: parseInt(this.numberOfComments / 10) + 1 }),
                 this.comments,
-                React.createElement(PageNumber, { pageLen: parseInt(this.numberOfComments / 10) + 1 }),
                 React.createElement(WriteComment, { attributes: this.props.attributes })
             );
         }

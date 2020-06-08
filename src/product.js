@@ -506,9 +506,9 @@ class Comments extends React.Component {
         return(
             <div>
                 <YorumlarHeader />
-                <PageNumber pageLen={parseInt(this.numberOfComments/10)+1}/>
+                {/*<PageNumber pageLen={parseInt(this.numberOfComments/10)+1}/>*/}
                     {this.comments}
-                <PageNumber pageLen={parseInt(this.numberOfComments/10)+1}/>
+                {/*<PageNumber pageLen={parseInt(this.numberOfComments/10)+1}/>*/}
                 <WriteComment attributes={this.props.attributes}/>
             </div>
         )
