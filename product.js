@@ -53,13 +53,67 @@ var App = function (_React$Component) {
                         date: "13.12"
                     }, {
                         key: "4",
-                        commentOwner: "ceza_22",
-                        commentText: "Samzung s3ün gedir götürünü yabar anca.",
-                        likeValue: "13",
-                        dislikeValue: "176",
-                        likeOrDislike: "dislike",
-                        ratingAverage: "1.2",
-                        date: "12.12"
+                        commentOwner: "Alp_77",
+                        commentText: "Bu tasarım sonraki sürümlerde de sürdürülmeliydi. Bu kadar güzel tasarımlı başka iphone yok.",
+                        likeValue: "999",
+                        dislikeValue: "12",
+                        likeOrDislike: " ",
+                        ratingAverage: "5.4",
+                        date: "13.12"
+                    }, {
+                        key: "5",
+                        commentOwner: "Alp_77",
+                        commentText: "Bu tasarım sonraki sürümlerde de sürdürülmeliydi. Bu kadar güzel tasarımlı başka iphone yok.",
+                        likeValue: "999",
+                        dislikeValue: "12",
+                        likeOrDislike: " ",
+                        ratingAverage: "5.4",
+                        date: "13.12"
+                    }, {
+                        key: "6",
+                        commentOwner: "Alp_77",
+                        commentText: "Bu tasarım sonraki sürümlerde de sürdürülmeliydi. Bu kadar güzel tasarımlı başka iphone yok.",
+                        likeValue: "999",
+                        dislikeValue: "12",
+                        likeOrDislike: " ",
+                        ratingAverage: "5.4",
+                        date: "13.12"
+                    }, {
+                        key: "7",
+                        commentOwner: "Alp_77",
+                        commentText: "Bu tasarım sonraki sürümlerde de sürdürülmeliydi. Bu kadar güzel tasarımlı başka iphone yok.",
+                        likeValue: "999",
+                        dislikeValue: "12",
+                        likeOrDislike: " ",
+                        ratingAverage: "5.4",
+                        date: "13.12"
+                    }, {
+                        key: "8",
+                        commentOwner: "Alp_77",
+                        commentText: "Bu tasarım sonraki sürümlerde de sürdürülmeliydi. Bu kadar güzel tasarımlı başka iphone yok.",
+                        likeValue: "999",
+                        dislikeValue: "12",
+                        likeOrDislike: " ",
+                        ratingAverage: "5.4",
+                        date: "13.12"
+                    }, {
+                        key: "9",
+                        commentOwner: "Alp_77",
+                        commentText: "Bu tasarım sonraki sürümlerde de sürdürülmeliydi. Bu kadar güzel tasarımlı başka iphone yok.",
+                        likeValue: "999",
+                        dislikeValue: "12",
+                        likeOrDislike: " ",
+                        ratingAverage: "5.4",
+                        date: "13.12"
+                    }, {
+                        key: "10",
+                        commentOwner: "Alp_77",
+                        commentText: "Bu tasarım sonraki sürümlerde de sürdürülmeliydi. Bu kadar güzel tasarımlı başka iphone yok.",
+                        likeValue: "999",
+                        dislikeValue: "12",
+                        likeOrDislike: " ",
+                        ratingAverage: "5.4",
+                        date: "13.12"
                     }],
                     productName: "iphone 5s",
                     mainCategory: {
@@ -661,6 +715,7 @@ var Comments = function (_React$Component14) {
         var _this15 = _possibleConstructorReturn(this, (Comments.__proto__ || Object.getPrototypeOf(Comments)).call(this, props));
 
         _this15.comments = [];
+        _this15.numberOfComments = 0;
         for (var i = 0; i < _this15.props.comments.length; i++) {
             _this15.comments.push(React.createElement(Comment, {
                 key: _this15.props.comments[i].key,
@@ -672,6 +727,7 @@ var Comments = function (_React$Component14) {
                 ratingAverage: _this15.props.comments[i].ratingAverage,
                 date: _this15.props.comments[i].date
             }));
+            _this15.numberOfComments++;
         }
         return _this15;
     }
@@ -683,9 +739,9 @@ var Comments = function (_React$Component14) {
                 "div",
                 null,
                 React.createElement(YorumlarHeader, null),
-                React.createElement(PageNumber, null),
+                React.createElement(PageNumber, { pageLen: parseInt(this.numberOfComments / 10) + 1 }),
                 this.comments,
-                React.createElement(PageNumber, null),
+                React.createElement(PageNumber, { pageLen: parseInt(this.numberOfComments / 10) + 1 }),
                 React.createElement(WriteComment, { attributes: this.props.attributes })
             );
         }
@@ -724,20 +780,30 @@ var YorumlarHeader = function (_React$Component15) {
 var PageNumber = function (_React$Component16) {
     _inherits(PageNumber, _React$Component16);
 
-    function PageNumber() {
+    function PageNumber(props) {
         _classCallCheck(this, PageNumber);
 
-        return _possibleConstructorReturn(this, (PageNumber.__proto__ || Object.getPrototypeOf(PageNumber)).apply(this, arguments));
+        var _this17 = _possibleConstructorReturn(this, (PageNumber.__proto__ || Object.getPrototypeOf(PageNumber)).call(this, props));
+
+        _this17.pages = [];
+        for (var i = 1; i <= _this17.props.pageLen; i++) {
+            _this17.pages.push(React.createElement(
+                "option",
+                { key: i, value: i },
+                i
+            ));
+        }
+        return _this17;
     }
+    /*
+        ortadaki html select'i masaüstü ve tabletlerde görünümünü daha küçük yapmak için size'ını 'two', ilk ve sonrakini de 'seven'
+        yapabiliriz. ancak mobil (iphone 6s) görünümünde html select sığmıyor. Bu durumu kurtarmak için mobilde şöyle görün normalde
+        şöyle görün diyebiliriz. şimdilik buraya not düşüyorum. ileride bu kısmı yaparım.
+    */
+
 
     _createClass(PageNumber, [{
         key: "render",
-
-        /*
-            ortadaki html select'i masaüstü ve tabletlerde görünümünü daha küçük yapmak için size'ını 'two', ilk ve sonrakini de 'seven'
-            yapabiliriz. ancak mobil (iphone 6s) görünümünde html select sığmıyor. Bu durumu kurtarmak için mobilde şöyle görün normalde
-            şöyle görün diyebiliriz. şimdilik buraya not düşüyorum. ileride bu kısmı yaparım.
-        */
         value: function render() {
             return React.createElement(
                 Row,
@@ -764,21 +830,7 @@ var PageNumber = function (_React$Component16) {
                             React.createElement(
                                 "select",
                                 null,
-                                React.createElement(
-                                    "option",
-                                    { value: "1" },
-                                    "1"
-                                ),
-                                React.createElement(
-                                    "option",
-                                    { value: "2" },
-                                    "2"
-                                ),
-                                React.createElement(
-                                    "option",
-                                    { value: "3" },
-                                    "3"
-                                )
+                                this.pages
                             )
                         )
                     )

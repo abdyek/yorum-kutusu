@@ -40,14 +40,74 @@ class App extends React.Component {
                         },
                         {
                             key:"4",
-                            commentOwner:"ceza_22",
-                            commentText:"Samzung s3ün gedir götürünü yabar anca.",
-                            likeValue:"13",
-                            dislikeValue:"176",
-                            likeOrDislike:"dislike",
-                            ratingAverage:"1.2",
-                            date:"12.12"
+                            commentOwner:"Alp_77",
+                            commentText:"Bu tasarım sonraki sürümlerde de sürdürülmeliydi. Bu kadar güzel tasarımlı başka iphone yok.",
+                            likeValue:"999",
+                            dislikeValue:"12",
+                            likeOrDislike:" ",
+                            ratingAverage:"5.4",
+                            date:"13.12"
                         },
+                        {
+                            key:"5",
+                            commentOwner:"Alp_77",
+                            commentText:"Bu tasarım sonraki sürümlerde de sürdürülmeliydi. Bu kadar güzel tasarımlı başka iphone yok.",
+                            likeValue:"999",
+                            dislikeValue:"12",
+                            likeOrDislike:" ",
+                            ratingAverage:"5.4",
+                            date:"13.12"
+                        },
+                        {
+                            key:"6",
+                            commentOwner:"Alp_77",
+                            commentText:"Bu tasarım sonraki sürümlerde de sürdürülmeliydi. Bu kadar güzel tasarımlı başka iphone yok.",
+                            likeValue:"999",
+                            dislikeValue:"12",
+                            likeOrDislike:" ",
+                            ratingAverage:"5.4",
+                            date:"13.12"
+                        },
+                        {
+                            key:"7",
+                            commentOwner:"Alp_77",
+                            commentText:"Bu tasarım sonraki sürümlerde de sürdürülmeliydi. Bu kadar güzel tasarımlı başka iphone yok.",
+                            likeValue:"999",
+                            dislikeValue:"12",
+                            likeOrDislike:" ",
+                            ratingAverage:"5.4",
+                            date:"13.12"
+                        },
+                        {
+                            key:"8",
+                            commentOwner:"Alp_77",
+                            commentText:"Bu tasarım sonraki sürümlerde de sürdürülmeliydi. Bu kadar güzel tasarımlı başka iphone yok.",
+                            likeValue:"999",
+                            dislikeValue:"12",
+                            likeOrDislike:" ",
+                            ratingAverage:"5.4",
+                            date:"13.12"
+                        },
+                        {
+                            key:"9",
+                            commentOwner:"Alp_77",
+                            commentText:"Bu tasarım sonraki sürümlerde de sürdürülmeliydi. Bu kadar güzel tasarımlı başka iphone yok.",
+                            likeValue:"999",
+                            dislikeValue:"12",
+                            likeOrDislike:" ",
+                            ratingAverage:"5.4",
+                            date:"13.12"
+                        },
+                        {
+                            key:"10",
+                            commentOwner:"Alp_77",
+                            commentText:"Bu tasarım sonraki sürümlerde de sürdürülmeliydi. Bu kadar güzel tasarımlı başka iphone yok.",
+                            likeValue:"999",
+                            dislikeValue:"12",
+                            likeOrDislike:" ",
+                            ratingAverage:"5.4",
+                            date:"13.12"
+                        }
                     ]}
                     productName="iphone 5s"
                     mainCategory={{
@@ -425,6 +485,7 @@ class Comments extends React.Component {
     constructor(props) {
         super(props);
         this.comments = [];
+        this.numberOfComments = 0;
         for(let i=0;i<this.props.comments.length;i++) {
             this.comments.push(
                 <Comment
@@ -438,15 +499,16 @@ class Comments extends React.Component {
                     date={this.props.comments[i].date}
                 />
             );
+            this.numberOfComments++;
         }
     }
     render() {
         return(
             <div>
                 <YorumlarHeader />
-                <PageNumber />
+                <PageNumber pageLen={parseInt(this.numberOfComments/10)+1}/>
                     {this.comments}
-                <PageNumber />
+                <PageNumber pageLen={parseInt(this.numberOfComments/10)+1}/>
                 <WriteComment attributes={this.props.attributes}/>
             </div>
         )
@@ -464,6 +526,15 @@ class YorumlarHeader extends React.Component {
     }
 }
 class PageNumber extends React.Component {
+    constructor(props) {
+        super(props);
+        this.pages = [];
+        for(let i=1;i<=this.props.pageLen;i++) {
+            this.pages.push(
+                <option key={i} value={i}>{i}</option>
+            )
+        }
+    }
     /*
         ortadaki html select'i masaüstü ve tabletlerde görünümünü daha küçük yapmak için size'ını 'two', ilk ve sonrakini de 'seven'
         yapabiliriz. ancak mobil (iphone 6s) görünümünde html select sığmıyor. Bu durumu kurtarmak için mobilde şöyle görün normalde
@@ -482,9 +553,7 @@ class PageNumber extends React.Component {
                     <div className="ui form">
                         <div className="field">
                             <select>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
+                                {this.pages}
                             </select>
                         </div>
                     </div>
