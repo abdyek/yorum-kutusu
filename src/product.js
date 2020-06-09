@@ -1,12 +1,112 @@
+class Loading extends React.Component {
+    render() {
+        return(<div>loading!</div>);
+    }
+}
+class Deneme extends React.Component {
+    constructor(props) {
+      super(props);
+      this.state = {
+        fruits: []
+      }
+      this.selectFruit = this.selectFruit.bind(this);
+    }
+  
+    selectFruit(e) {
+      if(e.target.checked) {
+        this.setState({
+          fruits: [ ...this.state.fruits, e.target.value],
+        }, () => {
+          console.log(this.state.fruits);
+        });
+      }
+    }
+  
+    render() {
+      return (
+        <div>
+            <div>
+                {this.state.fruits}
+            </div>
+          <form>
+            <input type="checkbox" id="apple" name="fruit" value="Apple"
+                    onClick={this.selectFruit}/>Apple <br/>
+            <input type="checkbox" id="mango" name="fruit" value="Mango"
+                    onClick={this.selectFruit}/>Mango <br/>
+            <input type="checkbox" id="pear" name="fruit" value="Pear"
+                    onClick={this.selectFruit}/>Pear <br/>
+          </form>
+        </div>
+      );
+    }
+  }
+  
+  
 class App extends React.Component {
     constructor(props) {
         super(props);
-        console.log(window.location.href);
+        let currentUrl = window.location.href;
+        let productName = currentUrl.split("urun/")[1];
+        this.state = {
+            ready:false,
+            productName:productName,
+            productTitle:"",
+            images:[],
+            productRating:[]
+            
+        };
+    }
+    componentDidMount() {
+        $.ajax({
+            type:'GET',
+            url:'https://yorumlaa.herokuapp.com/api/products/'+this.state.productName,
+            data: {
+                "":""
+            },
+            success: function(response) {
+                // bradcrumb
+                let breadCrumb = [];
+                breadCrumb.push(response.breadcrumb[0].name);
+                curCate = response.breadcrumb[0].children;
+                // breadcrumb kısmını şimdilik bırakıyorum
+                /*
+                while(curCate.length!=0) {
+                    breadCrumb.push(response.breadcrumb[0].name);
+                    curCate = response.breadcrumb[0].children;
+                }
+                */
+                // images
+                // image linklerinde bir sıkıntı var o yüzden görünmüyor
+                let images = [];
+                for(let i=0;i<response.images.length;i++) {
+                    images.push(response.images[i].image);
+                }
+                //productRating
+                let productRating = [];
+                for (let i=0;i<Object.keys(response.ratings.particularly).length;i++) {
+                    //Object.keys(myObj).length
+                    productRating.push({
+                        key:i,
+                        name:Object.keys(response.ratings.particularly)[i],
+                        percentValue: Object.values(response.ratings.particularly)[i].toFixed(1),
+                    })
+                }
+                this.setState({
+                    ready:true,
+                    productRating:productRating,
+                    productTitle:response.product.title,
+                    images:images,
+                })
+            }.bind(this),
+            dataType:'json'
+        })
     }
     render() {
         return (
             <div>
+                <Deneme />
                 <Header /> {/* from components.js */}
+                { this.state.ready ?
                 <Content 
                     comments={[
                         {
@@ -110,7 +210,7 @@ class App extends React.Component {
                             date:"13.12"
                         }
                     ]}
-                    productName="iphone 5s"
+                    productName={this.state.productTitle}
                     mainCategory={{
                         name:"Elektronik"
                     }}
@@ -126,7 +226,7 @@ class App extends React.Component {
                     ]}
                     followers={315}
                     followed={false}
-                    attributes={[
+                    attributes={this.state.productRating/*[
                         {
                             key:1,
                             name:"Tasarım",
@@ -152,15 +252,9 @@ class App extends React.Component {
                             name:"Fiyat-Performans",
                             percentValue: 6.4
                         }
-                    ]}
-                    imagesSrcs={[
-                        "https://cdn.shoplightspeed.com/shops/613622/files/8420157/image.jpg",
-                        "http://3.bp.blogspot.com/-uC4SEk9v07I/UyVCeORCsdI/AAAAAAAAA-k/6xZx0EVnCMc/s1600/iphone+5s+rep.jpg",
-                        "https://i.ytimg.com/vi/2jDd8iPIuEc/maxresdefault.jpg",
-                        "https://i.ytimg.com/vi/kLg__oZYfG8/maxresdefault.jpg",
-                        "http://3.bp.blogspot.com/-uC4SEk9v07I/UyVCeORCsdI/AAAAAAAAA-k/6xZx0EVnCMc/s1600/iphone+5s+rep.jpg"
-                    ]}
-                />
+                    ]*/}
+                    imagesSrcs={this.state.images}
+                />: <Loading />}
                 <Footer /> {/* from components.js */}
             </div>
         )

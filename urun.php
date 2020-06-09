@@ -20,15 +20,16 @@
     <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
 
-    <!-- React bileşenimizi yükleyin. -->
-    <script src="components.js"></script>
-    <script src="product.js"></script>
-
     <script
     src="https://code.jquery.com/jquery-3.5.0.min.js"
     integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ="
     crossorigin="anonymous"></script>
     <script src="semantic.min.js"></script>
+
+    <!-- React bileşenimizi yükleyin. -->
+    <script src="ajax.js"></script>
+    <script src="components.js"></script>
+    <script src="product.js"></script>
 
 </body>
 </html>
