@@ -1,6 +1,7 @@
 class App extends React.Component {
     constructor(props) {
         super(props);
+        console.log(window.location.href);
     }
     render() {
         return (
@@ -175,7 +176,7 @@ class Content extends React.Component {
                     categoryChildren={this.props.categoryChildren}
                     productName={this.props.productName}
                 />
-                <ProductHeader />
+                <ProductHeader productName={this.props.productName}/>
                 <FollowButton followers={this.props.followers} followed={this.props.followed}/>
                 <Product attributes={this.props.attributes} imagesSrcs={this.props.imagesSrcs}/>
                 <Comments comments={this.props.comments} attributes={this.props.attributes}/>
@@ -219,7 +220,7 @@ class ProductHeader extends React.Component {
             <Row size="one">
                 <Column>
                     <div id="productHeader">
-                        <H type="1" textAlign="center" text="iphone 5s"/>
+                        <H type="1" textAlign="center" text={this.props.productName}/>
                     </div>
                 </Column>
             </Row>

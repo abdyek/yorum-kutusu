@@ -12,7 +12,10 @@ var App = function (_React$Component) {
     function App(props) {
         _classCallCheck(this, App);
 
-        return _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
+        var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
+
+        console.log(window.location.href);
+        return _this;
     }
 
     _createClass(App, [{
@@ -180,7 +183,7 @@ var Content = function (_React$Component2) {
                     categoryChildren: this.props.categoryChildren,
                     productName: this.props.productName
                 }),
-                React.createElement(ProductHeader, null),
+                React.createElement(ProductHeader, { productName: this.props.productName }),
                 React.createElement(FollowButton, { followers: this.props.followers, followed: this.props.followed }),
                 React.createElement(Product, { attributes: this.props.attributes, imagesSrcs: this.props.imagesSrcs }),
                 React.createElement(Comments, { comments: this.props.comments, attributes: this.props.attributes })
@@ -269,7 +272,7 @@ var ProductHeader = function (_React$Component4) {
                     React.createElement(
                         "div",
                         { id: "productHeader" },
-                        React.createElement(H, { type: "1", textAlign: "center", text: "iphone 5s" })
+                        React.createElement(H, { type: "1", textAlign: "center", text: this.props.productName })
                     )
                 )
             );
