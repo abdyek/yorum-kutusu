@@ -6,7 +6,31 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+function setCookie(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
+    var expires = "expires=" + d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function getCookie(cname) {
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
+
 /* bu bütün sayfalarda kullanılabilecek bir bileşendir */
+
 var Container = function (_React$Component) {
     _inherits(Container, _React$Component);
 
@@ -383,36 +407,94 @@ var Buttons = function (_React$Component12) {
 var Menu = function (_React$Component13) {
     _inherits(Menu, _React$Component13);
 
-    function Menu() {
+    function Menu(props) {
         _classCallCheck(this, Menu);
 
-        return _possibleConstructorReturn(this, (Menu.__proto__ || Object.getPrototypeOf(Menu)).apply(this, arguments));
+        return _possibleConstructorReturn(this, (Menu.__proto__ || Object.getPrototypeOf(Menu)).call(this, props));
     }
 
     _createClass(Menu, [{
         key: "render",
         value: function render() {
-            return React.createElement(
-                "div",
-                { id: "menu", className: "ui secondary  menu" },
-                React.createElement(
-                    "div",
-                    { id: "hesap", className: "ui button" },
-                    React.createElement("i", { className: "user icon" }),
-                    " Hesap"
-                )
-            );
+            if (!getCookie("jwt")) {
+                return React.createElement(LogInButton, null);
+            }
+            return React.createElement(AccountButton, { userName: "mahmut" });
         }
     }]);
 
     return Menu;
 }(React.Component);
 
+var LogInButton = function (_React$Component14) {
+    _inherits(LogInButton, _React$Component14);
+
+    function LogInButton(props) {
+        _classCallCheck(this, LogInButton);
+
+        return _possibleConstructorReturn(this, (LogInButton.__proto__ || Object.getPrototypeOf(LogInButton)).call(this, props));
+    }
+
+    _createClass(LogInButton, [{
+        key: "render",
+        value: function render() {
+            return React.createElement(
+                "a",
+                { href: "girisYap" },
+                React.createElement(
+                    "div",
+                    { id: "menu", className: "ui secondary  menu" },
+                    React.createElement(
+                        "div",
+                        { id: "hesap", className: "ui button" },
+                        React.createElement("i", { className: "user icon" }),
+                        " Giri\u015F Yap"
+                    )
+                )
+            );
+        }
+    }]);
+
+    return LogInButton;
+}(React.Component);
+
+var AccountButton = function (_React$Component15) {
+    _inherits(AccountButton, _React$Component15);
+
+    function AccountButton(props) {
+        _classCallCheck(this, AccountButton);
+
+        return _possibleConstructorReturn(this, (AccountButton.__proto__ || Object.getPrototypeOf(AccountButton)).call(this, props));
+    }
+
+    _createClass(AccountButton, [{
+        key: "render",
+        value: function render() {
+            return React.createElement(
+                "a",
+                { href: "girisYap" },
+                React.createElement(
+                    "div",
+                    { id: "menu", className: "ui secondary  menu" },
+                    React.createElement(
+                        "div",
+                        { id: "hesap", className: "ui button" },
+                        React.createElement("i", { className: "user icon" }),
+                        this.props.userName
+                    )
+                )
+            );
+        }
+    }]);
+
+    return AccountButton;
+}(React.Component);
+
 /* bu bütün sayfalarda kullanılabilecek bir bileşendir */
 
 
-var Logo = function (_React$Component14) {
-    _inherits(Logo, _React$Component14);
+var Logo = function (_React$Component16) {
+    _inherits(Logo, _React$Component16);
 
     function Logo() {
         _classCallCheck(this, Logo);
@@ -437,8 +519,8 @@ var Logo = function (_React$Component14) {
 /* bu bütün sayfalarda kullanılabilecek bir bileşendir */
 
 
-var SearchBar = function (_React$Component15) {
-    _inherits(SearchBar, _React$Component15);
+var SearchBar = function (_React$Component17) {
+    _inherits(SearchBar, _React$Component17);
 
     function SearchBar() {
         _classCallCheck(this, SearchBar);
@@ -463,8 +545,8 @@ var SearchBar = function (_React$Component15) {
 /* bu bütün sayfalarda kullanılabilecek bir bileşendir */
 
 
-var Categories = function (_React$Component16) {
-    _inherits(Categories, _React$Component16);
+var Categories = function (_React$Component18) {
+    _inherits(Categories, _React$Component18);
 
     function Categories() {
         _classCallCheck(this, Categories);
@@ -523,8 +605,8 @@ var Categories = function (_React$Component16) {
 /* bu bütün sayfalarda kullanılabilecek bir bileşendir */
 
 
-var Header = function (_React$Component17) {
-    _inherits(Header, _React$Component17);
+var Header = function (_React$Component19) {
+    _inherits(Header, _React$Component19);
 
     function Header() {
         _classCallCheck(this, Header);
@@ -592,8 +674,8 @@ var Header = function (_React$Component17) {
 /* bu bütün sayfalarda kullanılabilecek bir bileşendir */
 
 
-var Footer = function (_React$Component18) {
-    _inherits(Footer, _React$Component18);
+var Footer = function (_React$Component20) {
+    _inherits(Footer, _React$Component20);
 
     function Footer() {
         _classCallCheck(this, Footer);

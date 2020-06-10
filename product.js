@@ -1,7 +1,5 @@
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -31,79 +29,17 @@ var Loading = function (_React$Component) {
     return Loading;
 }(React.Component);
 
-var Deneme = function (_React$Component2) {
-    _inherits(Deneme, _React$Component2);
-
-    function Deneme(props) {
-        _classCallCheck(this, Deneme);
-
-        var _this2 = _possibleConstructorReturn(this, (Deneme.__proto__ || Object.getPrototypeOf(Deneme)).call(this, props));
-
-        _this2.state = {
-            fruits: []
-        };
-        _this2.selectFruit = _this2.selectFruit.bind(_this2);
-        return _this2;
-    }
-
-    _createClass(Deneme, [{
-        key: "selectFruit",
-        value: function selectFruit(e) {
-            var _this3 = this;
-
-            if (e.target.checked) {
-                this.setState({
-                    fruits: [].concat(_toConsumableArray(this.state.fruits), [e.target.value])
-                }, function () {
-                    console.log(_this3.state.fruits);
-                });
-            }
-        }
-    }, {
-        key: "render",
-        value: function render() {
-            return React.createElement(
-                "div",
-                null,
-                React.createElement(
-                    "div",
-                    null,
-                    this.state.fruits
-                ),
-                React.createElement(
-                    "form",
-                    null,
-                    React.createElement("input", { type: "checkbox", id: "apple", name: "fruit", value: "Apple",
-                        onClick: this.selectFruit }),
-                    "Apple ",
-                    React.createElement("br", null),
-                    React.createElement("input", { type: "checkbox", id: "mango", name: "fruit", value: "Mango",
-                        onClick: this.selectFruit }),
-                    "Mango ",
-                    React.createElement("br", null),
-                    React.createElement("input", { type: "checkbox", id: "pear", name: "fruit", value: "Pear",
-                        onClick: this.selectFruit }),
-                    "Pear ",
-                    React.createElement("br", null)
-                )
-            );
-        }
-    }]);
-
-    return Deneme;
-}(React.Component);
-
-var App = function (_React$Component3) {
-    _inherits(App, _React$Component3);
+var App = function (_React$Component2) {
+    _inherits(App, _React$Component2);
 
     function App(props) {
         _classCallCheck(this, App);
 
-        var _this4 = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
+        var _this2 = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
 
         var currentUrl = window.location.href;
         var productName = currentUrl.split("urun/")[1];
-        _this4.state = {
+        _this2.state = {
             ready: false,
             productName: productName,
             productTitle: "",
@@ -112,7 +48,7 @@ var App = function (_React$Component3) {
             comments: []
 
         };
-        return _this4;
+        return _this2;
     }
 
     _createClass(App, [{
@@ -203,7 +139,6 @@ var App = function (_React$Component3) {
             return React.createElement(
                 "div",
                 null,
-                React.createElement(Deneme, null),
                 React.createElement(Header, null),
                 " ",
                 this.state.ready ? React.createElement(Content, {
@@ -259,8 +194,8 @@ var App = function (_React$Component3) {
     return App;
 }(React.Component);
 
-var Content = function (_React$Component4) {
-    _inherits(Content, _React$Component4);
+var Content = function (_React$Component3) {
+    _inherits(Content, _React$Component3);
 
     function Content() {
         _classCallCheck(this, Content);
@@ -290,28 +225,28 @@ var Content = function (_React$Component4) {
     return Content;
 }(React.Component);
 
-var BreadCrumb = function (_React$Component5) {
-    _inherits(BreadCrumb, _React$Component5);
+var BreadCrumb = function (_React$Component4) {
+    _inherits(BreadCrumb, _React$Component4);
 
     function BreadCrumb(props) {
         _classCallCheck(this, BreadCrumb);
 
-        var _this6 = _possibleConstructorReturn(this, (BreadCrumb.__proto__ || Object.getPrototypeOf(BreadCrumb)).call(this, props));
+        var _this4 = _possibleConstructorReturn(this, (BreadCrumb.__proto__ || Object.getPrototypeOf(BreadCrumb)).call(this, props));
 
-        _this6.categoryChildren = [];
-        for (var i = 0; i < _this6.props.categoryChildren.length; i++) {
-            _this6.categoryChildren.push(React.createElement(
+        _this4.categoryChildren = [];
+        for (var i = 0; i < _this4.props.categoryChildren.length; i++) {
+            _this4.categoryChildren.push(React.createElement(
                 "span",
-                { key: _this6.props.categoryChildren[i].id },
+                { key: _this4.props.categoryChildren[i].id },
                 React.createElement("i", { className: "right angle icon divider" }),
                 React.createElement(
                     "a",
                     { className: "section" },
-                    _this6.props.categoryChildren[i].name
+                    _this4.props.categoryChildren[i].name
                 )
             ));
         }
-        return _this6;
+        return _this4;
     }
 
     _createClass(BreadCrumb, [{
@@ -347,8 +282,8 @@ var BreadCrumb = function (_React$Component5) {
     return BreadCrumb;
 }(React.Component);
 
-var ProductHeader = function (_React$Component6) {
-    _inherits(ProductHeader, _React$Component6);
+var ProductHeader = function (_React$Component5) {
+    _inherits(ProductHeader, _React$Component5);
 
     function ProductHeader() {
         _classCallCheck(this, ProductHeader);
@@ -378,27 +313,27 @@ var ProductHeader = function (_React$Component6) {
     return ProductHeader;
 }(React.Component);
 
-var FollowButton = function (_React$Component7) {
-    _inherits(FollowButton, _React$Component7);
+var FollowButton = function (_React$Component6) {
+    _inherits(FollowButton, _React$Component6);
 
     function FollowButton(props) {
         _classCallCheck(this, FollowButton);
 
-        var _this8 = _possibleConstructorReturn(this, (FollowButton.__proto__ || Object.getPrototypeOf(FollowButton)).call(this, props));
+        var _this6 = _possibleConstructorReturn(this, (FollowButton.__proto__ || Object.getPrototypeOf(FollowButton)).call(this, props));
 
-        _this8.followToggle = _this8.followToggle.bind(_this8);
-        if (_this8.props.followed) {
-            _this8.state = {
+        _this6.followToggle = _this6.followToggle.bind(_this6);
+        if (_this6.props.followed) {
+            _this6.state = {
                 followed: true,
                 class: " red "
             };
         } else {
-            _this8.state = {
+            _this6.state = {
                 followed: false,
                 class: " "
             };
         }
-        return _this8;
+        return _this6;
     }
 
     _createClass(FollowButton, [{
@@ -458,8 +393,8 @@ var FollowButton = function (_React$Component7) {
     return FollowButton;
 }(React.Component);
 
-var Product = function (_React$Component8) {
-    _inherits(Product, _React$Component8);
+var Product = function (_React$Component7) {
+    _inherits(Product, _React$Component7);
 
     function Product() {
         _classCallCheck(this, Product);
@@ -502,21 +437,21 @@ var Product = function (_React$Component8) {
     return Product;
 }(React.Component);
 
-var ImageSlider = function (_React$Component9) {
-    _inherits(ImageSlider, _React$Component9);
+var ImageSlider = function (_React$Component8) {
+    _inherits(ImageSlider, _React$Component8);
 
     function ImageSlider(props) {
         _classCallCheck(this, ImageSlider);
 
-        var _this10 = _possibleConstructorReturn(this, (ImageSlider.__proto__ || Object.getPrototypeOf(ImageSlider)).call(this, props));
+        var _this8 = _possibleConstructorReturn(this, (ImageSlider.__proto__ || Object.getPrototypeOf(ImageSlider)).call(this, props));
 
-        _this10.nextIndex = 0;
-        _this10.state = {
-            src: _this10.props.srcs[0],
+        _this8.nextIndex = 0;
+        _this8.state = {
+            src: _this8.props.srcs[0],
             index: 0
         };
-        _this10.change = _this10.change.bind(_this10);
-        return _this10;
+        _this8.change = _this8.change.bind(_this8);
+        return _this8;
     }
 
     _createClass(ImageSlider, [{
@@ -537,7 +472,7 @@ var ImageSlider = function (_React$Component9) {
     }, {
         key: "render",
         value: function render() {
-            var _this11 = this;
+            var _this9 = this;
 
             return React.createElement(
                 "div",
@@ -568,14 +503,14 @@ var ImageSlider = function (_React$Component9) {
                             React.createElement(
                                 "button",
                                 { className: "mini ui icon button", onClick: function onClick() {
-                                        return _this11.change(-1);
+                                        return _this9.change(-1);
                                     } },
                                 React.createElement("i", { className: "left arrow icon" })
                             ),
                             React.createElement(
                                 "button",
                                 { className: "mini ui icon button", onClick: function onClick() {
-                                        return _this11.change(+1);
+                                        return _this9.change(+1);
                                     } },
                                 React.createElement("i", { className: "right arrow icon" })
                             )
@@ -589,8 +524,8 @@ var ImageSlider = function (_React$Component9) {
     return ImageSlider;
 }(React.Component);
 
-var Img = function (_React$Component10) {
-    _inherits(Img, _React$Component10);
+var Img = function (_React$Component9) {
+    _inherits(Img, _React$Component9);
 
     function Img() {
         _classCallCheck(this, Img);
@@ -612,34 +547,34 @@ var Img = function (_React$Component10) {
     return Img;
 }(React.Component);
 
-var DirectlyButtons = function (_React$Component11) {
-    _inherits(DirectlyButtons, _React$Component11);
+var DirectlyButtons = function (_React$Component10) {
+    _inherits(DirectlyButtons, _React$Component10);
 
     function DirectlyButtons(props) {
         _classCallCheck(this, DirectlyButtons);
 
-        var _this13 = _possibleConstructorReturn(this, (DirectlyButtons.__proto__ || Object.getPrototypeOf(DirectlyButtons)).call(this, props));
+        var _this11 = _possibleConstructorReturn(this, (DirectlyButtons.__proto__ || Object.getPrototypeOf(DirectlyButtons)).call(this, props));
 
-        _this13.buttons = [];
-        _this13.state = {
+        _this11.buttons = [];
+        _this11.state = {
             selectedIndex: 0
         };
         for (var i = 0; i < 4; i++) {
-            if (_this13.props.selectedIndex == i + 1) {
-                _this13.buttons.push(React.createElement(
+            if (_this11.props.selectedIndex == i + 1) {
+                _this11.buttons.push(React.createElement(
                     "button",
                     { key: i, className: "disabled ui button" },
                     i + 1
                 ));
             } else {
-                _this13.buttons.push(React.createElement(
+                _this11.buttons.push(React.createElement(
                     "button",
                     { key: i, className: "ui button" },
                     i + 1
                 ));
             }
         }
-        return _this13;
+        return _this11;
     }
 
     _createClass(DirectlyButtons, [{
@@ -656,24 +591,24 @@ var DirectlyButtons = function (_React$Component11) {
     return DirectlyButtons;
 }(React.Component);
 
-var Rating = function (_React$Component12) {
-    _inherits(Rating, _React$Component12);
+var Rating = function (_React$Component11) {
+    _inherits(Rating, _React$Component11);
 
     function Rating(props) {
         _classCallCheck(this, Rating);
 
-        var _this14 = _possibleConstructorReturn(this, (Rating.__proto__ || Object.getPrototypeOf(Rating)).call(this, props));
+        var _this12 = _possibleConstructorReturn(this, (Rating.__proto__ || Object.getPrototypeOf(Rating)).call(this, props));
 
-        _this14.attributes = [];
-        for (var i = 0; i < _this14.props.attributes.length; i++) {
-            _this14.attributes.push(React.createElement(ProductAttribute, {
-                key: _this14.props.attributes[i].key,
-                name: _this14.props.attributes[i].name,
-                percentValue: _this14.props.attributes[i].percentValue
+        _this12.attributes = [];
+        for (var i = 0; i < _this12.props.attributes.length; i++) {
+            _this12.attributes.push(React.createElement(ProductAttribute, {
+                key: _this12.props.attributes[i].key,
+                name: _this12.props.attributes[i].name,
+                percentValue: _this12.props.attributes[i].percentValue
             }));
         }
 
-        return _this14;
+        return _this12;
     }
 
     _createClass(Rating, [{
@@ -690,8 +625,8 @@ var Rating = function (_React$Component12) {
     return Rating;
 }(React.Component);
 
-var ProductAttribute = function (_React$Component13) {
-    _inherits(ProductAttribute, _React$Component13);
+var ProductAttribute = function (_React$Component12) {
+    _inherits(ProductAttribute, _React$Component12);
 
     function ProductAttribute() {
         _classCallCheck(this, ProductAttribute);
@@ -726,8 +661,8 @@ var ProductAttribute = function (_React$Component13) {
     return ProductAttribute;
 }(React.Component);
 
-var ProductAttributeName = function (_React$Component14) {
-    _inherits(ProductAttributeName, _React$Component14);
+var ProductAttributeName = function (_React$Component13) {
+    _inherits(ProductAttributeName, _React$Component13);
 
     function ProductAttributeName() {
         _classCallCheck(this, ProductAttributeName);
@@ -745,16 +680,16 @@ var ProductAttributeName = function (_React$Component14) {
     return ProductAttributeName;
 }(React.Component);
 
-var DrawCircle = function (_React$Component15) {
-    _inherits(DrawCircle, _React$Component15);
+var DrawCircle = function (_React$Component14) {
+    _inherits(DrawCircle, _React$Component14);
 
     function DrawCircle(props) {
         _classCallCheck(this, DrawCircle);
 
-        var _this17 = _possibleConstructorReturn(this, (DrawCircle.__proto__ || Object.getPrototypeOf(DrawCircle)).call(this, props));
+        var _this15 = _possibleConstructorReturn(this, (DrawCircle.__proto__ || Object.getPrototypeOf(DrawCircle)).call(this, props));
 
-        _this17.percent = _this17.props.percentValue * 10;
-        _this17.limitColor = {
+        _this15.percent = _this15.props.percentValue * 10;
+        _this15.limitColor = {
             0: {
                 min: 0,
                 max: 5,
@@ -771,14 +706,14 @@ var DrawCircle = function (_React$Component15) {
                 color: "#21ba45"
             }
         };
-        _this17.color = _this17.limitColor[0].color;
-        for (var i = 0; i < Object.keys(_this17.limitColor).length; i++) {
-            if (_this17.limitColor[i].min <= _this17.props.percentValue && _this17.props.percentValue < _this17.limitColor[i].max) {
-                _this17.color = _this17.limitColor[i].color;
+        _this15.color = _this15.limitColor[0].color;
+        for (var i = 0; i < Object.keys(_this15.limitColor).length; i++) {
+            if (_this15.limitColor[i].min <= _this15.props.percentValue && _this15.props.percentValue < _this15.limitColor[i].max) {
+                _this15.color = _this15.limitColor[i].color;
                 break;
             }
         }
-        return _this17;
+        return _this15;
     }
 
     _createClass(DrawCircle, [{
@@ -805,30 +740,30 @@ var DrawCircle = function (_React$Component15) {
     return DrawCircle;
 }(React.Component);
 
-var Comments = function (_React$Component16) {
-    _inherits(Comments, _React$Component16);
+var Comments = function (_React$Component15) {
+    _inherits(Comments, _React$Component15);
 
     function Comments(props) {
         _classCallCheck(this, Comments);
 
-        var _this18 = _possibleConstructorReturn(this, (Comments.__proto__ || Object.getPrototypeOf(Comments)).call(this, props));
+        var _this16 = _possibleConstructorReturn(this, (Comments.__proto__ || Object.getPrototypeOf(Comments)).call(this, props));
 
-        _this18.comments = [];
-        _this18.numberOfComments = 0;
-        for (var i = 0; i < _this18.props.comments.length; i++) {
-            _this18.comments.push(React.createElement(Comment, {
-                key: _this18.props.comments[i].key,
-                commentOwner: _this18.props.comments[i].commentOwner,
-                commentText: _this18.props.comments[i].commentText,
-                likeValue: _this18.props.comments[i].likeValue,
-                dislikeValue: _this18.props.comments[i].dislikeValue,
-                likeOrDislike: _this18.props.comments[i].likeOrDislike,
-                ratingAverage: _this18.props.comments[i].ratingAverage,
-                date: _this18.props.comments[i].date
+        _this16.comments = [];
+        _this16.numberOfComments = 0;
+        for (var i = 0; i < _this16.props.comments.length; i++) {
+            _this16.comments.push(React.createElement(Comment, {
+                key: _this16.props.comments[i].key,
+                commentOwner: _this16.props.comments[i].commentOwner,
+                commentText: _this16.props.comments[i].commentText,
+                likeValue: _this16.props.comments[i].likeValue,
+                dislikeValue: _this16.props.comments[i].dislikeValue,
+                likeOrDislike: _this16.props.comments[i].likeOrDislike,
+                ratingAverage: _this16.props.comments[i].ratingAverage,
+                date: _this16.props.comments[i].date
             }));
-            _this18.numberOfComments++;
+            _this16.numberOfComments++;
         }
-        return _this18;
+        return _this16;
     }
 
     _createClass(Comments, [{
@@ -847,8 +782,8 @@ var Comments = function (_React$Component16) {
     return Comments;
 }(React.Component);
 
-var YorumlarHeader = function (_React$Component17) {
-    _inherits(YorumlarHeader, _React$Component17);
+var YorumlarHeader = function (_React$Component16) {
+    _inherits(YorumlarHeader, _React$Component16);
 
     function YorumlarHeader() {
         _classCallCheck(this, YorumlarHeader);
@@ -874,23 +809,23 @@ var YorumlarHeader = function (_React$Component17) {
     return YorumlarHeader;
 }(React.Component);
 
-var PageNumber = function (_React$Component18) {
-    _inherits(PageNumber, _React$Component18);
+var PageNumber = function (_React$Component17) {
+    _inherits(PageNumber, _React$Component17);
 
     function PageNumber(props) {
         _classCallCheck(this, PageNumber);
 
-        var _this20 = _possibleConstructorReturn(this, (PageNumber.__proto__ || Object.getPrototypeOf(PageNumber)).call(this, props));
+        var _this18 = _possibleConstructorReturn(this, (PageNumber.__proto__ || Object.getPrototypeOf(PageNumber)).call(this, props));
 
-        _this20.pages = [];
-        for (var i = 1; i <= _this20.props.pageLen; i++) {
-            _this20.pages.push(React.createElement(
+        _this18.pages = [];
+        for (var i = 1; i <= _this18.props.pageLen; i++) {
+            _this18.pages.push(React.createElement(
                 "option",
                 { key: i, value: i },
                 i
             ));
         }
-        return _this20;
+        return _this18;
     }
     /*
         ortadaki html select'i masaüstü ve tabletlerde görünümünü daha küçük yapmak için size'ını 'two', ilk ve sonrakini de 'seven'
@@ -953,8 +888,8 @@ var PageNumber = function (_React$Component18) {
     return PageNumber;
 }(React.Component);
 
-var Comment = function (_React$Component19) {
-    _inherits(Comment, _React$Component19);
+var Comment = function (_React$Component18) {
+    _inherits(Comment, _React$Component18);
 
     function Comment(props) {
         _classCallCheck(this, Comment);
@@ -1042,17 +977,17 @@ var Comment = function (_React$Component19) {
     return Comment;
 }(React.Component);
 
-var RatingBar = function (_React$Component20) {
-    _inherits(RatingBar, _React$Component20);
+var RatingBar = function (_React$Component19) {
+    _inherits(RatingBar, _React$Component19);
 
     function RatingBar(props) {
         _classCallCheck(this, RatingBar);
 
-        var _this22 = _possibleConstructorReturn(this, (RatingBar.__proto__ || Object.getPrototypeOf(RatingBar)).call(this, props));
+        var _this20 = _possibleConstructorReturn(this, (RatingBar.__proto__ || Object.getPrototypeOf(RatingBar)).call(this, props));
 
-        _this22.percent = _this22.props.ratingAverage * 10;
+        _this20.percent = _this20.props.ratingAverage * 10;
         // bu kısım drawcircle ile aynı refactor ederken buna bir çare bulabilirsin
-        _this22.limitColor = {
+        _this20.limitColor = {
             0: {
                 min: 0,
                 max: 5,
@@ -1069,16 +1004,16 @@ var RatingBar = function (_React$Component20) {
                 color: "#21ba45"
             }
         };
-        _this22.color = _this22.limitColor[0].color;
-        for (var i = 0; i < Object.keys(_this22.limitColor).length; i++) {
-            if (_this22.limitColor[i].min <= _this22.props.ratingAverage && _this22.props.ratingAverage < _this22.limitColor[i].max) {
-                _this22.color = _this22.limitColor[i].color;
+        _this20.color = _this20.limitColor[0].color;
+        for (var i = 0; i < Object.keys(_this20.limitColor).length; i++) {
+            if (_this20.limitColor[i].min <= _this20.props.ratingAverage && _this20.props.ratingAverage < _this20.limitColor[i].max) {
+                _this20.color = _this20.limitColor[i].color;
                 break;
             }
         }
         // ^^^
-        _this22.widthOfFill = _this22.props.ratingAverage * 15 + "px";
-        return _this22;
+        _this20.widthOfFill = _this20.props.ratingAverage * 15 + "px";
+        return _this20;
     }
 
     _createClass(RatingBar, [{
@@ -1105,8 +1040,8 @@ var RatingBar = function (_React$Component20) {
     return RatingBar;
 }(React.Component);
 
-var CommentDate = function (_React$Component21) {
-    _inherits(CommentDate, _React$Component21);
+var CommentDate = function (_React$Component20) {
+    _inherits(CommentDate, _React$Component20);
 
     function CommentDate() {
         _classCallCheck(this, CommentDate);
@@ -1128,20 +1063,20 @@ var CommentDate = function (_React$Component21) {
     return CommentDate;
 }(React.Component);
 
-var LikeButton = function (_React$Component22) {
-    _inherits(LikeButton, _React$Component22);
+var LikeButton = function (_React$Component21) {
+    _inherits(LikeButton, _React$Component21);
 
     function LikeButton(props) {
         _classCallCheck(this, LikeButton);
 
-        var _this24 = _possibleConstructorReturn(this, (LikeButton.__proto__ || Object.getPrototypeOf(LikeButton)).call(this, props));
+        var _this22 = _possibleConstructorReturn(this, (LikeButton.__proto__ || Object.getPrototypeOf(LikeButton)).call(this, props));
 
-        if (_this24.props.likeOrDislike == "like") {
-            _this24.liked = " likedComment";
+        if (_this22.props.likeOrDislike == "like") {
+            _this22.liked = " likedComment";
         } else {
-            _this24.liked = " ";
+            _this22.liked = " ";
         }
-        return _this24;
+        return _this22;
     }
 
     _createClass(LikeButton, [{
@@ -1163,20 +1098,20 @@ var LikeButton = function (_React$Component22) {
     return LikeButton;
 }(React.Component);
 
-var DislikeButton = function (_React$Component23) {
-    _inherits(DislikeButton, _React$Component23);
+var DislikeButton = function (_React$Component22) {
+    _inherits(DislikeButton, _React$Component22);
 
     function DislikeButton(props) {
         _classCallCheck(this, DislikeButton);
 
-        var _this25 = _possibleConstructorReturn(this, (DislikeButton.__proto__ || Object.getPrototypeOf(DislikeButton)).call(this, props));
+        var _this23 = _possibleConstructorReturn(this, (DislikeButton.__proto__ || Object.getPrototypeOf(DislikeButton)).call(this, props));
 
-        if (_this25.props.likeOrDislike == "dislike") {
-            _this25.liked = " dislikedComment";
+        if (_this23.props.likeOrDislike == "dislike") {
+            _this23.liked = " dislikedComment";
         } else {
-            _this25.liked = " ";
+            _this23.liked = " ";
         }
-        return _this25;
+        return _this23;
     }
 
     _createClass(DislikeButton, [{
@@ -1198,8 +1133,8 @@ var DislikeButton = function (_React$Component23) {
     return DislikeButton;
 }(React.Component);
 
-var ComplaintButton = function (_React$Component24) {
-    _inherits(ComplaintButton, _React$Component24);
+var ComplaintButton = function (_React$Component23) {
+    _inherits(ComplaintButton, _React$Component23);
 
     function ComplaintButton() {
         _classCallCheck(this, ComplaintButton);
@@ -1221,8 +1156,8 @@ var ComplaintButton = function (_React$Component24) {
     return ComplaintButton;
 }(React.Component);
 
-var WriteComment = function (_React$Component25) {
-    _inherits(WriteComment, _React$Component25);
+var WriteComment = function (_React$Component24) {
+    _inherits(WriteComment, _React$Component24);
 
     function WriteComment() {
         _classCallCheck(this, WriteComment);
@@ -1291,19 +1226,19 @@ var WriteComment = function (_React$Component25) {
     return WriteComment;
 }(React.Component);
 
-var InputRating = function (_React$Component26) {
-    _inherits(InputRating, _React$Component26);
+var InputRating = function (_React$Component25) {
+    _inherits(InputRating, _React$Component25);
 
     function InputRating(props) {
         _classCallCheck(this, InputRating);
 
-        var _this28 = _possibleConstructorReturn(this, (InputRating.__proto__ || Object.getPrototypeOf(InputRating)).call(this, props));
+        var _this26 = _possibleConstructorReturn(this, (InputRating.__proto__ || Object.getPrototypeOf(InputRating)).call(this, props));
 
-        _this28.inputRanges = [];
-        for (var i = 0; i < _this28.props.attributes.length; i++) {
-            _this28.inputRanges.push(React.createElement(InputRange, { key: _this28.props.attributes[i].key, name: _this28.props.attributes[i].name }));
+        _this26.inputRanges = [];
+        for (var i = 0; i < _this26.props.attributes.length; i++) {
+            _this26.inputRanges.push(React.createElement(InputRange, { key: _this26.props.attributes[i].key, name: _this26.props.attributes[i].name }));
         }
-        return _this28;
+        return _this26;
     }
 
     _createClass(InputRating, [{
@@ -1320,19 +1255,19 @@ var InputRating = function (_React$Component26) {
     return InputRating;
 }(React.Component);
 
-var InputRange = function (_React$Component27) {
-    _inherits(InputRange, _React$Component27);
+var InputRange = function (_React$Component26) {
+    _inherits(InputRange, _React$Component26);
 
     function InputRange(props) {
         _classCallCheck(this, InputRange);
 
-        var _this29 = _possibleConstructorReturn(this, (InputRange.__proto__ || Object.getPrototypeOf(InputRange)).call(this, props));
+        var _this27 = _possibleConstructorReturn(this, (InputRange.__proto__ || Object.getPrototypeOf(InputRange)).call(this, props));
 
-        _this29.state = {
+        _this27.state = {
             value: "5"
         };
-        _this29.change = _this29.change.bind(_this29);
-        return _this29;
+        _this27.change = _this27.change.bind(_this27);
+        return _this27;
     }
 
     _createClass(InputRange, [{
@@ -1366,8 +1301,8 @@ var InputRange = function (_React$Component27) {
     return InputRange;
 }(React.Component);
 
-var SendButton = function (_React$Component28) {
-    _inherits(SendButton, _React$Component28);
+var SendButton = function (_React$Component27) {
+    _inherits(SendButton, _React$Component27);
 
     function SendButton() {
         _classCallCheck(this, SendButton);

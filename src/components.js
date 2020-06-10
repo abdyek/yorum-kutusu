@@ -1,3 +1,26 @@
+function setCookie(cname, cvalue, exdays) {
+    let d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    let expires = "expires="+ d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+  
+function getCookie(cname) {
+    let name = cname + "=";
+    let decodedCookie = decodeURIComponent(document.cookie);
+    let ca = decodedCookie.split(';');
+    for(let i = 0; i <ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
+
 /* bu bütün sayfalarda kullanılabilecek bir bileşendir */
 class Container extends React.Component {
     render() {
@@ -175,13 +198,51 @@ class Buttons extends React.Component {
 
 /* bu bütün sayfalarda kullanılabilecek bir bileşendir */
 class Menu extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+    render() {
+        if(!getCookie("jwt")) {
+            return(
+                <LogInButton />
+            )
+        }
+        return(
+            <AccountButton userName="mahmut" />
+        )
+    }
+}
+
+class LogInButton extends React.Component {
+    constructor(props) {
+        super(props);
+    }
     render() {
         return(
-            <div id="menu" className="ui secondary  menu">
-    <div id="hesap" className="ui button">
-        <i className="user icon"></i> Hesap
-    </div>
-</div>
+            <a href="girisYap">
+                <div id="menu" className="ui secondary  menu">
+                    <div id="hesap" className="ui button">
+                        <i className="user icon"></i> Giriş Yap
+                    </div>
+                </div>
+            </a>
+        )
+    }
+}
+
+class AccountButton extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+    render() {
+        return(
+            <a href="girisYap">
+                <div id="menu" className="ui secondary  menu">
+                    <div id="hesap" className="ui button">
+                        <i className="user icon"></i>{this.props.userName}
+                    </div>
+                </div>
+            </a>
         )
     }
 }
