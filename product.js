@@ -108,7 +108,8 @@ var App = function (_React$Component3) {
             productName: productName,
             productTitle: "",
             images: [],
-            productRating: []
+            productRating: [],
+            comments: []
 
         };
         return _this4;
@@ -151,11 +152,46 @@ var App = function (_React$Component3) {
                             percentValue: Object.values(response.ratings.particularly)[_i].toFixed(1)
                         });
                     }
+                    //comments
+                    var comments = [];
+                    for (var _i2 = 0; _i2 < response.comments.length; _i2++) {
+                        // like or dislike kontrolü
+                        var likeOrDislike = void 0;
+                        if (response.comments[_i2].like) {
+                            likeOrDislike = "like";
+                        } else if (response.comments[_i2].like == false) {
+                            likeOrDislike = "dislike";
+                        } else {
+                            likeOrDislike = "";
+                        }
+                        comments.push({
+                            key: _i2,
+                            commentOwner: response.comments[_i2].comment.username,
+                            commentText: response.comments[_i2].comment.body,
+                            likeValue: response.comments[_i2].comment.like,
+                            dislikeValue: response.comments[_i2].comment.dislike,
+                            likeOrDislike: likeOrDislike,
+                            ratingAverage: response.comments[_i2].rating.toFixed(1),
+                            date: response.comments[_i2].comment.created_at
+                        });
+                    }
+                    /*
+                    {
+                        key:"1",
+                        commentOwner:"Yunus Emre Bulut",
+                        commentText:"Çok güzel bir telefon. Yapanlardan Allah razı olsun.",
+                        likeValue:"455",
+                        dislikeValue:"75",
+                        likeOrDislike:"like",
+                        ratingAverage:"9.8",
+                        date:"07.06"
+                    },*/
                     this.setState({
                         ready: true,
                         productRating: productRating,
                         productTitle: response.product.title,
-                        images: images
+                        images: images,
+                        comments: comments
                     });
                 }.bind(this),
                 dataType: 'json'
@@ -171,97 +207,7 @@ var App = function (_React$Component3) {
                 React.createElement(Header, null),
                 " ",
                 this.state.ready ? React.createElement(Content, {
-                    comments: [{
-                        key: "1",
-                        commentOwner: "Yunus Emre Bulut",
-                        commentText: "Çok güzel bir telefon. Yapanlardan Allah razı olsun.",
-                        likeValue: "455",
-                        dislikeValue: "75",
-                        likeOrDislike: "like",
-                        ratingAverage: "9.8",
-                        date: "07.06"
-                    }, {
-                        key: "2",
-                        commentOwner: "Rıdvan Tülemen",
-                        commentText: "Apple gerçekten güzel ürünler üretiyor. Steve Jobs R.I.P :(",
-                        likeValue: "499",
-                        dislikeValue: "27",
-                        likeOrDislike: "like",
-                        ratingAverage: "8.2",
-                        date: "03.05"
-                    }, {
-                        key: "3",
-                        commentOwner: "Alp_77",
-                        commentText: "Bu tasarım sonraki sürümlerde de sürdürülmeliydi. Bu kadar güzel tasarımlı başka iphone yok.",
-                        likeValue: "999",
-                        dislikeValue: "12",
-                        likeOrDislike: " ",
-                        ratingAverage: "5.4",
-                        date: "13.12"
-                    }, {
-                        key: "4",
-                        commentOwner: "Alp_77",
-                        commentText: "Bu tasarım sonraki sürümlerde de sürdürülmeliydi. Bu kadar güzel tasarımlı başka iphone yok.",
-                        likeValue: "999",
-                        dislikeValue: "12",
-                        likeOrDislike: " ",
-                        ratingAverage: "5.4",
-                        date: "13.12"
-                    }, {
-                        key: "5",
-                        commentOwner: "Alp_77",
-                        commentText: "Bu tasarım sonraki sürümlerde de sürdürülmeliydi. Bu kadar güzel tasarımlı başka iphone yok.",
-                        likeValue: "999",
-                        dislikeValue: "12",
-                        likeOrDislike: " ",
-                        ratingAverage: "5.4",
-                        date: "13.12"
-                    }, {
-                        key: "6",
-                        commentOwner: "Alp_77",
-                        commentText: "Bu tasarım sonraki sürümlerde de sürdürülmeliydi. Bu kadar güzel tasarımlı başka iphone yok.",
-                        likeValue: "999",
-                        dislikeValue: "12",
-                        likeOrDislike: " ",
-                        ratingAverage: "5.4",
-                        date: "13.12"
-                    }, {
-                        key: "7",
-                        commentOwner: "Alp_77",
-                        commentText: "Bu tasarım sonraki sürümlerde de sürdürülmeliydi. Bu kadar güzel tasarımlı başka iphone yok.",
-                        likeValue: "999",
-                        dislikeValue: "12",
-                        likeOrDislike: " ",
-                        ratingAverage: "5.4",
-                        date: "13.12"
-                    }, {
-                        key: "8",
-                        commentOwner: "Alp_77",
-                        commentText: "Bu tasarım sonraki sürümlerde de sürdürülmeliydi. Bu kadar güzel tasarımlı başka iphone yok.",
-                        likeValue: "999",
-                        dislikeValue: "12",
-                        likeOrDislike: " ",
-                        ratingAverage: "5.4",
-                        date: "13.12"
-                    }, {
-                        key: "9",
-                        commentOwner: "Alp_77",
-                        commentText: "Bu tasarım sonraki sürümlerde de sürdürülmeliydi. Bu kadar güzel tasarımlı başka iphone yok.",
-                        likeValue: "999",
-                        dislikeValue: "12",
-                        likeOrDislike: " ",
-                        ratingAverage: "5.4",
-                        date: "13.12"
-                    }, {
-                        key: "10",
-                        commentOwner: "Alp_77",
-                        commentText: "Bu tasarım sonraki sürümlerde de sürdürülmeliydi. Bu kadar güzel tasarımlı başka iphone yok.",
-                        likeValue: "999",
-                        dislikeValue: "12",
-                        likeOrDislike: " ",
-                        ratingAverage: "5.4",
-                        date: "13.12"
-                    }],
+                    comments: this.state.comments,
                     productName: this.state.productTitle,
                     mainCategory: {
                         name: "Elektronik"
