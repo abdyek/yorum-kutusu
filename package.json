@@ -1,8 +1,8 @@
 {
-  "name": "2",
+  "name": "yorumlaa",
   "version": "1.0.0",
   "description": "",
-  "main": "script.js",
+  "main": "ajax.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
