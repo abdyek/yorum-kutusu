@@ -65,22 +65,20 @@ var LogIn = function (_React$Component2) {
         value: function logInClick(event) {
             $.ajax({
                 type: 'POST',
-                url: 'https://yorumlaa.herokuapp.com/api/login/',
+                url: 'ajax-login',
                 data: {
                     "user": {
                         "email_or_username": "yunusemre",
                         "password": "abc123"
                     }
                 },
-
                 success: function (response) {
                     // başarılı olması durumunda çalışacak fonki
-                    setCookie("jwt", response.jwt, 365);
+                    // setCookie("jwt",response.jwt,365);
                     console.log(response);
                 }.bind(this),
                 dataType: 'json'
             });
-            console.log("holli");
             event.preventDefault();
         }
     }, {

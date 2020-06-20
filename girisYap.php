@@ -1,3 +1,12 @@
+<?php
+    require "session.php";
+    print_r($_SESSION);
+    if($member) {
+        //header('Location: index');
+        //exit();
+        // ^ bu kısmı girip yap sayfası ile işim bittikten sonra açıcam
+    }
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
