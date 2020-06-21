@@ -28,30 +28,35 @@ class LogIn extends React.Component {
         // ^ bind
         this.state = {
             rememberMeCheched:true,
-            id:"",
-            password:""
+            message:""
         }
     }
     logInClick(event) {
-        this.props.sent();
         $.ajax({
             type:'POST',
             url:'ajax-login',
             data:{
                 "user": {
-                    "email_or_username": this.state.id,
-                    "password": this.state.password
+                    "email_or_username": this.props.id,
+                    "password": this.props.password
                 }
             },
             success: function(response) {
-                // başarılı olması durumunda çalışacak fonki
-                // setCookie("jwt",response.jwt,365);
+                if(response["message"]) {
+                    console.log("işte şimdi bittiniz");
+                    alert(response["message"]);
+                    this.setState({
+                        message:response["message"]
+                    })
+                } else {
+                    console.log("helal olsun kanka giriş yaptın");
+                }
                 this.props.came();
-                console.log(response);
 
             }.bind(this),
             dataType:'json'
         })
+        this.props.sent();
         event.preventDefault();
     }
     rememberMeToggle() {
@@ -72,14 +77,10 @@ class LogIn extends React.Component {
         */
     }
     idChange(event) {
-        this.setState({
-            id:event.target.value
-        })
+        this.props.idChangeHandler(event.target.value);
     }
     passwordChange(event){
-        this.setState({
-            password:event.target.value
-        })
+        this.props.passwordChangeHandler(event.target.value);
     }
     render() {
         return(
@@ -87,14 +88,15 @@ class LogIn extends React.Component {
                 <WideColumn size="four" />
                 <WideColumn size="eight">
                     <H type="1" textAlign="center" text="Giriş Yap"/>
+                    {this.props.message}
                     <form className="ui form">
                         <div className="field">
                             <label>E-posta</label>
-                            <input type="text" name="id" value={this.state.id} onChange={this.idChange} placeholder="veya Kullanıcı Adı" />
+                            <input type="text" name="id" value={this.props.id} onChange={this.idChange} placeholder="veya Kullanıcı Adı" />
                         </div>
                         <div className="field">
                             <label>Parola</label>
-                            <input type="password" name="password" value={this.state.password} onChange={this.passwordChange} placeholder="Parola" />
+                            <input type="password" name="password" value={this.props.password} onChange={this.passwordChange} placeholder="Parola" />
                         </div>
                         <div className="field">
                             <div className="ui checkbox" onClick={this.rememberMeToggle}>
@@ -124,10 +126,14 @@ class Content extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            id:"",
+            password:"",
             sent: false
         }
         this.showLoading = this.showLoading.bind(this);
         this.showLogin = this.showLogin.bind(this);
+        this.changeId = this.changeId.bind(this);
+        this.changePassword = this.changePassword.bind(this);
     }
     showLoading(){
         this.setState({
@@ -139,11 +145,29 @@ class Content extends React.Component {
             sent:false
         })
     }
+    changeId(value) {
+        this.setState({
+            id:value
+        })
+    }
+    changePassword(value){
+        this.setState({
+            password:value
+        })
+    }
     render() {
         if(this.state.sent) {
             this.page = <Loading />
         } else {
-            this.page = <LogIn sent={this.showLoading} came={this.showLogin}/>
+            this.page = <LogIn
+                            sent={this.showLoading}
+                            came={this.showLogin}
+                            id={this.state.id}
+                            password={this.state.password}
+                            idChangeHandler={this.changeId}
+                            passwordChangeHandler={this.changePassword}
+                            message={"falan"}
+                        />
         }
         return(
             <div>

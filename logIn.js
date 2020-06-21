@@ -18,10 +18,10 @@ var App = function (_React$Component) {
     }
 
     _createClass(App, [{
-        key: "render",
+        key: 'render',
         value: function render() {
             return React.createElement(
-                "div",
+                'div',
                 null,
                 React.createElement(Header, null),
                 React.createElement(Content, null),
@@ -53,37 +53,42 @@ var LogIn = function (_React$Component2) {
         // ^ bind
         _this2.state = {
             rememberMeCheched: true,
-            id: "",
-            password: ""
+            message: ""
         };
         return _this2;
     }
 
     _createClass(LogIn, [{
-        key: "logInClick",
+        key: 'logInClick',
         value: function logInClick(event) {
-            this.props.sent();
             $.ajax({
                 type: 'POST',
                 url: 'ajax-login',
                 data: {
                     "user": {
-                        "email_or_username": this.state.id,
-                        "password": this.state.password
+                        "email_or_username": this.props.id,
+                        "password": this.props.password
                     }
                 },
                 success: function (response) {
-                    // başarılı olması durumunda çalışacak fonki
-                    // setCookie("jwt",response.jwt,365);
+                    if (response["message"]) {
+                        console.log("işte şimdi bittiniz");
+                        alert(response["message"]);
+                        this.setState({
+                            message: response["message"]
+                        });
+                    } else {
+                        console.log("helal olsun kanka giriş yaptın");
+                    }
                     this.props.came();
-                    console.log(response);
                 }.bind(this),
                 dataType: 'json'
             });
+            this.props.sent();
             event.preventDefault();
         }
     }, {
-        key: "rememberMeToggle",
+        key: 'rememberMeToggle',
         value: function rememberMeToggle() {
             if (this.state.rememberMeCheched) {
                 this.setState({
@@ -96,7 +101,7 @@ var LogIn = function (_React$Component2) {
             }
         }
     }, {
-        key: "onChangeHandler",
+        key: 'onChangeHandler',
         value: function onChangeHandler() {
             /*
                 bu fonksiyonun bütün olayı react'ın "bilader checked'i state e bağladın ama onChange 'e bir şey bağlamadın" uyarısına karşılık
@@ -104,64 +109,61 @@ var LogIn = function (_React$Component2) {
             */
         }
     }, {
-        key: "idChange",
+        key: 'idChange',
         value: function idChange(event) {
-            this.setState({
-                id: event.target.value
-            });
+            this.props.idChangeHandler(event.target.value);
         }
     }, {
-        key: "passwordChange",
+        key: 'passwordChange',
         value: function passwordChange(event) {
-            this.setState({
-                password: event.target.value
-            });
+            this.props.passwordChangeHandler(event.target.value);
         }
     }, {
-        key: "render",
+        key: 'render',
         value: function render() {
             return React.createElement(
                 Row,
-                { size: "sixteen" },
-                React.createElement(WideColumn, { size: "four" }),
+                { size: 'sixteen' },
+                React.createElement(WideColumn, { size: 'four' }),
                 React.createElement(
                     WideColumn,
-                    { size: "eight" },
-                    React.createElement(H, { type: "1", textAlign: "center", text: "Giri\u015F Yap" }),
+                    { size: 'eight' },
+                    React.createElement(H, { type: '1', textAlign: 'center', text: 'Giri\u015F Yap' }),
+                    this.props.message,
                     React.createElement(
-                        "form",
-                        { className: "ui form" },
+                        'form',
+                        { className: 'ui form' },
                         React.createElement(
-                            "div",
-                            { className: "field" },
+                            'div',
+                            { className: 'field' },
                             React.createElement(
-                                "label",
+                                'label',
                                 null,
-                                "E-posta"
+                                'E-posta'
                             ),
-                            React.createElement("input", { type: "text", name: "id", value: this.state.id, onChange: this.idChange, placeholder: "veya Kullan\u0131c\u0131 Ad\u0131" })
+                            React.createElement('input', { type: 'text', name: 'id', value: this.props.id, onChange: this.idChange, placeholder: 'veya Kullan\u0131c\u0131 Ad\u0131' })
                         ),
                         React.createElement(
-                            "div",
-                            { className: "field" },
+                            'div',
+                            { className: 'field' },
                             React.createElement(
-                                "label",
+                                'label',
                                 null,
-                                "Parola"
+                                'Parola'
                             ),
-                            React.createElement("input", { type: "password", name: "password", value: this.state.password, onChange: this.passwordChange, placeholder: "Parola" })
+                            React.createElement('input', { type: 'password', name: 'password', value: this.props.password, onChange: this.passwordChange, placeholder: 'Parola' })
                         ),
                         React.createElement(
-                            "div",
-                            { className: "field" },
+                            'div',
+                            { className: 'field' },
                             React.createElement(
-                                "div",
-                                { className: "ui checkbox", onClick: this.rememberMeToggle },
-                                React.createElement("input", { type: "checkbox", onChange: this.onChangeHandler, checked: this.state.rememberMeCheched, tabIndex: "0", className: "hidden" }),
+                                'div',
+                                { className: 'ui checkbox', onClick: this.rememberMeToggle },
+                                React.createElement('input', { type: 'checkbox', onChange: this.onChangeHandler, checked: this.state.rememberMeCheched, tabIndex: '0', className: 'hidden' }),
                                 React.createElement(
-                                    "label",
+                                    'label',
                                     null,
-                                    "Beni Hat\u0131rla"
+                                    'Beni Hat\u0131rla'
                                 )
                             )
                         ),
@@ -169,9 +171,9 @@ var LogIn = function (_React$Component2) {
                             FloatRight,
                             null,
                             React.createElement(
-                                "button",
-                                { className: "ui primary button", type: "submit", onClick: this.logInClick },
-                                "Giri\u015F Yap"
+                                'button',
+                                { className: 'ui primary button', type: 'submit', onClick: this.logInClick },
+                                'Giri\u015F Yap'
                             )
                         )
                     )
@@ -193,12 +195,12 @@ var UserArea = function (_React$Component3) {
     }
 
     _createClass(UserArea, [{
-        key: "render",
+        key: 'render',
         value: function render() {
             return React.createElement(
-                "div",
+                'div',
                 null,
-                "Kullan\u0131c\u0131 ayarlar\u0131 ve di\u011Fer \u015Feyler"
+                'Kullan\u0131c\u0131 ayarlar\u0131 ve di\u011Fer \u015Feyler'
             );
         }
     }]);
@@ -215,37 +217,63 @@ var Content = function (_React$Component4) {
         var _this4 = _possibleConstructorReturn(this, (Content.__proto__ || Object.getPrototypeOf(Content)).call(this, props));
 
         _this4.state = {
+            id: "",
+            password: "",
             sent: false
         };
         _this4.showLoading = _this4.showLoading.bind(_this4);
         _this4.showLogin = _this4.showLogin.bind(_this4);
+        _this4.changeId = _this4.changeId.bind(_this4);
+        _this4.changePassword = _this4.changePassword.bind(_this4);
         return _this4;
     }
 
     _createClass(Content, [{
-        key: "showLoading",
+        key: 'showLoading',
         value: function showLoading() {
             this.setState({
                 sent: true
             });
         }
     }, {
-        key: "showLogin",
+        key: 'showLogin',
         value: function showLogin() {
             this.setState({
                 sent: false
             });
         }
     }, {
-        key: "render",
+        key: 'changeId',
+        value: function changeId(value) {
+            this.setState({
+                id: value
+            });
+        }
+    }, {
+        key: 'changePassword',
+        value: function changePassword(value) {
+            this.setState({
+                password: value
+            });
+        }
+    }, {
+        key: 'render',
         value: function render() {
             if (this.state.sent) {
                 this.page = React.createElement(Loading, null);
             } else {
-                this.page = React.createElement(LogIn, { sent: this.showLoading, came: this.showLogin });
+                this.page = React.createElement(LogIn, {
+                    sent: this.showLoading,
+                    came: this.showLogin,
+                    id: this.state.id,
+                    password: this.state.password,
+                    idChangeHandler: this.changeId,
+                    passwordChangeHandler: this.changePassword,
+                    message: "falan"
+                });
             }
             return React.createElement(
-                "div",
+                'div',
                 null,
                 this.page
             );
