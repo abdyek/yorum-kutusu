@@ -19,14 +19,14 @@
     $apiResponseArray = json_decode($apiResponse, true);
 
     if(isset($apiResponseArray["message"])) {
-        echo json_encode($apiResponse);
+        echo $apiResponse;
         // ^ sadece hata mesajlarında message key'i olduğu için hata varsa client'a yolla direkt
     } else {
         $_SESSION["jwt"] = $apiResponseArray["jwt"];
         $_SESSION["id"] = $apiResponseArray["id"];
         $_SESSION["username"] = $apiResponseArray["username"];
         $_SESSION["verification"] = $apiResponseArray["verification"];
-        echo json_encode($apiResponse);
+        echo $apiResponse;
     }
 
 ?>

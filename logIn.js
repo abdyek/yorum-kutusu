@@ -54,7 +54,9 @@ var LogIn = function (_React$Component2) {
         _this2.state = {
             rememberMeCheched: true,
             id: "",
-            password: ""
+            password: "",
+            loading: false,
+            message: ""
         };
         return _this2;
     }
@@ -62,7 +64,9 @@ var LogIn = function (_React$Component2) {
     _createClass(LogIn, [{
         key: "logInClick",
         value: function logInClick(event) {
-            this.props.sent();
+            this.setState({
+                loading: true
+            });
             $.ajax({
                 type: 'POST',
                 url: 'ajax-login',
@@ -75,8 +79,19 @@ var LogIn = function (_React$Component2) {
                 success: function (response) {
                     // başarılı olması durumunda çalışacak fonki
                     // setCookie("jwt",response.jwt,365);
-                    this.props.came();
                     console.log(response);
+                    this.setState({
+                        loading: false
+                    });
+                    if (response.jwt) {
+                        console.log("burası çalışıyor");
+                        window.location.href = 'index';
+                    }
+                    if (response.message != "") {
+                        this.setState({
+                            message: React.createElement(ErrorMessageBox, { text: response.message })
+                        });
+                    }
                 }.bind(this),
                 dataType: 'json'
             });
@@ -120,6 +135,9 @@ var LogIn = function (_React$Component2) {
     }, {
         key: "render",
         value: function render() {
+            if (this.state.loading) {
+                return React.createElement(Loading, null);
+            }
             return React.createElement(
                 Row,
                 { size: "sixteen" },
@@ -128,6 +146,7 @@ var LogIn = function (_React$Component2) {
                     WideColumn,
                     { size: "eight" },
                     React.createElement(H, { type: "1", textAlign: "center", text: "Giri\u015F Yap" }),
+                    this.state.message,
                     React.createElement(
                         "form",
                         { className: "ui form" },
@@ -183,8 +202,34 @@ var LogIn = function (_React$Component2) {
     return LogIn;
 }(React.Component);
 
-var UserArea = function (_React$Component3) {
-    _inherits(UserArea, _React$Component3);
+var ErrorMessageBox = function (_React$Component3) {
+    _inherits(ErrorMessageBox, _React$Component3);
+
+    function ErrorMessageBox() {
+        _classCallCheck(this, ErrorMessageBox);
+
+        return _possibleConstructorReturn(this, (ErrorMessageBox.__proto__ || Object.getPrototypeOf(ErrorMessageBox)).apply(this, arguments));
+    }
+
+    _createClass(ErrorMessageBox, [{
+        key: "render",
+        value: function render() {
+            if (this.props.text == undefined) {
+                return React.createElement("div", null);
+            }
+            return React.createElement(
+                "div",
+                { className: "ui red message" },
+                this.props.text
+            );
+        }
+    }]);
+
+    return ErrorMessageBox;
+}(React.Component);
+
+var UserArea = function (_React$Component4) {
+    _inherits(UserArea, _React$Component4);
 
     function UserArea() {
         _classCallCheck(this, UserArea);
@@ -206,48 +251,22 @@ var UserArea = function (_React$Component3) {
     return UserArea;
 }(React.Component);
 
-var Content = function (_React$Component4) {
-    _inherits(Content, _React$Component4);
+var Content = function (_React$Component5) {
+    _inherits(Content, _React$Component5);
 
     function Content(props) {
         _classCallCheck(this, Content);
 
-        var _this4 = _possibleConstructorReturn(this, (Content.__proto__ || Object.getPrototypeOf(Content)).call(this, props));
-
-        _this4.state = {
-            sent: false
-        };
-        _this4.showLoading = _this4.showLoading.bind(_this4);
-        _this4.showLogin = _this4.showLogin.bind(_this4);
-        return _this4;
+        return _possibleConstructorReturn(this, (Content.__proto__ || Object.getPrototypeOf(Content)).call(this, props));
     }
 
     _createClass(Content, [{
-        key: "showLoading",
-        value: function showLoading() {
-            this.setState({
-                sent: true
-            });
-        }
-    }, {
-        key: "showLogin",
-        value: function showLogin() {
-            this.setState({
-                sent: false
-            });
-        }
-    }, {
         key: "render",
         value: function render() {
-            if (this.state.sent) {
-                this.page = React.createElement(Loading, null);
-            } else {
-                this.page = React.createElement(LogIn, { sent: this.showLoading, came: this.showLogin });
-            }
             return React.createElement(
                 "div",
                 null,
-                this.page
+                React.createElement(LogIn, null)
             );
         }
     }]);

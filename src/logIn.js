@@ -29,11 +29,15 @@ class LogIn extends React.Component {
         this.state = {
             rememberMeCheched:true,
             id:"",
-            password:""
+            password:"",
+            loading:false,
+            message: ""
         }
     }
     logInClick(event) {
-        this.props.sent();
+        this.setState({
+            loading:true
+        })
         $.ajax({
             type:'POST',
             url:'ajax-login',
@@ -46,9 +50,19 @@ class LogIn extends React.Component {
             success: function(response) {
                 // başarılı olması durumunda çalışacak fonki
                 // setCookie("jwt",response.jwt,365);
-                this.props.came();
                 console.log(response);
-
+                this.setState({
+                    loading:false
+                })
+                if(response.jwt) {
+                    console.log("burası çalışıyor");
+                    window.location.href = 'index';
+                }
+                if(response.message!="") {
+                    this.setState({
+                        message: <ErrorMessageBox text={response.message}/>
+                    });
+                }
             }.bind(this),
             dataType:'json'
         })
@@ -82,11 +96,17 @@ class LogIn extends React.Component {
         })
     }
     render() {
+        if(this.state.loading){
+            return(
+                <Loading />
+            )
+        }
         return(
             <Row size="sixteen">
                 <WideColumn size="four" />
                 <WideColumn size="eight">
                     <H type="1" textAlign="center" text="Giriş Yap"/>
+                    {this.state.message}
                     <form className="ui form">
                         <div className="field">
                             <label>E-posta</label>
@@ -112,6 +132,17 @@ class LogIn extends React.Component {
     }
 }
 
+class ErrorMessageBox extends React.Component {
+    render() {
+        if(this.props.text==undefined) {
+            return <div></div>
+        }
+        return(
+            <div className="ui red message">{this.props.text}</div>
+        )
+    }
+}
+
 class UserArea extends React.Component {
     render() {
         return(
@@ -123,31 +154,11 @@ class UserArea extends React.Component {
 class Content extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            sent: false
-        }
-        this.showLoading = this.showLoading.bind(this);
-        this.showLogin = this.showLogin.bind(this);
-    }
-    showLoading(){
-        this.setState({
-            sent:true
-        })
-    }
-    showLogin() {
-        this.setState({
-            sent:false
-        })
     }
     render() {
-        if(this.state.sent) {
-            this.page = <Loading />
-        } else {
-            this.page = <LogIn sent={this.showLoading} came={this.showLogin}/>
-        }
         return(
             <div>
-                {this.page}
+                <LogIn />
             </div>
         )
     }
