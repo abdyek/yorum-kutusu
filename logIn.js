@@ -7,7 +7,6 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 // bu kısmı nereden kontrol edeceğime henüz karar vermedim
-var girisYapmis = false;
 
 var App = function (_React$Component) {
     _inherits(App, _React$Component);
@@ -63,18 +62,20 @@ var LogIn = function (_React$Component2) {
     _createClass(LogIn, [{
         key: "logInClick",
         value: function logInClick(event) {
+            this.props.sent();
             $.ajax({
                 type: 'POST',
                 url: 'ajax-login',
                 data: {
                     "user": {
-                        "email_or_username": "yunusemre",
-                        "password": "abc123"
+                        "email_or_username": this.state.id,
+                        "password": this.state.password
                     }
                 },
                 success: function (response) {
                     // başarılı olması durumunda çalışacak fonki
                     // setCookie("jwt",response.jwt,365);
+                    this.props.came();
                     console.log(response);
                 }.bind(this),
                 dataType: 'json'
@@ -213,17 +214,36 @@ var Content = function (_React$Component4) {
 
         var _this4 = _possibleConstructorReturn(this, (Content.__proto__ || Object.getPrototypeOf(Content)).call(this, props));
 
-        if (girisYapmis) {
-            _this4.page = React.createElement(UserArea, null);
-        } else {
-            _this4.page = React.createElement(LogIn, null);
-        }
+        _this4.state = {
+            sent: false
+        };
+        _this4.showLoading = _this4.showLoading.bind(_this4);
+        _this4.showLogin = _this4.showLogin.bind(_this4);
         return _this4;
     }
 
     _createClass(Content, [{
+        key: "showLoading",
+        value: function showLoading() {
+            this.setState({
+                sent: true
+            });
+        }
+    }, {
+        key: "showLogin",
+        value: function showLogin() {
+            this.setState({
+                sent: false
+            });
+        }
+    }, {
         key: "render",
         value: function render() {
+            if (this.state.sent) {
+                this.page = React.createElement(Loading, null);
+            } else {
+                this.page = React.createElement(LogIn, { sent: this.showLoading, came: this.showLogin });
+            }
             return React.createElement(
                 "div",
                 null,

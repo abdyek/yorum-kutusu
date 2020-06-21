@@ -1,5 +1,4 @@
 // bu kısmı nereden kontrol edeceğime henüz karar vermedim
-let girisYapmis = false;
 
 class App extends React.Component {
     constructor(props) {
@@ -34,18 +33,20 @@ class LogIn extends React.Component {
         }
     }
     logInClick(event) {
+        this.props.sent();
         $.ajax({
             type:'POST',
             url:'ajax-login',
             data:{
                 "user": {
-                    "email_or_username": "yunusemre",
-                    "password": "abc123"
+                    "email_or_username": this.state.id,
+                    "password": this.state.password
                 }
             },
             success: function(response) {
                 // başarılı olması durumunda çalışacak fonki
                 // setCookie("jwt",response.jwt,365);
+                this.props.came();
                 console.log(response);
 
             }.bind(this),
@@ -122,13 +123,28 @@ class UserArea extends React.Component {
 class Content extends React.Component {
     constructor(props) {
         super(props);
-        if(girisYapmis) {
-            this.page = <UserArea />
-        } else {
-            this.page = <LogIn />
+        this.state = {
+            sent: false
         }
+        this.showLoading = this.showLoading.bind(this);
+        this.showLogin = this.showLogin.bind(this);
+    }
+    showLoading(){
+        this.setState({
+            sent:true
+        })
+    }
+    showLogin() {
+        this.setState({
+            sent:false
+        })
     }
     render() {
+        if(this.state.sent) {
+            this.page = <Loading />
+        } else {
+            this.page = <LogIn sent={this.showLoading} came={this.showLogin}/>
+        }
         return(
             <div>
                 {this.page}

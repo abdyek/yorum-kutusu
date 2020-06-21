@@ -29,10 +29,34 @@ function getCookie(cname) {
     return "";
 }
 
+var Loading = function (_React$Component) {
+    _inherits(Loading, _React$Component);
+
+    function Loading() {
+        _classCallCheck(this, Loading);
+
+        return _possibleConstructorReturn(this, (Loading.__proto__ || Object.getPrototypeOf(Loading)).apply(this, arguments));
+    }
+
+    _createClass(Loading, [{
+        key: "render",
+        value: function render() {
+            return React.createElement(
+                "div",
+                null,
+                "loading!"
+            );
+        }
+    }]);
+
+    return Loading;
+}(React.Component);
+
 /* bu bütün sayfalarda kullanılabilecek bir bileşendir */
 
-var Container = function (_React$Component) {
-    _inherits(Container, _React$Component);
+
+var Container = function (_React$Component2) {
+    _inherits(Container, _React$Component2);
 
     function Container() {
         _classCallCheck(this, Container);
@@ -57,8 +81,8 @@ var Container = function (_React$Component) {
 /* bu bütün sayfalarda kullanılabilecek bir bileşendir */
 
 
-var Segment = function (_React$Component2) {
-    _inherits(Segment, _React$Component2);
+var Segment = function (_React$Component3) {
+    _inherits(Segment, _React$Component3);
 
     function Segment() {
         _classCallCheck(this, Segment);
@@ -83,8 +107,8 @@ var Segment = function (_React$Component2) {
 /* bu bütün sayfalarda kullanılabilecek bir bileşendir */
 
 
-var RaisedSegment = function (_React$Component3) {
-    _inherits(RaisedSegment, _React$Component3);
+var RaisedSegment = function (_React$Component4) {
+    _inherits(RaisedSegment, _React$Component4);
 
     function RaisedSegment() {
         _classCallCheck(this, RaisedSegment);
@@ -109,19 +133,19 @@ var RaisedSegment = function (_React$Component3) {
 /* bu bütün sayfalarda kullanılabilecek bir bileşendir */
 
 
-var Row = function (_React$Component4) {
-    _inherits(Row, _React$Component4);
+var Row = function (_React$Component5) {
+    _inherits(Row, _React$Component5);
 
     function Row(props) {
         _classCallCheck(this, Row);
 
-        var _this4 = _possibleConstructorReturn(this, (Row.__proto__ || Object.getPrototypeOf(Row)).call(this, props));
+        var _this5 = _possibleConstructorReturn(this, (Row.__proto__ || Object.getPrototypeOf(Row)).call(this, props));
 
-        _this4.stackable = "stackable";
-        if (_this4.props.nonStackable) {
-            _this4.stackable = "";
+        _this5.stackable = "stackable";
+        if (_this5.props.nonStackable) {
+            _this5.stackable = "";
         }
-        return _this4;
+        return _this5;
     }
 
     _createClass(Row, [{
@@ -153,8 +177,8 @@ var Row = function (_React$Component4) {
 /* bu bütün sayfalarda kullanılabilecek bir bileşendir */
 
 
-var Column = function (_React$Component5) {
-    _inherits(Column, _React$Component5);
+var Column = function (_React$Component6) {
+    _inherits(Column, _React$Component6);
 
     function Column() {
         _classCallCheck(this, Column);
@@ -179,8 +203,8 @@ var Column = function (_React$Component5) {
 /* bu bütün sayfalarda kullanılabilecek bir bileşendir */
 
 
-var WideColumn = function (_React$Component6) {
-    _inherits(WideColumn, _React$Component6);
+var WideColumn = function (_React$Component7) {
+    _inherits(WideColumn, _React$Component7);
 
     function WideColumn() {
         _classCallCheck(this, WideColumn);
@@ -205,24 +229,24 @@ var WideColumn = function (_React$Component6) {
 /* bu bütün sayfalarda kullanılabilecek bir bileşendir */
 
 
-var H = function (_React$Component7) {
-    _inherits(H, _React$Component7);
+var H = function (_React$Component8) {
+    _inherits(H, _React$Component8);
 
     function H(props) {
         _classCallCheck(this, H);
 
-        var _this7 = _possibleConstructorReturn(this, (H.__proto__ || Object.getPrototypeOf(H)).call(this, props));
+        var _this8 = _possibleConstructorReturn(this, (H.__proto__ || Object.getPrototypeOf(H)).call(this, props));
 
-        _this7.textAlign = "";
-        if (_this7.props.textAlign == "center") {
-            _this7.textAlign = " center aligned ";
+        _this8.textAlign = "";
+        if (_this8.props.textAlign == "center") {
+            _this8.textAlign = " center aligned ";
         }
-        if (!_this7.props.optional) {
-            _this7.optional = "";
+        if (!_this8.props.optional) {
+            _this8.optional = "";
         } else {
-            _this7.optional = _this7.props.optional;
+            _this8.optional = _this8.props.optional;
         }
-        return _this7;
+        return _this8;
     }
 
     _createClass(H, [{
@@ -268,8 +292,8 @@ var H = function (_React$Component7) {
 /* bu bütün sayfalarda kullanılabilecek bir bileşendir */
 
 
-var Center = function (_React$Component8) {
-    _inherits(Center, _React$Component8);
+var Center = function (_React$Component9) {
+    _inherits(Center, _React$Component9);
 
     function Center() {
         _classCallCheck(this, Center);
@@ -298,8 +322,8 @@ var Center = function (_React$Component8) {
 /* bu bütün sayfalarda kullanılabilecek bir bileşendir */
 
 
-var Hx = function (_React$Component9) {
-    _inherits(Hx, _React$Component9);
+var Hx = function (_React$Component10) {
+    _inherits(Hx, _React$Component10);
 
     function Hx() {
         _classCallCheck(this, Hx);
@@ -326,8 +350,8 @@ var Hx = function (_React$Component9) {
 /* bu bütün sayfalarda kullanılabilecek bir bileşendir */
 
 
-var FloatRight = function (_React$Component10) {
-    _inherits(FloatRight, _React$Component10);
+var FloatRight = function (_React$Component11) {
+    _inherits(FloatRight, _React$Component11);
 
     function FloatRight() {
         _classCallCheck(this, FloatRight);
@@ -352,8 +376,8 @@ var FloatRight = function (_React$Component10) {
 /* bu bütün sayfalarda kullanılabilecek bir bileşendir */
 
 
-var Button = function (_React$Component11) {
-    _inherits(Button, _React$Component11);
+var Button = function (_React$Component12) {
+    _inherits(Button, _React$Component12);
 
     function Button() {
         _classCallCheck(this, Button);
@@ -378,8 +402,8 @@ var Button = function (_React$Component11) {
 /* bu bütün sayfalarda kullanılabilecek bir bileşendir */
 
 
-var Buttons = function (_React$Component12) {
-    _inherits(Buttons, _React$Component12);
+var Buttons = function (_React$Component13) {
+    _inherits(Buttons, _React$Component13);
 
     function Buttons() {
         _classCallCheck(this, Buttons);
@@ -404,8 +428,8 @@ var Buttons = function (_React$Component12) {
 /* bu bütün sayfalarda kullanılabilecek bir bileşendir */
 
 
-var Menu = function (_React$Component13) {
-    _inherits(Menu, _React$Component13);
+var Menu = function (_React$Component14) {
+    _inherits(Menu, _React$Component14);
 
     function Menu(props) {
         _classCallCheck(this, Menu);
@@ -426,8 +450,8 @@ var Menu = function (_React$Component13) {
     return Menu;
 }(React.Component);
 
-var LogInButton = function (_React$Component14) {
-    _inherits(LogInButton, _React$Component14);
+var LogInButton = function (_React$Component15) {
+    _inherits(LogInButton, _React$Component15);
 
     function LogInButton(props) {
         _classCallCheck(this, LogInButton);
@@ -458,8 +482,8 @@ var LogInButton = function (_React$Component14) {
     return LogInButton;
 }(React.Component);
 
-var AccountButton = function (_React$Component15) {
-    _inherits(AccountButton, _React$Component15);
+var AccountButton = function (_React$Component16) {
+    _inherits(AccountButton, _React$Component16);
 
     function AccountButton(props) {
         _classCallCheck(this, AccountButton);
@@ -493,8 +517,8 @@ var AccountButton = function (_React$Component15) {
 /* bu bütün sayfalarda kullanılabilecek bir bileşendir */
 
 
-var Logo = function (_React$Component16) {
-    _inherits(Logo, _React$Component16);
+var Logo = function (_React$Component17) {
+    _inherits(Logo, _React$Component17);
 
     function Logo() {
         _classCallCheck(this, Logo);
@@ -519,8 +543,8 @@ var Logo = function (_React$Component16) {
 /* bu bütün sayfalarda kullanılabilecek bir bileşendir */
 
 
-var SearchBar = function (_React$Component17) {
-    _inherits(SearchBar, _React$Component17);
+var SearchBar = function (_React$Component18) {
+    _inherits(SearchBar, _React$Component18);
 
     function SearchBar() {
         _classCallCheck(this, SearchBar);
@@ -545,8 +569,8 @@ var SearchBar = function (_React$Component17) {
 /* bu bütün sayfalarda kullanılabilecek bir bileşendir */
 
 
-var Categories = function (_React$Component18) {
-    _inherits(Categories, _React$Component18);
+var Categories = function (_React$Component19) {
+    _inherits(Categories, _React$Component19);
 
     function Categories() {
         _classCallCheck(this, Categories);
@@ -605,8 +629,8 @@ var Categories = function (_React$Component18) {
 /* bu bütün sayfalarda kullanılabilecek bir bileşendir */
 
 
-var Header = function (_React$Component19) {
-    _inherits(Header, _React$Component19);
+var Header = function (_React$Component20) {
+    _inherits(Header, _React$Component20);
 
     function Header() {
         _classCallCheck(this, Header);
@@ -674,8 +698,8 @@ var Header = function (_React$Component19) {
 /* bu bütün sayfalarda kullanılabilecek bir bileşendir */
 
 
-var Footer = function (_React$Component20) {
-    _inherits(Footer, _React$Component20);
+var Footer = function (_React$Component21) {
+    _inherits(Footer, _React$Component21);
 
     function Footer() {
         _classCallCheck(this, Footer);

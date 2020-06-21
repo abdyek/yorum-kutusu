@@ -21,6 +21,12 @@ function getCookie(cname) {
     return "";
 }
 
+class Loading extends React.Component {
+    render() {
+        return(<div>loading!</div>);
+    }
+}
+
 /* bu bütün sayfalarda kullanılabilecek bir bileşendir */
 class Container extends React.Component {
     render() {
