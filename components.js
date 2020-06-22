@@ -440,10 +440,10 @@ var Menu = function (_React$Component14) {
     _createClass(Menu, [{
         key: "render",
         value: function render() {
-            if (!getCookie("jwt")) {
+            if (!getCookie("userName")) {
                 return React.createElement(LogInButton, null);
             }
-            return React.createElement(AccountButton, { userName: "mahmut" });
+            return React.createElement(AccountButton, { userName: getCookie("userName") });
         }
     }]);
 
@@ -496,7 +496,7 @@ var AccountButton = function (_React$Component16) {
         value: function render() {
             return React.createElement(
                 "a",
-                { href: "girisYap" },
+                { href: "profil/" + this.props.userName },
                 React.createElement(
                     "div",
                     { id: "menu", className: "ui secondary  menu" },

@@ -85,7 +85,9 @@ var LogIn = function (_React$Component2) {
                     });
                     if (response.jwt) {
                         console.log("burası çalışıyor");
-                        window.location.href = 'index';
+                        console.log(response);
+                        setCookie("userName", response.username, 365);
+                        //window.location.href = 'index';
                     }
                     if (response.message != "") {
                         this.setState({

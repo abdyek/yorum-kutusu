@@ -208,13 +208,13 @@ class Menu extends React.Component {
         super(props);
     }
     render() {
-        if(!getCookie("jwt")) {
+        if(!getCookie("userName")) {
             return(
                 <LogInButton />
             )
         }
         return(
-            <AccountButton userName="mahmut" />
+            <AccountButton userName={getCookie("userName")} />
         )
     }
 }
@@ -242,7 +242,7 @@ class AccountButton extends React.Component {
     }
     render() {
         return(
-            <a href="girisYap">
+            <a href={"profil/"+this.props.userName}>
                 <div id="menu" className="ui secondary  menu">
                     <div id="hesap" className="ui button">
                         <i className="user icon"></i>{this.props.userName}

@@ -1,3 +1,8 @@
+<?php
+    require "session.php";
+    print_r($_SESSION);
+    echo "burası ana sayfa olsun";
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

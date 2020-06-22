@@ -56,7 +56,9 @@ class LogIn extends React.Component {
                 })
                 if(response.jwt) {
                     console.log("burası çalışıyor");
-                    window.location.href = 'index';
+                    console.log(response);
+                    setCookie("userName", response.username, 365);
+                    //window.location.href = 'index';
                 }
                 if(response.message!="") {
                     this.setState({
