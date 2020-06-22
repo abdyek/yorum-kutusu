@@ -440,10 +440,10 @@ var Menu = function (_React$Component14) {
     _createClass(Menu, [{
         key: "render",
         value: function render() {
-            if (!getCookie("userName")) {
+            if (username == undefined) {
                 return React.createElement(LogInButton, null);
             }
-            return React.createElement(AccountButton, { userName: getCookie("userName") });
+            return React.createElement(AccountButton, { userName: username });
         }
     }]);
 

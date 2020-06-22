@@ -208,13 +208,13 @@ class Menu extends React.Component {
         super(props);
     }
     render() {
-        if(!getCookie("userName")) {
+        if(username==undefined) {
             return(
                 <LogInButton />
             )
         }
         return(
-            <AccountButton userName={getCookie("userName")} />
+            <AccountButton userName={username} />
         )
     }
 }

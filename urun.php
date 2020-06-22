@@ -3,6 +3,15 @@
     print_r($_SESSION);
     echo "burası ana sayfa olsun";
 ?>
+
+<?php if(isset($_SESSION["username"])):
+    // php ile react'ı birleştirmek bana böyle çözümler üretmeye zorladı
+?>
+    <script>
+        <?php echo "const username='".$_SESSION["username"]."'"; ?>
+    </script>
+<?php endif; ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

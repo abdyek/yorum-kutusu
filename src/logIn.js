@@ -57,7 +57,7 @@ class LogIn extends React.Component {
                 if(response.jwt) {
                     console.log("burası çalışıyor");
                     console.log(response);
-                    setCookie("userName", response.username, 365);
+                    // setCookie("userName", response.username, 365); -> buna ihtiyaç kalmadı artık kullanıcı ismini back-endden çekiyorum
                     //window.location.href = 'index';
                 }
                 if(response.message!="") {
