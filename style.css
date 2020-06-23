@@ -170,3 +170,8 @@ header > div {
     height: 15rem;
     overflow-y: auto;
 }
+
+.yorumlarHeader {
+    margin-top:1.5rem;
+    margin-bottom:1.5rem;
+}

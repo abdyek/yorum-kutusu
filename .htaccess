@@ -17,6 +17,9 @@ RewriteRule ^([^/.]+)$ $1.php [L]
 # urun.php sayfası için
 RewriteRule ^(urun)/([^/.]+)$ urun.php?urun=$2 [L]
 
+#profil.php sayfası için
+RewriteRule ^(profil)/([^/.]+)$ profil.php?username=$2 [L]
+
 # RewriteRule ^([0-9a-zA-Z-_]+)/([0-9]+)$  posts.php?sef=$1&id=$2 [L,QSA]
 
 # dosyaların sonunda .php olmadığı için dizinleri dosya zannedip not found fırlatıyor,
