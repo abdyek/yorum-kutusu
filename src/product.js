@@ -1,9 +1,3 @@
-class Loading extends React.Component {
-    render() {
-        return(<div>loading!</div>);
-    }
-}
-  
 class App extends React.Component {
     constructor(props) {
         super(props);
@@ -151,7 +145,7 @@ class App extends React.Component {
                         }
                     ]*/}
                     imagesSrcs={this.state.images}
-                />: <Loading />}
+                />: <RowLoading />}
                 <Footer /> {/* from components.js */}
             </div>
         )

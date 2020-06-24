@@ -289,11 +289,7 @@ var Comment = function (_React$Component4) {
                     )
                 );
             } else if (this.state.reVote == "loading") {
-                this.reVoteArea = React.createElement(
-                    "div",
-                    null,
-                    "y\xFCkleniyor"
-                );
+                this.reVoteArea = React.createElement(RowLoading, null);
             }
             if (owner) {
                 this.onlyOwner = React.createElement(

@@ -203,9 +203,7 @@ class Comment extends React.Component {
             )
         } else if(this.state.reVote=="loading") {
             this.reVoteArea = (
-                <div>
-                    yükleniyor
-                </div>
+                <RowLoading />
             )
         }
         if(owner){

@@ -21,9 +21,23 @@ function getCookie(cname) {
     return "";
 }
 
+class RowLoading extends React.Component {
+    render() {
+        return(
+            <Row size="one">
+                <Column>
+                    <Center>
+                        <Loading />
+                    </Center>
+                </Column>
+            </Row>
+        )
+    }
+}
+
 class Loading extends React.Component {
     render() {
-        return(<div>loading!</div>);
+        return(<div className="lds-dual-ring"></div>);
     }
 }
 
