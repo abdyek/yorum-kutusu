@@ -35,6 +35,29 @@ class Content extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            form:"normal"
+        }
+        // burada
+    }
+    render() {
+        if(this.state.form=="normal") {
+            return(
+                <ProfileInfo />
+            )
+        } else if(this.state.form=="loading") {
+            return(
+                <RowLoading />
+            )
+        } else if(this.state.form=="notFoundProfile") {
+            return <NotFoundProfile />
+        }
+    }
+}
+
+class ProfileInfo extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
             settingOpened: false,
             oldPassword: "",
             newPassword: "",
@@ -199,6 +222,22 @@ class Content extends React.Component {
                 </Row>
                 <Comments />
             </div>
+        )
+    }
+}
+
+class NotFoundProfile extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+    render() {
+        return(
+            <Row size="sixteen">
+                <WideColumn size="two"></WideColumn>
+                <WideColumn size="twelve">
+                    <div className="ui red message">Böyle bir profil yok!</div>
+                </WideColumn>
+            </Row>
         )
     }
 }

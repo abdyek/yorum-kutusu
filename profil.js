@@ -58,6 +58,36 @@ var Content = function (_React$Component2) {
         var _this2 = _possibleConstructorReturn(this, (Content.__proto__ || Object.getPrototypeOf(Content)).call(this, props));
 
         _this2.state = {
+            form: "normal"
+            // burada
+        };return _this2;
+    }
+
+    _createClass(Content, [{
+        key: "render",
+        value: function render() {
+            if (this.state.form == "normal") {
+                return React.createElement(ProfileInfo, null);
+            } else if (this.state.form == "loading") {
+                return React.createElement(RowLoading, null);
+            } else if (this.state.form == "notFoundProfile") {
+                return React.createElement(NotFoundProfile, null);
+            }
+        }
+    }]);
+
+    return Content;
+}(React.Component);
+
+var ProfileInfo = function (_React$Component3) {
+    _inherits(ProfileInfo, _React$Component3);
+
+    function ProfileInfo(props) {
+        _classCallCheck(this, ProfileInfo);
+
+        var _this3 = _possibleConstructorReturn(this, (ProfileInfo.__proto__ || Object.getPrototypeOf(ProfileInfo)).call(this, props));
+
+        _this3.state = {
             settingOpened: false,
             oldPassword: "",
             newPassword: "",
@@ -68,16 +98,16 @@ var Content = function (_React$Component2) {
             messageType: "",
             logout: ""
         };
-        _this2.toggleSetting = _this2.toggleSetting.bind(_this2);
-        _this2.logout = _this2.logout.bind(_this2);
-        _this2.changeOldPassword = _this2.changeOldPassword.bind(_this2);
-        _this2.changeNewPassword = _this2.changeNewPassword.bind(_this2);
-        _this2.changeNewPassword2 = _this2.changeNewPassword2.bind(_this2);
-        _this2.tryChange = _this2.tryChange.bind(_this2);
-        return _this2;
+        _this3.toggleSetting = _this3.toggleSetting.bind(_this3);
+        _this3.logout = _this3.logout.bind(_this3);
+        _this3.changeOldPassword = _this3.changeOldPassword.bind(_this3);
+        _this3.changeNewPassword = _this3.changeNewPassword.bind(_this3);
+        _this3.changeNewPassword2 = _this3.changeNewPassword2.bind(_this3);
+        _this3.tryChange = _this3.tryChange.bind(_this3);
+        return _this3;
     }
 
-    _createClass(Content, [{
+    _createClass(ProfileInfo, [{
         key: "toggleSetting",
         value: function toggleSetting() {
             if (this.state.settingOpened) {
@@ -298,19 +328,51 @@ var Content = function (_React$Component2) {
         }
     }]);
 
-    return Content;
+    return ProfileInfo;
 }(React.Component);
 
-var Comments = function (_React$Component3) {
-    _inherits(Comments, _React$Component3);
+var NotFoundProfile = function (_React$Component4) {
+    _inherits(NotFoundProfile, _React$Component4);
+
+    function NotFoundProfile(props) {
+        _classCallCheck(this, NotFoundProfile);
+
+        return _possibleConstructorReturn(this, (NotFoundProfile.__proto__ || Object.getPrototypeOf(NotFoundProfile)).call(this, props));
+    }
+
+    _createClass(NotFoundProfile, [{
+        key: "render",
+        value: function render() {
+            return React.createElement(
+                Row,
+                { size: "sixteen" },
+                React.createElement(WideColumn, { size: "two" }),
+                React.createElement(
+                    WideColumn,
+                    { size: "twelve" },
+                    React.createElement(
+                        "div",
+                        { className: "ui red message" },
+                        "B\xF6yle bir profil yok!"
+                    )
+                )
+            );
+        }
+    }]);
+
+    return NotFoundProfile;
+}(React.Component);
+
+var Comments = function (_React$Component5) {
+    _inherits(Comments, _React$Component5);
 
     function Comments(props) {
         _classCallCheck(this, Comments);
 
-        var _this3 = _possibleConstructorReturn(this, (Comments.__proto__ || Object.getPrototypeOf(Comments)).call(this, props));
+        var _this5 = _possibleConstructorReturn(this, (Comments.__proto__ || Object.getPrototypeOf(Comments)).call(this, props));
 
         if (!isMobile) {
-            _this3.buttonText = {
+            _this5.buttonText = {
                 editButtonText: "Düzenle",
                 deleteButtonText: "Sil",
                 approveDeleteButtonText: "Sil",
@@ -320,7 +382,7 @@ var Comments = function (_React$Component3) {
                 saveButtonText: "Kaydet"
             };
         } else {
-            _this3.buttonText = {
+            _this5.buttonText = {
                 editButtonText: "",
                 deleteButtonText: "",
                 approveDeleteButtonText: "",
@@ -330,7 +392,7 @@ var Comments = function (_React$Component3) {
                 saveButtonText: ""
             };
         }
-        return _this3;
+        return _this5;
     }
 
     _createClass(Comments, [{
@@ -351,21 +413,21 @@ var Comments = function (_React$Component3) {
     return Comments;
 }(React.Component);
 
-var Comment = function (_React$Component4) {
-    _inherits(Comment, _React$Component4);
+var Comment = function (_React$Component6) {
+    _inherits(Comment, _React$Component6);
 
     function Comment(props) {
         _classCallCheck(this, Comment);
 
-        var _this4 = _possibleConstructorReturn(this, (Comment.__proto__ || Object.getPrototypeOf(Comment)).call(this, props));
+        var _this6 = _possibleConstructorReturn(this, (Comment.__proto__ || Object.getPrototypeOf(Comment)).call(this, props));
 
-        _this4.state = {
+        _this6.state = {
             form: "normal",
             reVote: "none",
-            commentText: _this4.props.commentText,
-            commentTextOld: _this4.props.commentText
+            commentText: _this6.props.commentText,
+            commentTextOld: _this6.props.commentText
         };
-        _this4.inputRanges = [];
+        _this6.inputRanges = [];
         /*
         this.editButtonText = "Düzenle";
         this.deleteButtonText = "Sil";
@@ -373,12 +435,12 @@ var Comment = function (_React$Component4) {
         this.cancelDeleteButtonText = "İptal";
         this.cancelEditButtonText = "İptal";
         */
-        _this4.openEdit = _this4.openEdit.bind(_this4);
-        _this4.openDelete = _this4.openDelete.bind(_this4);
-        _this4.returnToNormal = _this4.returnToNormal.bind(_this4);
-        _this4.commentWriting = _this4.commentWriting.bind(_this4);
-        _this4.openReVote = _this4.openReVote.bind(_this4);
-        return _this4;
+        _this6.openEdit = _this6.openEdit.bind(_this6);
+        _this6.openDelete = _this6.openDelete.bind(_this6);
+        _this6.returnToNormal = _this6.returnToNormal.bind(_this6);
+        _this6.commentWriting = _this6.commentWriting.bind(_this6);
+        _this6.openReVote = _this6.openReVote.bind(_this6);
+        return _this6;
     }
 
     _createClass(Comment, [{
@@ -753,17 +815,17 @@ var Comment = function (_React$Component4) {
     return Comment;
 }(React.Component);
 
-var RatingBar = function (_React$Component5) {
-    _inherits(RatingBar, _React$Component5);
+var RatingBar = function (_React$Component7) {
+    _inherits(RatingBar, _React$Component7);
 
     function RatingBar(props) {
         _classCallCheck(this, RatingBar);
 
-        var _this5 = _possibleConstructorReturn(this, (RatingBar.__proto__ || Object.getPrototypeOf(RatingBar)).call(this, props));
+        var _this7 = _possibleConstructorReturn(this, (RatingBar.__proto__ || Object.getPrototypeOf(RatingBar)).call(this, props));
 
-        _this5.percent = _this5.props.ratingAverage * 10;
+        _this7.percent = _this7.props.ratingAverage * 10;
         // bu kısım drawcircle ile aynı refactor ederken buna bir çare bulabilirsin
-        _this5.limitColor = {
+        _this7.limitColor = {
             0: {
                 min: 0,
                 max: 5,
@@ -780,16 +842,16 @@ var RatingBar = function (_React$Component5) {
                 color: "#21ba45"
             }
         };
-        _this5.color = _this5.limitColor[0].color;
-        for (var i = 0; i < Object.keys(_this5.limitColor).length; i++) {
-            if (_this5.limitColor[i].min <= _this5.props.ratingAverage && _this5.props.ratingAverage < _this5.limitColor[i].max) {
-                _this5.color = _this5.limitColor[i].color;
+        _this7.color = _this7.limitColor[0].color;
+        for (var i = 0; i < Object.keys(_this7.limitColor).length; i++) {
+            if (_this7.limitColor[i].min <= _this7.props.ratingAverage && _this7.props.ratingAverage < _this7.limitColor[i].max) {
+                _this7.color = _this7.limitColor[i].color;
                 break;
             }
         }
         // ^^^
-        _this5.widthOfFill = _this5.props.ratingAverage * 15 + "px";
-        return _this5;
+        _this7.widthOfFill = _this7.props.ratingAverage * 15 + "px";
+        return _this7;
     }
 
     _createClass(RatingBar, [{
@@ -816,8 +878,8 @@ var RatingBar = function (_React$Component5) {
     return RatingBar;
 }(React.Component);
 
-var CommentText = function (_React$Component6) {
-    _inherits(CommentText, _React$Component6);
+var CommentText = function (_React$Component8) {
+    _inherits(CommentText, _React$Component8);
 
     function CommentText(props) {
         _classCallCheck(this, CommentText);
