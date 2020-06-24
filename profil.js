@@ -16,6 +16,14 @@ if ((window.innerWidth > 0 ? window.innerWidth : screen.width) < 750) {
     isMobile = false;
 }
 
+// profilin sahibi değil mi kontrol ediyoruz
+var owner = void 0;
+if (profileOwner == username) {
+    owner = true;
+} else {
+    owner = false;
+}
+
 var App = function (_React$Component) {
     _inherits(App, _React$Component);
 
@@ -66,7 +74,7 @@ var Content = function (_React$Component2) {
                             Center,
                             null,
                             React.createElement("i", { id: "userIcon", className: "user huge circle icon" }),
-                            React.createElement(H, { type: "1", text: username }),
+                            React.createElement(H, { type: "1", text: profileOwner }),
                             React.createElement(
                                 "button",
                                 { className: "ui grey button" },
@@ -287,6 +295,34 @@ var Comment = function (_React$Component4) {
                     "y\xFCkleniyor"
                 );
             }
+            if (owner) {
+                this.onlyOwner = React.createElement(
+                    "div",
+                    null,
+                    React.createElement(
+                        "button",
+                        { className: "ui icon teal button", onClick: this.openEdit },
+                        React.createElement(
+                            "i",
+                            { className: "icon" },
+                            React.createElement("i", { className: "fa fa-pencil-square-o", "aria-hidden": "true" })
+                        ),
+                        this.props.buttonText.editButtonText
+                    ),
+                    React.createElement(
+                        "button",
+                        { className: "ui icon orange button", onClick: this.openDelete },
+                        React.createElement(
+                            "i",
+                            { className: "icon" },
+                            React.createElement("i", { className: "fa fa-trash", "aria-hidden": "true" })
+                        ),
+                        this.props.buttonText.deleteButtonText
+                    )
+                );
+            } else {
+                this.onlyOwner = null;
+            }
             if (this.state.form == "normal") {
                 return React.createElement(
                     "div",
@@ -302,11 +338,20 @@ var Comment = function (_React$Component4) {
                                 null,
                                 React.createElement(
                                     Row,
-                                    { size: "two", nonStackable: true },
+                                    { size: "three", nonStackable: true },
                                     React.createElement(
                                         Column,
                                         null,
                                         React.createElement(H, { type: "3", text: this.props.productName })
+                                    ),
+                                    React.createElement(
+                                        Column,
+                                        null,
+                                        React.createElement(
+                                            Center,
+                                            null,
+                                            "14-12-1994"
+                                        )
                                     ),
                                     React.createElement(
                                         Column,
@@ -317,26 +362,7 @@ var Comment = function (_React$Component4) {
                                             React.createElement(
                                                 "div",
                                                 null,
-                                                React.createElement(
-                                                    "button",
-                                                    { className: "ui icon teal button", onClick: this.openEdit },
-                                                    React.createElement(
-                                                        "i",
-                                                        { className: "icon" },
-                                                        React.createElement("i", { className: "fa fa-pencil-square-o", "aria-hidden": "true" })
-                                                    ),
-                                                    this.props.buttonText.editButtonText
-                                                ),
-                                                React.createElement(
-                                                    "button",
-                                                    { className: "ui icon orange button", onClick: this.openDelete },
-                                                    React.createElement(
-                                                        "i",
-                                                        { className: "icon" },
-                                                        React.createElement("i", { className: "fa fa-trash", "aria-hidden": "true" })
-                                                    ),
-                                                    this.props.buttonText.deleteButtonText
-                                                )
+                                                this.onlyOwner
                                             )
                                         )
                                     )
@@ -350,7 +376,30 @@ var Comment = function (_React$Component4) {
                                         React.createElement(RatingBar, { ratingAverage: 5.5 })
                                     )
                                 ),
-                                React.createElement(CommentText, { text: this.state.commentTextOld })
+                                React.createElement(CommentText, { text: this.state.commentTextOld }),
+                                React.createElement(
+                                    Row,
+                                    { size: "two" },
+                                    React.createElement(
+                                        Column,
+                                        null,
+                                        React.createElement(
+                                            "div",
+                                            { className: "commentHeader" },
+                                            React.createElement(H, { type: "5", text: "yunusemre" })
+                                        )
+                                    ),
+                                    React.createElement(
+                                        Column,
+                                        null,
+                                        React.createElement(
+                                            FloatRight,
+                                            null,
+                                            React.createElement(LikeButton, { value: 1, likeOrDislike: "like" }),
+                                            React.createElement(DislikeButton, { value: 3, likeOrDislike: "" })
+                                        )
+                                    )
+                                )
                             )
                         )
                     )

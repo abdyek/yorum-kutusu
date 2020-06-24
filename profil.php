@@ -3,9 +3,17 @@
 ?>
 <?php if(isset($_SESSION["username"])): // php ile react'ı birleştirmek bana böyle çözümler üretmeye zorladı ?>
     <script>
-        <?php echo "const username='".$_SESSION["username"]."'"; ?>
+        <?php echo "const username='".$_SESSION["username"]."';"; ?>
+    </script>
+<?php else: ?>
+    <script>
+        <?php echo "const username=undefined"; ?>
     </script>
 <?php endif; ?>
+
+<script>
+    <?php echo "const profileOwner='" . $_GET["username"] . "';";?>
+</script>
 
 <!DOCTYPE html>
 <html lang="tr">
@@ -19,7 +27,6 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="css/profil.css">
     <!-- her sayfanın css sayfasını ayırmak istiyorum buradaki gibi -->
-    <link rel="stylesheet" href="css/circle.css">
     <link rel="stylesheet" href="semantic.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css" integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&family=Work+Sans:wght@500&display=swap" rel="stylesheet">

@@ -338,3 +338,46 @@ class Footer extends React.Component {
         )
     }
 }
+
+// bunlar 2 sayfada bulunduğu için componentJS'ye taşınmasını uygun buldum
+class LikeButton extends React.Component {
+    constructor(props) {
+        super(props);
+        if(this.props.likeOrDislike=="like") {
+            this.liked = " likedComment";
+        } else {
+            this.liked = " ";
+        }
+    }
+    render() {
+        return(
+            <button className="ui basic button">
+                <i className="icon">
+                    <i className={"fa fa-thumbs-up" + this.liked} aria-hidden="true"></i>
+                </i>
+                {this.props.value}
+            </button>
+        )
+    }
+}
+class DislikeButton extends React.Component {
+    constructor(props) {
+        super(props);
+        if(this.props.likeOrDislike=="dislike") {
+            this.liked = " dislikedComment";
+        } else {
+            this.liked = " ";
+        }
+    }
+    render() {
+        return(
+            <button className="ui basic button">
+                <i className="icon">
+                    <i className={"fa fa-thumbs-down" + this.liked} aria-hidden="true"></i>
+                </i>
+                {this.props.value}
+            </button>
+        )
+    }
+}
+// ^ bunlar 2 sayfada bulunduğu için componentJS'ye taşınmasını uygun buldum

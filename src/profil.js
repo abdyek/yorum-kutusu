@@ -8,6 +8,14 @@ if(((window.innerWidth > 0) ? window.innerWidth : screen.width) < 750) {
     isMobile = false;
 }
 
+// profilin sahibi değil mi kontrol ediyoruz
+let owner;
+if(profileOwner==username){
+    owner = true;
+} else {
+    owner = false;
+}
+
 class App extends React.Component {
     constructor(props) {
         super(props);
@@ -34,7 +42,7 @@ class Content extends React.Component {
                     <Column>
                         <Center>
                             <i id="userIcon" className="user huge circle icon"></i>
-                            <H type="1" text={username}/>
+                            <H type="1" text={profileOwner}/>
                             <button className="ui grey button">
                                 <i className="icon">
                                     <i className="fa fa-cog" aria-hidden="true"></i>
@@ -200,31 +208,45 @@ class Comment extends React.Component {
                 </div>
             )
         }
+        if(owner){
+            this.onlyOwner = (
+                <div>
+                    <button className="ui icon teal button" onClick={this.openEdit}>
+                            <i className="icon">
+                                <i className="fa fa-pencil-square-o" aria-hidden="true"></i>
+                        </i>
+                        {this.props.buttonText.editButtonText}
+                    </button>
+                    <button className="ui icon orange button" onClick={this.openDelete}>
+                        <i className="icon">
+                            <i className="fa fa-trash" aria-hidden="true"></i>
+                        </i>
+                        {this.props.buttonText.deleteButtonText}
+                    </button>
+                </div>
+            )
+        } else {
+            this.onlyOwner = null;
+        }
         if(this.state.form=="normal") {
             return(
                 <div>
                     <Row size="one">
                         <Column>
                             <RaisedSegment>
-                                <Row size="two" nonStackable={true}>
+                                <Row size="three" nonStackable={true}>
                                     <Column>
                                         <H type="3" text={this.props.productName} />
                                     </Column>
                                     <Column>
+                                        <Center>
+                                            14-12-1994
+                                        </Center>
+                                    </Column>
+                                    <Column>
                                         <FloatRight>
                                             <div>
-                                                <button className="ui icon teal button" onClick={this.openEdit}>
-                                                    <i className="icon">
-                                                        <i className="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                                    </i>
-                                                    {this.props.buttonText.editButtonText}
-                                                </button>
-                                                <button className="ui icon orange button" onClick={this.openDelete}>
-                                                    <i className="icon">
-                                                        <i className="fa fa-trash" aria-hidden="true"></i>
-                                                    </i>
-                                                    {this.props.buttonText.deleteButtonText}
-                                                </button>
+                                                {this.onlyOwner}
                                             </div>
                                         </FloatRight>
                                     </Column>
@@ -235,6 +257,19 @@ class Comment extends React.Component {
                                     </Column>
                                 </Row>
                                 <CommentText text={this.state.commentTextOld}/>
+                                <Row size="two">
+                                    <Column>
+                                        <div className="commentHeader">
+                                            <H type="5" text={"yunusemre"} />
+                                        </div>
+                                    </Column>
+                                    <Column>
+                                        <FloatRight>
+                                            <LikeButton value={1} likeOrDislike={"like"}/>
+                                            <DislikeButton value={3} likeOrDislike={""}/>
+                                        </FloatRight>
+                                    </Column>
+                                </Row>
                             </RaisedSegment>
                         </Column>
                     </Row>

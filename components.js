@@ -716,3 +716,77 @@ var Footer = function (_React$Component21) {
 
     return Footer;
 }(React.Component);
+
+// bunlar 2 sayfada bulunduğu için componentJS'ye taşınmasını uygun buldum
+
+
+var LikeButton = function (_React$Component22) {
+    _inherits(LikeButton, _React$Component22);
+
+    function LikeButton(props) {
+        _classCallCheck(this, LikeButton);
+
+        var _this22 = _possibleConstructorReturn(this, (LikeButton.__proto__ || Object.getPrototypeOf(LikeButton)).call(this, props));
+
+        if (_this22.props.likeOrDislike == "like") {
+            _this22.liked = " likedComment";
+        } else {
+            _this22.liked = " ";
+        }
+        return _this22;
+    }
+
+    _createClass(LikeButton, [{
+        key: "render",
+        value: function render() {
+            return React.createElement(
+                "button",
+                { className: "ui basic button" },
+                React.createElement(
+                    "i",
+                    { className: "icon" },
+                    React.createElement("i", { className: "fa fa-thumbs-up" + this.liked, "aria-hidden": "true" })
+                ),
+                this.props.value
+            );
+        }
+    }]);
+
+    return LikeButton;
+}(React.Component);
+
+var DislikeButton = function (_React$Component23) {
+    _inherits(DislikeButton, _React$Component23);
+
+    function DislikeButton(props) {
+        _classCallCheck(this, DislikeButton);
+
+        var _this23 = _possibleConstructorReturn(this, (DislikeButton.__proto__ || Object.getPrototypeOf(DislikeButton)).call(this, props));
+
+        if (_this23.props.likeOrDislike == "dislike") {
+            _this23.liked = " dislikedComment";
+        } else {
+            _this23.liked = " ";
+        }
+        return _this23;
+    }
+
+    _createClass(DislikeButton, [{
+        key: "render",
+        value: function render() {
+            return React.createElement(
+                "button",
+                { className: "ui basic button" },
+                React.createElement(
+                    "i",
+                    { className: "icon" },
+                    React.createElement("i", { className: "fa fa-thumbs-down" + this.liked, "aria-hidden": "true" })
+                ),
+                this.props.value
+            );
+        }
+    }]);
+
+    return DislikeButton;
+}(React.Component);
+// ^ bunlar 2 sayfada bulunduğu için componentJS'ye taşınmasını uygun buldum
