@@ -6,6 +6,16 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+// aygıtın mobil olması ya da olmaması butonlar için önemli,
+// ekran boyutunu her yorum için kontrol etmek fazladan yavaşlayacaktı o yüzden değişkene atadım
+
+var isMobile = void 0;
+if ((window.innerWidth > 0 ? window.innerWidth : screen.width) < 750) {
+    isMobile = true;
+} else {
+    isMobile = false;
+}
+
 var App = function (_React$Component) {
     _inherits(App, _React$Component);
 
@@ -107,7 +117,30 @@ var Comments = function (_React$Component3) {
     function Comments(props) {
         _classCallCheck(this, Comments);
 
-        return _possibleConstructorReturn(this, (Comments.__proto__ || Object.getPrototypeOf(Comments)).call(this, props));
+        var _this3 = _possibleConstructorReturn(this, (Comments.__proto__ || Object.getPrototypeOf(Comments)).call(this, props));
+
+        if (!isMobile) {
+            _this3.buttonText = {
+                editButtonText: "Düzenle",
+                deleteButtonText: "Sil",
+                approveDeleteButtonText: "Sil",
+                cancelDeleteButtonText: "İptal",
+                cancelEditButtonText: "İptal",
+                reVoteButtonText: "Özellikleri Yeniden Oyla",
+                saveButtonText: "Kaydet"
+            };
+        } else {
+            _this3.buttonText = {
+                editButtonText: "",
+                deleteButtonText: "",
+                approveDeleteButtonText: "",
+                cancelDeleteButtonText: "",
+                cancelEditButtonText: "",
+                reVoteButtonText: "",
+                saveButtonText: ""
+            };
+        }
+        return _this3;
     }
 
     _createClass(Comments, [{
@@ -116,11 +149,11 @@ var Comments = function (_React$Component3) {
             return React.createElement(
                 "div",
                 null,
-                React.createElement(Comment, { productName: "iphone-x", commentText: "\xE7ok g\xFCzel telefon ama \xE7ok pahal\u0131" }),
-                React.createElement(Comment, { productName: "le-cola", commentText: "tam bir kanser yap\u0131c\u0131" }),
-                React.createElement(Comment, { productName: "s\xFCrahi", commentText: "Yayg\u0131n inanc\u0131n tersine, Lorem Ipsum rastgele s\xF6zc\xFCklerden olu\u015Fmaz. K\xF6kleri M.\xD6. 45 tarihinden bu yana klasik Latin edebiyat\u0131na kadar uzanan 2000 y\u0131ll\u0131k bir ge\xE7mi\u015Fi vard\u0131r. Virginiadaki Hampden-Sydney Collegedan Latince profes\xF6r\xFC Richard McClintock, bir Lorem Ipsum pasaj\u0131nda ge\xE7en ve anla\u015F\u0131lmas\u0131 en g\xFC\xE7 s\xF6zc\xFCklerden biri olan consectetur s\xF6zc\xFC\u011F\xFCn\xFCn klasik edebiyattaki \xF6rneklerini inceledi\u011Finde kesin bir kayna\u011Fa ula\u015Fm\u0131\u015Ft\u0131r. Lorm Ipsum, \xC7i\xE7ero taraf\u0131ndan M.\xD6. 45 tarihinde kaleme al\u0131nan \"de Finibus Bonorum et Malorum\" (\u0130yi ve K\xF6t\xFCn\xFCn U\xE7 S\u0131n\u0131rlar\u0131) eserinin 1.10.32 ve 1.10.33 say\u0131l\u0131 b\xF6l\xFCmlerinden gelmektedir. Bu kitap, ahlak kuram\u0131 \xFCzerine bir tezdir ve R\xF6nesans d\xF6neminde \xE7ok pop\xFCler olmu\u015Ftur. Lorem Ipsum pasaj\u0131n\u0131n ilk sat\u0131r\u0131 olan \"Lorem ipsum dolor sit amet\" 1.10.32 say\u0131l\u0131 b\xF6l\xFCmdeki bir sat\u0131rdan gelmektedir." }),
-                React.createElement(Comment, { productName: "honor 9 lite", commentText: "gelebilirse yeni telefonum olacak \u015Fuan kargoda" }),
-                React.createElement(Comment, { productName: "\xFClker \xE7ikolatal\u0131 gofret", commentText: "eski tad\u0131 yok bunun" })
+                React.createElement(Comment, { productName: "iphone-x", commentText: "\xE7ok g\xFCzel telefon ama \xE7ok pahal\u0131", buttonText: this.buttonText }),
+                React.createElement(Comment, { productName: "le-cola", commentText: "tam bir kanser yap\u0131c\u0131", buttonText: this.buttonText }),
+                React.createElement(Comment, { productName: "s\xFCrahi", commentText: "Yayg\u0131n inanc\u0131n tersine, Lorem Ipsum rastgele s\xF6zc\xFCklerden olu\u015Fmaz. K\xF6kleri M.\xD6. 45 tarihinden bu yana klasik Latin edebiyat\u0131na kadar uzanan 2000 y\u0131ll\u0131k bir ge\xE7mi\u015Fi vard\u0131r. Virginiadaki Hampden-Sydney Collegedan Latince profes\xF6r\xFC Richard McClintock, bir Lorem Ipsum pasaj\u0131nda ge\xE7en ve anla\u015F\u0131lmas\u0131 en g\xFC\xE7 s\xF6zc\xFCklerden biri olan consectetur s\xF6zc\xFC\u011F\xFCn\xFCn klasik edebiyattaki \xF6rneklerini inceledi\u011Finde kesin bir kayna\u011Fa ula\u015Fm\u0131\u015Ft\u0131r. Lorm Ipsum, \xC7i\xE7ero taraf\u0131ndan M.\xD6. 45 tarihinde kaleme al\u0131nan \"de Finibus Bonorum et Malorum\" (\u0130yi ve K\xF6t\xFCn\xFCn U\xE7 S\u0131n\u0131rlar\u0131) eserinin 1.10.32 ve 1.10.33 say\u0131l\u0131 b\xF6l\xFCmlerinden gelmektedir. Bu kitap, ahlak kuram\u0131 \xFCzerine bir tezdir ve R\xF6nesans d\xF6neminde \xE7ok pop\xFCler olmu\u015Ftur. Lorem Ipsum pasaj\u0131n\u0131n ilk sat\u0131r\u0131 olan \"Lorem ipsum dolor sit amet\" 1.10.32 say\u0131l\u0131 b\xF6l\xFCmdeki bir sat\u0131rdan gelmektedir.", buttonText: this.buttonText }),
+                React.createElement(Comment, { productName: "honor 9 lite", commentText: "gelebilirse yeni telefonum olacak \u015Fuan kargoda", buttonText: this.buttonText }),
+                React.createElement(Comment, { productName: "\xFClker \xE7ikolatal\u0131 gofret", commentText: "eski tad\u0131 yok bunun", buttonText: this.buttonText })
             );
         }
     }]);
@@ -138,46 +171,56 @@ var Comment = function (_React$Component4) {
 
         _this4.state = {
             form: "normal",
-            commentText: _this4.props.commentText
-        };
-        _this4.editButtonText = "Düzenle";
-        _this4.deleteButtonText = "Sil";
-        _this4.approveDeleteButtonText = "Sil";
-        _this4.cancelDeleteButtonText = "İptal";
-        _this4.cancelEditDeleteButtonText = "iptal";
-        _this4.edit = _this4.edit.bind(_this4);
-        _this4.delete = _this4.delete.bind(_this4);
-        _this4.cancel = _this4.cancel.bind(_this4);
+            commentText: _this4.props.commentText,
+            commentTextOld: _this4.props.commentText
+            /*
+            this.editButtonText = "Düzenle";
+            this.deleteButtonText = "Sil";
+            this.approveDeleteButtonText = "Sil";
+            this.cancelDeleteButtonText = "İptal";
+            this.cancelEditButtonText = "İptal";
+            */
+        };_this4.openEdit = _this4.openEdit.bind(_this4);
+        _this4.openDelete = _this4.openDelete.bind(_this4);
+        _this4.returnToNormal = _this4.returnToNormal.bind(_this4);
+        _this4.commentWriting = _this4.commentWriting.bind(_this4);
         return _this4;
     }
 
     _createClass(Comment, [{
-        key: "edit",
-        value: function edit() {
+        key: "openEdit",
+        value: function openEdit() {
             console.log("düzenleme işlemi burada yapılacak");
             this.setState({
                 form: "edit"
             });
         }
     }, {
-        key: "delete",
-        value: function _delete() {
+        key: "openDelete",
+        value: function openDelete() {
             console.log("silme yeri");
             this.setState({
                 form: "delete"
             });
         }
     }, {
-        key: "cancel",
-        value: function cancel() {
+        key: "returnToNormal",
+        value: function returnToNormal() {
             this.setState({
                 form: "normal"
             });
         }
     }, {
+        key: "commentWriting",
+        value: function commentWriting(e) {
+            this.setState({
+                commentText: e.target.value
+            });
+        }
+    }, {
         key: "render",
         value: function render() {
-            if ((window.innerWidth > 0 ? window.innerWidth : screen.width) < 750) {
+            if (isMobile) {
                 /* ekran boyutu 750'den küçük cihazlar için (mobil) butonların textini yok ediyoruz (sadece yüklenmede kontrol ediyor) */
                 this.editButtonText = "";
                 this.deleteButtonText = "";
@@ -217,23 +260,23 @@ var Comment = function (_React$Component4) {
                                                 null,
                                                 React.createElement(
                                                     "button",
-                                                    { className: "ui icon teal button", onClick: this.edit },
+                                                    { className: "ui icon teal button", onClick: this.openEdit },
                                                     React.createElement(
                                                         "i",
                                                         { className: "icon" },
                                                         React.createElement("i", { className: "fa fa-pencil-square-o", "aria-hidden": "true" })
                                                     ),
-                                                    this.editButtonText
+                                                    this.props.buttonText.editButtonText
                                                 ),
                                                 React.createElement(
                                                     "button",
-                                                    { className: "ui icon orange button", onClick: this.delete },
+                                                    { className: "ui icon orange button", onClick: this.openDelete },
                                                     React.createElement(
                                                         "i",
                                                         { className: "icon" },
                                                         React.createElement("i", { className: "fa fa-trash", "aria-hidden": "true" })
                                                     ),
-                                                    this.deleteButtonText
+                                                    this.props.buttonText.deleteButtonText
                                                 )
                                             )
                                         )
@@ -248,7 +291,7 @@ var Comment = function (_React$Component4) {
                                         React.createElement(RatingBar, { ratingAverage: 5.5 })
                                     )
                                 ),
-                                React.createElement(CommentText, { text: this.props.commentText })
+                                React.createElement(CommentText, { text: this.state.commentTextOld })
                             )
                         )
                     )
@@ -282,13 +325,13 @@ var Comment = function (_React$Component4) {
                                             null,
                                             React.createElement(
                                                 "button",
-                                                { "class": "ui icon red button", onClick: this.cancel },
+                                                { "class": "ui icon red button", onClick: this.returnToNormal },
                                                 React.createElement(
                                                     "i",
                                                     { "class": "icon" },
                                                     React.createElement("i", { "class": "fa fa-times", "aria-hidden": "true" })
                                                 ),
-                                                this.cancelEditButtonText
+                                                this.props.buttonText.cancelEditButtonText
                                             )
                                         )
                                     )
@@ -299,7 +342,64 @@ var Comment = function (_React$Component4) {
                                     React.createElement(
                                         Column,
                                         null,
-                                        "buraya d\xFCzenleme \u015Feyi gelecek"
+                                        React.createElement(
+                                            Row,
+                                            { size: "one" },
+                                            React.createElement(
+                                                Column,
+                                                null,
+                                                React.createElement(
+                                                    "div",
+                                                    { className: "ui form" },
+                                                    React.createElement(
+                                                        "div",
+                                                        { className: "field" },
+                                                        React.createElement(
+                                                            "label",
+                                                            null,
+                                                            "Yorum D\xFCzenle"
+                                                        ),
+                                                        React.createElement("textarea", { value: this.state.commentText, onChange: this.commentWriting })
+                                                    )
+                                                )
+                                            )
+                                        ),
+                                        React.createElement(
+                                            Row,
+                                            { size: "one" },
+                                            React.createElement(
+                                                Column,
+                                                null,
+                                                React.createElement(
+                                                    FloatRight,
+                                                    null,
+                                                    React.createElement(
+                                                        "div",
+                                                        null,
+                                                        React.createElement(
+                                                            "button",
+                                                            { className: "ui teal button" },
+                                                            React.createElement(
+                                                                "i",
+                                                                { className: "icon" },
+                                                                React.createElement("i", { "class": "fa fa-line-chart", "aria-hidden": "true" })
+                                                            ),
+                                                            this.props.buttonText.reVoteButtonText
+                                                        ),
+                                                        React.createElement(
+                                                            "button",
+                                                            { className: "ui teal button" },
+                                                            React.createElement(
+                                                                "i",
+                                                                { className: "icon" },
+                                                                React.createElement("i", { "class": "fa fa-floppy-o", "aria-hidden": "true" })
+                                                            ),
+                                                            this.props.buttonText.saveButtonText
+                                                        )
+                                                    )
+                                                )
+                                            )
+                                        )
                                     )
                                 )
                             )
@@ -341,17 +441,17 @@ var Comment = function (_React$Component4) {
                                                     { "class": "icon" },
                                                     React.createElement("i", { "class": "fa fa-check", "aria-hidden": "true" })
                                                 ),
-                                                this.approveDeleteButtonText
+                                                this.props.buttonText.approveDeleteButtonText
                                             ),
                                             React.createElement(
                                                 "button",
-                                                { "class": "ui icon red button", onClick: this.cancel },
+                                                { "class": "ui icon red button", onClick: this.returnToNormal },
                                                 React.createElement(
                                                     "i",
                                                     { "class": "icon" },
                                                     React.createElement("i", { "class": "fa fa-times", "aria-hidden": "true" })
                                                 ),
-                                                this.cancelDeleteButtonText
+                                                this.props.buttonText.cancelDeleteButtonText
                                             )
                                         )
                                     )

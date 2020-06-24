@@ -1,3 +1,13 @@
+// aygıtın mobil olması ya da olmaması butonlar için önemli,
+// ekran boyutunu her yorum için kontrol etmek fazladan yavaşlayacaktı o yüzden değişkene atadım
+
+let isMobile;
+if(((window.innerWidth > 0) ? window.innerWidth : screen.width) < 750) {
+    isMobile = true;
+} else {
+    isMobile = false;
+}
+
 class App extends React.Component {
     constructor(props) {
         super(props);
@@ -56,15 +66,36 @@ class Content extends React.Component {
 class Comments extends React.Component {
     constructor(props) {
         super(props);
+        if(!isMobile) {
+            this.buttonText = {
+                editButtonText : "Düzenle",
+                deleteButtonText : "Sil",
+                approveDeleteButtonText : "Sil",
+                cancelDeleteButtonText : "İptal",
+                cancelEditButtonText : "İptal",
+                reVoteButtonText : "Özellikleri Yeniden Oyla",
+                saveButtonText : "Kaydet"
+            }
+        } else {
+            this.buttonText = {
+                editButtonText : "",
+                deleteButtonText : "",
+                approveDeleteButtonText : "",
+                cancelDeleteButtonText : "",
+                cancelEditButtonText : "",
+                reVoteButtonText: "",
+                saveButtonText : ""
+            }
+        }
     }
     render() {
         return(
             <div>
-                <Comment productName="iphone-x" commentText="çok güzel telefon ama çok pahalı"/>
-                <Comment productName="le-cola" commentText="tam bir kanser yapıcı"/>
-                <Comment productName="sürahi" commentText='Yaygın inancın tersine, Lorem Ipsum rastgele sözcüklerden oluşmaz. Kökleri M.Ö. 45 tarihinden bu yana klasik Latin edebiyatına kadar uzanan 2000 yıllık bir geçmişi vardır. Virginiadaki Hampden-Sydney Collegedan Latince profesörü Richard McClintock, bir Lorem Ipsum pasajında geçen ve anlaşılması en güç sözcüklerden biri olan consectetur sözcüğünün klasik edebiyattaki örneklerini incelediğinde kesin bir kaynağa ulaşmıştır. Lorm Ipsum, Çiçero tarafından M.Ö. 45 tarihinde kaleme alınan "de Finibus Bonorum et Malorum" (İyi ve Kötünün Uç Sınırları) eserinin 1.10.32 ve 1.10.33 sayılı bölümlerinden gelmektedir. Bu kitap, ahlak kuramı üzerine bir tezdir ve Rönesans döneminde çok popüler olmuştur. Lorem Ipsum pasajının ilk satırı olan "Lorem ipsum dolor sit amet" 1.10.32 sayılı bölümdeki bir satırdan gelmektedir.'/>
-                <Comment productName="honor 9 lite" commentText="gelebilirse yeni telefonum olacak şuan kargoda"/>
-                <Comment productName="ülker çikolatalı gofret" commentText="eski tadı yok bunun"/>
+                <Comment productName="iphone-x" commentText="çok güzel telefon ama çok pahalı" buttonText={this.buttonText}/>
+                <Comment productName="le-cola" commentText="tam bir kanser yapıcı" buttonText={this.buttonText}/>
+                <Comment productName="sürahi" commentText='Yaygın inancın tersine, Lorem Ipsum rastgele sözcüklerden oluşmaz. Kökleri M.Ö. 45 tarihinden bu yana klasik Latin edebiyatına kadar uzanan 2000 yıllık bir geçmişi vardır. Virginiadaki Hampden-Sydney Collegedan Latince profesörü Richard McClintock, bir Lorem Ipsum pasajında geçen ve anlaşılması en güç sözcüklerden biri olan consectetur sözcüğünün klasik edebiyattaki örneklerini incelediğinde kesin bir kaynağa ulaşmıştır. Lorm Ipsum, Çiçero tarafından M.Ö. 45 tarihinde kaleme alınan "de Finibus Bonorum et Malorum" (İyi ve Kötünün Uç Sınırları) eserinin 1.10.32 ve 1.10.33 sayılı bölümlerinden gelmektedir. Bu kitap, ahlak kuramı üzerine bir tezdir ve Rönesans döneminde çok popüler olmuştur. Lorem Ipsum pasajının ilk satırı olan "Lorem ipsum dolor sit amet" 1.10.32 sayılı bölümdeki bir satırdan gelmektedir.' buttonText={this.buttonText} />
+                <Comment productName="honor 9 lite" commentText="gelebilirse yeni telefonum olacak şuan kargoda" buttonText={this.buttonText}/>
+                <Comment productName="ülker çikolatalı gofret" commentText="eski tadı yok bunun" buttonText={this.buttonText}/>
             </div>
         )
     }
@@ -75,36 +106,45 @@ class Comment extends React.Component {
         super(props);
         this.state = {
             form:"normal",
-            commentText: this.props.commentText
+            commentText: this.props.commentText,
+            commentTextOld: this.props.commentText
         }
+        /*
         this.editButtonText = "Düzenle";
         this.deleteButtonText = "Sil";
         this.approveDeleteButtonText = "Sil";
         this.cancelDeleteButtonText = "İptal";
-        this.cancelEditDeleteButtonText = "iptal";
-        this.edit = this.edit.bind(this);
-        this.delete = this.delete.bind(this);
-        this.cancel = this.cancel.bind(this);
+        this.cancelEditButtonText = "İptal";
+        */
+        this.openEdit = this.openEdit.bind(this);
+        this.openDelete = this.openDelete.bind(this);
+        this.returnToNormal = this.returnToNormal.bind(this);
+        this.commentWriting = this.commentWriting.bind(this);
     }
-    edit() {
+    openEdit() {
         console.log("düzenleme işlemi burada yapılacak");
         this.setState({
             form:"edit"
         })
     }
-    delete() {
+    openDelete() {
         console.log("silme yeri");
         this.setState({
             form:"delete"
         })
     }
-    cancel() {
+    returnToNormal() {
         this.setState({
             form: "normal"
         })
     }
+    commentWriting(e) {
+        this.setState({
+            commentText:e.target.value
+        })
+    }
     render() {
-        if(((window.innerWidth > 0) ? window.innerWidth : screen.width) < 750) {
+        if(isMobile) {
             /* ekran boyutu 750'den küçük cihazlar için (mobil) butonların textini yok ediyoruz (sadece yüklenmede kontrol ediyor) */
             this.editButtonText = "";
             this.deleteButtonText = "";
@@ -125,17 +165,17 @@ class Comment extends React.Component {
                                     <Column>
                                         <FloatRight>
                                             <div>
-                                                <button className="ui icon teal button" onClick={this.edit}>
+                                                <button className="ui icon teal button" onClick={this.openEdit}>
                                                     <i className="icon">
                                                         <i className="fa fa-pencil-square-o" aria-hidden="true"></i>
                                                     </i>
-                                                    {this.editButtonText}
+                                                    {this.props.buttonText.editButtonText}
                                                 </button>
-                                                <button className="ui icon orange button" onClick={this.delete}>
+                                                <button className="ui icon orange button" onClick={this.openDelete}>
                                                     <i className="icon">
                                                         <i className="fa fa-trash" aria-hidden="true"></i>
                                                     </i>
-                                                    {this.deleteButtonText}
+                                                    {this.props.buttonText.deleteButtonText}
                                                 </button>
                                             </div>
                                         </FloatRight>
@@ -146,7 +186,7 @@ class Comment extends React.Component {
                                         <RatingBar ratingAverage={5.5}/>
                                     </Column>
                                 </Row>
-                                <CommentText text={this.props.commentText}/>
+                                <CommentText text={this.state.commentTextOld}/>
                             </RaisedSegment>
                         </Column>
                     </Row>
@@ -164,18 +204,47 @@ class Comment extends React.Component {
                                     </Column>
                                     <Column>
                                         <FloatRight>
-                                            <button class="ui icon red button" onClick={this.cancel}>
+                                            <button class="ui icon red button" onClick={this.returnToNormal}>
                                                 <i class="icon">
                                                     <i class="fa fa-times" aria-hidden="true"></i>
                                                 </i>
-                                                {this.cancelEditButtonText}
+                                                {this.props.buttonText.cancelEditButtonText}
                                             </button>
                                         </FloatRight>
                                     </Column>
                                 </Row>
                                 <Row size="one">
                                     <Column>
-                                        buraya düzenleme şeyi gelecek
+                                            <Row size="one">
+                                                <Column>
+                                                    <div className="ui form">
+                                                        <div className="field">
+                                                            <label>Yorum Düzenle</label>
+                                                            <textarea value={this.state.commentText} onChange={this.commentWriting}></textarea>
+                                                        </div>
+                                                    </div>
+                                                </Column>
+                                            </Row>
+                                            <Row size="one">
+                                                <Column>
+                                                    <FloatRight>
+                                                        <div>
+                                                            <button className="ui teal button">
+                                                                <i className="icon">
+                                                                    <i class="fa fa-line-chart" aria-hidden="true"></i>
+                                                                </i>
+                                                                {this.props.buttonText.reVoteButtonText}
+                                                            </button>
+                                                            <button className="ui teal button">
+                                                                <i className="icon">
+                                                                    <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                                                                </i>
+                                                                {this.props.buttonText.saveButtonText}
+                                                            </button>
+                                                        </div>
+                                                    </FloatRight>
+                                                </Column>
+                                            </Row>
                                     </Column>
                                 </Row>
                             </RaisedSegment>
@@ -199,13 +268,13 @@ class Comment extends React.Component {
                                                 <i class="icon">
                                                     <i class="fa fa-check" aria-hidden="true"></i>
                                                 </i>
-                                                {this.approveDeleteButtonText}
+                                                {this.props.buttonText.approveDeleteButtonText}
                                             </button>
-                                            <button class="ui icon red button" onClick={this.cancel}>
+                                            <button class="ui icon red button" onClick={this.returnToNormal}>
                                                 <i class="icon">
                                                     <i class="fa fa-times" aria-hidden="true"></i>
                                                 </i>
-                                                {this.cancelDeleteButtonText}
+                                                {this.props.buttonText.cancelDeleteButtonText}
                                             </button>
                                         </FloatRight>
                                     </Column>
