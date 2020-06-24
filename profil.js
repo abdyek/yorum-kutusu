@@ -338,21 +338,7 @@ var Comment = function (_React$Component4) {
                                 null,
                                 React.createElement(
                                     Row,
-                                    { size: "three", nonStackable: true },
-                                    React.createElement(
-                                        Column,
-                                        null,
-                                        React.createElement(H, { type: "3", text: this.props.productName })
-                                    ),
-                                    React.createElement(
-                                        Column,
-                                        null,
-                                        React.createElement(
-                                            Center,
-                                            null,
-                                            "14-12-1994"
-                                        )
-                                    ),
+                                    { size: "one" },
                                     React.createElement(
                                         Column,
                                         null,
@@ -364,6 +350,24 @@ var Comment = function (_React$Component4) {
                                                 null,
                                                 this.onlyOwner
                                             )
+                                        )
+                                    )
+                                ),
+                                React.createElement(
+                                    Row,
+                                    { size: "two", nonStackable: true },
+                                    React.createElement(
+                                        Column,
+                                        null,
+                                        React.createElement(H, { type: "3", text: this.props.productName })
+                                    ),
+                                    React.createElement(
+                                        Column,
+                                        null,
+                                        React.createElement(
+                                            FloatRight,
+                                            null,
+                                            "15.14.1994"
                                         )
                                     )
                                 ),

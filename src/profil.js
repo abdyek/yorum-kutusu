@@ -234,20 +234,22 @@ class Comment extends React.Component {
                     <Row size="one">
                         <Column>
                             <RaisedSegment>
-                                <Row size="three" nonStackable={true}>
-                                    <Column>
-                                        <H type="3" text={this.props.productName} />
-                                    </Column>
-                                    <Column>
-                                        <Center>
-                                            14-12-1994
-                                        </Center>
-                                    </Column>
+                                <Row size="one">
                                     <Column>
                                         <FloatRight>
                                             <div>
                                                 {this.onlyOwner}
                                             </div>
+                                        </FloatRight>
+                                    </Column>
+                                </Row>
+                                <Row size="two" nonStackable={true}>
+                                    <Column>
+                                        <H type="3" text={this.props.productName} />
+                                    </Column>
+                                    <Column>
+                                        <FloatRight>
+                                            15.14.1994
                                         </FloatRight>
                                     </Column>
                                 </Row>
