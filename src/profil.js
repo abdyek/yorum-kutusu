@@ -73,7 +73,7 @@ class Comments extends React.Component {
                 approveDeleteButtonText : "Sil",
                 cancelDeleteButtonText : "İptal",
                 cancelEditButtonText : "İptal",
-                reVoteButtonText : "Özellikleri Yeniden Oyla",
+                reVoteButtonText : "Yeniden Oyla",
                 saveButtonText : "Kaydet"
             }
         } else {
@@ -106,9 +106,11 @@ class Comment extends React.Component {
         super(props);
         this.state = {
             form:"normal",
+            reVote:"none",
             commentText: this.props.commentText,
             commentTextOld: this.props.commentText
         }
+        this.inputRanges = [];
         /*
         this.editButtonText = "Düzenle";
         this.deleteButtonText = "Sil";
@@ -120,6 +122,7 @@ class Comment extends React.Component {
         this.openDelete = this.openDelete.bind(this);
         this.returnToNormal = this.returnToNormal.bind(this);
         this.commentWriting = this.commentWriting.bind(this);
+        this.openReVote = this.openReVote.bind(this);
     }
     openEdit() {
         console.log("düzenleme işlemi burada yapılacak");
@@ -143,6 +146,27 @@ class Comment extends React.Component {
             commentText:e.target.value
         })
     }
+    openReVote() {
+        this.setState({
+            reVote:"loading"
+        })
+        for(let i=0;i<3;i++) {
+            this.inputRanges.push(
+                <div className="inputRangeWrapper" key={i}>
+                    <label className="inputRangeLabel">
+                        {"buraya isim gelecek"}
+                    </label>
+                    <input className="inputRange" type="range" id="" name="" defaultValue={this.state.value} step="1" min="0" max="10" onChange={this.change}></input>
+                    <label className="inputRangeValue">
+                        {"5.5"}
+                    </label>
+                </div>
+            )
+        }
+        this.setState({
+            reVote:"ready"
+        })
+    }
     render() {
         if(isMobile) {
             /* ekran boyutu 750'den küçük cihazlar için (mobil) butonların textini yok ediyoruz (sadece yüklenmede kontrol ediyor) */
@@ -151,6 +175,30 @@ class Comment extends React.Component {
             this.approveDeleteButtonText = "";
             this.cancelDeleteButtonText = "";
             this.cancelEditButtonText = "";
+        }
+        if(this.state.reVote=="ready") {
+            this.reVoteArea = (
+                <div>
+                    {this.inputRanges}
+                </div>
+            )
+        } else if(this.state.reVote=="none") {
+            this.reVoteArea = (
+                <Center>
+                    <button className="ui teal button" onClick={this.openReVote}>
+                        <i className="icon">
+                            <i class="fa fa-line-chart" aria-hidden="true"></i>
+                        </i>
+                        {this.props.buttonText.reVoteButtonText}
+                    </button>
+                </Center>
+            )
+        } else if(this.state.reVote=="loading") {
+            this.reVoteArea = (
+                <div>
+                    yükleniyor
+                </div>
+            )
         }
         if(this.state.form=="normal") {
             return(
@@ -215,26 +263,23 @@ class Comment extends React.Component {
                                 </Row>
                                 <Row size="one">
                                     <Column>
-                                            <Row size="one">
-                                                <Column>
+                                            <Row size="sixteen">
+                                                <WideColumn size="ten">
                                                     <div className="ui form">
                                                         <div className="field">
                                                             <label>Yorum Düzenle</label>
                                                             <textarea value={this.state.commentText} onChange={this.commentWriting}></textarea>
                                                         </div>
                                                     </div>
-                                                </Column>
+                                                </WideColumn>
+                                                <WideColumn size="six">
+                                                    {this.reVoteArea}
+                                                </WideColumn>
                                             </Row>
                                             <Row size="one">
                                                 <Column>
                                                     <FloatRight>
                                                         <div>
-                                                            <button className="ui teal button">
-                                                                <i className="icon">
-                                                                    <i class="fa fa-line-chart" aria-hidden="true"></i>
-                                                                </i>
-                                                                {this.props.buttonText.reVoteButtonText}
-                                                            </button>
                                                             <button className="ui teal button">
                                                                 <i className="icon">
                                                                     <i class="fa fa-floppy-o" aria-hidden="true"></i>

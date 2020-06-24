@@ -126,7 +126,7 @@ var Comments = function (_React$Component3) {
                 approveDeleteButtonText: "Sil",
                 cancelDeleteButtonText: "İptal",
                 cancelEditButtonText: "İptal",
-                reVoteButtonText: "Özellikleri Yeniden Oyla",
+                reVoteButtonText: "Yeniden Oyla",
                 saveButtonText: "Kaydet"
             };
         } else {
@@ -171,19 +171,23 @@ var Comment = function (_React$Component4) {
 
         _this4.state = {
             form: "normal",
+            reVote: "none",
             commentText: _this4.props.commentText,
             commentTextOld: _this4.props.commentText
-            /*
-            this.editButtonText = "Düzenle";
-            this.deleteButtonText = "Sil";
-            this.approveDeleteButtonText = "Sil";
-            this.cancelDeleteButtonText = "İptal";
-            this.cancelEditButtonText = "İptal";
-            */
-        };_this4.openEdit = _this4.openEdit.bind(_this4);
+        };
+        _this4.inputRanges = [];
+        /*
+        this.editButtonText = "Düzenle";
+        this.deleteButtonText = "Sil";
+        this.approveDeleteButtonText = "Sil";
+        this.cancelDeleteButtonText = "İptal";
+        this.cancelEditButtonText = "İptal";
+        */
+        _this4.openEdit = _this4.openEdit.bind(_this4);
         _this4.openDelete = _this4.openDelete.bind(_this4);
         _this4.returnToNormal = _this4.returnToNormal.bind(_this4);
         _this4.commentWriting = _this4.commentWriting.bind(_this4);
+        _this4.openReVote = _this4.openReVote.bind(_this4);
         return _this4;
     }
 
@@ -218,6 +222,33 @@ var Comment = function (_React$Component4) {
             });
         }
     }, {
+        key: "openReVote",
+        value: function openReVote() {
+            this.setState({
+                reVote: "loading"
+            });
+            for (var i = 0; i < 3; i++) {
+                this.inputRanges.push(React.createElement(
+                    "div",
+                    { className: "inputRangeWrapper", key: i },
+                    React.createElement(
+                        "label",
+                        { className: "inputRangeLabel" },
+                        "buraya isim gelecek"
+                    ),
+                    React.createElement("input", { className: "inputRange", type: "range", id: "", name: "", defaultValue: this.state.value, step: "1", min: "0", max: "10", onChange: this.change }),
+                    React.createElement(
+                        "label",
+                        { className: "inputRangeValue" },
+                        "5.5"
+                    )
+                ));
+            }
+            this.setState({
+                reVote: "ready"
+            });
+        }
+    }, {
         key: "render",
         value: function render() {
             if (isMobile) {
@@ -227,6 +258,34 @@ var Comment = function (_React$Component4) {
                 this.approveDeleteButtonText = "";
                 this.cancelDeleteButtonText = "";
                 this.cancelEditButtonText = "";
+            }
+            if (this.state.reVote == "ready") {
+                this.reVoteArea = React.createElement(
+                    "div",
+                    null,
+                    this.inputRanges
+                );
+            } else if (this.state.reVote == "none") {
+                this.reVoteArea = React.createElement(
+                    Center,
+                    null,
+                    React.createElement(
+                        "button",
+                        { className: "ui teal button", onClick: this.openReVote },
+                        React.createElement(
+                            "i",
+                            { className: "icon" },
+                            React.createElement("i", { "class": "fa fa-line-chart", "aria-hidden": "true" })
+                        ),
+                        this.props.buttonText.reVoteButtonText
+                    )
+                );
+            } else if (this.state.reVote == "loading") {
+                this.reVoteArea = React.createElement(
+                    "div",
+                    null,
+                    "y\xFCkleniyor"
+                );
             }
             if (this.state.form == "normal") {
                 return React.createElement(
@@ -344,10 +403,10 @@ var Comment = function (_React$Component4) {
                                         null,
                                         React.createElement(
                                             Row,
-                                            { size: "one" },
+                                            { size: "sixteen" },
                                             React.createElement(
-                                                Column,
-                                                null,
+                                                WideColumn,
+                                                { size: "ten" },
                                                 React.createElement(
                                                     "div",
                                                     { className: "ui form" },
@@ -362,6 +421,11 @@ var Comment = function (_React$Component4) {
                                                         React.createElement("textarea", { value: this.state.commentText, onChange: this.commentWriting })
                                                     )
                                                 )
+                                            ),
+                                            React.createElement(
+                                                WideColumn,
+                                                { size: "six" },
+                                                this.reVoteArea
                                             )
                                         ),
                                         React.createElement(
@@ -376,16 +440,6 @@ var Comment = function (_React$Component4) {
                                                     React.createElement(
                                                         "div",
                                                         null,
-                                                        React.createElement(
-                                                            "button",
-                                                            { className: "ui teal button" },
-                                                            React.createElement(
-                                                                "i",
-                                                                { className: "icon" },
-                                                                React.createElement("i", { "class": "fa fa-line-chart", "aria-hidden": "true" })
-                                                            ),
-                                                            this.props.buttonText.reVoteButtonText
-                                                        ),
                                                         React.createElement(
                                                             "button",
                                                             { className: "ui teal button" },
