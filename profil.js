@@ -241,26 +241,30 @@ var Content = function (_React$Component2) {
                             null,
                             React.createElement("i", { id: "userIcon", className: "user huge circle icon" }),
                             React.createElement(H, { type: "1", text: profileOwner }),
-                            React.createElement(
-                                "button",
-                                { className: "ui grey button", onClick: this.toggleSetting },
+                            owner ? React.createElement(
+                                "div",
+                                null,
                                 React.createElement(
-                                    "i",
-                                    { className: "icon" },
-                                    React.createElement("i", { className: "fa fa-cog", "aria-hidden": "true" })
+                                    "button",
+                                    { className: "ui grey button", onClick: this.toggleSetting },
+                                    React.createElement(
+                                        "i",
+                                        { className: "icon" },
+                                        React.createElement("i", { className: "fa fa-cog", "aria-hidden": "true" })
+                                    ),
+                                    "Ayarlar"
                                 ),
-                                "Ayarlar"
-                            ),
-                            React.createElement(
-                                "button",
-                                { className: "ui red button" },
                                 React.createElement(
-                                    "i",
-                                    { className: "icon" },
-                                    React.createElement("i", { className: "fa fa-paper-plane", "aria-hidden": "true" })
-                                ),
-                                "\xC7\u0131k\u0131\u015F Yap"
-                            )
+                                    "button",
+                                    { className: "ui red button" },
+                                    React.createElement(
+                                        "i",
+                                        { className: "icon" },
+                                        React.createElement("i", { className: "fa fa-paper-plane", "aria-hidden": "true" })
+                                    ),
+                                    "\xC7\u0131k\u0131\u015F Yap"
+                                )
+                            ) : ""
                         )
                     )
                 ),
@@ -563,7 +567,8 @@ var Comment = function (_React$Component4) {
                                             FloatRight,
                                             null,
                                             React.createElement(LikeButton, { value: 1, likeOrDislike: "like" }),
-                                            React.createElement(DislikeButton, { value: 3, likeOrDislike: "" })
+                                            React.createElement(DislikeButton, { value: 3, likeOrDislike: "" }),
+                                            !owner ? React.createElement(ComplaintButton, null) : ""
                                         )
                                     )
                                 )

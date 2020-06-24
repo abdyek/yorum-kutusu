@@ -394,4 +394,13 @@ class DislikeButton extends React.Component {
         )
     }
 }
+class ComplaintButton extends React.Component {
+    render() {
+        return (
+            <button className="ui basic button">
+                <i id="exclamation" className="fa fa-exclamation" aria-hidden="true"></i>
+            </button>
+        )
+    }
+}
 // ^ bunlar 2 sayfada bulunduğu için componentJS'ye taşınmasını uygun buldum

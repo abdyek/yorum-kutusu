@@ -159,18 +159,24 @@ class Content extends React.Component {
                         <Center>
                             <i id="userIcon" className="user huge circle icon"></i>
                             <H type="1" text={profileOwner}/>
-                            <button className="ui grey button" onClick={this.toggleSetting} >
-                                <i className="icon">
-                                    <i className="fa fa-cog" aria-hidden="true"></i>
-                                </i>
-                                Ayarlar
-                            </button>
-                            <button className="ui red button">
-                                <i className="icon">
-                                    <i className="fa fa-paper-plane" aria-hidden="true"></i>
-                                </i>
-                                Çıkış Yap
-                            </button>
+                            {
+                                owner ?
+                                    <div>
+                                        <button className="ui grey button" onClick={this.toggleSetting} >
+                                            <i className="icon">
+                                                <i className="fa fa-cog" aria-hidden="true"></i>
+                                            </i>
+                                            Ayarlar
+                                        </button>
+                                        <button className="ui red button">
+                                            <i className="icon">
+                                                <i className="fa fa-paper-plane" aria-hidden="true"></i>
+                                            </i>
+                                            Çıkış Yap
+                                        </button>
+                                    </div>
+                                : ""
+                            }
                         </Center>
                     </Column>
                 </Row>
@@ -384,6 +390,7 @@ class Comment extends React.Component {
                                         <FloatRight>
                                             <LikeButton value={1} likeOrDislike={"like"}/>
                                             <DislikeButton value={3} likeOrDislike={""}/>
+                                            {!owner?<ComplaintButton />: "" }
                                         </FloatRight>
                                     </Column>
                                 </Row>

@@ -660,15 +660,6 @@ class CommentDate extends React.Component {
         )
     }
 }
-class ComplaintButton extends React.Component {
-    render() {
-        return (
-            <button className="ui basic button">
-                <i id="exclamation" className="fa fa-exclamation" aria-hidden="true"></i>
-            </button>
-        )
-    }
-}
 
 
 class WriteComment extends React.Component {

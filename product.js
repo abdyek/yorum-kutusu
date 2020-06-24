@@ -1040,31 +1040,8 @@ var CommentDate = function (_React$Component19) {
     return CommentDate;
 }(React.Component);
 
-var ComplaintButton = function (_React$Component20) {
-    _inherits(ComplaintButton, _React$Component20);
-
-    function ComplaintButton() {
-        _classCallCheck(this, ComplaintButton);
-
-        return _possibleConstructorReturn(this, (ComplaintButton.__proto__ || Object.getPrototypeOf(ComplaintButton)).apply(this, arguments));
-    }
-
-    _createClass(ComplaintButton, [{
-        key: "render",
-        value: function render() {
-            return React.createElement(
-                "button",
-                { className: "ui basic button" },
-                React.createElement("i", { id: "exclamation", className: "fa fa-exclamation", "aria-hidden": "true" })
-            );
-        }
-    }]);
-
-    return ComplaintButton;
-}(React.Component);
-
-var WriteComment = function (_React$Component21) {
-    _inherits(WriteComment, _React$Component21);
+var WriteComment = function (_React$Component20) {
+    _inherits(WriteComment, _React$Component20);
 
     function WriteComment() {
         _classCallCheck(this, WriteComment);
@@ -1133,19 +1110,19 @@ var WriteComment = function (_React$Component21) {
     return WriteComment;
 }(React.Component);
 
-var InputRating = function (_React$Component22) {
-    _inherits(InputRating, _React$Component22);
+var InputRating = function (_React$Component21) {
+    _inherits(InputRating, _React$Component21);
 
     function InputRating(props) {
         _classCallCheck(this, InputRating);
 
-        var _this23 = _possibleConstructorReturn(this, (InputRating.__proto__ || Object.getPrototypeOf(InputRating)).call(this, props));
+        var _this22 = _possibleConstructorReturn(this, (InputRating.__proto__ || Object.getPrototypeOf(InputRating)).call(this, props));
 
-        _this23.inputRanges = [];
-        for (var i = 0; i < _this23.props.attributes.length; i++) {
-            _this23.inputRanges.push(React.createElement(InputRange, { key: _this23.props.attributes[i].key, name: _this23.props.attributes[i].name }));
+        _this22.inputRanges = [];
+        for (var i = 0; i < _this22.props.attributes.length; i++) {
+            _this22.inputRanges.push(React.createElement(InputRange, { key: _this22.props.attributes[i].key, name: _this22.props.attributes[i].name }));
         }
-        return _this23;
+        return _this22;
     }
 
     _createClass(InputRating, [{
@@ -1162,19 +1139,19 @@ var InputRating = function (_React$Component22) {
     return InputRating;
 }(React.Component);
 
-var InputRange = function (_React$Component23) {
-    _inherits(InputRange, _React$Component23);
+var InputRange = function (_React$Component22) {
+    _inherits(InputRange, _React$Component22);
 
     function InputRange(props) {
         _classCallCheck(this, InputRange);
 
-        var _this24 = _possibleConstructorReturn(this, (InputRange.__proto__ || Object.getPrototypeOf(InputRange)).call(this, props));
+        var _this23 = _possibleConstructorReturn(this, (InputRange.__proto__ || Object.getPrototypeOf(InputRange)).call(this, props));
 
-        _this24.state = {
+        _this23.state = {
             value: "5"
         };
-        _this24.change = _this24.change.bind(_this24);
-        return _this24;
+        _this23.change = _this23.change.bind(_this23);
+        return _this23;
     }
 
     _createClass(InputRange, [{
@@ -1208,8 +1185,8 @@ var InputRange = function (_React$Component23) {
     return InputRange;
 }(React.Component);
 
-var SendButton = function (_React$Component24) {
-    _inherits(SendButton, _React$Component24);
+var SendButton = function (_React$Component23) {
+    _inherits(SendButton, _React$Component23);
 
     function SendButton() {
         _classCallCheck(this, SendButton);

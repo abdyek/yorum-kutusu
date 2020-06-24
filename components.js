@@ -816,4 +816,27 @@ var DislikeButton = function (_React$Component24) {
 
     return DislikeButton;
 }(React.Component);
+
+var ComplaintButton = function (_React$Component25) {
+    _inherits(ComplaintButton, _React$Component25);
+
+    function ComplaintButton() {
+        _classCallCheck(this, ComplaintButton);
+
+        return _possibleConstructorReturn(this, (ComplaintButton.__proto__ || Object.getPrototypeOf(ComplaintButton)).apply(this, arguments));
+    }
+
+    _createClass(ComplaintButton, [{
+        key: "render",
+        value: function render() {
+            return React.createElement(
+                "button",
+                { className: "ui basic button" },
+                React.createElement("i", { id: "exclamation", className: "fa fa-exclamation", "aria-hidden": "true" })
+            );
+        }
+    }]);
+
+    return ComplaintButton;
+}(React.Component);
 // ^ bunlar 2 sayfada bulunduğu için componentJS'ye taşınmasını uygun buldum
