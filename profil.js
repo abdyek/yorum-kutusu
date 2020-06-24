@@ -65,9 +65,11 @@ var Content = function (_React$Component2) {
             readyPasswordForm: true,
             message: false,
             messageText: "",
-            messageType: ""
+            messageType: "",
+            logout: ""
         };
         _this2.toggleSetting = _this2.toggleSetting.bind(_this2);
+        _this2.logout = _this2.logout.bind(_this2);
         _this2.changeOldPassword = _this2.changeOldPassword.bind(_this2);
         _this2.changeNewPassword = _this2.changeNewPassword.bind(_this2);
         _this2.changeNewPassword2 = _this2.changeNewPassword2.bind(_this2);
@@ -87,6 +89,15 @@ var Content = function (_React$Component2) {
                     settingOpened: true
                 });
             }
+        }
+    }, {
+        key: "logout",
+        value: function logout() {
+            console.log("çıkıp yapmak için php'ye ajax ile çıkış şeyi gönderilecek");
+            // butona spin ekliyoruz, başarılı çıkış sağlanırsa başarıyla çıkış yaptınız sayfasına yönlendirilebilir
+            this.setState({
+                logout: "loading"
+            });
         }
     }, {
         key: "changeOldPassword",
@@ -256,7 +267,7 @@ var Content = function (_React$Component2) {
                                 ),
                                 React.createElement(
                                     "button",
-                                    { className: "ui red button" },
+                                    { className: "ui red " + this.state.logout + " button", onClick: this.logout },
                                     React.createElement(
                                         "i",
                                         { className: "icon" },

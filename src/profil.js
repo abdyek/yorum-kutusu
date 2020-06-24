@@ -42,9 +42,11 @@ class Content extends React.Component {
             readyPasswordForm: true,
             message: false,
             messageText: "",
-            messageType: ""
+            messageType: "",
+            logout:""
         }
         this.toggleSetting = this.toggleSetting.bind(this);
+        this.logout = this.logout.bind(this);
         this.changeOldPassword= this.changeOldPassword.bind(this);
         this.changeNewPassword = this.changeNewPassword.bind(this);
         this.changeNewPassword2= this.changeNewPassword2.bind(this);
@@ -60,6 +62,13 @@ class Content extends React.Component {
                 settingOpened: true
             })
         }
+    }
+    logout() {
+        console.log("çıkıp yapmak için php'ye ajax ile çıkış şeyi gönderilecek")
+        // butona spin ekliyoruz, başarılı çıkış sağlanırsa başarıyla çıkış yaptınız sayfasına yönlendirilebilir
+        this.setState({
+            logout:"loading"
+        })
     }
     changeOldPassword(e) {
         this.setState({
@@ -168,7 +177,7 @@ class Content extends React.Component {
                                             </i>
                                             Ayarlar
                                         </button>
-                                        <button className="ui red button">
+                                        <button className={"ui red "+this.state.logout+" button"} onClick={this.logout}>
                                             <i className="icon">
                                                 <i className="fa fa-paper-plane" aria-hidden="true"></i>
                                             </i>
