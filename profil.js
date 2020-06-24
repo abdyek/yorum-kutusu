@@ -55,12 +55,178 @@ var Content = function (_React$Component2) {
     function Content(props) {
         _classCallCheck(this, Content);
 
-        return _possibleConstructorReturn(this, (Content.__proto__ || Object.getPrototypeOf(Content)).call(this, props));
+        var _this2 = _possibleConstructorReturn(this, (Content.__proto__ || Object.getPrototypeOf(Content)).call(this, props));
+
+        _this2.state = {
+            settingOpened: false,
+            oldPassword: "",
+            newPassword: "",
+            newPassword2: "",
+            readyPasswordForm: true,
+            message: false,
+            messageText: "",
+            messageType: ""
+        };
+        _this2.toggleSetting = _this2.toggleSetting.bind(_this2);
+        _this2.changeOldPassword = _this2.changeOldPassword.bind(_this2);
+        _this2.changeNewPassword = _this2.changeNewPassword.bind(_this2);
+        _this2.changeNewPassword2 = _this2.changeNewPassword2.bind(_this2);
+        _this2.tryChange = _this2.tryChange.bind(_this2);
+        return _this2;
     }
 
     _createClass(Content, [{
+        key: "toggleSetting",
+        value: function toggleSetting() {
+            if (this.state.settingOpened) {
+                this.setState({
+                    settingOpened: false
+                });
+            } else {
+                this.setState({
+                    settingOpened: true
+                });
+            }
+        }
+    }, {
+        key: "changeOldPassword",
+        value: function changeOldPassword(e) {
+            this.setState({
+                oldPassword: e.target.value
+            });
+        }
+    }, {
+        key: "changeNewPassword",
+        value: function changeNewPassword(e) {
+            this.setState({
+                newPassword: e.target.value
+            });
+        }
+    }, {
+        key: "changeNewPassword2",
+        value: function changeNewPassword2(e) {
+            this.setState({
+                newPassword2: e.target.value
+            });
+        }
+    }, {
+        key: "tryChange",
+        value: function tryChange() {
+            // API tarafında yeni parola tekrarı istenmediğinden bu kısım client'a kaldı
+            if (this.state.newPassword != this.state.newPassword2) {
+                this.setState({
+                    message: true,
+                    messageText: "Yeni parola tekrarı ile uyumlu değil",
+                    messageType: "red"
+                });
+            } else {
+                this.setState({
+                    message: false
+                });
+                console.log("burada API'ye gönderme işlemi yapıcaz");
+                // burada API'ye gönderme işlemi yapıcaz bu sırada da kullanıcıya spin göstericez
+                // ayrıca gelen mesaj olumlu ise messageType'ı blue yapıyoruz, ya da uygun diğer bir renk
+            }
+        }
+    }, {
         key: "render",
         value: function render() {
+            if (this.state.settingOpened) {
+                this.setting = React.createElement(
+                    "div",
+                    null,
+                    React.createElement(
+                        Row,
+                        { size: "one" },
+                        React.createElement(
+                            Column,
+                            null,
+                            React.createElement(H, { type: "2", textAlign: "center", text: "Ayarlar" }),
+                            React.createElement(
+                                Row,
+                                { size: "three" },
+                                React.createElement(Column, null),
+                                React.createElement(
+                                    Column,
+                                    null,
+                                    React.createElement(
+                                        Segment,
+                                        null,
+                                        React.createElement(H, { type: "3", textAlign: "left", text: "Parola De\u011Fi\u015Ftir" }),
+                                        this.state.readyPasswordForm ? React.createElement(
+                                            "div",
+                                            { className: "ui form" },
+                                            React.createElement(
+                                                "div",
+                                                { className: "field" },
+                                                React.createElement(
+                                                    "label",
+                                                    null,
+                                                    "Eski Parola"
+                                                ),
+                                                React.createElement("input", { type: "password", value: this.state.oldPassword, onChange: this.changeOldPassword })
+                                            ),
+                                            React.createElement(
+                                                "div",
+                                                { className: "field" },
+                                                React.createElement(
+                                                    "label",
+                                                    null,
+                                                    "Yeni Parola"
+                                                ),
+                                                React.createElement("input", { type: "password", value: this.state.newPassword, onChange: this.changeNewPassword })
+                                            ),
+                                            React.createElement(
+                                                "div",
+                                                { className: "field" },
+                                                React.createElement(
+                                                    "label",
+                                                    null,
+                                                    "Yeni Parola Tekrar"
+                                                ),
+                                                React.createElement("input", { type: "password", value: this.state.newPassword2, onChange: this.changeNewPassword2 })
+                                            )
+                                        ) : React.createElement(RowLoading, null),
+                                        this.state.message ? React.createElement(
+                                            Row,
+                                            { size: "one" },
+                                            React.createElement(
+                                                Column,
+                                                null,
+                                                React.createElement(
+                                                    "div",
+                                                    { id: "passwordChangeMessage", className: "ui " + this.state.messageType + " message" },
+                                                    this.state.messageText
+                                                )
+                                            )
+                                        ) : "",
+                                        React.createElement(
+                                            Row,
+                                            { size: "one" },
+                                            React.createElement(
+                                                Column,
+                                                null,
+                                                React.createElement(
+                                                    FloatRight,
+                                                    null,
+                                                    React.createElement(
+                                                        "button",
+                                                        { id: "passwordChangeButton", className: "ui primary button", onClick: this.tryChange },
+                                                        "De\u011Fi\u015Ftir"
+                                                    )
+                                                )
+                                            )
+                                        )
+                                    )
+                                ),
+                                React.createElement(Column, null)
+                            )
+                        )
+                    )
+                );
+            } else {
+                this.setting = React.createElement("div", null);
+            }
             return React.createElement(
                 "div",
                 null,
@@ -77,7 +243,7 @@ var Content = function (_React$Component2) {
                             React.createElement(H, { type: "1", text: profileOwner }),
                             React.createElement(
                                 "button",
-                                { className: "ui grey button" },
+                                { className: "ui grey button", onClick: this.toggleSetting },
                                 React.createElement(
                                     "i",
                                     { className: "icon" },
@@ -98,6 +264,7 @@ var Content = function (_React$Component2) {
                         )
                     )
                 ),
+                this.setting,
                 React.createElement(
                     Row,
                     { size: "one" },
@@ -283,7 +450,7 @@ var Comment = function (_React$Component4) {
                         React.createElement(
                             "i",
                             { className: "icon" },
-                            React.createElement("i", { "class": "fa fa-line-chart", "aria-hidden": "true" })
+                            React.createElement("i", { className: "fa fa-line-chart", "aria-hidden": "true" })
                         ),
                         this.props.buttonText.reVoteButtonText
                     )
@@ -433,11 +600,11 @@ var Comment = function (_React$Component4) {
                                             null,
                                             React.createElement(
                                                 "button",
-                                                { "class": "ui icon red button", onClick: this.returnToNormal },
+                                                { className: "ui icon red button", onClick: this.returnToNormal },
                                                 React.createElement(
                                                     "i",
-                                                    { "class": "icon" },
-                                                    React.createElement("i", { "class": "fa fa-times", "aria-hidden": "true" })
+                                                    { className: "icon" },
+                                                    React.createElement("i", { className: "fa fa-times", "aria-hidden": "true" })
                                                 ),
                                                 this.props.buttonText.cancelEditButtonText
                                             )
@@ -495,7 +662,7 @@ var Comment = function (_React$Component4) {
                                                             React.createElement(
                                                                 "i",
                                                                 { className: "icon" },
-                                                                React.createElement("i", { "class": "fa fa-floppy-o", "aria-hidden": "true" })
+                                                                React.createElement("i", { className: "fa fa-floppy-o", "aria-hidden": "true" })
                                                             ),
                                                             this.props.buttonText.saveButtonText
                                                         )
@@ -538,21 +705,21 @@ var Comment = function (_React$Component4) {
                                             null,
                                             React.createElement(
                                                 "button",
-                                                { "class": "ui icon blue button" },
+                                                { className: "ui icon blue button" },
                                                 React.createElement(
                                                     "i",
-                                                    { "class": "icon" },
-                                                    React.createElement("i", { "class": "fa fa-check", "aria-hidden": "true" })
+                                                    { className: "icon" },
+                                                    React.createElement("i", { className: "fa fa-check", "aria-hidden": "true" })
                                                 ),
                                                 this.props.buttonText.approveDeleteButtonText
                                             ),
                                             React.createElement(
                                                 "button",
-                                                { "class": "ui icon red button", onClick: this.returnToNormal },
+                                                { className: "ui icon red button", onClick: this.returnToNormal },
                                                 React.createElement(
                                                     "i",
-                                                    { "class": "icon" },
-                                                    React.createElement("i", { "class": "fa fa-times", "aria-hidden": "true" })
+                                                    { className: "icon" },
+                                                    React.createElement("i", { className: "fa fa-times", "aria-hidden": "true" })
                                                 ),
                                                 this.props.buttonText.cancelDeleteButtonText
                                             )

@@ -34,8 +34,124 @@ class App extends React.Component {
 class Content extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            settingOpened: false,
+            oldPassword: "",
+            newPassword: "",
+            newPassword2: "",
+            readyPasswordForm: true,
+            message: false,
+            messageText: "",
+            messageType: ""
+        }
+        this.toggleSetting = this.toggleSetting.bind(this);
+        this.changeOldPassword= this.changeOldPassword.bind(this);
+        this.changeNewPassword = this.changeNewPassword.bind(this);
+        this.changeNewPassword2= this.changeNewPassword2.bind(this);
+        this.tryChange = this.tryChange.bind(this);
+    }
+    toggleSetting() {
+        if(this.state.settingOpened) {
+            this.setState({
+                settingOpened: false
+            })
+        } else {
+            this.setState({
+                settingOpened: true
+            })
+        }
+    }
+    changeOldPassword(e) {
+        this.setState({
+            oldPassword: e.target.value
+        })
+    }
+    changeNewPassword(e) {
+        this.setState({
+            newPassword: e.target.value
+        })
+    }
+    changeNewPassword2(e) {
+        this.setState({
+            newPassword2: e.target.value
+        })
+    }
+    tryChange() {
+        // API tarafında yeni parola tekrarı istenmediğinden bu kısım client'a kaldı
+        if(this.state.newPassword!=this.state.newPassword2) {
+            this.setState({
+                message:true,
+                messageText: "Yeni parola tekrarı ile uyumlu değil",
+                messageType:"red"
+            })
+        } else {
+            this.setState({
+                message:false
+            })
+            console.log("burada API'ye gönderme işlemi yapıcaz");
+            // burada API'ye gönderme işlemi yapıcaz bu sırada da kullanıcıya spin göstericez
+            // ayrıca gelen mesaj olumlu ise messageType'ı blue yapıyoruz, ya da uygun diğer bir renk
+        }
     }
     render() {
+        if(this.state.settingOpened) {
+            this.setting = (
+                <div>
+                    <Row size="one">
+                        <Column>
+                            <H type="2" textAlign="center" text="Ayarlar" />
+                            <Row size="three">
+                                <Column></Column>
+                                <Column>
+                                    <Segment>
+                                        <H type="3" textAlign="left" text="Parola Değiştir" />
+                                        { this.state.readyPasswordForm ? 
+                                            <div className="ui form">
+                                                <div className="field">
+                                                    <label>Eski Parola</label>
+                                                    <input type="password" value={this.state.oldPassword} onChange={this.changeOldPassword} />
+                                                </div>
+                                                <div className="field">
+                                                    <label>Yeni Parola</label>
+                                                    <input type="password" value={this.state.newPassword} onChange={this.changeNewPassword}/>
+                                                </div>
+                                                <div className="field">
+                                                    <label>Yeni Parola Tekrar</label>
+                                                    <input type="password" value={this.state.newPassword2} onChange={this.changeNewPassword2}/>
+                                                </div>
+                                            </div>
+                                        :
+                                            <RowLoading />
+                                        }
+                                        { this.state.message ?
+                                            <Row size="one">
+                                                <Column>
+                                                    <div id="passwordChangeMessage" className={"ui "+this.state.messageType+" message"}>{this.state.messageText}</div>
+                                                </Column>
+                                            </Row>
+                                            : ""
+                                        }
+                                        <Row size="one">
+                                            <Column>
+                                                <FloatRight>
+                                                    <button id="passwordChangeButton" className="ui primary button" onClick={this.tryChange}>
+                                                        Değiştir
+                                                    </button>
+                                                </FloatRight>
+                                            </Column>
+                                        </Row>
+                                    </Segment>
+                                </Column>
+                                <Column></Column>
+                            </Row>
+                        </Column>
+                    </Row>
+                </div>
+
+            )
+        } else {
+            this.setting = <div></div>
+        }
         return(
             <div>
                 <Row size="one">
@@ -43,7 +159,7 @@ class Content extends React.Component {
                         <Center>
                             <i id="userIcon" className="user huge circle icon"></i>
                             <H type="1" text={profileOwner}/>
-                            <button className="ui grey button">
+                            <button className="ui grey button" onClick={this.toggleSetting} >
                                 <i className="icon">
                                     <i className="fa fa-cog" aria-hidden="true"></i>
                                 </i>
@@ -58,6 +174,7 @@ class Content extends React.Component {
                         </Center>
                     </Column>
                 </Row>
+                    {this.setting}
                 <Row size="one">
                     <Column>
                         <div className="yorumlarHeader">
@@ -195,7 +312,7 @@ class Comment extends React.Component {
                 <Center>
                     <button className="ui teal button" onClick={this.openReVote}>
                         <i className="icon">
-                            <i class="fa fa-line-chart" aria-hidden="true"></i>
+                            <i className="fa fa-line-chart" aria-hidden="true"></i>
                         </i>
                         {this.props.buttonText.reVoteButtonText}
                     </button>
@@ -287,9 +404,9 @@ class Comment extends React.Component {
                                     </Column>
                                     <Column>
                                         <FloatRight>
-                                            <button class="ui icon red button" onClick={this.returnToNormal}>
-                                                <i class="icon">
-                                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                            <button className="ui icon red button" onClick={this.returnToNormal}>
+                                                <i className="icon">
+                                                    <i className="fa fa-times" aria-hidden="true"></i>
                                                 </i>
                                                 {this.props.buttonText.cancelEditButtonText}
                                             </button>
@@ -317,7 +434,7 @@ class Comment extends React.Component {
                                                         <div>
                                                             <button className="ui teal button">
                                                                 <i className="icon">
-                                                                    <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                                                                    <i className="fa fa-floppy-o" aria-hidden="true"></i>
                                                                 </i>
                                                                 {this.props.buttonText.saveButtonText}
                                                             </button>
@@ -344,15 +461,15 @@ class Comment extends React.Component {
                                     </Column>
                                     <Column>
                                         <FloatRight>
-                                            <button class="ui icon blue button">
-                                                <i class="icon">
-                                                    <i class="fa fa-check" aria-hidden="true"></i>
+                                            <button className="ui icon blue button">
+                                                <i className="icon">
+                                                    <i className="fa fa-check" aria-hidden="true"></i>
                                                 </i>
                                                 {this.props.buttonText.approveDeleteButtonText}
                                             </button>
-                                            <button class="ui icon red button" onClick={this.returnToNormal}>
-                                                <i class="icon">
-                                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                            <button className="ui icon red button" onClick={this.returnToNormal}>
+                                                <i className="icon">
+                                                    <i className="fa fa-times" aria-hidden="true"></i>
                                                 </i>
                                                 {this.props.buttonText.cancelDeleteButtonText}
                                             </button>
