@@ -46,13 +46,10 @@ var LogIn = function (_React$Component2) {
         var _this2 = _possibleConstructorReturn(this, (LogIn.__proto__ || Object.getPrototypeOf(LogIn)).call(this, props));
 
         _this2.logInClick = _this2.logInClick.bind(_this2);
-        _this2.rememberMeToggle = _this2.rememberMeToggle.bind(_this2);
-        _this2.onChangeHandler = _this2.onChangeHandler.bind(_this2);
         _this2.idChange = _this2.idChange.bind(_this2);
         _this2.passwordChange = _this2.passwordChange.bind(_this2);
         // ^ bind
         _this2.state = {
-            rememberMeCheched: true,
             id: "",
             password: "",
             loading: false,
@@ -97,27 +94,6 @@ var LogIn = function (_React$Component2) {
                 dataType: 'json'
             });
             event.preventDefault();
-        }
-    }, {
-        key: "rememberMeToggle",
-        value: function rememberMeToggle() {
-            if (this.state.rememberMeCheched) {
-                this.setState({
-                    rememberMeCheched: false
-                });
-            } else {
-                this.setState({
-                    rememberMeCheched: true
-                });
-            }
-        }
-    }, {
-        key: "onChangeHandler",
-        value: function onChangeHandler() {
-            /*
-                bu fonksiyonun bütün olayı react'ın "bilader checked'i state e bağladın ama onChange 'e bir şey bağlamadın" uyarısına karşılık
-                "yaa react kardeş çok rahat konuşuyordun" demektir
-            */
         }
     }, {
         key: "idChange",
@@ -172,20 +148,6 @@ var LogIn = function (_React$Component2) {
                             React.createElement("input", { type: "password", name: "password", value: this.state.password, onChange: this.passwordChange, placeholder: "Parola" })
                         ),
                         React.createElement(
-                            "div",
-                            { className: "field" },
-                            React.createElement(
-                                "div",
-                                { className: "ui checkbox", onClick: this.rememberMeToggle },
-                                React.createElement("input", { type: "checkbox", onChange: this.onChangeHandler, checked: this.state.rememberMeCheched, tabIndex: "0", className: "hidden" }),
-                                React.createElement(
-                                    "label",
-                                    null,
-                                    "Beni Hat\u0131rla"
-                                )
-                            )
-                        ),
-                        React.createElement(
                             FloatRight,
                             null,
                             React.createElement(
@@ -203,8 +165,49 @@ var LogIn = function (_React$Component2) {
     return LogIn;
 }(React.Component);
 
-var ErrorMessageBox = function (_React$Component3) {
-    _inherits(ErrorMessageBox, _React$Component3);
+var SignUp = function (_React$Component3) {
+    _inherits(SignUp, _React$Component3);
+
+    function SignUp() {
+        _classCallCheck(this, SignUp);
+
+        return _possibleConstructorReturn(this, (SignUp.__proto__ || Object.getPrototypeOf(SignUp)).apply(this, arguments));
+    }
+
+    _createClass(SignUp, [{
+        key: "render",
+        value: function render() {
+            return React.createElement(
+                "div",
+                null,
+                React.createElement(
+                    Row,
+                    { size: "one" },
+                    React.createElement(
+                        Column,
+                        null,
+                        React.createElement(
+                            Center,
+                            null,
+                            "Hesab\u0131n m\u0131 yok?",
+                            React.createElement("br", null),
+                            React.createElement(
+                                "a",
+                                { href: "uyeOl" },
+                                "\u015Eimdi \xDCye ol"
+                            )
+                        )
+                    )
+                )
+            );
+        }
+    }]);
+
+    return SignUp;
+}(React.Component);
+
+var ErrorMessageBox = function (_React$Component4) {
+    _inherits(ErrorMessageBox, _React$Component4);
 
     function ErrorMessageBox() {
         _classCallCheck(this, ErrorMessageBox);
@@ -229,8 +232,8 @@ var ErrorMessageBox = function (_React$Component3) {
     return ErrorMessageBox;
 }(React.Component);
 
-var UserArea = function (_React$Component4) {
-    _inherits(UserArea, _React$Component4);
+var UserArea = function (_React$Component5) {
+    _inherits(UserArea, _React$Component5);
 
     function UserArea() {
         _classCallCheck(this, UserArea);
@@ -252,8 +255,8 @@ var UserArea = function (_React$Component4) {
     return UserArea;
 }(React.Component);
 
-var Content = function (_React$Component5) {
-    _inherits(Content, _React$Component5);
+var Content = function (_React$Component6) {
+    _inherits(Content, _React$Component6);
 
     function Content(props) {
         _classCallCheck(this, Content);
@@ -267,7 +270,8 @@ var Content = function (_React$Component5) {
             return React.createElement(
                 "div",
                 null,
-                React.createElement(LogIn, null)
+                React.createElement(LogIn, null),
+                React.createElement(SignUp, null)
             );
         }
     }]);

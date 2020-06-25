@@ -21,13 +21,10 @@ class LogIn extends React.Component {
         super(props);
         // bind
         this.logInClick = this.logInClick.bind(this);
-        this.rememberMeToggle = this.rememberMeToggle.bind(this);
-        this.onChangeHandler= this.onChangeHandler.bind(this);
         this.idChange = this.idChange.bind(this);
         this.passwordChange = this.passwordChange.bind(this);
         // ^ bind
         this.state = {
-            rememberMeCheched:true,
             id:"",
             password:"",
             loading:false,
@@ -69,23 +66,6 @@ class LogIn extends React.Component {
         })
         event.preventDefault();
     }
-    rememberMeToggle() {
-        if(this.state.rememberMeCheched) {
-            this.setState({
-                rememberMeCheched:false
-            })
-        } else {
-            this.setState({
-                rememberMeCheched:true
-            })
-        }
-    }
-    onChangeHandler(){
-        /*
-            bu fonksiyonun bütün olayı react'ın "bilader checked'i state e bağladın ama onChange 'e bir şey bağlamadın" uyarısına karşılık
-            "yaa react kardeş çok rahat konuşuyordun" demektir
-        */
-    }
     idChange(event) {
         this.setState({
             id:event.target.value
@@ -117,18 +97,31 @@ class LogIn extends React.Component {
                             <label>Parola</label>
                             <input type="password" name="password" value={this.state.password} onChange={this.passwordChange} placeholder="Parola" />
                         </div>
-                        <div className="field">
-                            <div className="ui checkbox" onClick={this.rememberMeToggle}>
-                            <input type="checkbox" onChange={this.onChangeHandler} checked={this.state.rememberMeCheched} tabIndex="0" className="hidden" />
-                            <label>Beni Hatırla</label>
-                            </div>
-                        </div>
                         <FloatRight>
                             <button className="ui primary button" type="submit" onClick={this.logInClick}>Giriş Yap</button>
                         </FloatRight>
                     </form>
                 </WideColumn>
             </Row>
+        )
+    }
+}
+
+class SignUp extends React.Component {
+    render() {
+        return(
+            <div>
+                <Row size="one">
+                    <Column>
+                        <Center>
+                            Hesabın mı yok?<br />
+                            <a href="uyeOl">
+                                Şimdi Üye ol
+                            </a>
+                        </Center>
+                    </Column>
+                </Row>
+            </div>
         )
     }
 }
@@ -160,6 +153,7 @@ class Content extends React.Component {
         return(
             <div>
                 <LogIn />
+                <SignUp />
             </div>
         )
     }
