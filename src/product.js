@@ -9,8 +9,8 @@ class App extends React.Component {
             productTitle:"",
             images:[],
             productRating:[],
-            comments:[]
-            
+            comments:[],
+            LoadingOrNotFoundProduct: "loading"
         };
     }
     componentDidMount() {
@@ -19,6 +19,14 @@ class App extends React.Component {
             url:'https://yorumlaa.herokuapp.com/api/products/'+this.state.productName,
             data: {
                 "":""
+            },
+            statusCode: {
+                404: function() {
+                    this.setState({
+                        LoadingOrNotFoundProduct: "notFoundProduct"
+                        /* kodları çok spagetti yazdım, ilerleyen zamanlarda ihtiyacım olursa buraları refactor ederim */
+                    })
+                }.bind(this)
             },
             success: function(response) {
                 // bradcrumb
@@ -145,10 +153,29 @@ class App extends React.Component {
                         }
                     ]*/}
                     imagesSrcs={this.state.images}
-                />: <RowLoading />}
+                />: <LoadingOrNotFoundProduct form={this.state.LoadingOrNotFoundProduct}/>}
                 <Footer /> {/* from components.js */}
             </div>
         )
+    }
+}
+
+class LoadingOrNotFoundProduct extends React.Component {
+    render() {
+        if(this.props.form=="loading") {
+            return(
+                <RowLoading />
+            )
+        } else if(this.props.form=="notFoundProduct") {
+            return(
+                <Row size="sixteen">
+                    <WideColumn size="two"></WideColumn>
+                    <WideColumn size="twelve">
+                        <div className="ui red message">Böyle bir ürün yok!</div>
+                    </WideColumn>
+                </Row>
+            )
+        }
     }
 }
 

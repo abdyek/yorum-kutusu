@@ -101,7 +101,8 @@ var ProfileInfo = function (_React$Component3) {
             emailToDelete: "",
             usernameToDelete: "",
             passwordToDelete: "",
-            deleteAccount: ""
+            deleteAccount: "",
+            deleteMessage: ""
         };
         _this3.toggleSetting = _this3.toggleSetting.bind(_this3);
         _this3.logout = _this3.logout.bind(_this3);
@@ -137,6 +138,12 @@ var ProfileInfo = function (_React$Component3) {
                 this.setState({
                     deleteAccount: "loading"
                 });
+                /*
+                this.setState({
+                    deleteMessage: "buraya API'den gelen mesajı yazıyoruz"
+                })
+                ^ bununla gelen mesajı doğrudan veriyoruz
+                */
             } else {
                 this.setState({
                     deleteOpened: true
@@ -373,6 +380,11 @@ var ProfileInfo = function (_React$Component3) {
                                                             React.createElement("input", { type: "password", value: this.state.changePasswordToDelete, onChange: this.changePasswordToDelete })
                                                         )
                                                     ),
+                                                    this.state.deleteMessage ? React.createElement(
+                                                        "div",
+                                                        { className: "ui teal message" },
+                                                        this.state.deleteMessage
+                                                    ) : "",
                                                     React.createElement(
                                                         FloatRight,
                                                         null,

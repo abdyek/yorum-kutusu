@@ -72,6 +72,7 @@ class ProfileInfo extends React.Component {
             usernameToDelete: "",
             passwordToDelete: "",
             deleteAccount:"",
+            deleteMessage:""
         }
         this.toggleSetting = this.toggleSetting.bind(this);
         this.logout = this.logout.bind(this);
@@ -101,6 +102,12 @@ class ProfileInfo extends React.Component {
             this.setState({
                 deleteAccount: "loading"
             })
+            /*
+            this.setState({
+                deleteMessage: "buraya API'den gelen mesajı yazıyoruz"
+            })
+            ^ bununla gelen mesajı doğrudan veriyoruz
+            */
         } else {
             this.setState({
                 deleteOpened: true
@@ -238,6 +245,7 @@ class ProfileInfo extends React.Component {
                                                                 <input type="password" value={this.state.changePasswordToDelete} onChange={this.changePasswordToDelete}/>
                                                             </div>
                                                         </div>
+                                                        { this.state.deleteMessage? <div className="ui teal message">{this.state.deleteMessage}</div> :   "" }
                                                         <FloatRight>
                                                             <button id="deleteAccount" className={"ui red "+this.state.deleteAccount+" button"} onClick={this.deleteAccount}>
                                                                 Sil
