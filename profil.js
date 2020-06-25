@@ -96,7 +96,12 @@ var ProfileInfo = function (_React$Component3) {
             message: false,
             messageText: "",
             messageType: "",
-            logout: ""
+            logout: "",
+            deleteOpened: false,
+            emailToDelete: "",
+            usernameToDelete: "",
+            passwordToDelete: "",
+            deleteAccount: ""
         };
         _this3.toggleSetting = _this3.toggleSetting.bind(_this3);
         _this3.logout = _this3.logout.bind(_this3);
@@ -104,6 +109,10 @@ var ProfileInfo = function (_React$Component3) {
         _this3.changeNewPassword = _this3.changeNewPassword.bind(_this3);
         _this3.changeNewPassword2 = _this3.changeNewPassword2.bind(_this3);
         _this3.tryChange = _this3.tryChange.bind(_this3);
+        _this3.deleteAccount = _this3.deleteAccount.bind(_this3);
+        _this3.changeEmailToDelete = _this3.changeEmailToDelete.bind(_this3);
+        _this3.changeUsernameToDelete = _this3.changeUsernameToDelete.bind(_this3);
+        _this3.changePasswordToDelete = _this3.changePasswordToDelete.bind(_this3);
         return _this3;
     }
 
@@ -117,6 +126,20 @@ var ProfileInfo = function (_React$Component3) {
             } else {
                 this.setState({
                     settingOpened: true
+                });
+            }
+        }
+    }, {
+        key: "deleteAccount",
+        value: function deleteAccount() {
+            if (this.state.deleteOpened) {
+                console.log("burada hesap silmek için gerekli veriler API'ye gönderilecek");
+                this.setState({
+                    deleteAccount: "loading"
+                });
+            } else {
+                this.setState({
+                    deleteOpened: true
                 });
             }
         }
@@ -170,6 +193,27 @@ var ProfileInfo = function (_React$Component3) {
             }
         }
     }, {
+        key: "changeEmailToDelete",
+        value: function changeEmailToDelete(e) {
+            this.setState({
+                emailToDelete: e.target.value
+            });
+        }
+    }, {
+        key: "changeUsernameToDelete",
+        value: function changeUsernameToDelete(e) {
+            this.setState({
+                usernameToDelete: e.target.value
+            });
+        }
+    }, {
+        key: "changePasswordToDelete",
+        value: function changePasswordToDelete(e) {
+            this.setState({
+                passwordToDelete: e.target.value
+            });
+        }
+    }, {
         key: "render",
         value: function render() {
             if (this.state.settingOpened) {
@@ -185,11 +229,11 @@ var ProfileInfo = function (_React$Component3) {
                             React.createElement(H, { type: "2", textAlign: "center", text: "Ayarlar" }),
                             React.createElement(
                                 Row,
-                                { size: "three" },
-                                React.createElement(Column, null),
+                                { size: "four" },
+                                React.createElement(WideColumn, { size: "three" }),
                                 React.createElement(
-                                    Column,
-                                    null,
+                                    WideColumn,
+                                    { size: "five" },
                                     React.createElement(
                                         Segment,
                                         null,
@@ -260,7 +304,98 @@ var ProfileInfo = function (_React$Component3) {
                                         )
                                     )
                                 ),
-                                React.createElement(Column, null)
+                                React.createElement(
+                                    WideColumn,
+                                    { size: "five" },
+                                    React.createElement(
+                                        Segment,
+                                        null,
+                                        React.createElement(H, { type: "3", textAlign: "left", text: "Hesap Sil" }),
+                                        React.createElement(
+                                            "div",
+                                            { className: "ui orange message" },
+                                            React.createElement(
+                                                "div",
+                                                { className: "header" },
+                                                "Dikkat!"
+                                            ),
+                                            React.createElement(
+                                                "p",
+                                                null,
+                                                "Hesab\u0131n\u0131z\u0131 silerseniz b\xFCt\xFCn yorumlar\u0131n\u0131z da kal\u0131c\u0131 olarak silinir."
+                                            )
+                                        ),
+                                        React.createElement(
+                                            Row,
+                                            { size: "one" },
+                                            React.createElement(
+                                                Column,
+                                                null,
+                                                this.state.deleteOpened ? React.createElement(
+                                                    "div",
+                                                    null,
+                                                    React.createElement(
+                                                        "div",
+                                                        { className: "ui yellow message" },
+                                                        "E-Posta, kullan\u0131c\u0131 ad\u0131 ve parolan\u0131z\u0131 girin."
+                                                    ),
+                                                    React.createElement(
+                                                        "div",
+                                                        { className: "ui form" },
+                                                        React.createElement(
+                                                            "div",
+                                                            { className: "field" },
+                                                            React.createElement(
+                                                                "label",
+                                                                null,
+                                                                "E-Posta"
+                                                            ),
+                                                            React.createElement("input", { type: "text", value: this.state.emailToDelete, onChange: this.changeEmailToDelete })
+                                                        ),
+                                                        React.createElement(
+                                                            "div",
+                                                            { className: "field" },
+                                                            React.createElement(
+                                                                "label",
+                                                                null,
+                                                                "Kullan\u0131c\u0131 Ad\u0131"
+                                                            ),
+                                                            React.createElement("input", { type: "text", value: this.state.changeUsernameToDelete, onChange: this.changeUsernameToDelete })
+                                                        ),
+                                                        React.createElement(
+                                                            "div",
+                                                            { className: "field" },
+                                                            React.createElement(
+                                                                "label",
+                                                                null,
+                                                                "Parola"
+                                                            ),
+                                                            React.createElement("input", { type: "password", value: this.state.changePasswordToDelete, onChange: this.changePasswordToDelete })
+                                                        )
+                                                    ),
+                                                    React.createElement(
+                                                        FloatRight,
+                                                        null,
+                                                        React.createElement(
+                                                            "button",
+                                                            { id: "deleteAccount", className: "ui red " + this.state.deleteAccount + " button", onClick: this.deleteAccount },
+                                                            "Sil"
+                                                        )
+                                                    )
+                                                ) : React.createElement(
+                                                    FloatRight,
+                                                    null,
+                                                    React.createElement(
+                                                        "button",
+                                                        { id: "deleteAccount", className: "ui red button", onClick: this.deleteAccount },
+                                                        "Sil"
+                                                    )
+                                                )
+                                            )
+                                        )
+                                    )
+                                ),
+                                React.createElement(WideColumn, { size: "three" })
                             )
                         )
                     )

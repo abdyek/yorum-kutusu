@@ -66,7 +66,12 @@ class ProfileInfo extends React.Component {
             message: false,
             messageText: "",
             messageType: "",
-            logout:""
+            logout:"",
+            deleteOpened: false,
+            emailToDelete: "",
+            usernameToDelete: "",
+            passwordToDelete: "",
+            deleteAccount:"",
         }
         this.toggleSetting = this.toggleSetting.bind(this);
         this.logout = this.logout.bind(this);
@@ -74,6 +79,10 @@ class ProfileInfo extends React.Component {
         this.changeNewPassword = this.changeNewPassword.bind(this);
         this.changeNewPassword2= this.changeNewPassword2.bind(this);
         this.tryChange = this.tryChange.bind(this);
+        this.deleteAccount = this.deleteAccount.bind(this);
+        this.changeEmailToDelete = this.changeEmailToDelete.bind(this);
+        this.changeUsernameToDelete = this.changeUsernameToDelete.bind(this);
+        this.changePasswordToDelete= this.changePasswordToDelete.bind(this);
     }
     toggleSetting() {
         if(this.state.settingOpened) {
@@ -83,6 +92,18 @@ class ProfileInfo extends React.Component {
         } else {
             this.setState({
                 settingOpened: true
+            })
+        }
+    }
+    deleteAccount() {
+        if(this.state.deleteOpened) {
+            console.log("burada hesap silmek için gerekli veriler API'ye gönderilecek");
+            this.setState({
+                deleteAccount: "loading"
+            })
+        } else {
+            this.setState({
+                deleteOpened: true
             })
         }
     }
@@ -125,6 +146,21 @@ class ProfileInfo extends React.Component {
             // ayrıca gelen mesaj olumlu ise messageType'ı blue yapıyoruz, ya da uygun diğer bir renk
         }
     }
+    changeEmailToDelete(e) {
+        this.setState({
+            emailToDelete: e.target.value
+        })
+    }
+    changeUsernameToDelete(e) {
+        this.setState({
+            usernameToDelete:e.target.value
+        })
+    }
+    changePasswordToDelete(e) {
+        this.setState({
+            passwordToDelete:e.target.value
+        })
+    }
     render() {
         if(this.state.settingOpened) {
             this.setting = (
@@ -132,9 +168,9 @@ class ProfileInfo extends React.Component {
                     <Row size="one">
                         <Column>
                             <H type="2" textAlign="center" text="Ayarlar" />
-                            <Row size="three">
-                                <Column></Column>
-                                <Column>
+                            <Row size="four">
+                                <WideColumn size="three"></WideColumn>
+                                <WideColumn size="five">
                                     <Segment>
                                         <H type="3" textAlign="left" text="Parola Değiştir" />
                                         { this.state.readyPasswordForm ? 
@@ -173,8 +209,53 @@ class ProfileInfo extends React.Component {
                                             </Column>
                                         </Row>
                                     </Segment>
-                                </Column>
-                                <Column></Column>
+                                </WideColumn>
+                                <WideColumn size="five">
+                                    <Segment>
+                                        <H type="3" textAlign="left" text="Hesap Sil" />
+                                        <div className="ui orange message">
+                                            <div className="header">
+                                                Dikkat!
+                                            </div>
+                                            <p>Hesabınızı silerseniz bütün yorumlarınız da kalıcı olarak silinir.</p>
+                                        </div>
+                                        <Row size="one">
+                                            <Column>
+                                                {this.state.deleteOpened?
+                                                    <div>
+                                                        <div className="ui yellow message">E-Posta, kullanıcı adı ve parolanızı girin.</div>
+                                                        <div className="ui form">
+                                                            <div className="field">
+                                                                <label>E-Posta</label>
+                                                                <input type="text" value={this.state.emailToDelete} onChange={this.changeEmailToDelete} />
+                                                            </div>
+                                                            <div className="field">
+                                                                <label>Kullanıcı Adı</label>
+                                                                <input type="text" value={this.state.changeUsernameToDelete} onChange={this.changeUsernameToDelete}/>
+                                                            </div>
+                                                            <div className="field">
+                                                                <label>Parola</label>
+                                                                <input type="password" value={this.state.changePasswordToDelete} onChange={this.changePasswordToDelete}/>
+                                                            </div>
+                                                        </div>
+                                                        <FloatRight>
+                                                            <button id="deleteAccount" className={"ui red "+this.state.deleteAccount+" button"} onClick={this.deleteAccount}>
+                                                                Sil
+                                                            </button>
+                                                        </FloatRight>
+                                                    </div>
+                                                :
+                                                    <FloatRight>
+                                                        <button id="deleteAccount" className="ui red button" onClick={this.deleteAccount}>
+                                                            Sil
+                                                        </button>
+                                                    </FloatRight>
+                                            }
+                                            </Column>
+                                        </Row>
+                                    </Segment>
+                                </WideColumn>
+                                <WideColumn size="three"></WideColumn>
                             </Row>
                         </Column>
                     </Row>
