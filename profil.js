@@ -102,7 +102,8 @@ var ProfileInfo = function (_React$Component3) {
             usernameToDelete: "",
             passwordToDelete: "",
             deleteAccount: "",
-            deleteMessage: ""
+            deleteMessage: "",
+            verification: false
         };
         _this3.toggleSetting = _this3.toggleSetting.bind(_this3);
         _this3.logout = _this3.logout.bind(_this3);
@@ -418,6 +419,7 @@ var ProfileInfo = function (_React$Component3) {
             return React.createElement(
                 "div",
                 null,
+                !this.state.verification ? React.createElement(Verification, null) : "",
                 React.createElement(
                     Row,
                     { size: "one" },
@@ -478,8 +480,126 @@ var ProfileInfo = function (_React$Component3) {
     return ProfileInfo;
 }(React.Component);
 
-var NotFoundProfile = function (_React$Component4) {
-    _inherits(NotFoundProfile, _React$Component4);
+var Verification = function (_React$Component4) {
+    _inherits(Verification, _React$Component4);
+
+    function Verification(props) {
+        _classCallCheck(this, Verification);
+
+        var _this4 = _possibleConstructorReturn(this, (Verification.__proto__ || Object.getPrototypeOf(Verification)).call(this, props));
+
+        _this4.state = {
+            form: "normal",
+            verification: false,
+            verificationHeadMessage: true,
+            verificationAPIMessage: "",
+            verificationAPIMessageType: ""
+        };
+        _this4.sendVerification = _this4.sendVerification.bind(_this4);
+        return _this4;
+    }
+
+    _createClass(Verification, [{
+        key: "sendVerification",
+        value: function sendVerification() {
+            // burada gönderim işi yaplıacak
+        }
+    }, {
+        key: "render",
+        value: function render() {
+            if (this.state.form == "normal") {
+                this.body = React.createElement(
+                    Row,
+                    { size: "sixteen" },
+                    React.createElement(WideColumn, { size: "five" }),
+                    React.createElement(
+                        WideColumn,
+                        { size: "six" },
+                        React.createElement(
+                            "div",
+                            { className: "ui form" },
+                            React.createElement(
+                                "div",
+                                { className: "field" },
+                                React.createElement(
+                                    "label",
+                                    null,
+                                    "Aktivasyon Kodu"
+                                ),
+                                React.createElement("input", { type: "text" })
+                            )
+                        ),
+                        React.createElement(
+                            FloatRight,
+                            null,
+                            React.createElement(
+                                "button",
+                                { id: "sendActivation", className: "ui blue button", onClick: this.sendVerification },
+                                "G\xF6nder"
+                            )
+                        )
+                    )
+                );
+            } else if (this.state.form == "loading") {
+                this.body = React.createElement(RowLoading, null);
+            }
+            if (this.state.verificationAPIMessage) {
+                this.apiMessage = React.createElement(
+                    "div",
+                    null,
+                    React.createElement(
+                        Row,
+                        { size: "one" },
+                        React.createElement(
+                            Column,
+                            null,
+                            React.createElement(
+                                "div",
+                                { "class": "ui " + this.state.verificationAPIMessageType + " message" },
+                                this.state.verificationAPIMessage
+                            )
+                        )
+                    )
+                );
+            } else {
+                this.apiMessage = "";
+            }
+            return React.createElement(
+                "div",
+                null,
+                this.state.verificationHeadMessage ? React.createElement(
+                    Row,
+                    { size: "one" },
+                    React.createElement(
+                        Column,
+                        null,
+                        React.createElement(
+                            "div",
+                            { className: "ui negative message" },
+                            React.createElement(
+                                "div",
+                                { className: "header" },
+                                "E-posta Aktivasyonu Ba\u015Far\u0131s\u0131z!"
+                            ),
+                            React.createElement(
+                                "p",
+                                null,
+                                "L\xFCtfen E-postan\u0131za g\xF6nderdi\u011Fimiz kod ile e-posta aktivasyonunuzu yap\u0131n\u0131z"
+                            )
+                        )
+                    )
+                ) : "",
+                this.apiMessage,
+                this.body
+            );
+        }
+    }]);
+
+    return Verification;
+}(React.Component);
+
+var NotFoundProfile = function (_React$Component5) {
+    _inherits(NotFoundProfile, _React$Component5);
 
     function NotFoundProfile(props) {
         _classCallCheck(this, NotFoundProfile);
@@ -510,16 +630,16 @@ var NotFoundProfile = function (_React$Component4) {
     return NotFoundProfile;
 }(React.Component);
 
-var Comments = function (_React$Component5) {
-    _inherits(Comments, _React$Component5);
+var Comments = function (_React$Component6) {
+    _inherits(Comments, _React$Component6);
 
     function Comments(props) {
         _classCallCheck(this, Comments);
 
-        var _this5 = _possibleConstructorReturn(this, (Comments.__proto__ || Object.getPrototypeOf(Comments)).call(this, props));
+        var _this6 = _possibleConstructorReturn(this, (Comments.__proto__ || Object.getPrototypeOf(Comments)).call(this, props));
 
         if (!isMobile) {
-            _this5.buttonText = {
+            _this6.buttonText = {
                 editButtonText: "Düzenle",
                 deleteButtonText: "Sil",
                 approveDeleteButtonText: "Sil",
@@ -529,7 +649,7 @@ var Comments = function (_React$Component5) {
                 saveButtonText: "Kaydet"
             };
         } else {
-            _this5.buttonText = {
+            _this6.buttonText = {
                 editButtonText: "",
                 deleteButtonText: "",
                 approveDeleteButtonText: "",
@@ -539,7 +659,7 @@ var Comments = function (_React$Component5) {
                 saveButtonText: ""
             };
         }
-        return _this5;
+        return _this6;
     }
 
     _createClass(Comments, [{
@@ -560,21 +680,21 @@ var Comments = function (_React$Component5) {
     return Comments;
 }(React.Component);
 
-var Comment = function (_React$Component6) {
-    _inherits(Comment, _React$Component6);
+var Comment = function (_React$Component7) {
+    _inherits(Comment, _React$Component7);
 
     function Comment(props) {
         _classCallCheck(this, Comment);
 
-        var _this6 = _possibleConstructorReturn(this, (Comment.__proto__ || Object.getPrototypeOf(Comment)).call(this, props));
+        var _this7 = _possibleConstructorReturn(this, (Comment.__proto__ || Object.getPrototypeOf(Comment)).call(this, props));
 
-        _this6.state = {
+        _this7.state = {
             form: "normal",
             reVote: "none",
-            commentText: _this6.props.commentText,
-            commentTextOld: _this6.props.commentText
+            commentText: _this7.props.commentText,
+            commentTextOld: _this7.props.commentText
         };
-        _this6.inputRanges = [];
+        _this7.inputRanges = [];
         /*
         this.editButtonText = "Düzenle";
         this.deleteButtonText = "Sil";
@@ -582,12 +702,12 @@ var Comment = function (_React$Component6) {
         this.cancelDeleteButtonText = "İptal";
         this.cancelEditButtonText = "İptal";
         */
-        _this6.openEdit = _this6.openEdit.bind(_this6);
-        _this6.openDelete = _this6.openDelete.bind(_this6);
-        _this6.returnToNormal = _this6.returnToNormal.bind(_this6);
-        _this6.commentWriting = _this6.commentWriting.bind(_this6);
-        _this6.openReVote = _this6.openReVote.bind(_this6);
-        return _this6;
+        _this7.openEdit = _this7.openEdit.bind(_this7);
+        _this7.openDelete = _this7.openDelete.bind(_this7);
+        _this7.returnToNormal = _this7.returnToNormal.bind(_this7);
+        _this7.commentWriting = _this7.commentWriting.bind(_this7);
+        _this7.openReVote = _this7.openReVote.bind(_this7);
+        return _this7;
     }
 
     _createClass(Comment, [{
@@ -962,17 +1082,17 @@ var Comment = function (_React$Component6) {
     return Comment;
 }(React.Component);
 
-var RatingBar = function (_React$Component7) {
-    _inherits(RatingBar, _React$Component7);
+var RatingBar = function (_React$Component8) {
+    _inherits(RatingBar, _React$Component8);
 
     function RatingBar(props) {
         _classCallCheck(this, RatingBar);
 
-        var _this7 = _possibleConstructorReturn(this, (RatingBar.__proto__ || Object.getPrototypeOf(RatingBar)).call(this, props));
+        var _this8 = _possibleConstructorReturn(this, (RatingBar.__proto__ || Object.getPrototypeOf(RatingBar)).call(this, props));
 
-        _this7.percent = _this7.props.ratingAverage * 10;
+        _this8.percent = _this8.props.ratingAverage * 10;
         // bu kısım drawcircle ile aynı refactor ederken buna bir çare bulabilirsin
-        _this7.limitColor = {
+        _this8.limitColor = {
             0: {
                 min: 0,
                 max: 5,
@@ -989,16 +1109,16 @@ var RatingBar = function (_React$Component7) {
                 color: "#21ba45"
             }
         };
-        _this7.color = _this7.limitColor[0].color;
-        for (var i = 0; i < Object.keys(_this7.limitColor).length; i++) {
-            if (_this7.limitColor[i].min <= _this7.props.ratingAverage && _this7.props.ratingAverage < _this7.limitColor[i].max) {
-                _this7.color = _this7.limitColor[i].color;
+        _this8.color = _this8.limitColor[0].color;
+        for (var i = 0; i < Object.keys(_this8.limitColor).length; i++) {
+            if (_this8.limitColor[i].min <= _this8.props.ratingAverage && _this8.props.ratingAverage < _this8.limitColor[i].max) {
+                _this8.color = _this8.limitColor[i].color;
                 break;
             }
         }
         // ^^^
-        _this7.widthOfFill = _this7.props.ratingAverage * 15 + "px";
-        return _this7;
+        _this8.widthOfFill = _this8.props.ratingAverage * 15 + "px";
+        return _this8;
     }
 
     _createClass(RatingBar, [{
@@ -1025,8 +1145,8 @@ var RatingBar = function (_React$Component7) {
     return RatingBar;
 }(React.Component);
 
-var CommentText = function (_React$Component8) {
-    _inherits(CommentText, _React$Component8);
+var CommentText = function (_React$Component9) {
+    _inherits(CommentText, _React$Component9);
 
     function CommentText(props) {
         _classCallCheck(this, CommentText);

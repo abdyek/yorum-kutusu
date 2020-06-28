@@ -72,7 +72,8 @@ class ProfileInfo extends React.Component {
             usernameToDelete: "",
             passwordToDelete: "",
             deleteAccount:"",
-            deleteMessage:""
+            deleteMessage:"",
+            verification: false
         }
         this.toggleSetting = this.toggleSetting.bind(this);
         this.logout = this.logout.bind(this);
@@ -275,6 +276,10 @@ class ProfileInfo extends React.Component {
         }
         return(
             <div>
+                {   !this.state.verification? 
+                    <Verification />:
+                    ""
+                }
                 <Row size="one">
                     <Column>
                         <Center>
@@ -310,6 +315,79 @@ class ProfileInfo extends React.Component {
                     </Column>
                 </Row>
                 <Comments />
+            </div>
+        )
+    }
+}
+
+class Verification extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            form:"normal",
+            verification:false,
+            verificationHeadMessage: true,
+            verificationAPIMessage: "",
+            verificationAPIMessageType: ""
+        }
+        this.sendVerification = this.sendVerification.bind(this);
+    }
+    sendVerification() {
+        // burada gönderim işi yaplıacak
+    }
+    render() {
+        if(this.state.form=="normal") {
+            this.body = 
+                <Row size="sixteen">
+                    <WideColumn size="five"></WideColumn>
+                    <WideColumn size="six">
+                        <div className="ui form">
+                            <div className="field">
+                                <label>Aktivasyon Kodu</label>
+                                <input type="text" />
+                            </div>
+                        </div>
+                        <FloatRight>
+                            <button id="sendActivation" className="ui blue button" onClick={this.sendVerification}>
+                                Gönder
+                            </button>
+                        </FloatRight>
+                    </WideColumn>
+                </Row>
+        } else if(this.state.form=="loading") {
+            this.body = <RowLoading />
+        }
+        if(this.state.verificationAPIMessage) {
+            this.apiMessage =
+                <div>
+                    <Row size="one">
+                        <Column>
+                            <div class={"ui "+this.state.verificationAPIMessageType+" message"}>{this.state.verificationAPIMessage}</div>
+                        </Column>
+                    </Row>
+                </div>
+        } else {
+            this.apiMessage = "";
+        }
+        return (
+            <div>
+                {
+                    this.state.verificationHeadMessage?
+                    <Row size="one">
+                        <Column>
+                        <div className="ui negative message">
+                            <div className="header">
+                                E-posta Aktivasyonu Başarısız!
+                            </div>
+                            <p>Lütfen E-postanıza gönderdiğimiz kod ile e-posta aktivasyonunuzu yapınız
+                            </p>
+                        </div>
+                        </Column>
+                    </Row>:
+                    ""
+                }
+                {this.apiMessage}
+                {this.body}
             </div>
         )
     }
