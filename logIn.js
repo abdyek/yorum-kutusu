@@ -113,52 +113,52 @@ var LogIn = function (_React$Component2) {
         key: "render",
         value: function render() {
             if (this.state.loading) {
-                return React.createElement(Loading, null);
-            }
-            return React.createElement(
-                Row,
-                { size: "sixteen" },
-                React.createElement(WideColumn, { size: "four" }),
-                React.createElement(
-                    WideColumn,
-                    { size: "eight" },
-                    React.createElement(H, { type: "1", textAlign: "center", text: "Giri\u015F Yap" }),
-                    this.state.message,
+                return React.createElement(RowLoading, null);
+            } else {
+                return React.createElement(
+                    Row,
+                    { size: "sixteen" },
+                    React.createElement(WideColumn, { size: "four" }),
                     React.createElement(
-                        "form",
-                        { className: "ui form" },
+                        WideColumn,
+                        { size: "eight" },
+                        this.state.message,
                         React.createElement(
-                            "div",
-                            { className: "field" },
+                            "form",
+                            { className: "ui form" },
                             React.createElement(
-                                "label",
-                                null,
-                                "E-posta"
+                                "div",
+                                { className: "field" },
+                                React.createElement(
+                                    "label",
+                                    null,
+                                    "E-posta"
+                                ),
+                                React.createElement("input", { type: "text", name: "id", value: this.state.id, onChange: this.idChange, placeholder: "veya Kullan\u0131c\u0131 Ad\u0131" })
                             ),
-                            React.createElement("input", { type: "text", name: "id", value: this.state.id, onChange: this.idChange, placeholder: "veya Kullan\u0131c\u0131 Ad\u0131" })
-                        ),
-                        React.createElement(
-                            "div",
-                            { className: "field" },
                             React.createElement(
-                                "label",
-                                null,
-                                "Parola"
+                                "div",
+                                { className: "field" },
+                                React.createElement(
+                                    "label",
+                                    null,
+                                    "Parola"
+                                ),
+                                React.createElement("input", { type: "password", name: "password", value: this.state.password, onChange: this.passwordChange, placeholder: "Parola" })
                             ),
-                            React.createElement("input", { type: "password", name: "password", value: this.state.password, onChange: this.passwordChange, placeholder: "Parola" })
-                        ),
-                        React.createElement(
-                            FloatRight,
-                            null,
                             React.createElement(
-                                "button",
-                                { className: "ui primary button", type: "submit", onClick: this.logInClick },
-                                "Giri\u015F Yap"
+                                FloatRight,
+                                null,
+                                React.createElement(
+                                    "button",
+                                    { className: "ui primary button", type: "submit", onClick: this.logInClick },
+                                    "Giri\u015F Yap"
+                                )
                             )
                         )
                     )
-                )
-            );
+                );
+            }
         }
     }]);
 
@@ -255,8 +255,40 @@ var UserArea = function (_React$Component5) {
     return UserArea;
 }(React.Component);
 
-var Content = function (_React$Component6) {
-    _inherits(Content, _React$Component6);
+var Head = function (_React$Component6) {
+    _inherits(Head, _React$Component6);
+
+    function Head() {
+        _classCallCheck(this, Head);
+
+        return _possibleConstructorReturn(this, (Head.__proto__ || Object.getPrototypeOf(Head)).apply(this, arguments));
+    }
+
+    _createClass(Head, [{
+        key: "render",
+        value: function render() {
+            return React.createElement(
+                "div",
+                null,
+                React.createElement(
+                    Row,
+                    { size: "sixteen" },
+                    React.createElement(WideColumn, { size: "four" }),
+                    React.createElement(
+                        WideColumn,
+                        { size: "eight" },
+                        React.createElement(H, { type: "1", textAlign: "center", text: "Giri\u015F Yap" })
+                    )
+                )
+            );
+        }
+    }]);
+
+    return Head;
+}(React.Component);
+
+var Content = function (_React$Component7) {
+    _inherits(Content, _React$Component7);
 
     function Content(props) {
         _classCallCheck(this, Content);
@@ -270,6 +302,7 @@ var Content = function (_React$Component6) {
             return React.createElement(
                 "div",
                 null,
+                React.createElement(Head, null),
                 React.createElement(LogIn, null),
                 React.createElement(SignUp, null)
             );
