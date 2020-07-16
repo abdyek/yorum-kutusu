@@ -16,21 +16,6 @@ if(profileOwner==username){
     owner = false;
 }
 
-class App extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-    render() {
-        return (
-            <div>
-                <Header />
-                <Content />
-                <Footer />
-            </div>
-        )
-    }
-}
-
 class Content extends React.Component {
     constructor(props) {
         super(props);
@@ -283,7 +268,9 @@ class ProfileInfo extends React.Component {
                 <Row size="one">
                     <Column>
                         <Center>
-                            <i id="userIcon" className="user huge circle icon"></i>
+                            <i id="userIcon">
+                                <i class="fa fa-user-circle" aria-hidden="true"></i>
+                            </i>
                             <H type="1" text={profileOwner}/>
                             {
                                 owner ?
@@ -771,9 +758,3 @@ class CommentText extends React.Component {
 
 
 
-
-
-ReactDOM.render(
-    <App />,
-    document.getElementById('root')
-);

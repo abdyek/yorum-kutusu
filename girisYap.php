@@ -21,7 +21,7 @@
 <html lang="en">
 <head>
     <!-- bu kısım host'a atınca güncellenmeli -->
-    <base href="http://localhost/yorumlaa/" >
+    <base href="<?php echo $siteUrl ?>">
     <!-- ^ bu kısım host'a atınca güncellenmeli -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -42,8 +42,8 @@
     integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ="
     crossorigin="anonymous"></script>
     <script src="semantic.min.js"></script>
-    <script src="ajax.js"></script>
     <script src="components.js"></script>
     <script src="logIn.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>

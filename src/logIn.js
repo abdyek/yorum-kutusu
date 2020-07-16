@@ -1,20 +1,3 @@
-// bu kısmı nereden kontrol edeceğime henüz karar vermedim
-
-class App extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-    render() {
-        return(
-            <div>
-                <Header />
-                <Content />
-                <Footer />
-            </div>
-        )
-    }
-}
-
 // eğer kullanıcı giriş yapmadıysa burayı göstericez
 class LogIn extends React.Component {
     constructor(props) {
@@ -174,8 +157,3 @@ class Content extends React.Component {
         )
     }
 }
-
-ReactDOM.render(
-    <App />,
-    document.getElementById('root')
-);

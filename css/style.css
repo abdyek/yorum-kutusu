@@ -51,6 +51,10 @@ header > div {
     padding-left:25px;
 }
 
+#userIcon {
+    font-size:10rem;
+}
+
 #menu {
     margin-top:9px;
 }

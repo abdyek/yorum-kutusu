@@ -216,56 +216,6 @@ class Buttons extends React.Component {
     }
 }
 
-/* bu bütün sayfalarda kullanılabilecek bir bileşendir */
-class Menu extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-    render() {
-        if(username==undefined) {
-            return(
-                <LogInButton />
-            )
-        }
-        return(
-            <AccountButton userName={username} />
-        )
-    }
-}
-
-class LogInButton extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-    render() {
-        return(
-            <a href="girisYap">
-                <div id="menu" className="ui secondary  menu">
-                    <div id="hesap" className="ui button">
-                        <i className="user icon"></i> Giriş Yap
-                    </div>
-                </div>
-            </a>
-        )
-    }
-}
-
-class AccountButton extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-    render() {
-        return(
-            <a href={"profil/"+this.props.userName}>
-                <div id="menu" className="ui secondary  menu">
-                    <div id="hesap" className="ui button">
-                        <i className="user icon"></i>{this.props.userName}
-                    </div>
-                </div>
-            </a>
-        )
-    }
-}
 
 
 /* bu bütün sayfalarda kullanılabilecek bir bileşendir */
@@ -279,18 +229,6 @@ class Logo extends React.Component {
     }
 }
 
-/* bu bütün sayfalarda kullanılabilecek bir bileşendir */
-class SearchBar extends React.Component {
-    render() {
-        return(
-<div id="search" className="ui search">
-  <input className="prompt" type="text" placeholder="Ara..." />
-</div>
-        )
-    }
-}
-
-/* bu bütün sayfalarda kullanılabilecek bir bileşendir */
 class Categories extends React.Component {
     render(){
         return(
@@ -302,52 +240,6 @@ class Categories extends React.Component {
                 <button className=" big ui  button">Ofis</button>
                 <button className=" big ui  button">Kozmetik</button>
                 <button className=" big ui  button">Kitap</button>
-            </div>
-        )
-    }
-}
-
-
-/* bu bütün sayfalarda kullanılabilecek bir bileşendir */
-class Header extends React.Component {
-    render() {
-        return(
-            <header>
-                <Row withoutContainer={true} size="one">
-                    <Column>
-                        <Row>
-                            <WideColumn size="four">
-                                <Logo />
-                            </WideColumn>
-                            <WideColumn size="eight">
-                                <SearchBar />
-                            </WideColumn>
-                            <WideColumn size="four">
-                                <FloatRight>
-                                    <Menu />
-                                </FloatRight>
-                            </WideColumn>
-                        </Row>
-                    </Column>
-                </Row>
-                <Row withoutContainer={true} size="one">
-                    <Column>
-                        <Center size="sixteen">
-                            <Categories />
-                        </Center>
-                    </Column>
-                </Row>
-            </header>
-        )
-    }
-}
-
-/* bu bütün sayfalarda kullanılabilecek bir bileşendir */
-class Footer extends React.Component {
-    render() {
-        return(
-            <div>
-
             </div>
         )
     }

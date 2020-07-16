@@ -6,56 +6,27 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-// bu kısmı nereden kontrol edeceğime henüz karar vermedim
-
-var App = function (_React$Component) {
-    _inherits(App, _React$Component);
-
-    function App(props) {
-        _classCallCheck(this, App);
-
-        return _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
-    }
-
-    _createClass(App, [{
-        key: "render",
-        value: function render() {
-            return React.createElement(
-                "div",
-                null,
-                React.createElement(Header, null),
-                React.createElement(Content, null),
-                React.createElement(Footer, null)
-            );
-        }
-    }]);
-
-    return App;
-}(React.Component);
-
 // eğer kullanıcı giriş yapmadıysa burayı göstericez
-
-
-var LogIn = function (_React$Component2) {
-    _inherits(LogIn, _React$Component2);
+var LogIn = function (_React$Component) {
+    _inherits(LogIn, _React$Component);
 
     function LogIn(props) {
         _classCallCheck(this, LogIn);
 
         // bind
-        var _this2 = _possibleConstructorReturn(this, (LogIn.__proto__ || Object.getPrototypeOf(LogIn)).call(this, props));
+        var _this = _possibleConstructorReturn(this, (LogIn.__proto__ || Object.getPrototypeOf(LogIn)).call(this, props));
 
-        _this2.logInClick = _this2.logInClick.bind(_this2);
-        _this2.idChange = _this2.idChange.bind(_this2);
-        _this2.passwordChange = _this2.passwordChange.bind(_this2);
+        _this.logInClick = _this.logInClick.bind(_this);
+        _this.idChange = _this.idChange.bind(_this);
+        _this.passwordChange = _this.passwordChange.bind(_this);
         // ^ bind
-        _this2.state = {
+        _this.state = {
             id: "",
             password: "",
             loading: false,
             message: ""
         };
-        return _this2;
+        return _this;
     }
 
     _createClass(LogIn, [{
@@ -165,8 +136,8 @@ var LogIn = function (_React$Component2) {
     return LogIn;
 }(React.Component);
 
-var SignUp = function (_React$Component3) {
-    _inherits(SignUp, _React$Component3);
+var SignUp = function (_React$Component2) {
+    _inherits(SignUp, _React$Component2);
 
     function SignUp() {
         _classCallCheck(this, SignUp);
@@ -206,8 +177,8 @@ var SignUp = function (_React$Component3) {
     return SignUp;
 }(React.Component);
 
-var ErrorMessageBox = function (_React$Component4) {
-    _inherits(ErrorMessageBox, _React$Component4);
+var ErrorMessageBox = function (_React$Component3) {
+    _inherits(ErrorMessageBox, _React$Component3);
 
     function ErrorMessageBox() {
         _classCallCheck(this, ErrorMessageBox);
@@ -232,8 +203,8 @@ var ErrorMessageBox = function (_React$Component4) {
     return ErrorMessageBox;
 }(React.Component);
 
-var UserArea = function (_React$Component5) {
-    _inherits(UserArea, _React$Component5);
+var UserArea = function (_React$Component4) {
+    _inherits(UserArea, _React$Component4);
 
     function UserArea() {
         _classCallCheck(this, UserArea);
@@ -255,8 +226,8 @@ var UserArea = function (_React$Component5) {
     return UserArea;
 }(React.Component);
 
-var Head = function (_React$Component6) {
-    _inherits(Head, _React$Component6);
+var Head = function (_React$Component5) {
+    _inherits(Head, _React$Component5);
 
     function Head() {
         _classCallCheck(this, Head);
@@ -287,8 +258,8 @@ var Head = function (_React$Component6) {
     return Head;
 }(React.Component);
 
-var Content = function (_React$Component7) {
-    _inherits(Content, _React$Component7);
+var Content = function (_React$Component6) {
+    _inherits(Content, _React$Component6);
 
     function Content(props) {
         _classCallCheck(this, Content);
@@ -311,5 +282,3 @@ var Content = function (_React$Component7) {
 
     return Content;
 }(React.Component);
-
-ReactDOM.render(React.createElement(App, null), document.getElementById('root'));

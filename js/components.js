@@ -455,97 +455,8 @@ var Buttons = function (_React$Component14) {
 /* bu bütün sayfalarda kullanılabilecek bir bileşendir */
 
 
-var Menu = function (_React$Component15) {
-    _inherits(Menu, _React$Component15);
-
-    function Menu(props) {
-        _classCallCheck(this, Menu);
-
-        return _possibleConstructorReturn(this, (Menu.__proto__ || Object.getPrototypeOf(Menu)).call(this, props));
-    }
-
-    _createClass(Menu, [{
-        key: "render",
-        value: function render() {
-            if (username == undefined) {
-                return React.createElement(LogInButton, null);
-            }
-            return React.createElement(AccountButton, { userName: username });
-        }
-    }]);
-
-    return Menu;
-}(React.Component);
-
-var LogInButton = function (_React$Component16) {
-    _inherits(LogInButton, _React$Component16);
-
-    function LogInButton(props) {
-        _classCallCheck(this, LogInButton);
-
-        return _possibleConstructorReturn(this, (LogInButton.__proto__ || Object.getPrototypeOf(LogInButton)).call(this, props));
-    }
-
-    _createClass(LogInButton, [{
-        key: "render",
-        value: function render() {
-            return React.createElement(
-                "a",
-                { href: "girisYap" },
-                React.createElement(
-                    "div",
-                    { id: "menu", className: "ui secondary  menu" },
-                    React.createElement(
-                        "div",
-                        { id: "hesap", className: "ui button" },
-                        React.createElement("i", { className: "user icon" }),
-                        " Giri\u015F Yap"
-                    )
-                )
-            );
-        }
-    }]);
-
-    return LogInButton;
-}(React.Component);
-
-var AccountButton = function (_React$Component17) {
-    _inherits(AccountButton, _React$Component17);
-
-    function AccountButton(props) {
-        _classCallCheck(this, AccountButton);
-
-        return _possibleConstructorReturn(this, (AccountButton.__proto__ || Object.getPrototypeOf(AccountButton)).call(this, props));
-    }
-
-    _createClass(AccountButton, [{
-        key: "render",
-        value: function render() {
-            return React.createElement(
-                "a",
-                { href: "profil/" + this.props.userName },
-                React.createElement(
-                    "div",
-                    { id: "menu", className: "ui secondary  menu" },
-                    React.createElement(
-                        "div",
-                        { id: "hesap", className: "ui button" },
-                        React.createElement("i", { className: "user icon" }),
-                        this.props.userName
-                    )
-                )
-            );
-        }
-    }]);
-
-    return AccountButton;
-}(React.Component);
-
-/* bu bütün sayfalarda kullanılabilecek bir bileşendir */
-
-
-var Logo = function (_React$Component18) {
-    _inherits(Logo, _React$Component18);
+var Logo = function (_React$Component15) {
+    _inherits(Logo, _React$Component15);
 
     function Logo() {
         _classCallCheck(this, Logo);
@@ -567,37 +478,8 @@ var Logo = function (_React$Component18) {
     return Logo;
 }(React.Component);
 
-/* bu bütün sayfalarda kullanılabilecek bir bileşendir */
-
-
-var SearchBar = function (_React$Component19) {
-    _inherits(SearchBar, _React$Component19);
-
-    function SearchBar() {
-        _classCallCheck(this, SearchBar);
-
-        return _possibleConstructorReturn(this, (SearchBar.__proto__ || Object.getPrototypeOf(SearchBar)).apply(this, arguments));
-    }
-
-    _createClass(SearchBar, [{
-        key: "render",
-        value: function render() {
-            return React.createElement(
-                "div",
-                { id: "search", className: "ui search" },
-                React.createElement("input", { className: "prompt", type: "text", placeholder: "Ara..." })
-            );
-        }
-    }]);
-
-    return SearchBar;
-}(React.Component);
-
-/* bu bütün sayfalarda kullanılabilecek bir bileşendir */
-
-
-var Categories = function (_React$Component20) {
-    _inherits(Categories, _React$Component20);
+var Categories = function (_React$Component16) {
+    _inherits(Categories, _React$Component16);
 
     function Categories() {
         _classCallCheck(this, Categories);
@@ -653,114 +535,23 @@ var Categories = function (_React$Component20) {
     return Categories;
 }(React.Component);
 
-/* bu bütün sayfalarda kullanılabilecek bir bileşendir */
-
-
-var Header = function (_React$Component21) {
-    _inherits(Header, _React$Component21);
-
-    function Header() {
-        _classCallCheck(this, Header);
-
-        return _possibleConstructorReturn(this, (Header.__proto__ || Object.getPrototypeOf(Header)).apply(this, arguments));
-    }
-
-    _createClass(Header, [{
-        key: "render",
-        value: function render() {
-            return React.createElement(
-                "header",
-                null,
-                React.createElement(
-                    Row,
-                    { withoutContainer: true, size: "one" },
-                    React.createElement(
-                        Column,
-                        null,
-                        React.createElement(
-                            Row,
-                            null,
-                            React.createElement(
-                                WideColumn,
-                                { size: "four" },
-                                React.createElement(Logo, null)
-                            ),
-                            React.createElement(
-                                WideColumn,
-                                { size: "eight" },
-                                React.createElement(SearchBar, null)
-                            ),
-                            React.createElement(
-                                WideColumn,
-                                { size: "four" },
-                                React.createElement(
-                                    FloatRight,
-                                    null,
-                                    React.createElement(Menu, null)
-                                )
-                            )
-                        )
-                    )
-                ),
-                React.createElement(
-                    Row,
-                    { withoutContainer: true, size: "one" },
-                    React.createElement(
-                        Column,
-                        null,
-                        React.createElement(
-                            Center,
-                            { size: "sixteen" },
-                            React.createElement(Categories, null)
-                        )
-                    )
-                )
-            );
-        }
-    }]);
-
-    return Header;
-}(React.Component);
-
-/* bu bütün sayfalarda kullanılabilecek bir bileşendir */
-
-
-var Footer = function (_React$Component22) {
-    _inherits(Footer, _React$Component22);
-
-    function Footer() {
-        _classCallCheck(this, Footer);
-
-        return _possibleConstructorReturn(this, (Footer.__proto__ || Object.getPrototypeOf(Footer)).apply(this, arguments));
-    }
-
-    _createClass(Footer, [{
-        key: "render",
-        value: function render() {
-            return React.createElement("div", null);
-        }
-    }]);
-
-    return Footer;
-}(React.Component);
-
 // bunlar 2 sayfada bulunduğu için componentJS'ye taşınmasını uygun buldum
 
 
-var LikeButton = function (_React$Component23) {
-    _inherits(LikeButton, _React$Component23);
+var LikeButton = function (_React$Component17) {
+    _inherits(LikeButton, _React$Component17);
 
     function LikeButton(props) {
         _classCallCheck(this, LikeButton);
 
-        var _this23 = _possibleConstructorReturn(this, (LikeButton.__proto__ || Object.getPrototypeOf(LikeButton)).call(this, props));
+        var _this17 = _possibleConstructorReturn(this, (LikeButton.__proto__ || Object.getPrototypeOf(LikeButton)).call(this, props));
 
-        if (_this23.props.likeOrDislike == "like") {
-            _this23.liked = " likedComment";
+        if (_this17.props.likeOrDislike == "like") {
+            _this17.liked = " likedComment";
         } else {
-            _this23.liked = " ";
+            _this17.liked = " ";
         }
-        return _this23;
+        return _this17;
     }
 
     _createClass(LikeButton, [{
@@ -782,20 +573,20 @@ var LikeButton = function (_React$Component23) {
     return LikeButton;
 }(React.Component);
 
-var DislikeButton = function (_React$Component24) {
-    _inherits(DislikeButton, _React$Component24);
+var DislikeButton = function (_React$Component18) {
+    _inherits(DislikeButton, _React$Component18);
 
     function DislikeButton(props) {
         _classCallCheck(this, DislikeButton);
 
-        var _this24 = _possibleConstructorReturn(this, (DislikeButton.__proto__ || Object.getPrototypeOf(DislikeButton)).call(this, props));
+        var _this18 = _possibleConstructorReturn(this, (DislikeButton.__proto__ || Object.getPrototypeOf(DislikeButton)).call(this, props));
 
-        if (_this24.props.likeOrDislike == "dislike") {
-            _this24.liked = " dislikedComment";
+        if (_this18.props.likeOrDislike == "dislike") {
+            _this18.liked = " dislikedComment";
         } else {
-            _this24.liked = " ";
+            _this18.liked = " ";
         }
-        return _this24;
+        return _this18;
     }
 
     _createClass(DislikeButton, [{
@@ -817,8 +608,8 @@ var DislikeButton = function (_React$Component24) {
     return DislikeButton;
 }(React.Component);
 
-var ComplaintButton = function (_React$Component25) {
-    _inherits(ComplaintButton, _React$Component25);
+var ComplaintButton = function (_React$Component19) {
+    _inherits(ComplaintButton, _React$Component19);
 
     function ComplaintButton() {
         _classCallCheck(this, ComplaintButton);
