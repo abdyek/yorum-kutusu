@@ -6,40 +6,15 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var App = function (_React$Component) {
-    _inherits(App, _React$Component);
-
-    function App() {
-        _classCallCheck(this, App);
-
-        return _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).apply(this, arguments));
-    }
-
-    _createClass(App, [{
-        key: "render",
-        value: function render() {
-            return React.createElement(
-                "div",
-                null,
-                React.createElement(Header, null),
-                React.createElement(Content, null),
-                React.createElement(Footer, null)
-            );
-        }
-    }]);
-
-    return App;
-}(React.Component);
-
-var Content = function (_React$Component2) {
-    _inherits(Content, _React$Component2);
+var Content = function (_React$Component) {
+    _inherits(Content, _React$Component);
 
     function Content(props) {
         _classCallCheck(this, Content);
 
-        var _this2 = _possibleConstructorReturn(this, (Content.__proto__ || Object.getPrototypeOf(Content)).call(this, props));
+        var _this = _possibleConstructorReturn(this, (Content.__proto__ || Object.getPrototypeOf(Content)).call(this, props));
 
-        _this2.state = {
+        _this.state = {
             form: "normal",
             emailText: "",
             usernameText: "",
@@ -55,12 +30,12 @@ var Content = function (_React$Component2) {
             */
             error: null
         };
-        _this2.signUpClick = _this2.signUpClick.bind(_this2);
-        _this2.changeEmail = _this2.changeEmail.bind(_this2);
-        _this2.changeUsername = _this2.changeUsername.bind(_this2);
-        _this2.changePassword = _this2.changePassword.bind(_this2);
-        _this2.changePasswordVerification = _this2.changePasswordVerification.bind(_this2);
-        return _this2;
+        _this.signUpClick = _this.signUpClick.bind(_this);
+        _this.changeEmail = _this.changeEmail.bind(_this);
+        _this.changeUsername = _this.changeUsername.bind(_this);
+        _this.changePassword = _this.changePassword.bind(_this);
+        _this.changePasswordVerification = _this.changePasswordVerification.bind(_this);
+        return _this;
     }
 
     _createClass(Content, [{
@@ -223,5 +198,3 @@ var Content = function (_React$Component2) {
 
     return Content;
 }(React.Component);
-
-ReactDOM.render(React.createElement(App, null), document.getElementById('root'));

@@ -6,24 +6,6 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-// aygıtın mobil olması ya da olmaması butonlar için önemli,
-// ekran boyutunu her yorum için kontrol etmek fazladan yavaşlayacaktı o yüzden değişkene atadım
-
-var isMobile = void 0;
-if ((window.innerWidth > 0 ? window.innerWidth : screen.width) < 750) {
-    isMobile = true;
-} else {
-    isMobile = false;
-}
-
-// profilin sahibi değil mi kontrol ediyoruz
-var owner = void 0;
-if (profileOwner == username) {
-    owner = true;
-} else {
-    owner = false;
-}
-
 var Content = function (_React$Component) {
     _inherits(Content, _React$Component);
 
@@ -53,6 +35,9 @@ var Content = function (_React$Component) {
 
     return Content;
 }(React.Component);
+
+owner = true;
+isMobile = false;
 
 var ProfileInfo = function (_React$Component2) {
     _inherits(ProfileInfo, _React$Component2);
@@ -407,9 +392,9 @@ var ProfileInfo = function (_React$Component2) {
                             React.createElement(
                                 "i",
                                 { id: "userIcon" },
-                                React.createElement("i", { "class": "fa fa-user-circle", "aria-hidden": "true" })
+                                React.createElement("i", { className: "fa fa-user-circle", "aria-hidden": "true" })
                             ),
-                            React.createElement(H, { type: "1", text: profileOwner }),
+                            React.createElement(H, { type: "1", text: "önemsiz" }),
                             owner ? React.createElement(
                                 "div",
                                 null,

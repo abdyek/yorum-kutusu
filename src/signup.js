@@ -1,15 +1,3 @@
-class App extends React.Component {
-    render() {
-        return(
-            <div>
-                <Header />
-                <Content />
-                <Footer />
-            </div>
-        )
-    }
-}
-
 class Content extends React.Component {
     constructor(props) {
         super(props);
@@ -133,8 +121,3 @@ class Content extends React.Component {
         )
     }
 }
-
-ReactDOM.render(
-    <App />,
-    document.getElementById('root')
-)

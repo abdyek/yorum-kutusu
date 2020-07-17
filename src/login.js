@@ -98,7 +98,7 @@ class SignUp extends React.Component {
                     <Column>
                         <Center>
                             Hesabın mı yok?<br />
-                            <a href="uyeOl">
+                            <a href="uye-ol">
                                 Şimdi Üye ol
                             </a>
                         </Center>

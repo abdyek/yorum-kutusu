@@ -51,8 +51,8 @@ var LogInButton = function (_React$Component2) {
                         { id: "hesap", className: "ui button" },
                         React.createElement(
                             "i",
-                            { "class": "icon" },
-                            React.createElement("i", { "class": "fa fa-user", "aria-hidden": "true" })
+                            { className: "icon" },
+                            React.createElement("i", { className: "fa fa-user", "aria-hidden": "true" })
                         ),
                         "Giri\u015F Yap"
                     )
@@ -85,7 +85,7 @@ var AccountButton = function (_React$Component3) {
                     React.createElement(
                         "div",
                         { id: "hesap", className: "ui button" },
-                        React.createElement("i", { "class": "fa fa-user", "aria-hidden": "true" }),
+                        React.createElement("i", { className: "fa fa-user", "aria-hidden": "true" }),
                         " ",
                         this.props.userName
                     )

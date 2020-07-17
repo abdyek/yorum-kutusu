@@ -23,8 +23,8 @@ class LogInButton extends React.Component {
             <a href="girisYap">
                 <div id="menu" className="ui secondary  menu">
                     <div id="hesap" className="ui button">
-                        <i class="icon">
-                            <i class="fa fa-user" aria-hidden="true"></i>
+                        <i className="icon">
+                            <i className="fa fa-user" aria-hidden="true"></i>
                         </i>
                         Giriş Yap
                     </div>
@@ -43,7 +43,7 @@ class AccountButton extends React.Component {
             <a href={"profil/"+this.props.userName}>
                 <div id="menu" className="ui secondary  menu">
                     <div id="hesap" className="ui button">
-                        <i class="fa fa-user" aria-hidden="true"></i> {this.props.userName}
+                        <i className="fa fa-user" aria-hidden="true"></i> {this.props.userName}
                     </div>
                 </div>
             </a>

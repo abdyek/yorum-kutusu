@@ -1,4 +1,4 @@
-class App extends React.Component {
+class Content extends React.Component {
     constructor(props) {
         super(props);
         let currentUrl = window.location.href;
@@ -105,9 +105,8 @@ class App extends React.Component {
     render() {
         return (
             <div>
-                <Header /> {/* from components.js */}
-                { this.state.ready ?
-                <Content 
+                { /*this.state.ready*/ true ?
+                <SubContent 
                     comments={this.state.comments}
                     productName={this.state.productTitle}
                     mainCategory={{
@@ -154,7 +153,6 @@ class App extends React.Component {
                     ]*/}
                     imagesSrcs={this.state.images}
                 />: <LoadingOrNotFoundProduct form={this.state.LoadingOrNotFoundProduct}/>}
-                <Footer /> {/* from components.js */}
             </div>
         )
     }
@@ -179,15 +177,10 @@ class LoadingOrNotFoundProduct extends React.Component {
     }
 }
 
-class Content extends React.Component {
+class SubContent extends React.Component {
     render() {
         return(
             <div id="content">
-                <BreadCrumb
-                    mainCategory={this.props.mainCategory}
-                    categoryChildren={this.props.categoryChildren}
-                    productName={this.props.productName}
-                />
                 <ProductHeader productName={this.props.productName}/>
                 <FollowButton followers={this.props.followers} followed={this.props.followed}/>
                 <Product attributes={this.props.attributes} imagesSrcs={this.props.imagesSrcs}/>
@@ -197,34 +190,6 @@ class Content extends React.Component {
     }
 }
 
-class BreadCrumb extends React.Component {
-    constructor(props){
-        super(props);
-        this.categoryChildren = [];
-        for(var i=0;i<this.props.categoryChildren.length; i++) {
-            this.categoryChildren.push(
-                <span key={this.props.categoryChildren[i].id}>
-                    <i className="right angle icon divider"></i>
-                    <a className="section">{this.props.categoryChildren[i].name}</a>
-                </span>
-            )
-        }
-    }
-    render() {
-        return(
-            <Row size="one">
-                <Column>
-                    <div className="ui breadcrumb">
-                        <a className="section">{this.props.mainCategory.name}</a>
-                        {this.categoryChildren}
-                        <i className="right angle icon divider"></i>
-                        <div className="active section">{this.props.productName}</div>
-                    </div>
-                </Column>
-            </Row>
-        )
-    }
-}
 
 class ProductHeader extends React.Component {
     render() {
@@ -775,8 +740,3 @@ class SendButton extends React.Component {
         )
     }
 }
-
-ReactDOM.render(
-    <App />,
-    document.getElementById('root')
-);

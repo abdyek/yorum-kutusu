@@ -164,7 +164,7 @@ var SignUp = function (_React$Component2) {
                             React.createElement("br", null),
                             React.createElement(
                                 "a",
-                                { href: "uyeOl" },
+                                { href: "uye-ol" },
                                 "\u015Eimdi \xDCye ol"
                             )
                         )

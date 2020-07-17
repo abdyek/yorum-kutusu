@@ -1,21 +1,3 @@
-// aygıtın mobil olması ya da olmaması butonlar için önemli,
-// ekran boyutunu her yorum için kontrol etmek fazladan yavaşlayacaktı o yüzden değişkene atadım
-
-let isMobile;
-if(((window.innerWidth > 0) ? window.innerWidth : screen.width) < 750) {
-    isMobile = true;
-} else {
-    isMobile = false;
-}
-
-// profilin sahibi değil mi kontrol ediyoruz
-let owner;
-if(profileOwner==username){
-    owner = true;
-} else {
-    owner = false;
-}
-
 class Content extends React.Component {
     constructor(props) {
         super(props);
@@ -38,6 +20,9 @@ class Content extends React.Component {
         }
     }
 }
+
+owner = true;
+isMobile = false;
 
 class ProfileInfo extends React.Component {
     constructor(props) {
@@ -269,9 +254,9 @@ class ProfileInfo extends React.Component {
                     <Column>
                         <Center>
                             <i id="userIcon">
-                                <i class="fa fa-user-circle" aria-hidden="true"></i>
+                                <i className="fa fa-user-circle" aria-hidden="true"></i>
                             </i>
-                            <H type="1" text={profileOwner}/>
+                            <H type="1" text={"önemsiz"}/>
                             {
                                 owner ?
                                     <div>
