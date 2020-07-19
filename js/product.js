@@ -9,165 +9,20 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var Content = function (_React$Component) {
     _inherits(Content, _React$Component);
 
-    function Content(props) {
+    function Content() {
         _classCallCheck(this, Content);
 
-        var _this = _possibleConstructorReturn(this, (Content.__proto__ || Object.getPrototypeOf(Content)).call(this, props));
-
-        var currentUrl = window.location.href;
-        var productName = currentUrl.split("urun/")[1];
-        _this.state = {
-            ready: false,
-            productName: productName,
-            productTitle: "",
-            images: [],
-            productRating: [],
-            comments: [],
-            LoadingOrNotFoundProduct: "loading"
-        };
-        return _this;
+        return _possibleConstructorReturn(this, (Content.__proto__ || Object.getPrototypeOf(Content)).apply(this, arguments));
     }
 
     _createClass(Content, [{
-        key: "componentDidMount",
-        value: function componentDidMount() {
-            $.ajax({
-                type: 'GET',
-                url: 'https://yorumlaa.herokuapp.com/api/products/' + this.state.productName,
-                data: {
-                    "": ""
-                },
-                statusCode: {
-                    404: function () {
-                        this.setState({
-                            LoadingOrNotFoundProduct: "notFoundProduct"
-                            /* kodları çok spagetti yazdım, ilerleyen zamanlarda ihtiyacım olursa buraları refactor ederim */
-                        });
-                    }.bind(this)
-                },
-                success: function (response) {
-                    // bradcrumb
-                    var breadCrumb = [];
-                    breadCrumb.push(response.breadcrumb[0].name);
-                    curCate = response.breadcrumb[0].children;
-                    // breadcrumb kısmını şimdilik bırakıyorum
-                    /*
-                    while(curCate.length!=0) {
-                        breadCrumb.push(response.breadcrumb[0].name);
-                        curCate = response.breadcrumb[0].children;
-                    }
-                    */
-                    // images
-                    // image linklerinde bir sıkıntı var o yüzden görünmüyor
-                    var images = [];
-                    for (var i = 0; i < response.images.length; i++) {
-                        images.push(response.images[i].image);
-                    }
-                    //productRating
-                    var productRating = [];
-                    for (var _i = 0; _i < Object.keys(response.ratings.particularly).length; _i++) {
-                        //Object.keys(myObj).length
-                        productRating.push({
-                            key: _i,
-                            name: Object.keys(response.ratings.particularly)[_i],
-                            percentValue: Object.values(response.ratings.particularly)[_i].toFixed(1)
-                        });
-                    }
-                    //comments
-                    var comments = [];
-                    for (var _i2 = 0; _i2 < response.comments.length; _i2++) {
-                        // like or dislike kontrolü
-                        var likeOrDislike = void 0;
-                        if (response.comments[_i2].like) {
-                            likeOrDislike = "like";
-                        } else if (response.comments[_i2].like == false) {
-                            likeOrDislike = "dislike";
-                        } else {
-                            likeOrDislike = "";
-                        }
-                        comments.push({
-                            key: _i2,
-                            commentOwner: response.comments[_i2].comment.username,
-                            commentText: response.comments[_i2].comment.body,
-                            likeValue: response.comments[_i2].comment.like,
-                            dislikeValue: response.comments[_i2].comment.dislike,
-                            likeOrDislike: likeOrDislike,
-                            ratingAverage: response.comments[_i2].rating.toFixed(1),
-                            date: response.comments[_i2].comment.created_at
-                        });
-                    }
-                    /*
-                    {
-                        key:"1",
-                        commentOwner:"Yunus Emre Bulut",
-                        commentText:"Çok güzel bir telefon. Yapanlardan Allah razı olsun.",
-                        likeValue:"455",
-                        dislikeValue:"75",
-                        likeOrDislike:"like",
-                        ratingAverage:"9.8",
-                        date:"07.06"
-                    },*/
-                    this.setState({
-                        ready: true,
-                        productRating: productRating,
-                        productTitle: response.product.title,
-                        images: images,
-                        comments: comments
-                    });
-                }.bind(this),
-                dataType: 'json'
-            });
-        }
-    }, {
         key: "render",
         value: function render() {
             return React.createElement(
                 "div",
                 null,
-                /*this.state.ready*/true ? React.createElement(SubContent, {
-                    comments: this.state.comments,
-                    productName: this.state.productTitle,
-                    mainCategory: {
-                        name: "Elektronik"
-                    },
-                    categoryChildren: [{
-                        id: "2",
-                        name: "Telefon"
-                    }, {
-                        id: "4",
-                        name: "Akıllı Telefon"
-                    }],
-                    followers: 315,
-                    followed: false,
-                    attributes: this.state.productRating /*[
-                                                         {
-                                                         key:1,
-                                                         name:"Tasarım",
-                                                         percentValue: 7.8
-                                                         },
-                                                         {
-                                                         key:2,
-                                                         name:"Kullanışlılık",
-                                                         percentValue: 6.9
-                                                         },
-                                                         {
-                                                         key:3,
-                                                         name:"Pil Ömrü",
-                                                         percentValue: 4.6
-                                                         },
-                                                         {
-                                                         key:4,
-                                                         name:"Taşınabilirlik",
-                                                         percentValue: 7.5
-                                                         },
-                                                         {
-                                                         key:5,
-                                                         name:"Fiyat-Performans",
-                                                         percentValue: 6.4
-                                                         }
-                                                         ]*/,
-                    imagesSrcs: this.state.images
-                }) : React.createElement(LoadingOrNotFoundProduct, { form: this.state.LoadingOrNotFoundProduct })
+                React.createElement(Product, null),
+                React.createElement(Comments, null)
             );
         }
     }]);
@@ -175,181 +30,8 @@ var Content = function (_React$Component) {
     return Content;
 }(React.Component);
 
-var LoadingOrNotFoundProduct = function (_React$Component2) {
-    _inherits(LoadingOrNotFoundProduct, _React$Component2);
-
-    function LoadingOrNotFoundProduct() {
-        _classCallCheck(this, LoadingOrNotFoundProduct);
-
-        return _possibleConstructorReturn(this, (LoadingOrNotFoundProduct.__proto__ || Object.getPrototypeOf(LoadingOrNotFoundProduct)).apply(this, arguments));
-    }
-
-    _createClass(LoadingOrNotFoundProduct, [{
-        key: "render",
-        value: function render() {
-            if (this.props.form == "loading") {
-                return React.createElement(RowLoading, null);
-            } else if (this.props.form == "notFoundProduct") {
-                return React.createElement(
-                    Row,
-                    { size: "sixteen" },
-                    React.createElement(WideColumn, { size: "two" }),
-                    React.createElement(
-                        WideColumn,
-                        { size: "twelve" },
-                        React.createElement(
-                            "div",
-                            { className: "ui red message" },
-                            "B\xF6yle bir \xFCr\xFCn yok!"
-                        )
-                    )
-                );
-            }
-        }
-    }]);
-
-    return LoadingOrNotFoundProduct;
-}(React.Component);
-
-var SubContent = function (_React$Component3) {
-    _inherits(SubContent, _React$Component3);
-
-    function SubContent() {
-        _classCallCheck(this, SubContent);
-
-        return _possibleConstructorReturn(this, (SubContent.__proto__ || Object.getPrototypeOf(SubContent)).apply(this, arguments));
-    }
-
-    _createClass(SubContent, [{
-        key: "render",
-        value: function render() {
-            return React.createElement(
-                "div",
-                { id: "content" },
-                React.createElement(ProductHeader, { productName: this.props.productName }),
-                React.createElement(FollowButton, { followers: this.props.followers, followed: this.props.followed }),
-                React.createElement(Product, { attributes: this.props.attributes, imagesSrcs: this.props.imagesSrcs }),
-                React.createElement(Comments, { comments: this.props.comments, attributes: this.props.attributes })
-            );
-        }
-    }]);
-
-    return SubContent;
-}(React.Component);
-
-var ProductHeader = function (_React$Component4) {
-    _inherits(ProductHeader, _React$Component4);
-
-    function ProductHeader() {
-        _classCallCheck(this, ProductHeader);
-
-        return _possibleConstructorReturn(this, (ProductHeader.__proto__ || Object.getPrototypeOf(ProductHeader)).apply(this, arguments));
-    }
-
-    _createClass(ProductHeader, [{
-        key: "render",
-        value: function render() {
-            return React.createElement(
-                Row,
-                { size: "one" },
-                React.createElement(
-                    Column,
-                    null,
-                    React.createElement(
-                        "div",
-                        { id: "productHeader" },
-                        React.createElement(H, { type: "1", textAlign: "center", text: this.props.productName })
-                    )
-                )
-            );
-        }
-    }]);
-
-    return ProductHeader;
-}(React.Component);
-
-var FollowButton = function (_React$Component5) {
-    _inherits(FollowButton, _React$Component5);
-
-    function FollowButton(props) {
-        _classCallCheck(this, FollowButton);
-
-        var _this5 = _possibleConstructorReturn(this, (FollowButton.__proto__ || Object.getPrototypeOf(FollowButton)).call(this, props));
-
-        _this5.followToggle = _this5.followToggle.bind(_this5);
-        if (_this5.props.followed) {
-            _this5.state = {
-                followed: true,
-                class: " red "
-            };
-        } else {
-            _this5.state = {
-                followed: false,
-                class: " "
-            };
-        }
-        return _this5;
-    }
-
-    _createClass(FollowButton, [{
-        key: "followToggle",
-        value: function followToggle() {
-            if (this.state.followed) {
-                // takipten çıkma kodları buraya gelecek
-                this.setState({
-                    followed: false,
-                    class: " "
-                });
-            } else {
-                // takip etme kodları buraya gelecek
-                this.setState({
-                    followed: true,
-                    class: " red "
-                });
-            }
-        }
-    }, {
-        key: "render",
-        value: function render() {
-            return React.createElement(
-                Row,
-                { size: "one" },
-                React.createElement(
-                    Column,
-                    null,
-                    React.createElement(
-                        FloatRight,
-                        null,
-                        React.createElement(
-                            "div",
-                            { id: "followButton", onClick: this.followToggle },
-                            React.createElement(
-                                "div",
-                                { className: "ui labeled button", tabIndex: "0" },
-                                React.createElement(
-                                    "div",
-                                    { className: "ui" + this.state.class + "button" },
-                                    React.createElement("i", { className: "heart icon" }),
-                                    " Takip Et"
-                                ),
-                                React.createElement(
-                                    "a",
-                                    { className: "ui basic" + this.state.class + "left pointing label" },
-                                    this.props.followers
-                                )
-                            )
-                        )
-                    )
-                )
-            );
-        }
-    }]);
-
-    return FollowButton;
-}(React.Component);
-
-var Product = function (_React$Component6) {
-    _inherits(Product, _React$Component6);
+var Product = function (_React$Component2) {
+    _inherits(Product, _React$Component2);
 
     function Product() {
         _classCallCheck(this, Product);
@@ -361,29 +43,25 @@ var Product = function (_React$Component6) {
         key: "render",
         value: function render() {
             return React.createElement(
-                Row,
-                { size: "sixteen" },
+                "div",
+                null,
                 React.createElement(
-                    WideColumn,
-                    { size: "eight" },
+                    Row,
+                    { size: "one" },
                     React.createElement(
-                        Row,
-                        { size: "one" },
-                        React.createElement(
-                            Column,
-                            null,
-                            React.createElement(
-                                Center,
-                                null,
-                                React.createElement(ImageSlider, { srcs: this.props.imagesSrcs })
-                            )
-                        )
+                        Column,
+                        null,
+                        "[buraya etiketler gelecek]"
                     )
                 ),
                 React.createElement(
-                    WideColumn,
-                    { size: "eight" },
-                    React.createElement(Rating, { attributes: this.props.attributes })
+                    Row,
+                    { size: "one" },
+                    React.createElement(
+                        Column,
+                        null,
+                        React.createElement(H, { type: "1", text: "Iphone 5s" })
+                    )
                 )
             );
         }
@@ -392,333 +70,13 @@ var Product = function (_React$Component6) {
     return Product;
 }(React.Component);
 
-var ImageSlider = function (_React$Component7) {
-    _inherits(ImageSlider, _React$Component7);
+var Comments = function (_React$Component3) {
+    _inherits(Comments, _React$Component3);
 
-    function ImageSlider(props) {
-        _classCallCheck(this, ImageSlider);
-
-        var _this7 = _possibleConstructorReturn(this, (ImageSlider.__proto__ || Object.getPrototypeOf(ImageSlider)).call(this, props));
-
-        _this7.nextIndex = 0;
-        _this7.state = {
-            src: _this7.props.srcs[0],
-            index: 0
-        };
-        _this7.change = _this7.change.bind(_this7);
-        return _this7;
-    }
-
-    _createClass(ImageSlider, [{
-        key: "change",
-        value: function change(id) {
-            this.nextIndex = this.state.index + id;
-            if (this.nextIndex == this.props.srcs.length) {
-                this.nextIndex = 0;
-            } else if (this.nextIndex == -1) {
-                this.nextIndex = this.props.srcs.length - 1;
-            }
-            this.setState({
-                index: this.nextIndex,
-                src: this.props.srcs[this.nextIndex]
-            });
-            console.log(this.nextIndex);
-        }
-    }, {
-        key: "render",
-        value: function render() {
-            var _this8 = this;
-
-            return React.createElement(
-                "div",
-                { id: "imageSlider" },
-                React.createElement(
-                    "div",
-                    { id: "imageSliderImg" },
-                    React.createElement(Img, { src: this.state.src })
-                ),
-                React.createElement(
-                    "div",
-                    { id: "imageSliderButtons" },
-                    React.createElement(
-                        Row,
-                        { size: "one" },
-                        React.createElement(
-                            Column,
-                            null,
-                            React.createElement(DirectlyButtons, { selectedIndex: this.state.index + 1 })
-                        )
-                    ),
-                    React.createElement(
-                        Row,
-                        { size: "one", nonStackable: true },
-                        React.createElement(
-                            Column,
-                            null,
-                            React.createElement(
-                                "button",
-                                { className: "mini ui icon button", onClick: function onClick() {
-                                        return _this8.change(-1);
-                                    } },
-                                React.createElement("i", { className: "left arrow icon" })
-                            ),
-                            React.createElement(
-                                "button",
-                                { className: "mini ui icon button", onClick: function onClick() {
-                                        return _this8.change(+1);
-                                    } },
-                                React.createElement("i", { className: "right arrow icon" })
-                            )
-                        )
-                    )
-                )
-            );
-        }
-    }]);
-
-    return ImageSlider;
-}(React.Component);
-
-var Img = function (_React$Component8) {
-    _inherits(Img, _React$Component8);
-
-    function Img() {
-        _classCallCheck(this, Img);
-
-        return _possibleConstructorReturn(this, (Img.__proto__ || Object.getPrototypeOf(Img)).apply(this, arguments));
-    }
-
-    _createClass(Img, [{
-        key: "render",
-        value: function render() {
-            return React.createElement(
-                "div",
-                null,
-                React.createElement("img", { id: "productImg", className: "ui image", src: this.props.src })
-            );
-        }
-    }]);
-
-    return Img;
-}(React.Component);
-
-var DirectlyButtons = function (_React$Component9) {
-    _inherits(DirectlyButtons, _React$Component9);
-
-    function DirectlyButtons(props) {
-        _classCallCheck(this, DirectlyButtons);
-
-        var _this10 = _possibleConstructorReturn(this, (DirectlyButtons.__proto__ || Object.getPrototypeOf(DirectlyButtons)).call(this, props));
-
-        _this10.buttons = [];
-        _this10.state = {
-            selectedIndex: 0
-        };
-        for (var i = 0; i < 4; i++) {
-            if (_this10.props.selectedIndex == i + 1) {
-                _this10.buttons.push(React.createElement(
-                    "button",
-                    { key: i, className: "disabled ui button" },
-                    i + 1
-                ));
-            } else {
-                _this10.buttons.push(React.createElement(
-                    "button",
-                    { key: i, className: "ui button" },
-                    i + 1
-                ));
-            }
-        }
-        return _this10;
-    }
-
-    _createClass(DirectlyButtons, [{
-        key: "render",
-        value: function render() {
-            return React.createElement(
-                "div",
-                { className: "small blue ui buttons" },
-                this.buttons
-            );
-        }
-    }]);
-
-    return DirectlyButtons;
-}(React.Component);
-
-var Rating = function (_React$Component10) {
-    _inherits(Rating, _React$Component10);
-
-    function Rating(props) {
-        _classCallCheck(this, Rating);
-
-        var _this11 = _possibleConstructorReturn(this, (Rating.__proto__ || Object.getPrototypeOf(Rating)).call(this, props));
-
-        _this11.attributes = [];
-        for (var i = 0; i < _this11.props.attributes.length; i++) {
-            _this11.attributes.push(React.createElement(ProductAttribute, {
-                key: _this11.props.attributes[i].key,
-                name: _this11.props.attributes[i].name,
-                percentValue: _this11.props.attributes[i].percentValue
-            }));
-        }
-
-        return _this11;
-    }
-
-    _createClass(Rating, [{
-        key: "render",
-        value: function render() {
-            return React.createElement(
-                "div",
-                null,
-                this.attributes
-            );
-        }
-    }]);
-
-    return Rating;
-}(React.Component);
-
-var ProductAttribute = function (_React$Component11) {
-    _inherits(ProductAttribute, _React$Component11);
-
-    function ProductAttribute() {
-        _classCallCheck(this, ProductAttribute);
-
-        return _possibleConstructorReturn(this, (ProductAttribute.__proto__ || Object.getPrototypeOf(ProductAttribute)).apply(this, arguments));
-    }
-
-    _createClass(ProductAttribute, [{
-        key: "render",
-        value: function render() {
-            return React.createElement(
-                Row,
-                { size: "two", nonStackable: true },
-                React.createElement(
-                    Column,
-                    null,
-                    React.createElement(ProductAttributeName, { name: this.props.name })
-                ),
-                React.createElement(
-                    Column,
-                    null,
-                    React.createElement(
-                        Center,
-                        null,
-                        React.createElement(DrawCircle, { percentValue: this.props.percentValue })
-                    )
-                )
-            );
-        }
-    }]);
-
-    return ProductAttribute;
-}(React.Component);
-
-var ProductAttributeName = function (_React$Component12) {
-    _inherits(ProductAttributeName, _React$Component12);
-
-    function ProductAttributeName() {
-        _classCallCheck(this, ProductAttributeName);
-
-        return _possibleConstructorReturn(this, (ProductAttributeName.__proto__ || Object.getPrototypeOf(ProductAttributeName)).apply(this, arguments));
-    }
-
-    _createClass(ProductAttributeName, [{
-        key: "render",
-        value: function render() {
-            return React.createElement(H, { type: "3", textAlign: "center", text: this.props.name, optional: "lineHeight80px" });
-        }
-    }]);
-
-    return ProductAttributeName;
-}(React.Component);
-
-var DrawCircle = function (_React$Component13) {
-    _inherits(DrawCircle, _React$Component13);
-
-    function DrawCircle(props) {
-        _classCallCheck(this, DrawCircle);
-
-        var _this14 = _possibleConstructorReturn(this, (DrawCircle.__proto__ || Object.getPrototypeOf(DrawCircle)).call(this, props));
-
-        _this14.percent = _this14.props.percentValue * 10;
-        _this14.limitColor = {
-            0: {
-                min: 0,
-                max: 5,
-                color: "#db2828"
-            },
-            1: {
-                min: 5,
-                max: 7,
-                color: "#f2711c"
-            },
-            2: {
-                min: 7,
-                max: 10,
-                color: "#21ba45"
-            }
-        };
-        _this14.color = _this14.limitColor[0].color;
-        for (var i = 0; i < Object.keys(_this14.limitColor).length; i++) {
-            if (_this14.limitColor[i].min <= _this14.props.percentValue && _this14.props.percentValue < _this14.limitColor[i].max) {
-                _this14.color = _this14.limitColor[i].color;
-                break;
-            }
-        }
-        return _this14;
-    }
-
-    _createClass(DrawCircle, [{
-        key: "render",
-        value: function render() {
-            return React.createElement(
-                "div",
-                { className: "c100 p" + this.percent + " small" },
-                React.createElement(
-                    "span",
-                    null,
-                    this.props.percentValue
-                ),
-                React.createElement(
-                    "div",
-                    { className: "slice" },
-                    React.createElement("div", { className: "bar", style: { borderColor: this.color } }),
-                    React.createElement("div", { className: "fill", style: { borderColor: this.color } })
-                )
-            );
-        }
-    }]);
-
-    return DrawCircle;
-}(React.Component);
-
-var Comments = function (_React$Component14) {
-    _inherits(Comments, _React$Component14);
-
-    function Comments(props) {
+    function Comments() {
         _classCallCheck(this, Comments);
 
-        var _this15 = _possibleConstructorReturn(this, (Comments.__proto__ || Object.getPrototypeOf(Comments)).call(this, props));
-
-        _this15.comments = [];
-        _this15.numberOfComments = 0;
-        for (var i = 0; i < _this15.props.comments.length; i++) {
-            _this15.comments.push(React.createElement(Comment, {
-                key: _this15.props.comments[i].key,
-                commentOwner: _this15.props.comments[i].commentOwner,
-                commentText: _this15.props.comments[i].commentText,
-                likeValue: _this15.props.comments[i].likeValue,
-                dislikeValue: _this15.props.comments[i].dislikeValue,
-                likeOrDislike: _this15.props.comments[i].likeOrDislike,
-                ratingAverage: _this15.props.comments[i].ratingAverage,
-                date: _this15.props.comments[i].date
-            }));
-            _this15.numberOfComments++;
-        }
-        return _this15;
+        return _possibleConstructorReturn(this, (Comments.__proto__ || Object.getPrototypeOf(Comments)).apply(this, arguments));
     }
 
     _createClass(Comments, [{
@@ -727,9 +85,36 @@ var Comments = function (_React$Component14) {
             return React.createElement(
                 "div",
                 null,
-                React.createElement(YorumlarHeader, null),
-                this.comments,
-                React.createElement(WriteComment, { attributes: this.props.attributes })
+                React.createElement(Comment, { text: " Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus condimentum elementum est, eget condimentum purus venenatis id. Aliquam ultrices lacinia lacus vitae congue. Fusce id elit sapien. Etiam velit diam, hendrerit vitae tincidunt vel, tempor sed leo. Quisque iaculis dolor non ultrices suscipit. Donec consectetur, lorem vel molestie blandit, mi mi sagittis nisl, ac pretium nibh nulla ut odio. Proin vitae auctor dolor, vitae ultricies lectus. Fusce a lectus sodales, tincidunt libero imperdiet, vulputate est. Vestibulum euismod, ante at malesuada finibus, quam urna aliquam leo, at tristique orci nunc sit amet tellus. Donec nibh tellus, suscipit ac euismod nec, scelerisque sed dui. Aliquam pellentesque tincidunt felis et sollicitudin. Quisque molestie consequat tellus, commodo pharetra lacus. Etiam scelerisque dui non leo feugiat, ut ornare nibh accumsan. Cras eget ex cursus, tristique dolor non, molestie libero. Duis dolor felis, hendrerit eu ligula ut, iaculis semper mi. Maecenas venenatis quis turpis nec sodales. Duis consequat nulla sed efficitur consequat. Integer suscipit blandit mollis. Proin posuere, lacus sed posuere lacinia, tortor est tristique augue, sed consectetur augue eros et augue. Quisque mauris diam, rhoncus sed vulputate quis, gravida in massa. Praesent purus leo, porta in elit ut, porta blandit risus. Integer ipsum dolor, luctus sed tincidunt ac, ullamcorper ornare libero. Curabitur porta arcu elit, sit amet varius orci rutrum vitae. Pellentesque luctus dolor tortor. Nulla fringilla odio massa, vitae laoreet felis fringilla in. Vestibulum maximus condimentum velit vel ultrices. Maecenas commodo, lorem et mollis maximus, felis elit tempus arcu, a volutpat ex justo eu urna. Sed aliquet semper feugiat. Ut ornare ipsum at posuere faucibus. Nullam vitae massa blandit, tristique lectus in, volutpat dolor. Curabitur non nisi et erat maximus eleifend vitae quis dui. Cras at ultrices nulla. Maecenas viverra dapibus tortor, ac commodo risus finibus ac. Nullam ultrices tortor nec posuere luctus. Vivamus viverra, tellus suscipit dignissim euismod, tellus dolor pulvinar tellus, vitae placerat libero enim aliquet libero. Aenean gravida sem at odio dapibus, quis aliquet sem malesuada. Vestibulum dictum metus ac orci mattis egestas. Suspendisse vel auctor elit, et suscipit nulla. Aliquam feugiat neque nisl, ac convallis metus dignissim non. Morbi dapibus vitae est sed egestas. Integer laoreet ac elit vitae facilisis. Quisque fermentum ipsum eu sagittis mattis. Duis pellentesque ante quis aliquam volutpat. Proin eget arcu quis orci sagittis fringilla. Cras elementum tempus quam. Nulla non mollis risus. Fusce cursus quam nec est suscipit accumsan. Sed sit amet nisi lacus. Etiam a libero in nisi vehicula efficitur. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Maecenas in velit vitae eros consequat feugiat. Sed vitae sapien et turpis egestas tempor sit amet vel purus. Duis non arcu dolor. Nam eget accumsan elit, sit amet ultrices nunc. Proin eget lacinia nunc. Sed tortor ex, vehicula ut interdum nec, aliquam eget risus. Phasellus ligula lorem, dapibus quis diam in, iaculis volutpat orci. Nulla facilisi. In dignissim viverra elit sit amet accumsan. ",
+                    likeCount: "145",
+                    liked: false,
+                    userName: "Mahmut",
+                    date: "19 Temmuz - 21:45"
+                }),
+                React.createElement(Comment, { text: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).",
+                    likeCount: "13",
+                    liked: false,
+                    userName: "abdyek",
+                    date: "13 Temmuz - 08:12"
+                }),
+                React.createElement(Comment, { text: "bu \xE7ok ho\u015F bir yorumcuk",
+                    likeCount: "99",
+                    liked: false,
+                    userName: "at h\u0131rs\u0131z\u0131 12",
+                    date: "02 Haziran - 13:51"
+                }),
+                React.createElement(Comment, { text: "yorumsuz",
+                    likeCount: "103",
+                    liked: true,
+                    userName: "liseli_detected91",
+                    date: "21 Ocak - 17:29"
+                }),
+                React.createElement(Comment, { text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+                    likeCount: "0",
+                    liked: false,
+                    userName: "crazy_mahmut",
+                    date: "14 Aral\u0131k 2019- 18:49"
+                })
             );
         }
     }]);
@@ -737,191 +122,32 @@ var Comments = function (_React$Component14) {
     return Comments;
 }(React.Component);
 
-var YorumlarHeader = function (_React$Component15) {
-    _inherits(YorumlarHeader, _React$Component15);
+var Comment = function (_React$Component4) {
+    _inherits(Comment, _React$Component4);
 
-    function YorumlarHeader() {
-        _classCallCheck(this, YorumlarHeader);
-
-        return _possibleConstructorReturn(this, (YorumlarHeader.__proto__ || Object.getPrototypeOf(YorumlarHeader)).apply(this, arguments));
-    }
-
-    _createClass(YorumlarHeader, [{
-        key: "render",
-        value: function render() {
-            return React.createElement(
-                Row,
-                null,
-                React.createElement(
-                    Column,
-                    null,
-                    React.createElement(H, { type: "1", textAlign: "center", text: "Yorumlar" })
-                )
-            );
-        }
-    }]);
-
-    return YorumlarHeader;
-}(React.Component);
-
-var PageNumber = function (_React$Component16) {
-    _inherits(PageNumber, _React$Component16);
-
-    function PageNumber(props) {
-        _classCallCheck(this, PageNumber);
-
-        var _this17 = _possibleConstructorReturn(this, (PageNumber.__proto__ || Object.getPrototypeOf(PageNumber)).call(this, props));
-
-        _this17.pages = [];
-        for (var i = 1; i <= _this17.props.pageLen; i++) {
-            _this17.pages.push(React.createElement(
-                "option",
-                { key: i, value: i },
-                i
-            ));
-        }
-        return _this17;
-    }
-    /*
-        ortadaki html select'i masaüstü ve tabletlerde görünümünü daha küçük yapmak için size'ını 'two', ilk ve sonrakini de 'seven'
-        yapabiliriz. ancak mobil (iphone 6s) görünümünde html select sığmıyor. Bu durumu kurtarmak için mobilde şöyle görün normalde
-        şöyle görün diyebiliriz. şimdilik buraya not düşüyorum. ileride bu kısmı yaparım.
-    */
-
-
-    _createClass(PageNumber, [{
-        key: "render",
-        value: function render() {
-            return React.createElement(
-                Row,
-                { size: "sixteen", nonStackable: true },
-                React.createElement(
-                    WideColumn,
-                    { size: "seven" },
-                    React.createElement(
-                        "button",
-                        { className: "ui disabled labeled icon button" },
-                        React.createElement("i", { className: "left arrow icon" }),
-                        "\xD6nceki Sayfa"
-                    )
-                ),
-                React.createElement(
-                    WideColumn,
-                    { size: "two" },
-                    React.createElement(
-                        "div",
-                        { className: "ui form" },
-                        React.createElement(
-                            "div",
-                            { className: "field" },
-                            React.createElement(
-                                "select",
-                                null,
-                                this.pages
-                            )
-                        )
-                    )
-                ),
-                React.createElement(
-                    WideColumn,
-                    { size: "seven" },
-                    React.createElement(
-                        FloatRight,
-                        null,
-                        React.createElement(
-                            "button",
-                            { className: "ui right labeled icon button" },
-                            React.createElement("i", { className: "right arrow icon" }),
-                            "Sonraki Sayfa"
-                        )
-                    )
-                )
-            );
-        }
-    }]);
-
-    return PageNumber;
-}(React.Component);
-
-var Comment = function (_React$Component17) {
-    _inherits(Comment, _React$Component17);
-
-    function Comment(props) {
+    function Comment() {
         _classCallCheck(this, Comment);
 
-        return _possibleConstructorReturn(this, (Comment.__proto__ || Object.getPrototypeOf(Comment)).call(this, props));
+        return _possibleConstructorReturn(this, (Comment.__proto__ || Object.getPrototypeOf(Comment)).apply(this, arguments));
     }
 
     _createClass(Comment, [{
         key: "render",
         value: function render() {
             return React.createElement(
-                Row,
+                "div",
                 null,
                 React.createElement(
-                    Column,
-                    null,
+                    Row,
+                    { size: "one" },
                     React.createElement(
-                        RaisedSegment,
+                        Column,
                         null,
                         React.createElement(
-                            Row,
-                            { size: "two", nonStackable: true },
-                            React.createElement(
-                                Column,
-                                null,
-                                React.createElement(RatingBar, { ratingAverage: this.props.ratingAverage })
-                            ),
-                            React.createElement(
-                                Column,
-                                null,
-                                React.createElement(
-                                    FloatRight,
-                                    null,
-                                    React.createElement(CommentDate, { date: this.props.date })
-                                )
-                            )
-                        ),
-                        React.createElement(
-                            Row,
-                            { size: "one" },
-                            React.createElement(
-                                Column,
-                                null,
-                                React.createElement(
-                                    "div",
-                                    { className: "commentText" },
-                                    React.createElement(
-                                        "p",
-                                        null,
-                                        this.props.commentText
-                                    )
-                                )
-                            )
-                        ),
-                        React.createElement(
-                            Row,
-                            { size: "two" },
-                            React.createElement(
-                                Column,
-                                null,
-                                React.createElement(
-                                    "div",
-                                    { className: "commentHeader" },
-                                    React.createElement(H, { type: "5", text: this.props.commentOwner })
-                                )
-                            ),
-                            React.createElement(
-                                Column,
-                                null,
-                                React.createElement(
-                                    FloatRight,
-                                    null,
-                                    React.createElement(LikeButton, { value: this.props.likeValue, likeOrDislike: this.props.likeOrDislike }),
-                                    React.createElement(DislikeButton, { value: this.props.dislikeValue, likeOrDislike: this.props.likeOrDislike }),
-                                    React.createElement(ComplaintButton, null)
-                                )
-                            )
+                            Segment,
+                            null,
+                            React.createElement(TopOfComment, { text: this.props.text, userName: this.props.userName }),
+                            React.createElement(BottomOfComment, { likeCount: this.props.likeCount, liked: this.props.liked, date: this.props.date })
                         )
                     )
                 )
@@ -932,151 +158,100 @@ var Comment = function (_React$Component17) {
     return Comment;
 }(React.Component);
 
-var RatingBar = function (_React$Component18) {
-    _inherits(RatingBar, _React$Component18);
+var TopOfComment = function (_React$Component5) {
+    _inherits(TopOfComment, _React$Component5);
 
-    function RatingBar(props) {
-        _classCallCheck(this, RatingBar);
+    function TopOfComment() {
+        _classCallCheck(this, TopOfComment);
 
-        var _this19 = _possibleConstructorReturn(this, (RatingBar.__proto__ || Object.getPrototypeOf(RatingBar)).call(this, props));
-
-        _this19.percent = _this19.props.ratingAverage * 10;
-        // bu kısım drawcircle ile aynı refactor ederken buna bir çare bulabilirsin
-        _this19.limitColor = {
-            0: {
-                min: 0,
-                max: 5,
-                color: "#db2828"
-            },
-            1: {
-                min: 5,
-                max: 7,
-                color: "#f2711c"
-            },
-            2: {
-                min: 7,
-                max: 10,
-                color: "#21ba45"
-            }
-        };
-        _this19.color = _this19.limitColor[0].color;
-        for (var i = 0; i < Object.keys(_this19.limitColor).length; i++) {
-            if (_this19.limitColor[i].min <= _this19.props.ratingAverage && _this19.props.ratingAverage < _this19.limitColor[i].max) {
-                _this19.color = _this19.limitColor[i].color;
-                break;
-            }
-        }
-        // ^^^
-        _this19.widthOfFill = _this19.props.ratingAverage * 15 + "px";
-        return _this19;
+        return _possibleConstructorReturn(this, (TopOfComment.__proto__ || Object.getPrototypeOf(TopOfComment)).apply(this, arguments));
     }
 
-    _createClass(RatingBar, [{
+    _createClass(TopOfComment, [{
         key: "render",
         value: function render() {
             return React.createElement(
                 "div",
-                { className: "ratingBar" },
+                null,
                 React.createElement(
-                    "span",
-                    { className: "barValue" },
-                    this.props.ratingAverage
+                    Row,
+                    { size: "one" },
+                    React.createElement(
+                        Column,
+                        null,
+                        React.createElement(
+                            "div",
+                            { className: "user-name" },
+                            React.createElement(H, { type: "3", text: this.props.userName })
+                        )
+                    )
                 ),
                 React.createElement(
-                    "div",
-                    { className: "barStickWrapper" },
-                    React.createElement("div", { className: "barStick barStickFull" }),
-                    React.createElement("div", { className: "barStick barStickFill", style: { backgroundColor: this.color, width: this.widthOfFill } })
+                    Row,
+                    { size: "one" },
+                    React.createElement(
+                        Column,
+                        null,
+                        React.createElement(
+                            "div",
+                            { className: "comment-text" },
+                            this.props.text
+                        )
+                    )
                 )
             );
         }
     }]);
 
-    return RatingBar;
+    return TopOfComment;
 }(React.Component);
 
-var CommentDate = function (_React$Component19) {
-    _inherits(CommentDate, _React$Component19);
+var BottomOfComment = function (_React$Component6) {
+    _inherits(BottomOfComment, _React$Component6);
 
-    function CommentDate() {
-        _classCallCheck(this, CommentDate);
+    function BottomOfComment() {
+        _classCallCheck(this, BottomOfComment);
 
-        return _possibleConstructorReturn(this, (CommentDate.__proto__ || Object.getPrototypeOf(CommentDate)).apply(this, arguments));
+        return _possibleConstructorReturn(this, (BottomOfComment.__proto__ || Object.getPrototypeOf(BottomOfComment)).apply(this, arguments));
     }
 
-    _createClass(CommentDate, [{
+    _createClass(BottomOfComment, [{
         key: "render",
         value: function render() {
             return React.createElement(
-                "span",
-                { className: "commentDate" },
-                this.props.date
-            );
-        }
-    }]);
-
-    return CommentDate;
-}(React.Component);
-
-var WriteComment = function (_React$Component20) {
-    _inherits(WriteComment, _React$Component20);
-
-    function WriteComment() {
-        _classCallCheck(this, WriteComment);
-
-        return _possibleConstructorReturn(this, (WriteComment.__proto__ || Object.getPrototypeOf(WriteComment)).apply(this, arguments));
-    }
-
-    _createClass(WriteComment, [{
-        key: "render",
-        value: function render() {
-            return React.createElement(
-                Row,
+                "div",
                 null,
                 React.createElement(
-                    Column,
-                    null,
+                    Row,
+                    { size: "one" },
                     React.createElement(
-                        Segment,
+                        Column,
                         null,
                         React.createElement(
-                            Row,
-                            { size: "sixteen" },
-                            React.createElement(
-                                WideColumn,
-                                { size: "ten" },
-                                React.createElement(
-                                    "div",
-                                    { className: "ui form" },
-                                    React.createElement(
-                                        "div",
-                                        { className: "field" },
-                                        React.createElement(
-                                            "label",
-                                            null,
-                                            "Yorum Yaz"
-                                        ),
-                                        React.createElement("textarea", { rows: "10" })
-                                    )
-                                )
-                            ),
-                            React.createElement(
-                                WideColumn,
-                                { size: "six" },
-                                React.createElement(InputRating, { attributes: this.props.attributes })
-                            )
-                        ),
-                        React.createElement(
-                            Row,
+                            FloatRight,
                             null,
                             React.createElement(
-                                WideColumn,
+                                "div",
+                                { className: "comment-date" },
+                                this.props.date
+                            )
+                        )
+                    )
+                ),
+                React.createElement(
+                    Row,
+                    { size: "one", nonStackable: true },
+                    React.createElement(
+                        Column,
+                        null,
+                        React.createElement(
+                            FloatRight,
+                            null,
+                            React.createElement(
+                                "div",
                                 null,
-                                React.createElement(
-                                    FloatRight,
-                                    null,
-                                    React.createElement(SendButton, null)
-                                )
+                                React.createElement(LikeButton, { likeCount: this.props.likeCount, liked: this.props.liked }),
+                                React.createElement(ReportButton, null)
                             )
                         )
                     )
@@ -1085,103 +260,109 @@ var WriteComment = function (_React$Component20) {
         }
     }]);
 
-    return WriteComment;
+    return BottomOfComment;
 }(React.Component);
 
-var InputRating = function (_React$Component21) {
-    _inherits(InputRating, _React$Component21);
+var LikeButton = function (_React$Component7) {
+    _inherits(LikeButton, _React$Component7);
 
-    function InputRating(props) {
-        _classCallCheck(this, InputRating);
+    function LikeButton(props) {
+        _classCallCheck(this, LikeButton);
 
-        var _this22 = _possibleConstructorReturn(this, (InputRating.__proto__ || Object.getPrototypeOf(InputRating)).call(this, props));
+        var _this7 = _possibleConstructorReturn(this, (LikeButton.__proto__ || Object.getPrototypeOf(LikeButton)).call(this, props));
 
-        _this22.inputRanges = [];
-        for (var i = 0; i < _this22.props.attributes.length; i++) {
-            _this22.inputRanges.push(React.createElement(InputRange, { key: _this22.props.attributes[i].key, name: _this22.props.attributes[i].name }));
-        }
-        return _this22;
-    }
-
-    _createClass(InputRating, [{
-        key: "render",
-        value: function render() {
-            return React.createElement(
-                "div",
-                { id: "inputRating" },
-                this.inputRanges
-            );
-        }
-    }]);
-
-    return InputRating;
-}(React.Component);
-
-var InputRange = function (_React$Component22) {
-    _inherits(InputRange, _React$Component22);
-
-    function InputRange(props) {
-        _classCallCheck(this, InputRange);
-
-        var _this23 = _possibleConstructorReturn(this, (InputRange.__proto__ || Object.getPrototypeOf(InputRange)).call(this, props));
-
-        _this23.state = {
-            value: "5"
+        _this7.state = {
+            liked: _this7.props.liked,
+            likeCount: _this7.props.likeCount
         };
-        _this23.change = _this23.change.bind(_this23);
-        return _this23;
+        _this7.like = _this7.like.bind(_this7);
+        return _this7;
     }
 
-    _createClass(InputRange, [{
-        key: "change",
-        value: function change(event) {
-            this.setState({
-                value: event.target.value
-            });
+    _createClass(LikeButton, [{
+        key: "like",
+        value: function like() {
+            var likeCount = this.state.likeCount;
+            if (this.state.liked) {
+                likeCount--;
+                this.setState({
+                    liked: false,
+                    likeCount: likeCount
+                });
+            } else {
+                likeCount++;
+                this.setState({
+                    liked: true,
+                    likeCount: likeCount
+                });
+            }
         }
     }, {
         key: "render",
         value: function render() {
+            this.buttonClass = this.state.liked ? "ui blue button" : "ui button";
             return React.createElement(
-                "div",
-                { className: "inputRangeWrapper" },
+                "button",
+                { className: this.buttonClass, onClick: this.like },
                 React.createElement(
-                    "label",
-                    { className: "inputRangeLabel" },
-                    this.props.name
+                    "i",
+                    { className: "icon" },
+                    React.createElement("i", { className: "fa fa-thumbs-up", "aria-hidden": "true" })
                 ),
-                React.createElement("input", { className: "inputRange", type: "range", id: "", name: "", defaultValue: this.state.value, step: "1", min: "0", max: "10", onChange: this.change }),
+                this.state.likeCount
+            );
+        }
+    }]);
+
+    return LikeButton;
+}(React.Component);
+
+var ReportButton = function (_React$Component8) {
+    _inherits(ReportButton, _React$Component8);
+
+    function ReportButton() {
+        _classCallCheck(this, ReportButton);
+
+        return _possibleConstructorReturn(this, (ReportButton.__proto__ || Object.getPrototypeOf(ReportButton)).apply(this, arguments));
+    }
+
+    _createClass(ReportButton, [{
+        key: "render",
+        value: function render() {
+            return React.createElement(
+                "button",
+                { className: "ui icon button" },
                 React.createElement(
-                    "label",
-                    { className: "inputRangeValue" },
-                    this.state.value
+                    "i",
+                    { className: "icon" },
+                    React.createElement("i", { className: "fa fa-exclamation-triangle", "aria-hidden": "true" })
                 )
             );
         }
     }]);
 
-    return InputRange;
+    return ReportButton;
 }(React.Component);
 
-var SendButton = function (_React$Component23) {
-    _inherits(SendButton, _React$Component23);
+var ReportArea = function (_React$Component9) {
+    _inherits(ReportArea, _React$Component9);
 
-    function SendButton() {
-        _classCallCheck(this, SendButton);
+    function ReportArea() {
+        _classCallCheck(this, ReportArea);
 
-        return _possibleConstructorReturn(this, (SendButton.__proto__ || Object.getPrototypeOf(SendButton)).apply(this, arguments));
+        return _possibleConstructorReturn(this, (ReportArea.__proto__ || Object.getPrototypeOf(ReportArea)).apply(this, arguments));
     }
 
-    _createClass(SendButton, [{
+    _createClass(ReportArea, [{
         key: "render",
         value: function render() {
             return React.createElement(
-                "button",
-                { className: "ui primary button" },
-                "G\xF6nder"
+                "div",
+                null,
+                "buras\u0131 report area"
             );
         }
     }]);
 
-    return SendButton;
+    return ReportArea;
 }(React.Component);

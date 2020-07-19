@@ -1,6 +1,8 @@
 <?php
-
     require 'tool.php';
-    generatePage('Profil', 'profile.js');
-
+    generatePage([
+        'pageTitle' => 'Profil',
+        'reactScriptFile' => 'profile.js',
+        'styleFile' => ''
+    ]);
 ?>

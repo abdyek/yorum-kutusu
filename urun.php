@@ -1,6 +1,10 @@
 <?php
 
     require 'tool.php';
-    generatePage('Ürün Sayfası', 'product.js');
+    generatePage([
+        'pageTitle' => 'Ürün Sayfası',
+        'reactScriptFile' => 'product.js',
+        'styleFile' => 'product.css'
+    ]);
 
 ?>

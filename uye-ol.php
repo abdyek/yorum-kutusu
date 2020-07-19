@@ -1,6 +1,8 @@
 <?php
-
     require 'tool.php';
-    generatePage('Üye Ol', 'signup.js');
-
+    generatePage([
+        'pageTitle' => 'Üye Ol',
+        'reactScriptFile' => 'signup.js',
+        'styleFile' => ''
+    ]);
 ?>

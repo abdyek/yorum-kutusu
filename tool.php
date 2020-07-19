@@ -35,14 +35,11 @@ function CallAPI($method, $url, $data = false) {
     return $result;
 }
 
-function generatePage($pageTitle, $reactScript) {
+function generatePage($pageInfo) {
     require 'session.php';
     require 'config.php';
 
-    $pageTitle = $pageTitle;
-    $reactScript = $reactScript;
-
-    $username = 'mahmut';
+    $username = 'mahmut';  // bu şimdilik
     include 'template.php';
 }
 

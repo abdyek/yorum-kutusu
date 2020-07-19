@@ -1,6 +1,8 @@
 <?php
-
     require 'tool.php';
-    generatePage('Giriş Yap', 'login.js');
-
+    generatePage([
+        'pageTitle' => 'Giriş Yap',
+        'reactScriptFile' => 'login.js',
+        'styleFile' => ''
+    ]);
 ?>

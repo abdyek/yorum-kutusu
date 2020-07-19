@@ -1,742 +1,206 @@
 class Content extends React.Component {
-    constructor(props) {
-        super(props);
-        let currentUrl = window.location.href;
-        let productName = currentUrl.split("urun/")[1];
-        this.state = {
-            ready:false,
-            productName:productName,
-            productTitle:"",
-            images:[],
-            productRating:[],
-            comments:[],
-            LoadingOrNotFoundProduct: "loading"
-        };
-    }
-    componentDidMount() {
-        $.ajax({
-            type:'GET',
-            url:'https://yorumlaa.herokuapp.com/api/products/'+this.state.productName,
-            data: {
-                "":""
-            },
-            statusCode: {
-                404: function() {
-                    this.setState({
-                        LoadingOrNotFoundProduct: "notFoundProduct"
-                        /* kodları çok spagetti yazdım, ilerleyen zamanlarda ihtiyacım olursa buraları refactor ederim */
-                    })
-                }.bind(this)
-            },
-            success: function(response) {
-                // bradcrumb
-                let breadCrumb = [];
-                breadCrumb.push(response.breadcrumb[0].name);
-                curCate = response.breadcrumb[0].children;
-                // breadcrumb kısmını şimdilik bırakıyorum
-                /*
-                while(curCate.length!=0) {
-                    breadCrumb.push(response.breadcrumb[0].name);
-                    curCate = response.breadcrumb[0].children;
-                }
-                */
-                // images
-                // image linklerinde bir sıkıntı var o yüzden görünmüyor
-                let images = [];
-                for(let i=0;i<response.images.length;i++) {
-                    images.push(response.images[i].image);
-                }
-                //productRating
-                let productRating = [];
-                for (let i=0;i<Object.keys(response.ratings.particularly).length;i++) {
-                    //Object.keys(myObj).length
-                    productRating.push({
-                        key:i,
-                        name:Object.keys(response.ratings.particularly)[i],
-                        percentValue: Object.values(response.ratings.particularly)[i].toFixed(1),
-                    })
-                }
-                //comments
-                let comments = [];
-                for(let i=0;i<response.comments.length;i++) {
-                    // like or dislike kontrolü
-                    let likeOrDislike;
-                    if(response.comments[i].like) {
-                        likeOrDislike = "like"
-                    } else if(response.comments[i].like==false) {
-                        likeOrDislike = "dislike";
-                    } else {
-                        likeOrDislike = "";
-                    }
-                    comments.push({
-                        key:i,
-                        commentOwner:response.comments[i].comment.username,
-                        commentText:response.comments[i].comment.body,
-                        likeValue:response.comments[i].comment.like,
-                        dislikeValue:response.comments[i].comment.dislike,
-                        likeOrDislike:likeOrDislike,
-                        ratingAverage:response.comments[i].rating.toFixed(1),
-                        date:response.comments[i].comment.created_at
-                    })
-                    
-                }
-                        /*
-                        {
-                            key:"1",
-                            commentOwner:"Yunus Emre Bulut",
-                            commentText:"Çok güzel bir telefon. Yapanlardan Allah razı olsun.",
-                            likeValue:"455",
-                            dislikeValue:"75",
-                            likeOrDislike:"like",
-                            ratingAverage:"9.8",
-                            date:"07.06"
-                        },*/
-                this.setState({
-                    ready:true,
-                    productRating:productRating,
-                    productTitle:response.product.title,
-                    images:images,
-                    comments:comments
-                })
-            }.bind(this),
-            dataType:'json'
-        })
-    }
     render() {
-        return (
+        return(
             <div>
-                { /*this.state.ready*/ true ?
-                <SubContent 
-                    comments={this.state.comments}
-                    productName={this.state.productTitle}
-                    mainCategory={{
-                        name:"Elektronik"
-                    }}
-                    categoryChildren={[
-                        {
-                            id:"2",
-                            name:"Telefon"
-                        },
-                        {
-                            id:"4",
-                            name:"Akıllı Telefon"
-                        }
-                    ]}
-                    followers={315}
-                    followed={false}
-                    attributes={this.state.productRating/*[
-                        {
-                            key:1,
-                            name:"Tasarım",
-                            percentValue: 7.8
-                        },
-                        {
-                            key:2,
-                            name:"Kullanışlılık",
-                            percentValue: 6.9
-                        },
-                        {
-                            key:3,
-                            name:"Pil Ömrü",
-                            percentValue: 4.6
-                        },
-                        {
-                            key:4,
-                            name:"Taşınabilirlik",
-                            percentValue: 7.5
-                        },
-                        {
-                            key:5,
-                            name:"Fiyat-Performans",
-                            percentValue: 6.4
-                        }
-                    ]*/}
-                    imagesSrcs={this.state.images}
-                />: <LoadingOrNotFoundProduct form={this.state.LoadingOrNotFoundProduct}/>}
+                <Product />
+                <Comments />
             </div>
-        )
-    }
-}
-
-class LoadingOrNotFoundProduct extends React.Component {
-    render() {
-        if(this.props.form=="loading") {
-            return(
-                <RowLoading />
-            )
-        } else if(this.props.form=="notFoundProduct") {
-            return(
-                <Row size="sixteen">
-                    <WideColumn size="two"></WideColumn>
-                    <WideColumn size="twelve">
-                        <div className="ui red message">Böyle bir ürün yok!</div>
-                    </WideColumn>
-                </Row>
-            )
-        }
-    }
-}
-
-class SubContent extends React.Component {
-    render() {
-        return(
-            <div id="content">
-                <ProductHeader productName={this.props.productName}/>
-                <FollowButton followers={this.props.followers} followed={this.props.followed}/>
-                <Product attributes={this.props.attributes} imagesSrcs={this.props.imagesSrcs}/>
-                <Comments comments={this.props.comments} attributes={this.props.attributes}/>
-            </div>
-        )
-    }
-}
-
-
-class ProductHeader extends React.Component {
-    render() {
-        return (
-            <Row size="one">
-                <Column>
-                    <div id="productHeader">
-                        <H type="1" textAlign="center" text={this.props.productName}/>
-                    </div>
-                </Column>
-            </Row>
-        )
-    }
-}
-
-class FollowButton extends React.Component {
-    constructor(props) {
-        super(props);
-        this.followToggle = this.followToggle.bind(this);
-        if(this.props.followed) {
-            this.state = {
-                followed:true,
-                class: " red "
-            }
-        } else {
-            this.state = {
-                followed:false,
-                class: " "
-            }
-        }
-    }
-    followToggle() {
-        if(this.state.followed) {
-            // takipten çıkma kodları buraya gelecek
-            this.setState({
-                followed:false,
-                class: " "
-            });
-        } else {
-            // takip etme kodları buraya gelecek
-            this.setState({
-                followed:true,
-                class: " red "
-            });
-        }
-    }
-    render() {
-        return(
-            <Row size="one">
-                <Column>
-                    <FloatRight>
-                        {/*
-                            takip etmediği zaman classNamedeki "red" i kaldırıcaz
-                        */}
-                        <div id="followButton" onClick={this.followToggle}>
-                            <div className="ui labeled button" tabIndex="0">
-                                <div className={"ui"+this.state.class+"button"}>
-                                    <i className="heart icon"></i> Takip Et
-                                </div>
-                                <a className={"ui basic"+this.state.class+"left pointing label"}>
-                                    {this.props.followers}
-                                </a>
-                            </div>
-                        </div>
-                    </FloatRight>
-                </Column>
-            </Row>
         )
     }
 }
 
 class Product extends React.Component {
     render() {
-        return(
-            <Row size="sixteen">
-                <WideColumn size="eight">
-                    <Row size="one">
-                        <Column>
-                            <Center>
-                                <ImageSlider srcs={this.props.imagesSrcs} />
-                            </Center>
-                        </Column>
-                    </Row>
-                </WideColumn>
-                <WideColumn size="eight">
-                    <Rating attributes={this.props.attributes}/>
-                </WideColumn>
-            </Row>
-        )
-    }
-}
-
-class ImageSlider extends React.Component {
-    constructor(props) {
-        super(props);
-        this.nextIndex = 0;
-        this.state = {
-            src: this.props.srcs[0],
-            index: 0
-        }
-        this.change = this.change.bind(this);
-    }
-    change(id) {
-        this.nextIndex = this.state.index + id;
-        if(this.nextIndex==this.props.srcs.length) {
-            this.nextIndex= 0;
-        } else if(this.nextIndex==-1) {
-            this.nextIndex = this.props.srcs.length - 1;
-        }
-        this.setState({
-            index: this.nextIndex,
-            src: this.props.srcs[this.nextIndex]
-        });
-        console.log(this.nextIndex);
-    }
-    render() {
-        return(
-            <div id="imageSlider">
-                <div id="imageSliderImg">
-                    <Img src={this.state.src} />
-                </div>
-                <div id="imageSliderButtons">
-                    <Row size="one">
-                        <Column>
-                            <DirectlyButtons selectedIndex={this.state.index+1}/>
-                        </Column>
-                    </Row>
-                    <Row size="one" nonStackable={true}>
-                        <Column>
-                            <button className="mini ui icon button" onClick={() => this.change(-1)}>
-                                <i className="left arrow icon"></i>
-                            </button> 
-                                <button className="mini ui icon button" onClick={() => this.change(+1)}>
-                                    <i className="right arrow icon"></i>
-                                </button> 
-                        </Column>
-                    </Row>
-                </div>
-            </div>
-        )
-    }
-}
-
-class Img extends React.Component {
-    render() {
-        return(
-            <div>
-                <img id="productImg" className="ui image" src={this.props.src}></img>
-            </div>
-        )
-    }
-}
-
-class DirectlyButtons extends React.Component {
-    constructor(props) {
-        super(props);
-        this.buttons = [];
-        this.state = {
-            selectedIndex:0
-        }
-        for(let i=0;i<4; i++) {
-            if(this.props.selectedIndex==i+1) {
-                this.buttons.push(
-                    <button key={i} className="disabled ui button">{i + 1}</button>
-                )
-            } else {
-                this.buttons.push(
-                    <button key={i} className="ui button">{i + 1}</button>
-                )
-            }
-        }
-    }
-    render() {
-        return(
-            <div className="small blue ui buttons">
-                {this.buttons}
-            </div>
-        )
-    }
-}
-
-class Rating extends React.Component {
-    constructor(props){
-        super(props);
-        this.attributes = [];
-        for(let i=0;i<this.props.attributes.length;i++) {
-            this.attributes.push(
-                <ProductAttribute
-                    key={this.props.attributes[i].key}
-                    name={this.props.attributes[i].name}
-                    percentValue={this.props.attributes[i].percentValue}
-                />
-            )
-        }
-            
-    }
-    render() {
-        return(
-            <div>
-                {this.attributes}
-            </div>
-        )
-    }
-}
-class ProductAttribute extends React.Component {
-    render() {
-        return(
-            <Row size="two" nonStackable={true}>
-                <Column>
-                    <ProductAttributeName name={this.props.name}/>
-                </Column>
-                <Column>
-                    <Center>
-                        <DrawCircle percentValue={this.props.percentValue} />
-                    </Center>
-                </Column>
-            </Row>
-        )
-    }
-}
-class ProductAttributeName extends React.Component {
-    render() {
         return (
-            <H type="3" textAlign="center" text={this.props.name} optional="lineHeight80px"/>
-        )
-    }
-}
-class DrawCircle extends React.Component {
-    constructor(props) {
-        super(props);
-        this.percent = this.props.percentValue * 10;
-        this.limitColor = {
-            0: {
-                min: 0,
-                max: 5,
-                color: "#db2828"
-            },
-            1: {
-                min: 5,
-                max: 7,
-                color: "#f2711c"
-            },
-            2: {
-                min: 7,
-                max: 10,
-                color: "#21ba45"
-            },
-        }
-        this.color = this.limitColor[0].color;
-        for(let i=0; i<Object.keys(this.limitColor).length; i++) {
-            if(this.limitColor[i].min <= this.props.percentValue && this.props.percentValue < this.limitColor[i].max) {
-                this.color = this.limitColor[i].color;
-                break;
-            }
-        }
-    }
-    render() {
-        return(
-            <div className={"c100 p"+this.percent+" small"}>
-                <span>{this.props.percentValue}</span>
-                <div className="slice">
-                    <div className="bar" style={{borderColor: this.color}}></div>
-                    <div className="fill" style={{borderColor: this.color}}></div>
-                </div>
+            <div>
+                <Row size="one">
+                    <Column>
+                        [buraya etiketler gelecek]
+                    </Column>
+                </Row>
+                <Row size="one">
+                    <Column>
+                        <H type="1" text="Iphone 5s" />
+                    </Column>
+                </Row>
             </div>
         )
     }
 }
 
 class Comments extends React.Component {
-    constructor(props) {
-        super(props);
-        this.comments = [];
-        this.numberOfComments = 0;
-        for(let i=0;i<this.props.comments.length;i++) {
-            this.comments.push(
-                <Comment
-                    key = {this.props.comments[i].key}
-                    commentOwner= {this.props.comments[i].commentOwner}
-                    commentText= {this.props.comments[i].commentText}
-                    likeValue={this.props.comments[i].likeValue}
-                    dislikeValue={this.props.comments[i].dislikeValue}
-                    likeOrDislike={this.props.comments[i].likeOrDislike}
-                    ratingAverage={this.props.comments[i].ratingAverage}
-                    date={this.props.comments[i].date}
-                />
-            );
-            this.numberOfComments++;
-        }
-    }
     render() {
-        return(
+        return (
             <div>
-                <YorumlarHeader />
-                {/*<PageNumber pageLen={parseInt(this.numberOfComments/10)+1}/>*/}
-                    {this.comments}
-                {/*<PageNumber pageLen={parseInt(this.numberOfComments/10)+1}/>*/}
-                <WriteComment attributes={this.props.attributes}/>
+                <Comment text="
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus condimentum elementum est, eget condimentum purus venenatis id. Aliquam ultrices lacinia lacus vitae congue. Fusce id elit sapien. Etiam velit diam, hendrerit vitae tincidunt vel, tempor sed leo. Quisque iaculis dolor non ultrices suscipit. Donec consectetur, lorem vel molestie blandit, mi mi sagittis nisl, ac pretium nibh nulla ut odio. Proin vitae auctor dolor, vitae ultricies lectus. Fusce a lectus sodales, tincidunt libero imperdiet, vulputate est. Vestibulum euismod, ante at malesuada finibus, quam urna aliquam leo, at tristique orci nunc sit amet tellus. Donec nibh tellus, suscipit ac euismod nec, scelerisque sed dui. Aliquam pellentesque tincidunt felis et sollicitudin. Quisque molestie consequat tellus, commodo pharetra lacus.
+
+Etiam scelerisque dui non leo feugiat, ut ornare nibh accumsan. Cras eget ex cursus, tristique dolor non, molestie libero. Duis dolor felis, hendrerit eu ligula ut, iaculis semper mi. Maecenas venenatis quis turpis nec sodales. Duis consequat nulla sed efficitur consequat. Integer suscipit blandit mollis. Proin posuere, lacus sed posuere lacinia, tortor est tristique augue, sed consectetur augue eros et augue. Quisque mauris diam, rhoncus sed vulputate quis, gravida in massa.
+
+Praesent purus leo, porta in elit ut, porta blandit risus. Integer ipsum dolor, luctus sed tincidunt ac, ullamcorper ornare libero. Curabitur porta arcu elit, sit amet varius orci rutrum vitae. Pellentesque luctus dolor tortor. Nulla fringilla odio massa, vitae laoreet felis fringilla in. Vestibulum maximus condimentum velit vel ultrices. Maecenas commodo, lorem et mollis maximus, felis elit tempus arcu, a volutpat ex justo eu urna. Sed aliquet semper feugiat. Ut ornare ipsum at posuere faucibus.
+
+Nullam vitae massa blandit, tristique lectus in, volutpat dolor. Curabitur non nisi et erat maximus eleifend vitae quis dui. Cras at ultrices nulla. Maecenas viverra dapibus tortor, ac commodo risus finibus ac. Nullam ultrices tortor nec posuere luctus. Vivamus viverra, tellus suscipit dignissim euismod, tellus dolor pulvinar tellus, vitae placerat libero enim aliquet libero. Aenean gravida sem at odio dapibus, quis aliquet sem malesuada. Vestibulum dictum metus ac orci mattis egestas. Suspendisse vel auctor elit, et suscipit nulla. Aliquam feugiat neque nisl, ac convallis metus dignissim non. Morbi dapibus vitae est sed egestas. Integer laoreet ac elit vitae facilisis. Quisque fermentum ipsum eu sagittis mattis. Duis pellentesque ante quis aliquam volutpat. Proin eget arcu quis orci sagittis fringilla. Cras elementum tempus quam.
+
+Nulla non mollis risus. Fusce cursus quam nec est suscipit accumsan. Sed sit amet nisi lacus. Etiam a libero in nisi vehicula efficitur. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Maecenas in velit vitae eros consequat feugiat. Sed vitae sapien et turpis egestas tempor sit amet vel purus. Duis non arcu dolor. Nam eget accumsan elit, sit amet ultrices nunc. Proin eget lacinia nunc. Sed tortor ex, vehicula ut interdum nec, aliquam eget risus. Phasellus ligula lorem, dapibus quis diam in, iaculis volutpat orci. Nulla facilisi. In dignissim viverra elit sit amet accumsan. "
+                    likeCount="145"
+                    liked={false}
+                    userName="Mahmut"
+                    date="19 Temmuz - 21:45"
+                />
+                <Comment text="It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like)."
+                    likeCount="13"
+                    liked={false}
+                    userName="abdyek"
+                    date="13 Temmuz - 08:12"
+                />
+                <Comment text="bu çok hoş bir yorumcuk"
+                    likeCount="99"
+                    liked={false}
+                    userName="at hırsızı 12"
+                    date="02 Haziran - 13:51"
+                />
+                <Comment text="yorumsuz"
+                    likeCount="103"
+                    liked={true}
+                    userName="liseli_detected91"
+                    date="21 Ocak - 17:29"
+                />
+                <Comment text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+                    likeCount="0"
+                    liked={false}
+                    userName="crazy_mahmut"
+                    date="14 Aralık 2019- 18:49"
+                />
             </div>
-        )
-    }
-}
-class YorumlarHeader extends React.Component {
-    render() {
-        return(
-            <Row>
-                <Column>
-                    <H type="1" textAlign="center" text="Yorumlar"/>
-                </Column>
-            </Row>
-        )
-    }
-}
-class PageNumber extends React.Component {
-    constructor(props) {
-        super(props);
-        this.pages = [];
-        for(let i=1;i<=this.props.pageLen;i++) {
-            this.pages.push(
-                <option key={i} value={i}>{i}</option>
-            )
-        }
-    }
-    /*
-        ortadaki html select'i masaüstü ve tabletlerde görünümünü daha küçük yapmak için size'ını 'two', ilk ve sonrakini de 'seven'
-        yapabiliriz. ancak mobil (iphone 6s) görünümünde html select sığmıyor. Bu durumu kurtarmak için mobilde şöyle görün normalde
-        şöyle görün diyebiliriz. şimdilik buraya not düşüyorum. ileride bu kısmı yaparım.
-    */
-    render() {
-        return(
-            <Row size="sixteen" nonStackable={true}>
-                <WideColumn size="seven">
-                    <button className="ui disabled labeled icon button">
-                        <i className="left arrow icon"></i>
-                            Önceki Sayfa
-                    </button>
-                </WideColumn>
-                <WideColumn size="two">
-                    <div className="ui form">
-                        <div className="field">
-                            <select>
-                                {this.pages}
-                            </select>
-                        </div>
-                    </div>
-                </WideColumn>
-                <WideColumn size="seven">
-                    <FloatRight>
-                        <button className="ui right labeled icon button">
-                            <i className="right arrow icon"></i>
-                                Sonraki Sayfa
-                        </button>
-                    </FloatRight>
-                </WideColumn>
-            </Row>
         )
     }
 }
 
 class Comment extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-    render() {
-        return (
-            <Row>
-                <Column>
-                    <RaisedSegment>
-                        <Row size="two" nonStackable={true}>
-                            <Column>
-                                <RatingBar ratingAverage={this.props.ratingAverage}/>
-                            </Column>
-                            <Column>
-                                <FloatRight>
-                                    <CommentDate date={this.props.date} />
-                                </FloatRight>
-                            </Column>
-                        </Row>
-                        <Row size="one">
-                            <Column>
-                                <div className="commentText">
-                                    <p>
-                                        {this.props.commentText}
-                                    </p>
-                                </div>
-                            </Column>
-                        </Row>
-                        <Row size="two">
-                            <Column>
-                                <div className="commentHeader">
-                                    <H type="5" text={this.props.commentOwner} />
-                                </div>
-                            </Column>
-                            <Column>
-                                <FloatRight>
-                                    <LikeButton value={this.props.likeValue} likeOrDislike={this.props.likeOrDislike}/>
-                                    <DislikeButton value={this.props.dislikeValue} likeOrDislike={this.props.likeOrDislike}/>
-                                    <ComplaintButton />
-                                </FloatRight>
-                            </Column>
-                        </Row>
-                    </RaisedSegment>
-                </Column>
-            </Row>
-        )
-    }
-}
-class RatingBar extends React.Component {
-    constructor(props) {
-        super(props);
-        this.percent = this.props.ratingAverage * 10;
-        // bu kısım drawcircle ile aynı refactor ederken buna bir çare bulabilirsin
-        this.limitColor = {
-            0: {
-                min: 0,
-                max: 5,
-                color: "#db2828"
-            },
-            1: {
-                min: 5,
-                max: 7,
-                color: "#f2711c"
-            },
-            2: {
-                min: 7,
-                max: 10,
-                color: "#21ba45"
-            }
-        }
-        this.color = this.limitColor[0].color;
-        for(let i=0; i<Object.keys(this.limitColor).length; i++) {
-            if(this.limitColor[i].min <= this.props.ratingAverage && this.props.ratingAverage< this.limitColor[i].max) {
-                this.color = this.limitColor[i].color;
-                break;
-            }
-        }
-        // ^^^
-        this.widthOfFill = this.props.ratingAverage * 15 + "px";
-    }
     render() {
         return(
-            <div className="ratingBar">
-                <span className="barValue">
-                    {this.props.ratingAverage}
-                </span>
-                <div className="barStickWrapper">
-                    <div className="barStick barStickFull">
-                    </div>
-                    <div className="barStick barStickFill" style={{backgroundColor:this.color, width:this.widthOfFill}}>
-                    </div>
-                </div>
+            <div>
+                <Row size="one">
+                    <Column>
+                        <Segment>
+                            <TopOfComment text={this.props.text} userName={this.props.userName}/>
+                            <BottomOfComment likeCount={this.props.likeCount} liked={this.props.liked} date={this.props.date}/>
+                        </Segment>
+                    </Column>
+                </Row>
             </div>
         )
     }
 }
-class CommentDate extends React.Component {
+
+class TopOfComment extends React.Component{
     render() {
         return (
-            <span className="commentDate">{this.props.date}</span>
-        )
-    }
-}
-
-
-class WriteComment extends React.Component {
-    render() {
-        return (
-            <Row>
-                <Column>
-                    <Segment>
-                        <Row size="sixteen">
-                            <WideColumn size="ten">
-                                <div className="ui form">
-                                    <div className="field">
-                                        <label>Yorum Yaz</label>
-                                        <textarea rows="10"></textarea>
-                                    </div>
-                                </div>
-                            </WideColumn>
-                            <WideColumn size="six">
-                                <InputRating attributes={this.props.attributes}/>
-                            </WideColumn>
-                        </Row>
-                        <Row>
-                            <WideColumn>
-                                <FloatRight>
-                                    <SendButton />
-                                </FloatRight>
-                            </WideColumn>
-                        </Row>
-                    </Segment>
-                </Column>
-            </Row>
-        )
-    }
-}
-class InputRating extends React.Component {
-    constructor(props){
-        super(props);
-        this.inputRanges = [];
-        for(let i=0;i<this.props.attributes.length;i++) {
-            this.inputRanges.push(
-                <InputRange key={this.props.attributes[i].key} name={this.props.attributes[i].name}/>
-            )
-        }
-    }
-    render() {
-        return(
-            <div id="inputRating">
-                {this.inputRanges}
+            <div>
+                <Row size="one">
+                    <Column>
+                        <div className="user-name">
+                            <H type="3" text={this.props.userName} />
+                        </div>
+                    </Column>
+                </Row>
+                <Row size="one">
+                    <Column>
+                        <div className="comment-text">
+                            {this.props.text}
+                        </div>
+                    </Column>
+                </Row>
             </div>
         )
     }
 }
-class InputRange extends React.Component {
+
+class BottomOfComment extends React.Component {
+    render() {
+        return(
+            <div>
+                <Row size="one">
+                    <Column>
+                        <FloatRight>
+                            <div className="comment-date">
+                                {this.props.date}
+                            </div>
+                        </FloatRight>
+                    </Column>
+                </Row>
+                <Row size="one" nonStackable={true}>
+                    <Column>
+                        <FloatRight>
+                            <div>
+                                <LikeButton likeCount={this.props.likeCount} liked={this.props.liked}/>
+                                <ReportButton />
+                            </div>
+                        </FloatRight>
+                    </Column>
+                </Row>
+            </div>
+        )
+    }
+}
+
+class LikeButton extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            value:"5"
-        }
-        this.change = this.change.bind(this);
+            liked:this.props.liked,
+            likeCount: this.props.likeCount
+        };
+        this.like = this.like.bind(this);
     }
-    change(event) {
-        this.setState({
-            value: event.target.value
-        })
+    like() {
+        let likeCount = this.state.likeCount;
+        if(this.state.liked) {
+            likeCount--;
+            this.setState({
+                liked:false,
+                likeCount: likeCount
+            });
+        } else {
+            likeCount++;
+            this.setState({
+                liked:true,
+                likeCount: likeCount
+            });
+        }
     }
     render() {
+        this.buttonClass = (this.state.liked)? "ui blue button": "ui button";
         return(
-            <div className="inputRangeWrapper">
-                <label className="inputRangeLabel">
-                    {this.props.name}
-                </label>
-                <input className="inputRange" type="range" id="" name="" defaultValue={this.state.value} step="1" min="0" max="10" onChange={this.change}></input>
-                <label className="inputRangeValue">
-                    {this.state.value}
-                </label>
-            </div>
+            <button className={this.buttonClass} onClick={this.like}>
+                <i className="icon">
+                    <i className="fa fa-thumbs-up" aria-hidden="true"></i>
+                </i>
+                {this.state.likeCount}
+            </button>
         )
     }
 }
-class SendButton extends React.Component {
+
+class ReportButton extends React.Component {
     render() {
         return (
-            <button className="ui primary button">
-                Gönder
+            <button className="ui icon button">
+                <i className="icon">
+                    <i className="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                </i>
             </button>
+        )
+    }
+}
+
+class ReportArea extends React.Component {
+    render() {
+        return(
+            <div>
+                burası report area
+            </div>
         )
     }
 }
