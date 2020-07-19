@@ -125,33 +125,58 @@ var Comments = function (_React$Component3) {
 var Comment = function (_React$Component4) {
     _inherits(Comment, _React$Component4);
 
-    function Comment() {
+    function Comment(props) {
         _classCallCheck(this, Comment);
 
-        return _possibleConstructorReturn(this, (Comment.__proto__ || Object.getPrototypeOf(Comment)).apply(this, arguments));
+        var _this4 = _possibleConstructorReturn(this, (Comment.__proto__ || Object.getPrototypeOf(Comment)).call(this, props));
+
+        _this4.state = {
+            reportArea: false
+        };
+        _this4.openReportArea = _this4.openReportArea.bind(_this4);;
+        _this4.closeReportArea = _this4.closeReportArea.bind(_this4);;
+        return _this4;
     }
 
     _createClass(Comment, [{
+        key: "openReportArea",
+        value: function openReportArea() {
+            this.setState({
+                reportArea: true
+            });
+        }
+    }, {
+        key: "closeReportArea",
+        value: function closeReportArea() {
+            this.setState({
+                reportArea: false
+            });
+        }
+    }, {
         key: "render",
         value: function render() {
-            return React.createElement(
-                "div",
-                null,
-                React.createElement(
-                    Row,
-                    { size: "one" },
+            if (!this.state.reportArea) {
+                return React.createElement(
+                    "div",
+                    null,
                     React.createElement(
-                        Column,
-                        null,
+                        Row,
+                        { size: "one" },
                         React.createElement(
-                            Segment,
+                            Column,
                             null,
-                            React.createElement(TopOfComment, { text: this.props.text, userName: this.props.userName }),
-                            React.createElement(BottomOfComment, { likeCount: this.props.likeCount, liked: this.props.liked, date: this.props.date })
+                            React.createElement(
+                                Segment,
+                                null,
+                                React.createElement(TopOfComment, { text: this.props.text, userName: this.props.userName }),
+                                React.createElement(BottomOfComment, { likeCount: this.props.likeCount, liked: this.props.liked, date: this.props.date, handleOpenReportArea: this.openReportArea, handleCloseReportArea: this.closeReportArea })
+                            )
                         )
                     )
-                )
-            );
+                );
+            } else {
+                return React.createElement(ReportArea, { handleCloseReportArea: this.closeReportArea });
+            }
         }
     }]);
 
@@ -251,7 +276,7 @@ var BottomOfComment = function (_React$Component6) {
                                 "div",
                                 null,
                                 React.createElement(LikeButton, { likeCount: this.props.likeCount, liked: this.props.liked }),
-                                React.createElement(ReportButton, null)
+                                React.createElement(ReportButton, { handleOpenReportArea: this.props.handleOpenReportArea })
                             )
                         )
                     )
@@ -320,18 +345,26 @@ var LikeButton = function (_React$Component7) {
 var ReportButton = function (_React$Component8) {
     _inherits(ReportButton, _React$Component8);
 
-    function ReportButton() {
+    function ReportButton(props) {
         _classCallCheck(this, ReportButton);
 
-        return _possibleConstructorReturn(this, (ReportButton.__proto__ || Object.getPrototypeOf(ReportButton)).apply(this, arguments));
+        var _this8 = _possibleConstructorReturn(this, (ReportButton.__proto__ || Object.getPrototypeOf(ReportButton)).call(this, props));
+
+        _this8.openReportArea = _this8.openReportArea.bind(_this8);
+        return _this8;
     }
 
     _createClass(ReportButton, [{
+        key: "openReportArea",
+        value: function openReportArea() {
+            this.props.handleOpenReportArea();
+        }
+    }, {
         key: "render",
         value: function render() {
             return React.createElement(
                 "button",
-                { className: "ui icon button" },
+                { className: "ui icon button", onClick: this.openReportArea },
                 React.createElement(
                     "i",
                     { className: "icon" },
@@ -347,22 +380,329 @@ var ReportButton = function (_React$Component8) {
 var ReportArea = function (_React$Component9) {
     _inherits(ReportArea, _React$Component9);
 
-    function ReportArea() {
+    function ReportArea(props) {
         _classCallCheck(this, ReportArea);
 
-        return _possibleConstructorReturn(this, (ReportArea.__proto__ || Object.getPrototypeOf(ReportArea)).apply(this, arguments));
+        var _this9 = _possibleConstructorReturn(this, (ReportArea.__proto__ || Object.getPrototypeOf(ReportArea)).call(this, props));
+
+        _this9.limitOfReportText = 200;
+        _this9.state = {
+            // normal, loading, reported
+            form: "normal",
+            messageType: "success", // success, warning, danger
+            messageText: "",
+            selectOptionWarning: false,
+            reason: 0,
+            reportText: '',
+            reportTextSize: 0,
+            reportTextLimitWarning: false
+        };
+        _this9.closeReportArea = _this9.closeReportArea.bind(_this9);
+        _this9.sendReport = _this9.sendReport.bind(_this9);
+        _this9.changeReason = _this9.changeReason.bind(_this9);
+        _this9.changeTextarea = _this9.changeTextarea.bind(_this9);
+        return _this9;
     }
 
     _createClass(ReportArea, [{
+        key: "closeReportArea",
+        value: function closeReportArea() {
+            this.props.handleCloseReportArea();
+        }
+    }, {
+        key: "sendReport",
+        value: function sendReport() {
+            if (this.state.reason == 0) {
+                this.setState({
+                    selectOptionWarning: true
+                });
+            } else {
+                this.setState({
+                    form: "loading"
+                });
+            }
+            // burada API'ye gönderme şeyleri de olacak
+        }
+    }, {
+        key: "changeReason",
+        value: function changeReason(e) {
+            this.setState({
+                reason: e.target.value
+            });
+            if (e.target.value) {
+                this.setState({
+                    selectOptionWarning: false
+                });
+            }
+        }
+    }, {
+        key: "changeTextarea",
+        value: function changeTextarea(e) {
+            this.setState({
+                reportText: e.target.value,
+                reportTextSize: e.target.value.length
+            });
+            if (e.target.value.length > this.limitOfReportText) {
+                this.setState({
+                    reportTextLimitWarning: true
+                });
+            } else {
+                this.setState({
+                    reportTextLimitWarning: false
+                });
+            }
+        }
+    }, {
+        key: "render",
+        value: function render() {
+            if (this.state.form == "normal") {
+                return React.createElement(
+                    "div",
+                    null,
+                    React.createElement(
+                        Row,
+                        { size: "one" },
+                        React.createElement(
+                            Column,
+                            null,
+                            React.createElement(
+                                Segment,
+                                null,
+                                React.createElement(
+                                    Row,
+                                    { size: "two", nonStackable: true },
+                                    React.createElement(
+                                        Column,
+                                        null,
+                                        React.createElement(H, { type: "3", text: "Geri Bildirim" })
+                                    ),
+                                    React.createElement(
+                                        Column,
+                                        null,
+                                        React.createElement(
+                                            FloatRight,
+                                            null,
+                                            React.createElement(
+                                                "button",
+                                                { className: "ui icon red button", onClick: this.closeReportArea },
+                                                React.createElement(
+                                                    "i",
+                                                    { className: "icon" },
+                                                    React.createElement("i", { className: "fa fa-times", "aria-hidden": "true" })
+                                                )
+                                            )
+                                        )
+                                    )
+                                ),
+                                React.createElement(
+                                    Row,
+                                    { size: "one" },
+                                    React.createElement(
+                                        Column,
+                                        null,
+                                        React.createElement(
+                                            "div",
+                                            { className: "ui yellow message" },
+                                            React.createElement(
+                                                "div",
+                                                { className: "header" },
+                                                "Bu yorum hakk\u0131nda geri bildirimde bulunuyorsunuz."
+                                            ),
+                                            React.createElement(
+                                                "p",
+                                                null,
+                                                "Bildirimin as\u0131ls\u0131z olmas\u0131 durumunda size olan g\xFCvenimizin azalaca\u011F\u0131n\u0131 unutmay\u0131n."
+                                            )
+                                        )
+                                    )
+                                ),
+                                React.createElement(
+                                    Row,
+                                    { size: "one" },
+                                    React.createElement(
+                                        Column,
+                                        null,
+                                        React.createElement(ReportReason, { handleChangeReason: this.changeReason, reasons: [{
+                                                key: 0,
+                                                value: " -- Lütfen birini seçin -- "
+                                            }, {
+                                                key: 1,
+                                                value: "Hakaret"
+                                            }, {
+                                                key: 2,
+                                                value: "Siyasi içerik"
+                                            }, {
+                                                key: 3,
+                                                value: "Uygunsuz Kullanıcı Adı"
+                                            }] })
+                                    )
+                                ),
+                                this.state.selectOptionWarning ? React.createElement(BasicMessage, { messageType: "warning", text: "'Neden' bo\u015F b\u0131rak\u0131lamaz!" }) : '',
+                                React.createElement(
+                                    Row,
+                                    { size: "one" },
+                                    React.createElement(
+                                        Column,
+                                        null,
+                                        React.createElement(
+                                            "div",
+                                            { className: "ui form" },
+                                            React.createElement(
+                                                "div",
+                                                { className: "field" },
+                                                React.createElement(
+                                                    "label",
+                                                    null,
+                                                    "A\xE7\u0131klama"
+                                                ),
+                                                React.createElement("textarea", { rows: "2", onChange: this.changeTextarea, value: this.state.reportText })
+                                            )
+                                        )
+                                    )
+                                ),
+                                this.state.reportTextLimitWarning ? React.createElement(BasicMessage, { messageType: "warning", text: "A\xE7\u0131klama bu kadar uzun olamaz!" }) : '',
+                                React.createElement(
+                                    Row,
+                                    { size: "one" },
+                                    React.createElement(
+                                        Column,
+                                        null,
+                                        React.createElement(
+                                            FloatRight,
+                                            null,
+                                            React.createElement(
+                                                "div",
+                                                null,
+                                                React.createElement(
+                                                    "span",
+                                                    { className: "report-text-count " },
+                                                    this.state.reportTextSize,
+                                                    "/200"
+                                                ),
+                                                React.createElement(
+                                                    "button",
+                                                    { className: this.state.reportTextLimitWarning ? "ui blue disabled button" : "ui blue button", onClick: this.sendReport },
+                                                    "G\xF6nder"
+                                                )
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                );
+            } else if (this.state.form == "loading") {
+                return React.createElement(
+                    "div",
+                    null,
+                    React.createElement(RowLoadingSpin, null),
+                    React.createElement(RowLoadingSpin2, null)
+                );
+            } else if (this.state.form == "reported") {
+                return React.createElement(Reported, { messageType: this.state.messageType, text: this.state.messageText });
+            }
+        }
+    }]);
+
+    return ReportArea;
+}(React.Component);
+
+var ReportReason = function (_React$Component10) {
+    _inherits(ReportReason, _React$Component10);
+
+    function ReportReason(props) {
+        _classCallCheck(this, ReportReason);
+
+        var _this10 = _possibleConstructorReturn(this, (ReportReason.__proto__ || Object.getPrototypeOf(ReportReason)).call(this, props));
+
+        _this10.changeReason = _this10.changeReason.bind(_this10);
+        return _this10;
+    }
+
+    _createClass(ReportReason, [{
+        key: "changeReason",
+        value: function changeReason(e) {
+            this.props.handleChangeReason(e);
+        }
+    }, {
+        key: "render",
+        value: function render() {
+            var options = [];
+            for (var i = 0; i < this.props.reasons.length; i++) {
+                options.push(React.createElement(
+                    "option",
+                    { value: i, key: this.props.reasons[i].key },
+                    this.props.reasons[i].value
+                ));
+            }
+            return React.createElement(
+                "div",
+                null,
+                React.createElement(
+                    "div",
+                    { className: "ui form" },
+                    React.createElement(
+                        "div",
+                        { className: "field" },
+                        React.createElement(
+                            "label",
+                            null,
+                            "Neden"
+                        ),
+                        React.createElement(
+                            "select",
+                            { onChange: this.changeReason },
+                            options
+                        )
+                    )
+                )
+            );
+        }
+    }]);
+
+    return ReportReason;
+}(React.Component);
+
+var Reported = function (_React$Component11) {
+    _inherits(Reported, _React$Component11);
+
+    function Reported() {
+        _classCallCheck(this, Reported);
+
+        return _possibleConstructorReturn(this, (Reported.__proto__ || Object.getPrototypeOf(Reported)).apply(this, arguments));
+    }
+
+    _createClass(Reported, [{
         key: "render",
         value: function render() {
             return React.createElement(
                 "div",
                 null,
-                "buras\u0131 report area"
+                React.createElement(
+                    Row,
+                    { size: "one" },
+                    React.createElement(
+                        Column,
+                        null,
+                        React.createElement(
+                            Segment,
+                            null,
+                            React.createElement(
+                                Row,
+                                { size: "one" },
+                                React.createElement(
+                                    Column,
+                                    null,
+                                    React.createElement(BasicMessage, { messageType: this.props.messageType, text: this.props.text })
+                                )
+                            )
+                        )
+                    )
+                )
             );
         }
     }]);
 
-    return ReportArea;
+    return Reported;
 }(React.Component);

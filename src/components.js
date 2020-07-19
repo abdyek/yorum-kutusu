@@ -296,3 +296,73 @@ class ComplaintButton extends React.Component {
     }
 }
 // ^ bunlar 2 sayfada bulunduğu için componentJS'ye taşınmasını uygun buldum
+
+class LoadingSpin extends React.Component {
+    render() {
+        return(
+            <div>
+                <div className="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+            </div>
+        )
+    }
+}
+
+class RowLoadingSpin extends React.Component {
+    render() {
+        return(
+            <Row size="one">
+                <Column>
+                    <Segment>
+                        <Center>
+                            <LoadingSpin />
+                        </Center>
+                    </Segment>
+                </Column>
+            </Row>
+        )
+    }
+}
+
+class LoadingSpin2 extends React.Component {
+    render() {
+        return(
+            <div>
+                <div className="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+            </div>
+        )
+    }
+}
+
+class RowLoadingSpin2 extends React.Component {
+    render() {
+        return(
+            <Row size="one">
+                <Column>
+                    <Segment>
+                        <Center>
+                            <LoadingSpin2 />
+                        </Center>
+                    </Segment>
+                </Column>
+            </Row>
+        )
+    }
+}
+
+class BasicMessage extends React.Component {
+    constructor(props) {
+        super(props);
+        if(this.props.messageType=="success") {
+            this.className = "ui blue message";
+        } else if(this.props.messageType=="warning") {
+            this.className = "ui yellow message";
+        } else if(this.props.messageType=="danger") {
+            this.className = "ui red message";
+        }
+    }
+    render() {
+        return(
+            <div className={this.className}>{this.props.text}</div>
+        )
+    } 
+}

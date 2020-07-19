@@ -78,19 +78,43 @@ Nulla non mollis risus. Fusce cursus quam nec est suscipit accumsan. Sed sit ame
 }
 
 class Comment extends React.Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            reportArea: false
+        };
+        this.openReportArea = this.openReportArea.bind(this);;
+        this.closeReportArea = this.closeReportArea.bind(this);;
+    }
+    openReportArea() {
+        this.setState({
+            reportArea: true
+        });
+    }
+    closeReportArea() {
+        this.setState({
+            reportArea: false
+        })
+    }
     render() {
-        return(
-            <div>
-                <Row size="one">
-                    <Column>
-                        <Segment>
-                            <TopOfComment text={this.props.text} userName={this.props.userName}/>
-                            <BottomOfComment likeCount={this.props.likeCount} liked={this.props.liked} date={this.props.date}/>
-                        </Segment>
-                    </Column>
-                </Row>
-            </div>
-        )
+        if(!this.state.reportArea) {
+            return(
+                <div>
+                    <Row size="one">
+                        <Column>
+                            <Segment>
+                                <TopOfComment text={this.props.text} userName={this.props.userName}/>
+                                <BottomOfComment likeCount={this.props.likeCount} liked={this.props.liked} date={this.props.date} handleOpenReportArea={this.openReportArea} handleCloseReportArea={this.closeReportArea}/>
+                            </Segment>
+                        </Column>
+                    </Row>
+                </div>
+            )
+        } else {
+            return (
+                <ReportArea handleCloseReportArea={this.closeReportArea}/>
+            )
+        }
     }
 }
 
@@ -135,7 +159,7 @@ class BottomOfComment extends React.Component {
                         <FloatRight>
                             <div>
                                 <LikeButton likeCount={this.props.likeCount} liked={this.props.liked}/>
-                                <ReportButton />
+                                <ReportButton handleOpenReportArea={this.props.handleOpenReportArea}/>
                             </div>
                         </FloatRight>
                     </Column>
@@ -184,9 +208,16 @@ class LikeButton extends React.Component {
 }
 
 class ReportButton extends React.Component {
+    constructor(props){
+        super(props);
+        this.openReportArea = this.openReportArea.bind(this);
+    }
+    openReportArea() {
+        this.props.handleOpenReportArea();
+    }
     render() {
         return (
-            <button className="ui icon button">
+            <button className="ui icon button" onClick={this.openReportArea}>
                 <i className="icon">
                     <i className="fa fa-exclamation-triangle" aria-hidden="true"></i>
                 </i>
@@ -196,10 +227,211 @@ class ReportButton extends React.Component {
 }
 
 class ReportArea extends React.Component {
+    constructor(props) {
+        super(props);
+        this.limitOfReportText = 200;
+        this.state = {
+            // normal, loading, reported
+            form:"normal",
+            messageType:"success",  // success, warning, danger
+            messageText:"",
+            selectOptionWarning:false,
+            reason:0,
+            reportText: '',
+            reportTextSize:0,
+            reportTextLimitWarning: false
+        };
+        this.closeReportArea = this.closeReportArea.bind(this);
+        this.sendReport = this.sendReport.bind(this);
+        this.changeReason = this.changeReason.bind(this);
+        this.changeTextarea = this.changeTextarea.bind(this);
+    }
+    closeReportArea() {
+        this.props.handleCloseReportArea();
+    }
+    sendReport() {
+        if(this.state.reason==0) {
+            this.setState({
+                selectOptionWarning:true
+            });
+        } else {
+            this.setState({
+                form:"loading"
+            });
+        }
+        // burada API'ye gönderme şeyleri de olacak
+    }
+    changeReason(e) {
+        this.setState({
+            reason:e.target.value
+        });
+        if(e.target.value) {
+            this.setState({
+                selectOptionWarning: false
+            })
+        }
+    }
+    changeTextarea(e) {
+        this.setState({
+            reportText:e.target.value,
+            reportTextSize: e.target.value.length
+        })
+        if(e.target.value.length>this.limitOfReportText) {
+            this.setState({
+                reportTextLimitWarning: true
+            })
+        } else {
+            this.setState({
+                reportTextLimitWarning: false
+            })
+        }
+    }
+    render() {
+        if(this.state.form=="normal") {
+            return(
+                <div>
+                    <Row size="one">
+                        <Column>
+                            <Segment>
+                                <Row size="two" nonStackable={true}>
+                                    <Column>
+                                        <H type="3" text="Geri Bildirim" />
+                                    </Column>
+                                    <Column>
+                                        <FloatRight>
+                                            <button className="ui icon red button" onClick={this.closeReportArea}>
+                                                <i className="icon">
+                                                    <i className="fa fa-times" aria-hidden="true"></i>
+                                                </i>
+                                            </button>
+                                        </FloatRight>
+                                    </Column>
+                                </Row>
+                                <Row size="one">
+                                    <Column>
+                                        <div className="ui yellow message">
+                                            <div className="header">
+                                                Bu yorum hakkında geri bildirimde bulunuyorsunuz.
+                                            </div>
+                                            <p>
+                                                Bildirimin asılsız olması durumunda size olan güvenimizin azalacağını unutmayın.
+                                            </p>
+                                        </div>
+                                    </Column>
+                                </Row>
+                                <Row size="one">
+                                    <Column>
+                                        <ReportReason handleChangeReason={this.changeReason} reasons={[
+                                            {
+                                                key:0,
+                                                value: " -- Lütfen birini seçin -- "
+                                            },
+                                            {
+                                                key:1,
+                                                value: "Hakaret"
+                                            },
+                                            {
+                                                key:2,
+                                                value: "Siyasi içerik"
+                                            },
+                                            {
+                                                key:3,
+                                                value: "Uygunsuz Kullanıcı Adı"
+                                            }, 
+                                        ]} />
+                                    </Column>
+                                </Row>
+                                {this.state.selectOptionWarning ?
+                                    <BasicMessage messageType="warning" text="'Neden' boş bırakılamaz!"/>
+                                : ''}
+                                <Row size="one">
+                                    <Column>
+                                        <div className="ui form">
+                                            <div className="field">
+                                                <label>Açıklama</label>
+                                                <textarea rows="2" onChange={this.changeTextarea} value={this.state.reportText}></textarea>
+                                            </div>
+                                        </div> 
+                                    </Column>
+                                </Row>
+                                {this.state.reportTextLimitWarning ?
+                                    <BasicMessage messageType="warning" text="Açıklama bu kadar uzun olamaz!"/>
+                                : ''}
+                                <Row size="one">
+                                    <Column>
+                                        <FloatRight>
+                                            <div>
+                                                <span className="report-text-count ">
+                                                    {this.state.reportTextSize}/200
+                                                </span>
+                                                <button className={this.state.reportTextLimitWarning ? "ui blue disabled button" : "ui blue button"} onClick={this.sendReport}>Gönder</button>
+                                            </div>
+                                        </FloatRight>
+                                    </Column>
+                                </Row>
+                            </Segment>
+                        </Column>
+                    </Row>
+                </div>
+            )
+        } else if(this.state.form=="loading") {
+            return(
+                <div>
+                    <RowLoadingSpin />
+                    <RowLoadingSpin2 />
+                </div>
+            )
+        } else if(this.state.form=="reported") {
+            return(
+                <Reported messageType={this.state.messageType} text={this.state.messageText}/>
+            )
+        }
+    }
+}
+
+class ReportReason extends React.Component {
+    constructor(props) {
+        super(props);
+        this.changeReason = this.changeReason.bind(this);
+    }
+    changeReason(e) {
+        this.props.handleChangeReason(e);
+    }
+    render() {
+        const options = [];
+        for(let i=0;i<this.props.reasons.length;i++) {
+            options.push(<option value={i} key={this.props.reasons[i].key}>{this.props.reasons[i].value}</option>)
+        }
+        return(
+            <div>
+                <div className="ui form">
+                    <div className="field">
+                        <label>Neden</label>
+                        <select onChange={this.changeReason}>
+                            {options}
+                        </select>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+}
+
+class Reported extends React.Component {
     render() {
         return(
             <div>
-                burası report area
+                <Row size="one">
+                    <Column>
+                        <Segment>
+                            <Row size="one">
+                                <Column>
+                                    <BasicMessage messageType={this.props.messageType} text={this.props.text}/>
+                                </Column>
+                            </Row>
+                        </Segment>
+                    </Column>
+                </Row>
             </div>
         )
     }

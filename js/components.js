@@ -631,3 +631,169 @@ var ComplaintButton = function (_React$Component19) {
     return ComplaintButton;
 }(React.Component);
 // ^ bunlar 2 sayfada bulunduğu için componentJS'ye taşınmasını uygun buldum
+
+var LoadingSpin = function (_React$Component20) {
+    _inherits(LoadingSpin, _React$Component20);
+
+    function LoadingSpin() {
+        _classCallCheck(this, LoadingSpin);
+
+        return _possibleConstructorReturn(this, (LoadingSpin.__proto__ || Object.getPrototypeOf(LoadingSpin)).apply(this, arguments));
+    }
+
+    _createClass(LoadingSpin, [{
+        key: "render",
+        value: function render() {
+            return React.createElement(
+                "div",
+                null,
+                React.createElement(
+                    "div",
+                    { className: "lds-ellipsis" },
+                    React.createElement("div", null),
+                    React.createElement("div", null),
+                    React.createElement("div", null),
+                    React.createElement("div", null)
+                )
+            );
+        }
+    }]);
+
+    return LoadingSpin;
+}(React.Component);
+
+var RowLoadingSpin = function (_React$Component21) {
+    _inherits(RowLoadingSpin, _React$Component21);
+
+    function RowLoadingSpin() {
+        _classCallCheck(this, RowLoadingSpin);
+
+        return _possibleConstructorReturn(this, (RowLoadingSpin.__proto__ || Object.getPrototypeOf(RowLoadingSpin)).apply(this, arguments));
+    }
+
+    _createClass(RowLoadingSpin, [{
+        key: "render",
+        value: function render() {
+            return React.createElement(
+                Row,
+                { size: "one" },
+                React.createElement(
+                    Column,
+                    null,
+                    React.createElement(
+                        Segment,
+                        null,
+                        React.createElement(
+                            Center,
+                            null,
+                            React.createElement(LoadingSpin, null)
+                        )
+                    )
+                )
+            );
+        }
+    }]);
+
+    return RowLoadingSpin;
+}(React.Component);
+
+var LoadingSpin2 = function (_React$Component22) {
+    _inherits(LoadingSpin2, _React$Component22);
+
+    function LoadingSpin2() {
+        _classCallCheck(this, LoadingSpin2);
+
+        return _possibleConstructorReturn(this, (LoadingSpin2.__proto__ || Object.getPrototypeOf(LoadingSpin2)).apply(this, arguments));
+    }
+
+    _createClass(LoadingSpin2, [{
+        key: "render",
+        value: function render() {
+            return React.createElement(
+                "div",
+                null,
+                React.createElement(
+                    "div",
+                    { className: "lds-roller" },
+                    React.createElement("div", null),
+                    React.createElement("div", null),
+                    React.createElement("div", null),
+                    React.createElement("div", null),
+                    React.createElement("div", null),
+                    React.createElement("div", null),
+                    React.createElement("div", null),
+                    React.createElement("div", null)
+                )
+            );
+        }
+    }]);
+
+    return LoadingSpin2;
+}(React.Component);
+
+var RowLoadingSpin2 = function (_React$Component23) {
+    _inherits(RowLoadingSpin2, _React$Component23);
+
+    function RowLoadingSpin2() {
+        _classCallCheck(this, RowLoadingSpin2);
+
+        return _possibleConstructorReturn(this, (RowLoadingSpin2.__proto__ || Object.getPrototypeOf(RowLoadingSpin2)).apply(this, arguments));
+    }
+
+    _createClass(RowLoadingSpin2, [{
+        key: "render",
+        value: function render() {
+            return React.createElement(
+                Row,
+                { size: "one" },
+                React.createElement(
+                    Column,
+                    null,
+                    React.createElement(
+                        Segment,
+                        null,
+                        React.createElement(
+                            Center,
+                            null,
+                            React.createElement(LoadingSpin2, null)
+                        )
+                    )
+                )
+            );
+        }
+    }]);
+
+    return RowLoadingSpin2;
+}(React.Component);
+
+var BasicMessage = function (_React$Component24) {
+    _inherits(BasicMessage, _React$Component24);
+
+    function BasicMessage(props) {
+        _classCallCheck(this, BasicMessage);
+
+        var _this24 = _possibleConstructorReturn(this, (BasicMessage.__proto__ || Object.getPrototypeOf(BasicMessage)).call(this, props));
+
+        if (_this24.props.messageType == "success") {
+            _this24.className = "ui blue message";
+        } else if (_this24.props.messageType == "warning") {
+            _this24.className = "ui yellow message";
+        } else if (_this24.props.messageType == "danger") {
+            _this24.className = "ui red message";
+        }
+        return _this24;
+    }
+
+    _createClass(BasicMessage, [{
+        key: "render",
+        value: function render() {
+            return React.createElement(
+                "div",
+                { className: this.className },
+                this.props.text
+            );
+        }
+    }]);
+
+    return BasicMessage;
+}(React.Component);
