@@ -51,7 +51,37 @@ var Product = function (_React$Component2) {
                     React.createElement(
                         Column,
                         null,
-                        "[buraya etiketler gelecek]"
+                        React.createElement(Tags, { tags: [{
+                                id: 0,
+                                passive: true,
+                                text: "Akıllı Telefon"
+                            }, {
+                                id: 1,
+                                passive: true,
+                                text: "Apple"
+                            }, {
+                                id: 2,
+                                passive: true,
+                                text: "Ipone"
+                            }, {
+                                id: 3,
+                                passive: false,
+                                text: "Batarya",
+                                color: "yellow",
+                                rateValue: "5.5"
+                            }, {
+                                id: 4,
+                                passive: false,
+                                text: "Kamera",
+                                color: "orange",
+                                rateValue: "4.2"
+                            }, {
+                                id: 5,
+                                passive: false,
+                                text: "Ekran",
+                                color: "green",
+                                rateValue: "9.3"
+                            }] })
                     )
                 ),
                 React.createElement(
@@ -70,8 +100,79 @@ var Product = function (_React$Component2) {
     return Product;
 }(React.Component);
 
-var Comments = function (_React$Component3) {
-    _inherits(Comments, _React$Component3);
+var Tags = function (_React$Component3) {
+    _inherits(Tags, _React$Component3);
+
+    function Tags(props) {
+        _classCallCheck(this, Tags);
+
+        return _possibleConstructorReturn(this, (Tags.__proto__ || Object.getPrototypeOf(Tags)).call(this, props));
+    }
+
+    _createClass(Tags, [{
+        key: "render",
+        value: function render() {
+            this.tags = [];
+            for (var i = 0; i < this.props.tags.length; i++) {
+                this.tags.push(React.createElement(Tag, { key: this.props.tags[i].id,
+                    passive: this.props.tags[i].passive,
+                    text: this.props.tags[i].text,
+                    color: this.props.tags[i].color,
+                    rateValue: this.props.tags[i].rateValue
+                }));
+            }
+            return React.createElement(
+                "div",
+                null,
+                React.createElement(
+                    Center,
+                    null,
+                    this.tags
+                )
+            );
+        }
+    }]);
+
+    return Tags;
+}(React.Component);
+
+var Tag = function (_React$Component4) {
+    _inherits(Tag, _React$Component4);
+
+    function Tag(props) {
+        _classCallCheck(this, Tag);
+
+        return _possibleConstructorReturn(this, (Tag.__proto__ || Object.getPrototypeOf(Tag)).call(this, props));
+    }
+
+    _createClass(Tag, [{
+        key: "render",
+        value: function render() {
+            if (this.props.passive) {
+                return React.createElement(
+                    "a",
+                    { className: "ui large label tag-abdyek" },
+                    this.props.text
+                );
+            }
+            return React.createElement(
+                "a",
+                { className: "ui " + this.props.color + " large label tag-abdyek" },
+                this.props.text,
+                React.createElement(
+                    "div",
+                    { className: "detail" },
+                    this.props.rateValue
+                )
+            );
+        }
+    }]);
+
+    return Tag;
+}(React.Component);
+
+var Comments = function (_React$Component5) {
+    _inherits(Comments, _React$Component5);
 
     function Comments() {
         _classCallCheck(this, Comments);
@@ -122,20 +223,20 @@ var Comments = function (_React$Component3) {
     return Comments;
 }(React.Component);
 
-var Comment = function (_React$Component4) {
-    _inherits(Comment, _React$Component4);
+var Comment = function (_React$Component6) {
+    _inherits(Comment, _React$Component6);
 
     function Comment(props) {
         _classCallCheck(this, Comment);
 
-        var _this4 = _possibleConstructorReturn(this, (Comment.__proto__ || Object.getPrototypeOf(Comment)).call(this, props));
+        var _this6 = _possibleConstructorReturn(this, (Comment.__proto__ || Object.getPrototypeOf(Comment)).call(this, props));
 
-        _this4.state = {
+        _this6.state = {
             reportArea: false
         };
-        _this4.openReportArea = _this4.openReportArea.bind(_this4);;
-        _this4.closeReportArea = _this4.closeReportArea.bind(_this4);;
-        return _this4;
+        _this6.openReportArea = _this6.openReportArea.bind(_this6);;
+        _this6.closeReportArea = _this6.closeReportArea.bind(_this6);;
+        return _this6;
     }
 
     _createClass(Comment, [{
@@ -183,8 +284,8 @@ var Comment = function (_React$Component4) {
     return Comment;
 }(React.Component);
 
-var TopOfComment = function (_React$Component5) {
-    _inherits(TopOfComment, _React$Component5);
+var TopOfComment = function (_React$Component7) {
+    _inherits(TopOfComment, _React$Component7);
 
     function TopOfComment() {
         _classCallCheck(this, TopOfComment);
@@ -231,8 +332,8 @@ var TopOfComment = function (_React$Component5) {
     return TopOfComment;
 }(React.Component);
 
-var BottomOfComment = function (_React$Component6) {
-    _inherits(BottomOfComment, _React$Component6);
+var BottomOfComment = function (_React$Component8) {
+    _inherits(BottomOfComment, _React$Component8);
 
     function BottomOfComment() {
         _classCallCheck(this, BottomOfComment);
@@ -288,20 +389,20 @@ var BottomOfComment = function (_React$Component6) {
     return BottomOfComment;
 }(React.Component);
 
-var LikeButton = function (_React$Component7) {
-    _inherits(LikeButton, _React$Component7);
+var LikeButton = function (_React$Component9) {
+    _inherits(LikeButton, _React$Component9);
 
     function LikeButton(props) {
         _classCallCheck(this, LikeButton);
 
-        var _this7 = _possibleConstructorReturn(this, (LikeButton.__proto__ || Object.getPrototypeOf(LikeButton)).call(this, props));
+        var _this9 = _possibleConstructorReturn(this, (LikeButton.__proto__ || Object.getPrototypeOf(LikeButton)).call(this, props));
 
-        _this7.state = {
-            liked: _this7.props.liked,
-            likeCount: _this7.props.likeCount
+        _this9.state = {
+            liked: _this9.props.liked,
+            likeCount: _this9.props.likeCount
         };
-        _this7.like = _this7.like.bind(_this7);
-        return _this7;
+        _this9.like = _this9.like.bind(_this9);
+        return _this9;
     }
 
     _createClass(LikeButton, [{
@@ -342,16 +443,16 @@ var LikeButton = function (_React$Component7) {
     return LikeButton;
 }(React.Component);
 
-var ReportButton = function (_React$Component8) {
-    _inherits(ReportButton, _React$Component8);
+var ReportButton = function (_React$Component10) {
+    _inherits(ReportButton, _React$Component10);
 
     function ReportButton(props) {
         _classCallCheck(this, ReportButton);
 
-        var _this8 = _possibleConstructorReturn(this, (ReportButton.__proto__ || Object.getPrototypeOf(ReportButton)).call(this, props));
+        var _this10 = _possibleConstructorReturn(this, (ReportButton.__proto__ || Object.getPrototypeOf(ReportButton)).call(this, props));
 
-        _this8.openReportArea = _this8.openReportArea.bind(_this8);
-        return _this8;
+        _this10.openReportArea = _this10.openReportArea.bind(_this10);
+        return _this10;
     }
 
     _createClass(ReportButton, [{
@@ -377,16 +478,16 @@ var ReportButton = function (_React$Component8) {
     return ReportButton;
 }(React.Component);
 
-var ReportArea = function (_React$Component9) {
-    _inherits(ReportArea, _React$Component9);
+var ReportArea = function (_React$Component11) {
+    _inherits(ReportArea, _React$Component11);
 
     function ReportArea(props) {
         _classCallCheck(this, ReportArea);
 
-        var _this9 = _possibleConstructorReturn(this, (ReportArea.__proto__ || Object.getPrototypeOf(ReportArea)).call(this, props));
+        var _this11 = _possibleConstructorReturn(this, (ReportArea.__proto__ || Object.getPrototypeOf(ReportArea)).call(this, props));
 
-        _this9.limitOfReportText = 200;
-        _this9.state = {
+        _this11.limitOfReportText = 200;
+        _this11.state = {
             // normal, loading, reported
             form: "normal",
             messageType: "success", // success, warning, danger
@@ -397,11 +498,11 @@ var ReportArea = function (_React$Component9) {
             reportTextSize: 0,
             reportTextLimitWarning: false
         };
-        _this9.closeReportArea = _this9.closeReportArea.bind(_this9);
-        _this9.sendReport = _this9.sendReport.bind(_this9);
-        _this9.changeReason = _this9.changeReason.bind(_this9);
-        _this9.changeTextarea = _this9.changeTextarea.bind(_this9);
-        return _this9;
+        _this11.closeReportArea = _this11.closeReportArea.bind(_this11);
+        _this11.sendReport = _this11.sendReport.bind(_this11);
+        _this11.changeReason = _this11.changeReason.bind(_this11);
+        _this11.changeTextarea = _this11.changeTextarea.bind(_this11);
+        return _this11;
     }
 
     _createClass(ReportArea, [{
@@ -608,16 +709,16 @@ var ReportArea = function (_React$Component9) {
     return ReportArea;
 }(React.Component);
 
-var ReportReason = function (_React$Component10) {
-    _inherits(ReportReason, _React$Component10);
+var ReportReason = function (_React$Component12) {
+    _inherits(ReportReason, _React$Component12);
 
     function ReportReason(props) {
         _classCallCheck(this, ReportReason);
 
-        var _this10 = _possibleConstructorReturn(this, (ReportReason.__proto__ || Object.getPrototypeOf(ReportReason)).call(this, props));
+        var _this12 = _possibleConstructorReturn(this, (ReportReason.__proto__ || Object.getPrototypeOf(ReportReason)).call(this, props));
 
-        _this10.changeReason = _this10.changeReason.bind(_this10);
-        return _this10;
+        _this12.changeReason = _this12.changeReason.bind(_this12);
+        return _this12;
     }
 
     _createClass(ReportReason, [{
@@ -664,8 +765,8 @@ var ReportReason = function (_React$Component10) {
     return ReportReason;
 }(React.Component);
 
-var Reported = function (_React$Component11) {
-    _inherits(Reported, _React$Component11);
+var Reported = function (_React$Component13) {
+    _inherits(Reported, _React$Component13);
 
     function Reported() {
         _classCallCheck(this, Reported);

@@ -82,13 +82,6 @@ class Header extends React.Component {
                         </Row>
                     </Column>
                 </Row>
-                <Row withoutContainer={true} size="one">
-                    <Column>
-                        <Center size="sixteen">
-                            <Categories />
-                        </Center>
-                    </Column>
-                </Row>
             </header>
         )
     }

@@ -229,22 +229,6 @@ class Logo extends React.Component {
     }
 }
 
-class Categories extends React.Component {
-    render(){
-        return(
-            <div id="categories">
-                <button className=" big ui button">Elektronik</button>
-                <button className=" big ui  button">Giyim</button>
-                <button className=" big ui  button">Mobilya</button>
-                <button className=" big ui  button">Gıda</button>
-                <button className=" big ui  button">Ofis</button>
-                <button className=" big ui  button">Kozmetik</button>
-                <button className=" big ui  button">Kitap</button>
-            </div>
-        )
-    }
-}
-
 // bunlar 2 sayfada bulunduğu için componentJS'ye taşınmasını uygun buldum
 class LikeButton extends React.Component {
     constructor(props) {

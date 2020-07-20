@@ -165,19 +165,6 @@ var Header = function (_React$Component5) {
                             )
                         )
                     )
-                ),
-                React.createElement(
-                    Row,
-                    { withoutContainer: true, size: "one" },
-                    React.createElement(
-                        Column,
-                        null,
-                        React.createElement(
-                            Center,
-                            { size: "sixteen" },
-                            React.createElement(Categories, null)
-                        )
-                    )
                 )
             );
         }

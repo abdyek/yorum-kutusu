@@ -478,80 +478,23 @@ var Logo = function (_React$Component15) {
     return Logo;
 }(React.Component);
 
-var Categories = function (_React$Component16) {
-    _inherits(Categories, _React$Component16);
-
-    function Categories() {
-        _classCallCheck(this, Categories);
-
-        return _possibleConstructorReturn(this, (Categories.__proto__ || Object.getPrototypeOf(Categories)).apply(this, arguments));
-    }
-
-    _createClass(Categories, [{
-        key: "render",
-        value: function render() {
-            return React.createElement(
-                "div",
-                { id: "categories" },
-                React.createElement(
-                    "button",
-                    { className: " big ui button" },
-                    "Elektronik"
-                ),
-                React.createElement(
-                    "button",
-                    { className: " big ui  button" },
-                    "Giyim"
-                ),
-                React.createElement(
-                    "button",
-                    { className: " big ui  button" },
-                    "Mobilya"
-                ),
-                React.createElement(
-                    "button",
-                    { className: " big ui  button" },
-                    "G\u0131da"
-                ),
-                React.createElement(
-                    "button",
-                    { className: " big ui  button" },
-                    "Ofis"
-                ),
-                React.createElement(
-                    "button",
-                    { className: " big ui  button" },
-                    "Kozmetik"
-                ),
-                React.createElement(
-                    "button",
-                    { className: " big ui  button" },
-                    "Kitap"
-                )
-            );
-        }
-    }]);
-
-    return Categories;
-}(React.Component);
-
 // bunlar 2 sayfada bulunduğu için componentJS'ye taşınmasını uygun buldum
 
 
-var LikeButton = function (_React$Component17) {
-    _inherits(LikeButton, _React$Component17);
+var LikeButton = function (_React$Component16) {
+    _inherits(LikeButton, _React$Component16);
 
     function LikeButton(props) {
         _classCallCheck(this, LikeButton);
 
-        var _this17 = _possibleConstructorReturn(this, (LikeButton.__proto__ || Object.getPrototypeOf(LikeButton)).call(this, props));
+        var _this16 = _possibleConstructorReturn(this, (LikeButton.__proto__ || Object.getPrototypeOf(LikeButton)).call(this, props));
 
-        if (_this17.props.likeOrDislike == "like") {
-            _this17.liked = " likedComment";
+        if (_this16.props.likeOrDislike == "like") {
+            _this16.liked = " likedComment";
         } else {
-            _this17.liked = " ";
+            _this16.liked = " ";
         }
-        return _this17;
+        return _this16;
     }
 
     _createClass(LikeButton, [{
@@ -573,20 +516,20 @@ var LikeButton = function (_React$Component17) {
     return LikeButton;
 }(React.Component);
 
-var DislikeButton = function (_React$Component18) {
-    _inherits(DislikeButton, _React$Component18);
+var DislikeButton = function (_React$Component17) {
+    _inherits(DislikeButton, _React$Component17);
 
     function DislikeButton(props) {
         _classCallCheck(this, DislikeButton);
 
-        var _this18 = _possibleConstructorReturn(this, (DislikeButton.__proto__ || Object.getPrototypeOf(DislikeButton)).call(this, props));
+        var _this17 = _possibleConstructorReturn(this, (DislikeButton.__proto__ || Object.getPrototypeOf(DislikeButton)).call(this, props));
 
-        if (_this18.props.likeOrDislike == "dislike") {
-            _this18.liked = " dislikedComment";
+        if (_this17.props.likeOrDislike == "dislike") {
+            _this17.liked = " dislikedComment";
         } else {
-            _this18.liked = " ";
+            _this17.liked = " ";
         }
-        return _this18;
+        return _this17;
     }
 
     _createClass(DislikeButton, [{
@@ -608,8 +551,8 @@ var DislikeButton = function (_React$Component18) {
     return DislikeButton;
 }(React.Component);
 
-var ComplaintButton = function (_React$Component19) {
-    _inherits(ComplaintButton, _React$Component19);
+var ComplaintButton = function (_React$Component18) {
+    _inherits(ComplaintButton, _React$Component18);
 
     function ComplaintButton() {
         _classCallCheck(this, ComplaintButton);
@@ -632,8 +575,8 @@ var ComplaintButton = function (_React$Component19) {
 }(React.Component);
 // ^ bunlar 2 sayfada bulunduğu için componentJS'ye taşınmasını uygun buldum
 
-var LoadingSpin = function (_React$Component20) {
-    _inherits(LoadingSpin, _React$Component20);
+var LoadingSpin = function (_React$Component19) {
+    _inherits(LoadingSpin, _React$Component19);
 
     function LoadingSpin() {
         _classCallCheck(this, LoadingSpin);
@@ -662,8 +605,8 @@ var LoadingSpin = function (_React$Component20) {
     return LoadingSpin;
 }(React.Component);
 
-var RowLoadingSpin = function (_React$Component21) {
-    _inherits(RowLoadingSpin, _React$Component21);
+var RowLoadingSpin = function (_React$Component20) {
+    _inherits(RowLoadingSpin, _React$Component20);
 
     function RowLoadingSpin() {
         _classCallCheck(this, RowLoadingSpin);
@@ -697,8 +640,8 @@ var RowLoadingSpin = function (_React$Component21) {
     return RowLoadingSpin;
 }(React.Component);
 
-var LoadingSpin2 = function (_React$Component22) {
-    _inherits(LoadingSpin2, _React$Component22);
+var LoadingSpin2 = function (_React$Component21) {
+    _inherits(LoadingSpin2, _React$Component21);
 
     function LoadingSpin2() {
         _classCallCheck(this, LoadingSpin2);
@@ -731,8 +674,8 @@ var LoadingSpin2 = function (_React$Component22) {
     return LoadingSpin2;
 }(React.Component);
 
-var RowLoadingSpin2 = function (_React$Component23) {
-    _inherits(RowLoadingSpin2, _React$Component23);
+var RowLoadingSpin2 = function (_React$Component22) {
+    _inherits(RowLoadingSpin2, _React$Component22);
 
     function RowLoadingSpin2() {
         _classCallCheck(this, RowLoadingSpin2);
@@ -766,22 +709,22 @@ var RowLoadingSpin2 = function (_React$Component23) {
     return RowLoadingSpin2;
 }(React.Component);
 
-var BasicMessage = function (_React$Component24) {
-    _inherits(BasicMessage, _React$Component24);
+var BasicMessage = function (_React$Component23) {
+    _inherits(BasicMessage, _React$Component23);
 
     function BasicMessage(props) {
         _classCallCheck(this, BasicMessage);
 
-        var _this24 = _possibleConstructorReturn(this, (BasicMessage.__proto__ || Object.getPrototypeOf(BasicMessage)).call(this, props));
+        var _this23 = _possibleConstructorReturn(this, (BasicMessage.__proto__ || Object.getPrototypeOf(BasicMessage)).call(this, props));
 
-        if (_this24.props.messageType == "success") {
-            _this24.className = "ui blue message";
-        } else if (_this24.props.messageType == "warning") {
-            _this24.className = "ui yellow message";
-        } else if (_this24.props.messageType == "danger") {
-            _this24.className = "ui red message";
+        if (_this23.props.messageType == "success") {
+            _this23.className = "ui blue message";
+        } else if (_this23.props.messageType == "warning") {
+            _this23.className = "ui yellow message";
+        } else if (_this23.props.messageType == "danger") {
+            _this23.className = "ui red message";
         }
-        return _this24;
+        return _this23;
     }
 
     _createClass(BasicMessage, [{
