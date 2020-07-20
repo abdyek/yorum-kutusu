@@ -1,9 +1,51 @@
 class Content extends React.Component {
+    constructor(props) {
+        super(props);
+        this.tagsInfo = [
+            {
+                id:0,
+                passive:true,
+                text:"Akıllı Telefon",
+            },
+            {
+                id:1,
+                passive:true,
+                text:"Apple"
+            },
+            {
+                id:2,
+                passive:true,
+                text:"Ipone"
+            },
+            {
+                id:3,
+                passive:false,
+                text:"Batarya",
+                color:"yellow",
+                rateValue: "5.5"
+            },
+            {
+                id:4,
+                passive:false,
+                text:"Kamera",
+                color:"orange",
+                rateValue: "4.2"
+            },
+            {
+                id:5,
+                passive:false,
+                text:"Ekran",
+                color:"green",
+                rateValue: "9.3"
+            },
+        ];
+    }
     render() {
         return(
             <div>
-                <Product />
+                <Product tags={this.tagsInfo}/>
                 <Comments />
+                <WriteComment tags={this.tagsInfo}/>
             </div>
         )
     }
@@ -15,44 +57,7 @@ class Product extends React.Component {
             <div>
                 <Row size="one">
                     <Column>
-                        <Tags tags={[
-                            {
-                                id:0,
-                                passive:true,
-                                text:"Akıllı Telefon",
-                            },
-                            {
-                                id:1,
-                                passive:true,
-                                text:"Apple"
-                            },
-                            {
-                                id:2,
-                                passive:true,
-                                text:"Ipone"
-                            },
-                            {
-                                id:3,
-                                passive:false,
-                                text:"Batarya",
-                                color:"yellow",
-                                rateValue: "5.5"
-                            },
-                            {
-                                id:4,
-                                passive:false,
-                                text:"Kamera",
-                                color:"orange",
-                                rateValue: "4.2"
-                            },
-                            {
-                                id:5,
-                                passive:false,
-                                text:"Ekran",
-                                color:"green",
-                                rateValue: "9.3"
-                            },
-                        ]}/>
+                        <Tags tags={this.props.tags}/>
                     </Column>
                 </Row>
                 <Row size="one">
@@ -514,6 +519,135 @@ class Reported extends React.Component {
                     </Column>
                 </Row>
             </div>
+        )
+    }
+}
+
+class WriteComment extends React.Component {
+    render() {
+        return(
+            <Row size="one">
+                <Column>
+                    <Segment>
+                        <H type="4" text="Yorum Yaz" />
+                        <Row size="one">
+                            <Column>
+                            <div className="ui form">
+                                <div className="field">
+                                    <label>Yorumunuz</label>
+                                    <textarea></textarea>
+                                </div>
+                            </div>
+                            </Column>
+                        </Row>
+                        <Row size="one">
+                            <Column>
+                                <Rating tags={this.props.tags}/>
+                            </Column>
+                        </Row>
+                        <Row size="one">
+                            <Column>
+                                <FloatRight>
+                                    <button className="ui green button">
+                                        Gönder
+                                    </button>
+                                </FloatRight>
+                            </Column>
+                        </Row>
+                    </Segment>
+                </Column>
+            </Row>
+        )
+    }
+}
+
+class Rating extends React.Component {
+    constructor(props){
+        super(props);
+        this.ratingLines = [];
+        for(let i=0;i<this.props.tags.length;i++) {
+            if(!this.props.tags[i].passive) {
+                this.ratingLines.push(
+                    <RatingLine key={this.props.tags[i].id} tagKey={this.props.tags[i].id} tagName={this.props.tags[i].text} />
+                )
+            }
+        }
+    }
+    render() {
+        return(
+            <Row size="sixteen">
+                <WideColumn size="two">
+                </WideColumn>
+                <WideColumn size="twelve">
+                    { this.ratingLines }
+                </WideColumn>
+            </Row>
+        )
+    }
+}
+
+class RatingLine extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            rateValue: "-",
+            color: ""
+        };
+        this.selectOption = this.selectOption.bind(this);
+        this.colors = {
+            "-": "",
+            1: "red",
+            2: "red",
+            3: "orange",
+            4: "orange",
+            5: "yellow",
+            6: "yellow",
+            7: "teal",
+            8: "teal",
+            9: "blue",
+            10: "blue"
+        };
+    }
+    selectOption(e) {
+        this.setState({
+            rateValue: e.target.value,
+            color:this.colors[e.target.value]
+        });
+    }
+    render() {
+        return(
+            <Row size="one">
+                <Column>
+                    <Row size="two">
+                        <Column>
+                            <Center>
+                                <Tag key={this.props.tagKey} passive={false} text={this.props.tagName} color={this.state.color} rateValue={this.state.rateValue}/>
+                            </Center>
+                        </Column>
+                        <Column>
+                            <Center>
+                                <div className="ui form">
+                                    <div className="field">
+                                        <select onChange={this.selectOption}>
+                                            <option value="-">Seçilmemiş</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                            <option value="6">6</option>
+                                            <option value="7">7</option>
+                                            <option value="8">8</option>
+                                            <option value="9">9</option>
+                                            <option value="10">10</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </Center>
+                        </Column>
+                    </Row>
+                </Column>
+            </Row>
         )
     }
 }

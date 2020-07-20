@@ -9,10 +9,43 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var Content = function (_React$Component) {
     _inherits(Content, _React$Component);
 
-    function Content() {
+    function Content(props) {
         _classCallCheck(this, Content);
 
-        return _possibleConstructorReturn(this, (Content.__proto__ || Object.getPrototypeOf(Content)).apply(this, arguments));
+        var _this = _possibleConstructorReturn(this, (Content.__proto__ || Object.getPrototypeOf(Content)).call(this, props));
+
+        _this.tagsInfo = [{
+            id: 0,
+            passive: true,
+            text: "Akıllı Telefon"
+        }, {
+            id: 1,
+            passive: true,
+            text: "Apple"
+        }, {
+            id: 2,
+            passive: true,
+            text: "Ipone"
+        }, {
+            id: 3,
+            passive: false,
+            text: "Batarya",
+            color: "yellow",
+            rateValue: "5.5"
+        }, {
+            id: 4,
+            passive: false,
+            text: "Kamera",
+            color: "orange",
+            rateValue: "4.2"
+        }, {
+            id: 5,
+            passive: false,
+            text: "Ekran",
+            color: "green",
+            rateValue: "9.3"
+        }];
+        return _this;
     }
 
     _createClass(Content, [{
@@ -21,8 +54,9 @@ var Content = function (_React$Component) {
             return React.createElement(
                 "div",
                 null,
-                React.createElement(Product, null),
-                React.createElement(Comments, null)
+                React.createElement(Product, { tags: this.tagsInfo }),
+                React.createElement(Comments, null),
+                React.createElement(WriteComment, { tags: this.tagsInfo })
             );
         }
     }]);
@@ -51,37 +85,7 @@ var Product = function (_React$Component2) {
                     React.createElement(
                         Column,
                         null,
-                        React.createElement(Tags, { tags: [{
-                                id: 0,
-                                passive: true,
-                                text: "Akıllı Telefon"
-                            }, {
-                                id: 1,
-                                passive: true,
-                                text: "Apple"
-                            }, {
-                                id: 2,
-                                passive: true,
-                                text: "Ipone"
-                            }, {
-                                id: 3,
-                                passive: false,
-                                text: "Batarya",
-                                color: "yellow",
-                                rateValue: "5.5"
-                            }, {
-                                id: 4,
-                                passive: false,
-                                text: "Kamera",
-                                color: "orange",
-                                rateValue: "4.2"
-                            }, {
-                                id: 5,
-                                passive: false,
-                                text: "Ekran",
-                                color: "green",
-                                rateValue: "9.3"
-                            }] })
+                        React.createElement(Tags, { tags: this.props.tags })
                     )
                 ),
                 React.createElement(
@@ -806,4 +810,261 @@ var Reported = function (_React$Component13) {
     }]);
 
     return Reported;
+}(React.Component);
+
+var WriteComment = function (_React$Component14) {
+    _inherits(WriteComment, _React$Component14);
+
+    function WriteComment() {
+        _classCallCheck(this, WriteComment);
+
+        return _possibleConstructorReturn(this, (WriteComment.__proto__ || Object.getPrototypeOf(WriteComment)).apply(this, arguments));
+    }
+
+    _createClass(WriteComment, [{
+        key: "render",
+        value: function render() {
+            return React.createElement(
+                Row,
+                { size: "one" },
+                React.createElement(
+                    Column,
+                    null,
+                    React.createElement(
+                        Segment,
+                        null,
+                        React.createElement(H, { type: "4", text: "Yorum Yaz" }),
+                        React.createElement(
+                            Row,
+                            { size: "one" },
+                            React.createElement(
+                                Column,
+                                null,
+                                React.createElement(
+                                    "div",
+                                    { className: "ui form" },
+                                    React.createElement(
+                                        "div",
+                                        { className: "field" },
+                                        React.createElement(
+                                            "label",
+                                            null,
+                                            "Yorumunuz"
+                                        ),
+                                        React.createElement("textarea", null)
+                                    )
+                                )
+                            )
+                        ),
+                        React.createElement(
+                            Row,
+                            { size: "one" },
+                            React.createElement(
+                                Column,
+                                null,
+                                React.createElement(Rating, { tags: this.props.tags })
+                            )
+                        ),
+                        React.createElement(
+                            Row,
+                            { size: "one" },
+                            React.createElement(
+                                Column,
+                                null,
+                                React.createElement(
+                                    FloatRight,
+                                    null,
+                                    React.createElement(
+                                        "button",
+                                        { className: "ui green button" },
+                                        "G\xF6nder"
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            );
+        }
+    }]);
+
+    return WriteComment;
+}(React.Component);
+
+var Rating = function (_React$Component15) {
+    _inherits(Rating, _React$Component15);
+
+    function Rating(props) {
+        _classCallCheck(this, Rating);
+
+        var _this15 = _possibleConstructorReturn(this, (Rating.__proto__ || Object.getPrototypeOf(Rating)).call(this, props));
+
+        _this15.ratingLines = [];
+        for (var i = 0; i < _this15.props.tags.length; i++) {
+            if (!_this15.props.tags[i].passive) {
+                _this15.ratingLines.push(React.createElement(RatingLine, { key: _this15.props.tags[i].id, tagKey: _this15.props.tags[i].id, tagName: _this15.props.tags[i].text }));
+            }
+        }
+        return _this15;
+    }
+
+    _createClass(Rating, [{
+        key: "render",
+        value: function render() {
+            return React.createElement(
+                Row,
+                { size: "sixteen" },
+                React.createElement(WideColumn, { size: "two" }),
+                React.createElement(
+                    WideColumn,
+                    { size: "twelve" },
+                    this.ratingLines
+                )
+            );
+        }
+    }]);
+
+    return Rating;
+}(React.Component);
+
+var RatingLine = function (_React$Component16) {
+    _inherits(RatingLine, _React$Component16);
+
+    function RatingLine(props) {
+        _classCallCheck(this, RatingLine);
+
+        var _this16 = _possibleConstructorReturn(this, (RatingLine.__proto__ || Object.getPrototypeOf(RatingLine)).call(this, props));
+
+        _this16.state = {
+            rateValue: "-",
+            color: ""
+        };
+        _this16.selectOption = _this16.selectOption.bind(_this16);
+        _this16.colors = {
+            "-": "",
+            1: "red",
+            2: "red",
+            3: "orange",
+            4: "orange",
+            5: "yellow",
+            6: "yellow",
+            7: "teal",
+            8: "teal",
+            9: "blue",
+            10: "blue"
+        };
+        return _this16;
+    }
+
+    _createClass(RatingLine, [{
+        key: "selectOption",
+        value: function selectOption(e) {
+            this.setState({
+                rateValue: e.target.value,
+                color: this.colors[e.target.value]
+            });
+        }
+    }, {
+        key: "render",
+        value: function render() {
+            return React.createElement(
+                Row,
+                { size: "one" },
+                React.createElement(
+                    Column,
+                    null,
+                    React.createElement(
+                        Row,
+                        { size: "two" },
+                        React.createElement(
+                            Column,
+                            null,
+                            React.createElement(
+                                Center,
+                                null,
+                                React.createElement(Tag, { key: this.props.tagKey, passive: false, text: this.props.tagName, color: this.state.color, rateValue: this.state.rateValue })
+                            )
+                        ),
+                        React.createElement(
+                            Column,
+                            null,
+                            React.createElement(
+                                Center,
+                                null,
+                                React.createElement(
+                                    "div",
+                                    { className: "ui form" },
+                                    React.createElement(
+                                        "div",
+                                        { className: "field" },
+                                        React.createElement(
+                                            "select",
+                                            { onChange: this.selectOption },
+                                            React.createElement(
+                                                "option",
+                                                { value: "-" },
+                                                "Se\xE7ilmemi\u015F"
+                                            ),
+                                            React.createElement(
+                                                "option",
+                                                { value: "1" },
+                                                "1"
+                                            ),
+                                            React.createElement(
+                                                "option",
+                                                { value: "2" },
+                                                "2"
+                                            ),
+                                            React.createElement(
+                                                "option",
+                                                { value: "3" },
+                                                "3"
+                                            ),
+                                            React.createElement(
+                                                "option",
+                                                { value: "4" },
+                                                "4"
+                                            ),
+                                            React.createElement(
+                                                "option",
+                                                { value: "5" },
+                                                "5"
+                                            ),
+                                            React.createElement(
+                                                "option",
+                                                { value: "6" },
+                                                "6"
+                                            ),
+                                            React.createElement(
+                                                "option",
+                                                { value: "7" },
+                                                "7"
+                                            ),
+                                            React.createElement(
+                                                "option",
+                                                { value: "8" },
+                                                "8"
+                                            ),
+                                            React.createElement(
+                                                "option",
+                                                { value: "9" },
+                                                "9"
+                                            ),
+                                            React.createElement(
+                                                "option",
+                                                { value: "10" },
+                                                "10"
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            );
+        }
+    }]);
+
+    return RatingLine;
 }(React.Component);
