@@ -464,7 +464,6 @@ class ReportArea extends React.Component {
             return(
                 <div>
                     <RowLoadingSpin />
-                    <RowLoadingSpin2 />
                 </div>
             )
         } else if(this.state.form=="reported") {
@@ -524,40 +523,90 @@ class Reported extends React.Component {
 }
 
 class WriteComment extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            // normal, loading, sent
+            form:"normal",
+            messageType:"success",  // success, warning, danger
+            messageText:"mahmutcan",
+            commentText:"",
+            sendButtonDisabled: true,
+            sendButtonClassName: "ui green disabled button"
+        };
+        this.sendComment = this.sendComment.bind(this);
+        this.changeComment = this.changeComment.bind(this);
+    }
+    sendComment() {
+        this.setState({
+            form:"loading"
+        });
+        // gerekli API işlemleri buraya yapılacak
+    }
+    changeComment(e) {
+        if(!e.target.value.length) {
+            this.setState({
+                sendButtonClassName:"ui green disabled button",
+                sendButtonDisabled: true
+            })
+        } else {
+            this.setState({
+                sendButtonClassName:"ui green button",
+                sendButtonDisabled: false
+            })
+        }
+        this.setState({
+            commentText: e.target.value
+        });
+    }
     render() {
-        return(
-            <Row size="one">
-                <Column>
-                    <Segment>
-                        <H type="4" text="Yorum Yaz" />
-                        <Row size="one">
-                            <Column>
-                            <div className="ui form">
-                                <div className="field">
-                                    <label>Yorumunuz</label>
-                                    <textarea></textarea>
+        if(this.state.form=="normal") {
+            return(
+                <Row size="one">
+                    <Column>
+                        <Segment>
+                            <H type="4" text="Yorum Yaz" />
+                            <Row size="one">
+                                <Column>
+                                <div className="ui form">
+                                    <div className="field">
+                                        <label>Yorumunuz</label>
+                                        <textarea value={this.state.commentText} onChange={this.changeComment}></textarea>
+                                    </div>
                                 </div>
-                            </div>
-                            </Column>
-                        </Row>
-                        <Row size="one">
-                            <Column>
-                                <Rating tags={this.props.tags}/>
-                            </Column>
-                        </Row>
-                        <Row size="one">
-                            <Column>
-                                <FloatRight>
-                                    <button className="ui green button">
-                                        Gönder
-                                    </button>
-                                </FloatRight>
-                            </Column>
-                        </Row>
-                    </Segment>
-                </Column>
-            </Row>
-        )
+                                </Column>
+                            </Row>
+                            <Row size="one">
+                                <Column>
+                                    <Rating tags={this.props.tags}/>
+                                </Column>
+                            </Row>
+                            <Row size="one">
+                                <Column>
+                                    <FloatRight>
+                                        <button className={this.state.sendButtonClassName} onClick={this.sendComment}>
+                                            Gönder
+                                        </button>
+                                    </FloatRight>
+                                </Column>
+                            </Row>
+                        </Segment>
+                    </Column>
+                </Row>
+            )
+        } else if(this.state.form=="loading") {
+            return(
+                <RowLoadingSpin />
+            )
+        } else if(this.state.form=="sent") {
+            return (
+                <Row size="one">
+                    <Column>
+                        <BasicMessage messageType={this.state.messageType} text={this.state.messageText} />
+                    </Column>
+                </Row>
+            )
+        }
     }
 }
 

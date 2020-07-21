@@ -307,32 +307,6 @@ class RowLoadingSpin extends React.Component {
     }
 }
 
-class LoadingSpin2 extends React.Component {
-    render() {
-        return(
-            <div>
-                <div className="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
-            </div>
-        )
-    }
-}
-
-class RowLoadingSpin2 extends React.Component {
-    render() {
-        return(
-            <Row size="one">
-                <Column>
-                    <Segment>
-                        <Center>
-                            <LoadingSpin2 />
-                        </Center>
-                    </Segment>
-                </Column>
-            </Row>
-        )
-    }
-}
-
 class BasicMessage extends React.Component {
     constructor(props) {
         super(props);

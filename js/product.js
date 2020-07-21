@@ -701,8 +701,7 @@ var ReportArea = function (_React$Component11) {
                 return React.createElement(
                     "div",
                     null,
-                    React.createElement(RowLoadingSpin, null),
-                    React.createElement(RowLoadingSpin2, null)
+                    React.createElement(RowLoadingSpin, null)
                 );
             } else if (this.state.form == "reported") {
                 return React.createElement(Reported, { messageType: this.state.messageType, text: this.state.messageText });
@@ -815,76 +814,129 @@ var Reported = function (_React$Component13) {
 var WriteComment = function (_React$Component14) {
     _inherits(WriteComment, _React$Component14);
 
-    function WriteComment() {
+    function WriteComment(props) {
         _classCallCheck(this, WriteComment);
 
-        return _possibleConstructorReturn(this, (WriteComment.__proto__ || Object.getPrototypeOf(WriteComment)).apply(this, arguments));
+        var _this14 = _possibleConstructorReturn(this, (WriteComment.__proto__ || Object.getPrototypeOf(WriteComment)).call(this, props));
+
+        _this14.state = {
+            // normal, loading, sent
+            form: "normal",
+            messageType: "success", // success, warning, danger
+            messageText: "mahmutcan",
+            commentText: "",
+            sendButtonDisabled: true,
+            sendButtonClassName: "ui green disabled button"
+        };
+        _this14.sendComment = _this14.sendComment.bind(_this14);
+        _this14.changeComment = _this14.changeComment.bind(_this14);
+        return _this14;
     }
 
     _createClass(WriteComment, [{
+        key: "sendComment",
+        value: function sendComment() {
+            this.setState({
+                form: "loading"
+            });
+            // gerekli API işlemleri buraya yapılacak
+        }
+    }, {
+        key: "changeComment",
+        value: function changeComment(e) {
+            if (!e.target.value.length) {
+                this.setState({
+                    sendButtonClassName: "ui green disabled button",
+                    sendButtonDisabled: true
+                });
+            } else {
+                this.setState({
+                    sendButtonClassName: "ui green button",
+                    sendButtonDisabled: false
+                });
+            }
+            this.setState({
+                commentText: e.target.value
+            });
+        }
+    }, {
         key: "render",
         value: function render() {
-            return React.createElement(
-                Row,
-                { size: "one" },
-                React.createElement(
-                    Column,
-                    null,
+            if (this.state.form == "normal") {
+                return React.createElement(
+                    Row,
+                    { size: "one" },
                     React.createElement(
-                        Segment,
+                        Column,
                         null,
-                        React.createElement(H, { type: "4", text: "Yorum Yaz" }),
                         React.createElement(
-                            Row,
-                            { size: "one" },
+                            Segment,
+                            null,
+                            React.createElement(H, { type: "4", text: "Yorum Yaz" }),
                             React.createElement(
-                                Column,
-                                null,
+                                Row,
+                                { size: "one" },
                                 React.createElement(
-                                    "div",
-                                    { className: "ui form" },
-                                    React.createElement(
-                                        "div",
-                                        { className: "field" },
-                                        React.createElement(
-                                            "label",
-                                            null,
-                                            "Yorumunuz"
-                                        ),
-                                        React.createElement("textarea", null)
-                                    )
-                                )
-                            )
-                        ),
-                        React.createElement(
-                            Row,
-                            { size: "one" },
-                            React.createElement(
-                                Column,
-                                null,
-                                React.createElement(Rating, { tags: this.props.tags })
-                            )
-                        ),
-                        React.createElement(
-                            Row,
-                            { size: "one" },
-                            React.createElement(
-                                Column,
-                                null,
-                                React.createElement(
-                                    FloatRight,
+                                    Column,
                                     null,
                                     React.createElement(
-                                        "button",
-                                        { className: "ui green button" },
-                                        "G\xF6nder"
+                                        "div",
+                                        { className: "ui form" },
+                                        React.createElement(
+                                            "div",
+                                            { className: "field" },
+                                            React.createElement(
+                                                "label",
+                                                null,
+                                                "Yorumunuz"
+                                            ),
+                                            React.createElement("textarea", { value: this.state.commentText, onChange: this.changeComment })
+                                        )
+                                    )
+                                )
+                            ),
+                            React.createElement(
+                                Row,
+                                { size: "one" },
+                                React.createElement(
+                                    Column,
+                                    null,
+                                    React.createElement(Rating, { tags: this.props.tags })
+                                )
+                            ),
+                            React.createElement(
+                                Row,
+                                { size: "one" },
+                                React.createElement(
+                                    Column,
+                                    null,
+                                    React.createElement(
+                                        FloatRight,
+                                        null,
+                                        React.createElement(
+                                            "button",
+                                            { className: this.state.sendButtonClassName, onClick: this.sendComment },
+                                            "G\xF6nder"
+                                        )
                                     )
                                 )
                             )
                         )
                     )
-                )
-            );
+                );
+            } else if (this.state.form == "loading") {
+                return React.createElement(RowLoadingSpin, null);
+            } else if (this.state.form == "sent") {
+                return React.createElement(
+                    Row,
+                    { size: "one" },
+                    React.createElement(
+                        Column,
+                        null,
+                        React.createElement(BasicMessage, { messageType: this.state.messageType, text: this.state.messageText })
+                    )
+                );
+            }
         }
     }]);
 
