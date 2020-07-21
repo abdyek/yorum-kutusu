@@ -2,7 +2,7 @@ class Content extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            form:"normal"
+            form:"loading"
         }
         // burada
     }
@@ -13,7 +13,7 @@ class Content extends React.Component {
             )
         } else if(this.state.form=="loading") {
             return(
-                <RowLoading />
+                <RowLoadingSpin />
             )
         } else if(this.state.form=="notFoundProfile") {
             return <NotFoundProfile />

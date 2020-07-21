@@ -617,14 +617,12 @@ var RowLoadingSpin = function (_React$Component20) {
     _createClass(RowLoadingSpin, [{
         key: "render",
         value: function render() {
-            return React.createElement(
-                Row,
-                { size: "one" },
-                React.createElement(
-                    Column,
-                    null,
+            if (this.props.nonSegment) {
+                return React.createElement(
+                    Row,
+                    { size: "one" },
                     React.createElement(
-                        Segment,
+                        Column,
                         null,
                         React.createElement(
                             Center,
@@ -632,8 +630,26 @@ var RowLoadingSpin = function (_React$Component20) {
                             React.createElement(LoadingSpin, null)
                         )
                     )
-                )
-            );
+                );
+            } else {
+                return React.createElement(
+                    Row,
+                    { size: "one" },
+                    React.createElement(
+                        Column,
+                        null,
+                        React.createElement(
+                            RaisedSegment,
+                            null,
+                            React.createElement(
+                                Center,
+                                null,
+                                React.createElement(LoadingSpin, null)
+                            )
+                        )
+                    )
+                );
+            }
         }
     }]);
 

@@ -15,7 +15,7 @@ var Content = function (_React$Component) {
         var _this = _possibleConstructorReturn(this, (Content.__proto__ || Object.getPrototypeOf(Content)).call(this, props));
 
         _this.state = {
-            form: "normal"
+            form: "loading"
             // burada
         };return _this;
     }
@@ -26,7 +26,7 @@ var Content = function (_React$Component) {
             if (this.state.form == "normal") {
                 return React.createElement(ProfileInfo, null);
             } else if (this.state.form == "loading") {
-                return React.createElement(RowLoading, null);
+                return React.createElement(RowLoadingSpin, null);
             } else if (this.state.form == "notFoundProfile") {
                 return React.createElement(NotFoundProfile, null);
             }

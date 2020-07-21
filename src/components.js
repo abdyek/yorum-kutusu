@@ -293,17 +293,29 @@ class LoadingSpin extends React.Component {
 
 class RowLoadingSpin extends React.Component {
     render() {
-        return(
-            <Row size="one">
-                <Column>
-                    <Segment>
+        if(this.props.nonSegment) {
+            return(
+                <Row size="one">
+                    <Column>
                         <Center>
                             <LoadingSpin />
                         </Center>
-                    </Segment>
-                </Column>
-            </Row>
-        )
+                    </Column>
+                </Row>
+            )
+        } else {
+            return(
+                <Row size="one">
+                    <Column>
+                        <RaisedSegment>
+                            <Center>
+                                <LoadingSpin />
+                            </Center>
+                        </RaisedSegment>
+                    </Column>
+                </Row>
+            )
+        }
     }
 }
 

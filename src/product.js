@@ -1,6 +1,10 @@
 class Content extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            // normal, loading, notFound
+            form:"normal"
+        };
         this.tagsInfo = [
             {
                 id:0,
@@ -41,13 +45,32 @@ class Content extends React.Component {
         ];
     }
     render() {
-        return(
-            <div>
-                <Product tags={this.tagsInfo}/>
-                <Comments />
-                <WriteComment tags={this.tagsInfo}/>
-            </div>
-        )
+        if(this.state.form=="normal") {
+            return(
+                <div>
+                    <Product tags={this.tagsInfo}/>
+                    <Comments />
+                    <WriteComment tags={this.tagsInfo}/>
+                </div>
+            )
+        } else if(this.state.form=="loading") {
+            return(
+                <RowLoadingSpin nonSegment={true}/>
+            )
+        } else if(this.state.form=="notFound") {
+            return(
+                <Row size="one">
+                    <Column>
+                        <BasicMessage messageType="warning" text="Böyle bir ürün yok" />
+                        <Center>
+                            <a href="urun-olustur">
+                                Yeni Bir Ürün Oluştur
+                            </a>
+                        </Center>
+                    </Column>
+                </Row>
+            )
+        }
     }
 }
 
@@ -378,7 +401,7 @@ class ReportArea extends React.Component {
                 <div>
                     <Row size="one">
                         <Column>
-                            <Segment>
+                            <RaisedSegment>
                                 <Row size="two" nonStackable={true}>
                                     <Column>
                                         <H type="3" text="Geri Bildirim" />
@@ -455,7 +478,7 @@ class ReportArea extends React.Component {
                                         </FloatRight>
                                     </Column>
                                 </Row>
-                            </Segment>
+                            </RaisedSegment>
                         </Column>
                     </Row>
                 </div>
@@ -508,13 +531,13 @@ class Reported extends React.Component {
             <div>
                 <Row size="one">
                     <Column>
-                        <Segment>
+                        <RaisedSegment>
                             <Row size="one">
                                 <Column>
                                     <BasicMessage messageType={this.props.messageType} text={this.props.text}/>
                                 </Column>
                             </Row>
-                        </Segment>
+                        </RaisedSegment>
                     </Column>
                 </Row>
             </div>

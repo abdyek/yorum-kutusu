@@ -3,6 +3,6 @@
     generatePage([
         'pageTitle' => 'Profil',
         'reactScriptFile' => 'profile.js',
-        'styleFile' => ''
+        'styleFile' => 'profile.css'
     ]);
 ?>

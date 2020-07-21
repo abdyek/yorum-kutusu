@@ -1,7 +1,7 @@
 header {
     margin-bottom:30px;
     background-color: #01BAEF;
-    box-shadow: 0 1rem 1rem #00000080;
+    box-shadow: 0 0.3rem 2.5rem #00000080;
 }
 
 header > div {

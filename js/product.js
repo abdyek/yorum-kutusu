@@ -14,6 +14,10 @@ var Content = function (_React$Component) {
 
         var _this = _possibleConstructorReturn(this, (Content.__proto__ || Object.getPrototypeOf(Content)).call(this, props));
 
+        _this.state = {
+            // normal, loading, notFound
+            form: "normal"
+        };
         _this.tagsInfo = [{
             id: 0,
             passive: true,
@@ -51,13 +55,36 @@ var Content = function (_React$Component) {
     _createClass(Content, [{
         key: "render",
         value: function render() {
-            return React.createElement(
-                "div",
-                null,
-                React.createElement(Product, { tags: this.tagsInfo }),
-                React.createElement(Comments, null),
-                React.createElement(WriteComment, { tags: this.tagsInfo })
-            );
+            if (this.state.form == "normal") {
+                return React.createElement(
+                    "div",
+                    null,
+                    React.createElement(Product, { tags: this.tagsInfo }),
+                    React.createElement(Comments, null),
+                    React.createElement(WriteComment, { tags: this.tagsInfo })
+                );
+            } else if (this.state.form == "loading") {
+                return React.createElement(RowLoadingSpin, { nonSegment: true });
+            } else if (this.state.form == "notFound") {
+                return React.createElement(
+                    Row,
+                    { size: "one" },
+                    React.createElement(
+                        Column,
+                        null,
+                        React.createElement(BasicMessage, { messageType: "warning", text: "B\xF6yle bir \xFCr\xFCn yok" }),
+                        React.createElement(
+                            Center,
+                            null,
+                            React.createElement(
+                                "a",
+                                { href: "urun-olustur" },
+                                "Yeni Bir \xDCr\xFCn Olu\u015Ftur"
+                            )
+                        )
+                    )
+                );
+            }
         }
     }]);
 
@@ -571,7 +598,7 @@ var ReportArea = function (_React$Component11) {
                             Column,
                             null,
                             React.createElement(
-                                Segment,
+                                RaisedSegment,
                                 null,
                                 React.createElement(
                                     Row,
@@ -790,7 +817,7 @@ var Reported = function (_React$Component13) {
                         Column,
                         null,
                         React.createElement(
-                            Segment,
+                            RaisedSegment,
                             null,
                             React.createElement(
                                 Row,
