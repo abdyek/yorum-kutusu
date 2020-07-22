@@ -12,12 +12,13 @@ var Content = function (_React$Component) {
     function Content(props) {
         _classCallCheck(this, Content);
 
+        // normal, loading, notFound
         var _this = _possibleConstructorReturn(this, (Content.__proto__ || Object.getPrototypeOf(Content)).call(this, props));
 
         _this.state = {
-            form: "loading"
-            // burada
-        };return _this;
+            form: "normal"
+        };
+        return _this;
     }
 
     _createClass(Content, [{
@@ -26,9 +27,9 @@ var Content = function (_React$Component) {
             if (this.state.form == "normal") {
                 return React.createElement(ProfileInfo, null);
             } else if (this.state.form == "loading") {
-                return React.createElement(RowLoadingSpin, null);
-            } else if (this.state.form == "notFoundProfile") {
-                return React.createElement(NotFoundProfile, null);
+                return React.createElement(RowLoadingSpin, { nonSegment: true });
+            } else if (this.state.form == "notFound") {
+                return React.createElement(NotFound, null);
             }
         }
     }]);
@@ -562,36 +563,31 @@ var Verification = function (_React$Component3) {
     return Verification;
 }(React.Component);
 
-var NotFoundProfile = function (_React$Component4) {
-    _inherits(NotFoundProfile, _React$Component4);
+var NotFound = function (_React$Component4) {
+    _inherits(NotFound, _React$Component4);
 
-    function NotFoundProfile(props) {
-        _classCallCheck(this, NotFoundProfile);
+    function NotFound(props) {
+        _classCallCheck(this, NotFound);
 
-        return _possibleConstructorReturn(this, (NotFoundProfile.__proto__ || Object.getPrototypeOf(NotFoundProfile)).call(this, props));
+        return _possibleConstructorReturn(this, (NotFound.__proto__ || Object.getPrototypeOf(NotFound)).call(this, props));
     }
 
-    _createClass(NotFoundProfile, [{
+    _createClass(NotFound, [{
         key: "render",
         value: function render() {
             return React.createElement(
                 Row,
-                { size: "sixteen" },
-                React.createElement(WideColumn, { size: "two" }),
+                { size: "one" },
                 React.createElement(
-                    WideColumn,
-                    { size: "twelve" },
-                    React.createElement(
-                        "div",
-                        { className: "ui red message" },
-                        "B\xF6yle bir profil yok!"
-                    )
+                    Column,
+                    null,
+                    React.createElement(BasicMessage, { messageType: "danger", text: "B\xF6yle bir hesap yok!" })
                 )
             );
         }
     }]);
 
-    return NotFoundProfile;
+    return NotFound;
 }(React.Component);
 
 var Comments = function (_React$Component5) {
@@ -659,13 +655,6 @@ var Comment = function (_React$Component6) {
             commentTextOld: _this6.props.commentText
         };
         _this6.inputRanges = [];
-        /*
-        this.editButtonText = "Düzenle";
-        this.deleteButtonText = "Sil";
-        this.approveDeleteButtonText = "Sil";
-        this.cancelDeleteButtonText = "İptal";
-        this.cancelEditButtonText = "İptal";
-        */
         _this6.openEdit = _this6.openEdit.bind(_this6);
         _this6.openDelete = _this6.openDelete.bind(_this6);
         _this6.returnToNormal = _this6.returnToNormal.bind(_this6);
@@ -685,7 +674,6 @@ var Comment = function (_React$Component6) {
     }, {
         key: "openDelete",
         value: function openDelete() {
-            console.log("silme yeri");
             this.setState({
                 form: "delete"
             });
@@ -809,7 +797,16 @@ var Comment = function (_React$Component6) {
                                 null,
                                 React.createElement(
                                     Row,
-                                    { size: "one" },
+                                    { size: "two" },
+                                    React.createElement(
+                                        Column,
+                                        null,
+                                        React.createElement(
+                                            "div",
+                                            { className: "product-name" },
+                                            React.createElement(H, { type: "3", text: "Iphone 5s" })
+                                        )
+                                    ),
                                     React.createElement(
                                         Column,
                                         null,
@@ -826,19 +823,14 @@ var Comment = function (_React$Component6) {
                                 ),
                                 React.createElement(
                                     Row,
-                                    { size: "two", nonStackable: true },
-                                    React.createElement(
-                                        Column,
-                                        null,
-                                        React.createElement(H, { type: "3", text: this.props.productName })
-                                    ),
+                                    { size: "one" },
                                     React.createElement(
                                         Column,
                                         null,
                                         React.createElement(
-                                            FloatRight,
-                                            null,
-                                            "15.14.1994"
+                                            "div",
+                                            { className: "comment-text" },
+                                            this.state.commentTextOld
                                         )
                                     )
                                 ),
@@ -848,30 +840,10 @@ var Comment = function (_React$Component6) {
                                     React.createElement(
                                         Column,
                                         null,
-                                        React.createElement(RatingBar, { ratingAverage: 5.5 })
-                                    )
-                                ),
-                                React.createElement(CommentText, { text: this.state.commentTextOld }),
-                                React.createElement(
-                                    Row,
-                                    { size: "two" },
-                                    React.createElement(
-                                        Column,
-                                        null,
-                                        React.createElement(
-                                            "div",
-                                            { className: "commentHeader" },
-                                            React.createElement(H, { type: "5", text: "yunusemre" })
-                                        )
-                                    ),
-                                    React.createElement(
-                                        Column,
-                                        null,
                                         React.createElement(
                                             FloatRight,
                                             null,
                                             React.createElement(LikeButton, { value: 1, likeOrDislike: "like" }),
-                                            React.createElement(DislikeButton, { value: 3, likeOrDislike: "" }),
                                             !owner ? React.createElement(ComplaintButton, null) : ""
                                         )
                                     )
@@ -1107,27 +1079,4 @@ var RatingBar = function (_React$Component7) {
     }]);
 
     return RatingBar;
-}(React.Component);
-
-var CommentText = function (_React$Component8) {
-    _inherits(CommentText, _React$Component8);
-
-    function CommentText(props) {
-        _classCallCheck(this, CommentText);
-
-        return _possibleConstructorReturn(this, (CommentText.__proto__ || Object.getPrototypeOf(CommentText)).call(this, props));
-    }
-
-    _createClass(CommentText, [{
-        key: "render",
-        value: function render() {
-            return React.createElement(
-                "div",
-                { className: "commentText" },
-                this.props.text
-            );
-        }
-    }]);
-
-    return CommentText;
 }(React.Component);

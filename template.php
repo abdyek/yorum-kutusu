@@ -24,7 +24,15 @@
 
     <!-- React bileşenimizi yükleyin. -->
     <script src="js/components.js"></script>
-    <script src="js/<?php echo $pageInfo['reactScriptFile']; ?>"></script>
+    <?php
+        if(is_array($pageInfo['reactScriptFile'])) {
+            foreach ($pageInfo['reactScriptFile'] as $scriptFile) {
+                echo '<script src="js/'.$scriptFile.'"></script> ';
+            }
+        } else {
+            echo '<script src="js/'.$pageInfo['reactScriptFile'].'"></script>';
+        }
+    ?>
     <script src="js/app.js"></script>
 
 </body>

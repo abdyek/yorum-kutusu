@@ -516,43 +516,8 @@ var LikeButton = function (_React$Component16) {
     return LikeButton;
 }(React.Component);
 
-var DislikeButton = function (_React$Component17) {
-    _inherits(DislikeButton, _React$Component17);
-
-    function DislikeButton(props) {
-        _classCallCheck(this, DislikeButton);
-
-        var _this17 = _possibleConstructorReturn(this, (DislikeButton.__proto__ || Object.getPrototypeOf(DislikeButton)).call(this, props));
-
-        if (_this17.props.likeOrDislike == "dislike") {
-            _this17.liked = " dislikedComment";
-        } else {
-            _this17.liked = " ";
-        }
-        return _this17;
-    }
-
-    _createClass(DislikeButton, [{
-        key: "render",
-        value: function render() {
-            return React.createElement(
-                "button",
-                { className: "ui basic button" },
-                React.createElement(
-                    "i",
-                    { className: "icon" },
-                    React.createElement("i", { className: "fa fa-thumbs-down" + this.liked, "aria-hidden": "true" })
-                ),
-                this.props.value
-            );
-        }
-    }]);
-
-    return DislikeButton;
-}(React.Component);
-
-var ComplaintButton = function (_React$Component18) {
-    _inherits(ComplaintButton, _React$Component18);
+var ComplaintButton = function (_React$Component17) {
+    _inherits(ComplaintButton, _React$Component17);
 
     function ComplaintButton() {
         _classCallCheck(this, ComplaintButton);
@@ -575,8 +540,8 @@ var ComplaintButton = function (_React$Component18) {
 }(React.Component);
 // ^ bunlar 2 sayfada bulunduğu için componentJS'ye taşınmasını uygun buldum
 
-var LoadingSpin = function (_React$Component19) {
-    _inherits(LoadingSpin, _React$Component19);
+var LoadingSpin = function (_React$Component18) {
+    _inherits(LoadingSpin, _React$Component18);
 
     function LoadingSpin() {
         _classCallCheck(this, LoadingSpin);
@@ -605,8 +570,8 @@ var LoadingSpin = function (_React$Component19) {
     return LoadingSpin;
 }(React.Component);
 
-var RowLoadingSpin = function (_React$Component20) {
-    _inherits(RowLoadingSpin, _React$Component20);
+var RowLoadingSpin = function (_React$Component19) {
+    _inherits(RowLoadingSpin, _React$Component19);
 
     function RowLoadingSpin() {
         _classCallCheck(this, RowLoadingSpin);
@@ -656,22 +621,22 @@ var RowLoadingSpin = function (_React$Component20) {
     return RowLoadingSpin;
 }(React.Component);
 
-var BasicMessage = function (_React$Component21) {
-    _inherits(BasicMessage, _React$Component21);
+var BasicMessage = function (_React$Component20) {
+    _inherits(BasicMessage, _React$Component20);
 
     function BasicMessage(props) {
         _classCallCheck(this, BasicMessage);
 
-        var _this21 = _possibleConstructorReturn(this, (BasicMessage.__proto__ || Object.getPrototypeOf(BasicMessage)).call(this, props));
+        var _this20 = _possibleConstructorReturn(this, (BasicMessage.__proto__ || Object.getPrototypeOf(BasicMessage)).call(this, props));
 
-        if (_this21.props.messageType == "success") {
-            _this21.className = "ui blue message";
-        } else if (_this21.props.messageType == "warning") {
-            _this21.className = "ui yellow message";
-        } else if (_this21.props.messageType == "danger") {
-            _this21.className = "ui red message";
+        if (_this20.props.messageType == "success") {
+            _this20.className = "ui blue message";
+        } else if (_this20.props.messageType == "warning") {
+            _this20.className = "ui yellow message";
+        } else if (_this20.props.messageType == "danger") {
+            _this20.className = "ui red message";
         }
-        return _this21;
+        return _this20;
     }
 
     _createClass(BasicMessage, [{

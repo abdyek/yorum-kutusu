@@ -1,10 +1,10 @@
 class Content extends React.Component {
     constructor(props) {
         super(props);
+        // normal, loading, notFound
         this.state = {
-            form:"loading"
+            form:"normal"
         }
-        // burada
     }
     render() {
         if(this.state.form=="normal") {
@@ -13,10 +13,10 @@ class Content extends React.Component {
             )
         } else if(this.state.form=="loading") {
             return(
-                <RowLoadingSpin />
+                <RowLoadingSpin nonSegment={true} />
             )
-        } else if(this.state.form=="notFoundProfile") {
-            return <NotFoundProfile />
+        } else if(this.state.form=="notFound") {
+            return <NotFound />
         }
     }
 }
@@ -365,17 +365,16 @@ class Verification extends React.Component {
     }
 }
 
-class NotFoundProfile extends React.Component {
+class NotFound extends React.Component {
     constructor(props) {
         super(props);
     }
     render() {
         return(
-            <Row size="sixteen">
-                <WideColumn size="two"></WideColumn>
-                <WideColumn size="twelve">
-                    <div className="ui red message">Böyle bir profil yok!</div>
-                </WideColumn>
+            <Row size="one">
+                <Column>
+                    <BasicMessage messageType="danger" text="Böyle bir hesap yok!" />
+                </Column>
             </Row>
         )
     }
@@ -429,13 +428,6 @@ class Comment extends React.Component {
             commentTextOld: this.props.commentText
         }
         this.inputRanges = [];
-        /*
-        this.editButtonText = "Düzenle";
-        this.deleteButtonText = "Sil";
-        this.approveDeleteButtonText = "Sil";
-        this.cancelDeleteButtonText = "İptal";
-        this.cancelEditButtonText = "İptal";
-        */
         this.openEdit = this.openEdit.bind(this);
         this.openDelete = this.openDelete.bind(this);
         this.returnToNormal = this.returnToNormal.bind(this);
@@ -449,7 +441,6 @@ class Comment extends React.Component {
         })
     }
     openDelete() {
-        console.log("silme yeri");
         this.setState({
             form:"delete"
         })
@@ -542,7 +533,12 @@ class Comment extends React.Component {
                     <Row size="one">
                         <Column>
                             <RaisedSegment>
-                                <Row size="one">
+                                <Row size="two">
+                                    <Column>
+                                        <div className="product-name">
+                                            <H type="3" text="Iphone 5s" />
+                                        </div>
+                                    </Column>
                                     <Column>
                                         <FloatRight>
                                             <div>
@@ -551,32 +547,17 @@ class Comment extends React.Component {
                                         </FloatRight>
                                     </Column>
                                 </Row>
-                                <Row size="two" nonStackable={true}>
+                                <Row size="one">
                                     <Column>
-                                        <H type="3" text={this.props.productName} />
-                                    </Column>
-                                    <Column>
-                                        <FloatRight>
-                                            15.14.1994
-                                        </FloatRight>
+                                        <div className="comment-text">
+                                            {this.state.commentTextOld}
+                                        </div>
                                     </Column>
                                 </Row>
                                 <Row size="one">
                                     <Column>
-                                        <RatingBar ratingAverage={5.5}/>
-                                    </Column>
-                                </Row>
-                                <CommentText text={this.state.commentTextOld}/>
-                                <Row size="two">
-                                    <Column>
-                                        <div className="commentHeader">
-                                            <H type="5" text={"yunusemre"} />
-                                        </div>
-                                    </Column>
-                                    <Column>
                                         <FloatRight>
                                             <LikeButton value={1} likeOrDislike={"like"}/>
-                                            <DislikeButton value={3} likeOrDislike={""}/>
                                             {!owner?<ComplaintButton />: "" }
                                         </FloatRight>
                                     </Column>
@@ -727,19 +708,3 @@ class RatingBar extends React.Component {
         )
     }
 }
-
-class CommentText extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-    render() {
-        return(
-            <div className="commentText">
-                {this.props.text}
-            </div>
-        )
-    }
-}
-
-
-

@@ -250,26 +250,6 @@ class LikeButton extends React.Component {
         )
     }
 }
-class DislikeButton extends React.Component {
-    constructor(props) {
-        super(props);
-        if(this.props.likeOrDislike=="dislike") {
-            this.liked = " dislikedComment";
-        } else {
-            this.liked = " ";
-        }
-    }
-    render() {
-        return(
-            <button className="ui basic button">
-                <i className="icon">
-                    <i className={"fa fa-thumbs-down" + this.liked} aria-hidden="true"></i>
-                </i>
-                {this.props.value}
-            </button>
-        )
-    }
-}
 class ComplaintButton extends React.Component {
     render() {
         return (
