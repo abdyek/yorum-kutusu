@@ -37,9 +37,9 @@ class Tags extends React.Component {
         }
         return(
             <div>
-                <Center>
+                <div>
                     {this.tags}
-                </Center>
+                </div>
             </div>
         )
     }

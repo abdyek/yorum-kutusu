@@ -80,7 +80,9 @@ class Product extends React.Component {
             <div>
                 <Row size="one">
                     <Column>
-                        <Tags tags={this.props.tags} activeOnly={false}/>
+                        <Center>
+                            <Tags tags={this.props.tags} activeOnly={false}/>
+                        </Center>
                     </Column>
                 </Row>
                 <Row size="one">

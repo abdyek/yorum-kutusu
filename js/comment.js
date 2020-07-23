@@ -51,12 +51,15 @@ var Comment = function (_React$Component2) {
 
         _this2.state = {
             // normal, report, edit, delete
-            form: "normal"
+            form: "normal",
+            showMessage: _this2.props.showMessage
         };
         _this2.openReportArea = _this2.openReportArea.bind(_this2);
         _this2.closeReportArea = _this2.closeReportArea.bind(_this2);
         _this2.openEditArea = _this2.openEditArea.bind(_this2);
         _this2.closeEditArea = _this2.closeEditArea.bind(_this2);
+        _this2.openDeleteArea = _this2.openDeleteArea.bind(_this2);
+        _this2.closeDeleteArea = _this2.closeDeleteArea.bind(_this2);
         return _this2;
     }
 
@@ -78,12 +81,28 @@ var Comment = function (_React$Component2) {
         key: "openEditArea",
         value: function openEditArea() {
             this.setState({
-                form: "edit"
+                form: "edit",
+                showMessage: null
             });
         }
     }, {
         key: "closeEditArea",
         value: function closeEditArea() {
+            this.setState({
+                form: "normal"
+            });
+        }
+    }, {
+        key: "openDeleteArea",
+        value: function openDeleteArea() {
+            this.setState({
+                form: "delete",
+                showMessage: null
+            });
+        }
+    }, {
+        key: "closeDeleteArea",
+        value: function closeDeleteArea() {
             this.setState({
                 form: "normal"
             });
@@ -95,6 +114,15 @@ var Comment = function (_React$Component2) {
                 return React.createElement(
                     "div",
                     null,
+                    this.state.showMessage ? React.createElement(
+                        Row,
+                        { size: "one" },
+                        React.createElement(
+                            Column,
+                            null,
+                            React.createElement(BasicMessage, { messageType: this.state.showMessage.messageType, text: this.state.showMessage.text })
+                        )
+                    ) : "",
                     React.createElement(
                         Row,
                         { size: "one" },
@@ -104,7 +132,7 @@ var Comment = function (_React$Component2) {
                             React.createElement(
                                 RaisedSegment,
                                 null,
-                                React.createElement(TopOfComment, { text: this.props.text, title: this.props.title, owner: this.props.owner, handleOpenEditArea: this.openEditArea }),
+                                React.createElement(TopOfComment, { text: this.props.text, title: this.props.title, owner: this.props.owner, handleOpenEditArea: this.openEditArea, handleOpenDeleteArea: this.openDeleteArea }),
                                 React.createElement(BottomOfComment, { likeCount: this.props.likeCount, liked: this.props.liked, date: this.props.date, handleOpenReportArea: this.openReportArea, handleCloseReportArea: this.closeReportArea, tags: this.props.tags, owner: this.props.owner })
                             )
                         )
@@ -114,6 +142,8 @@ var Comment = function (_React$Component2) {
                 return React.createElement(ReportArea, { handleCloseReportArea: this.closeReportArea });
             } else if (this.state.form == "edit") {
                 return React.createElement(EditArea, { tags: this.props.tags, handleCancelButton: this.closeEditArea, commentText: this.props.text, owner: this.props.owner });
+            } else if (this.state.form == "delete") {
+                return React.createElement(DeleteArea, { handleCancelButton: this.closeDeleteArea });
             }
         }
     }]);
@@ -130,6 +160,7 @@ var TopOfComment = function (_React$Component3) {
         var _this3 = _possibleConstructorReturn(this, (TopOfComment.__proto__ || Object.getPrototypeOf(TopOfComment)).call(this, props));
 
         _this3.openEditArea = _this3.openEditArea.bind(_this3);
+        _this3.openDeleteArea = _this3.openDeleteArea.bind(_this3);
         return _this3;
     }
 
@@ -137,6 +168,11 @@ var TopOfComment = function (_React$Component3) {
         key: "openEditArea",
         value: function openEditArea() {
             this.props.handleOpenEditArea();
+        }
+    }, {
+        key: "openDeleteArea",
+        value: function openDeleteArea() {
+            this.props.handleOpenDeleteArea();
         }
     }, {
         key: "render",
@@ -177,7 +213,7 @@ var TopOfComment = function (_React$Component3) {
                                 ),
                                 React.createElement(
                                     "button",
-                                    { className: "ui icon orange button" },
+                                    { className: "ui icon orange button", onClick: this.openDeleteArea },
                                     React.createElement(
                                         "i",
                                         { className: "icon" },
@@ -230,11 +266,7 @@ var BottomOfComment = function (_React$Component4) {
                     React.createElement(
                         Column,
                         null,
-                        React.createElement(
-                            Center,
-                            null,
-                            React.createElement(Tags, { tags: this.props.tags, activeOnly: true })
-                        )
+                        React.createElement(Tags, { tags: this.props.tags, activeOnly: true })
                     )
                 ),
                 React.createElement(
@@ -712,12 +744,14 @@ var WriteComment = function (_React$Component10) {
             };
         }
         _this10.state = {
-            // normal, loading, sent
+            // normal, loading, sent, edited
             form: "normal",
             messageType: "success", // success, warning, danger
             messageText: "mahmutcan",
             commentText: _this10.props.commentText,
-            sendButtonClassName: _this10.var.buttonClassName
+            sendButtonClassName: _this10.var.buttonClassName,
+            topMessageType: "",
+            topMessageText: ""
         };
         _this10.sendComment = _this10.sendComment.bind(_this10);
         _this10.changeComment = _this10.changeComment.bind(_this10);
@@ -727,11 +761,24 @@ var WriteComment = function (_React$Component10) {
     _createClass(WriteComment, [{
         key: "sendComment",
         value: function sendComment() {
-            this.setState({
-                form: "loading"
-            });
+            //this.setState({
+            //form:"loading"
+            //});
             // gerekli API işlemleri buraya yapılacak
             // yorum düzenleme de buradan gönderileceği için, düzenleme mi yoksa yeni yorum gönderme mi kontrolleri burada yaparım
+            //if(this.props.forEdit) {
+            // başarılı olması durumunda edited 'e çeviricez
+            //setTimeout(function() {
+            //this.setState({
+            //form:"edited"
+            //})
+            //}.bind(this), 1000);
+            //}
+            // başarısız olma durumunda kullanılabilecek bir üst mesaj
+            this.setState({
+                topMessageType: "warning",
+                topMessageText: "bir yorun oldu"
+            });
         }
     }, {
         key: "changeComment",
@@ -759,6 +806,15 @@ var WriteComment = function (_React$Component10) {
                     React.createElement(
                         Column,
                         null,
+                        this.state.topMessageText ? React.createElement(
+                            Row,
+                            { size: "one" },
+                            React.createElement(
+                                Column,
+                                null,
+                                React.createElement(BasicMessage, { messageType: this.state.topMessageType, text: this.state.topMessageText })
+                            )
+                        ) : "",
                         React.createElement(
                             RaisedSegment,
                             null,
@@ -842,6 +898,42 @@ var WriteComment = function (_React$Component10) {
                         null,
                         React.createElement(BasicMessage, { messageType: this.state.messageType, text: this.state.messageText })
                     )
+                );
+            } else if (this.state.form == "edited") {
+                return (
+                    // bu kısım başarılı olması durumunda gösterilecek
+                    // API ile konuşturan yunus emre'ye not: buradaki Comment componentinin özelliklerini WriteComment'in state'i üzerinde tuttuğun API reponse'u değerleri
+                    // üzerinden dolduracaksın
+                    React.createElement(Comment, { text: " Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus condimentum elementum est, eget condimentum purus venenatis id. Aliquam ultrices lacinia lacus vitae congue. Fusce id elit sapien. Etiam velit diam, hendrerit vitae tincidunt vel, tempor sed leo. Quisque iaculis dolor non ultrices suscipit. Donec consectetur, lorem vel molestie blandit, mi mi sagittis nisl, ac pretium nibh nulla ut odio. Proin vitae auctor dolor, vitae ultricies lectus. Fusce a lectus sodales, tincidunt libero imperdiet, vulputate est. Vestibulum euismod, ante at malesuada finibus, quam urna aliquam leo, at tristique orci nunc sit amet tellus. Donec nibh tellus, suscipit ac euismod nec, scelerisque sed dui. Aliquam pellentesque tincidunt felis et sollicitudin. Quisque molestie consequat tellus, commodo pharetra lacus. Etiam scelerisque dui non leo feugiat, ut ornare nibh accumsan. Cras eget ex cursus, tristique dolor non, molestie libero. Duis dolor felis, hendrerit eu ligula ut, iaculis semper mi. Maecenas venenatis quis turpis nec sodales. Duis consequat nulla sed efficitur consequat. Integer suscipit blandit mollis. Proin posuere, lacus sed posuere lacinia, tortor est tristique augue, sed consectetur augue eros et augue. Quisque mauris diam, rhoncus sed vulputate quis, gravida in massa. Praesent purus leo, porta in elit ut, porta blandit risus. Integer ipsum dolor, luctus sed tincidunt ac, ullamcorper ornare libero. Curabitur porta arcu elit, sit amet varius orci rutrum vitae. Pellentesque luctus dolor tortor. Nulla fringilla odio massa, vitae laoreet felis fringilla in. Vestibulum maximus condimentum velit vel ultrices. Maecenas commodo, lorem et mollis maximus, felis elit tempus arcu, a volutpat ex justo eu urna. Sed aliquet semper feugiat. Ut ornare ipsum at posuere faucibus. Nullam vitae massa blandit, tristique lectus in, volutpat dolor. Curabitur non nisi et erat maximus eleifend vitae quis dui. Cras at ultrices nulla. Maecenas viverra dapibus tortor, ac commodo risus finibus ac. Nullam ultrices tortor nec posuere luctus. Vivamus viverra, tellus suscipit dignissim euismod, tellus dolor pulvinar tellus, vitae placerat libero enim aliquet libero. Aenean gravida sem at odio dapibus, quis aliquet sem malesuada. Vestibulum dictum metus ac orci mattis egestas. Suspendisse vel auctor elit, et suscipit nulla. Aliquam feugiat neque nisl, ac convallis metus dignissim non. Morbi dapibus vitae est sed egestas. Integer laoreet ac elit vitae facilisis. Quisque fermentum ipsum eu sagittis mattis. Duis pellentesque ante quis aliquam volutpat. Proin eget arcu quis orci sagittis fringilla. Cras elementum tempus quam. Nulla non mollis risus. Fusce cursus quam nec est suscipit accumsan. Sed sit amet nisi lacus. Etiam a libero in nisi vehicula efficitur. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Maecenas in velit vitae eros consequat feugiat. Sed vitae sapien et turpis egestas tempor sit amet vel purus. Duis non arcu dolor. Nam eget accumsan elit, sit amet ultrices nunc. Proin eget lacinia nunc. Sed tortor ex, vehicula ut interdum nec, aliquam eget risus. Phasellus ligula lorem, dapibus quis diam in, iaculis volutpat orci. Nulla facilisi. In dignissim viverra elit sit amet accumsan. ",
+                        likeCount: "145",
+                        liked: false,
+                        title: "Mahmut",
+                        date: "19 Temmuz - 21:45",
+                        tags: [{
+                            id: 3,
+                            passive: false,
+                            text: "Batarya",
+                            color: "yellow",
+                            rateValue: "5"
+                        }, {
+                            id: 4,
+                            passive: false,
+                            text: "Kamera",
+                            color: "orange",
+                            rateValue: "4"
+                        }, {
+                            id: 5,
+                            passive: false,
+                            text: "Tasarım",
+                            color: "",
+                            rateValue: "-"
+                        }],
+                        owner: true,
+                        showMessage: {
+                            messageType: "success",
+                            text: "Yorumunuz başarılı bir şekilde düzenlendi"
+                        }
+                    })
                 );
             }
         }
@@ -1050,4 +1142,77 @@ var EditArea = function (_React$Component13) {
     }]);
 
     return EditArea;
+}(React.Component);
+
+var DeleteArea = function (_React$Component14) {
+    _inherits(DeleteArea, _React$Component14);
+
+    function DeleteArea(props) {
+        _classCallCheck(this, DeleteArea);
+
+        var _this14 = _possibleConstructorReturn(this, (DeleteArea.__proto__ || Object.getPrototypeOf(DeleteArea)).call(this, props));
+
+        _this14.cancelFunc = _this14.cancelFunc.bind(_this14);
+        return _this14;
+    }
+
+    _createClass(DeleteArea, [{
+        key: "cancelFunc",
+        value: function cancelFunc() {
+            this.props.handleCancelButton();
+        }
+    }, {
+        key: "render",
+        value: function render() {
+            return React.createElement(
+                Row,
+                { size: "one" },
+                React.createElement(
+                    Column,
+                    null,
+                    React.createElement(
+                        RaisedSegment,
+                        null,
+                        React.createElement(
+                            Row,
+                            { size: "one" },
+                            React.createElement(
+                                Column,
+                                null,
+                                React.createElement(BasicMessage, { messageType: "warning", text: "Bu yorumu kal\u0131c\u0131 olarak silmek istedi\u011Finizden emin misiniz?" })
+                            )
+                        ),
+                        React.createElement(
+                            Row,
+                            { size: "two", nonStackable: true },
+                            React.createElement(
+                                Column,
+                                null,
+                                React.createElement(
+                                    FloatRight,
+                                    null,
+                                    React.createElement(
+                                        "button",
+                                        { className: "ui green button" },
+                                        "Evet"
+                                    )
+                                )
+                            ),
+                            React.createElement(
+                                Column,
+                                null,
+                                React.createElement(
+                                    "button",
+                                    { className: "ui red button", onClick: this.cancelFunc },
+                                    "Hay\u0131r"
+                                )
+                            )
+                        )
+                    )
+                )
+            );
+        }
+    }]);
+
+    return DeleteArea;
 }(React.Component);

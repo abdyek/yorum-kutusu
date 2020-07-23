@@ -112,7 +112,11 @@ var Product = function (_React$Component2) {
                     React.createElement(
                         Column,
                         null,
-                        React.createElement(Tags, { tags: this.props.tags, activeOnly: false })
+                        React.createElement(
+                            Center,
+                            null,
+                            React.createElement(Tags, { tags: this.props.tags, activeOnly: false })
+                        )
                     )
                 ),
                 React.createElement(

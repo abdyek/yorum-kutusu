@@ -69,7 +69,7 @@ var Tags = function (_React$Component2) {
                 "div",
                 null,
                 React.createElement(
-                    Center,
+                    "div",
                     null,
                     this.tags
                 )
