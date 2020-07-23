@@ -20,9 +20,10 @@ class Comment extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            // normal, report, edit, delete
+            // normal, report, edit, delete, message, loading
             form:"normal",
-            showMessage: this.props.showMessage
+            showMessage: this.props.showMessage,
+            message: this.props.message
         };
         this.openReportArea = this.openReportArea.bind(this);
         this.closeReportArea = this.closeReportArea.bind(this);
@@ -30,6 +31,7 @@ class Comment extends React.Component {
         this.closeEditArea = this.closeEditArea.bind(this);
         this.openDeleteArea = this.openDeleteArea.bind(this);
         this.closeDeleteArea = this.closeDeleteArea.bind(this);
+        this.confirmDelete = this.confirmDelete.bind(this);
     }
     openReportArea() {
         this.setState({
@@ -63,6 +65,20 @@ class Comment extends React.Component {
             form:"normal"
         });
     }
+    confirmDelete() {
+        this.setState({
+            form:"loading"
+        });
+        setTimeout(function(){
+            this.setState({
+                form:"message",
+                message: {
+                    messageType: "success",
+                    messageText: "Başarılı bir şekilde yorumunuz kaldırıldı"
+                }
+            })
+        }.bind(this),1000)
+    }
     render() {
         if(this.state.form=="normal") {
             return(
@@ -94,7 +110,19 @@ class Comment extends React.Component {
             )
         } else if(this.state.form=="delete") {
             return(
-                <DeleteArea handleCancelButton={this.closeDeleteArea}/>
+                <DeleteArea handleCancelButton={this.closeDeleteArea} handleConfirmButton={this.confirmDelete}/>
+            )
+        } else if(this.state.form=="message") {
+            return(
+                <Row size="one">
+                    <Column>
+                        <BasicMessage messageType={this.state.message.messageType} text={this.state.message.messageText} />
+                    </Column>
+                </Row>
+            )
+        } else if(this.state.form=="loading") {
+            return(
+                <RowLoadingSpin />
             )
         }
     }
@@ -745,6 +773,10 @@ class DeleteArea extends React.Component {
     constructor(props) {
         super(props);
         this.cancelFunc = this.cancelFunc.bind(this);
+        this.confirmFunc = this.confirmFunc.bind(this);
+    }
+    confirmFunc() {
+        this.props.handleConfirmButton();
     }
     cancelFunc() {
         this.props.handleCancelButton();
@@ -762,7 +794,7 @@ class DeleteArea extends React.Component {
                         <Row size="two" nonStackable={true}>
                             <Column>
                                 <FloatRight>
-                                    <button className="ui green button">
+                                    <button className="ui green button" onClick={this.confirmFunc}>
                                         Evet
                                     </button>
                                 </FloatRight>

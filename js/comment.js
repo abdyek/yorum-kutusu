@@ -50,9 +50,10 @@ var Comment = function (_React$Component2) {
         var _this2 = _possibleConstructorReturn(this, (Comment.__proto__ || Object.getPrototypeOf(Comment)).call(this, props));
 
         _this2.state = {
-            // normal, report, edit, delete
+            // normal, report, edit, delete, message, loading
             form: "normal",
-            showMessage: _this2.props.showMessage
+            showMessage: _this2.props.showMessage,
+            message: _this2.props.message
         };
         _this2.openReportArea = _this2.openReportArea.bind(_this2);
         _this2.closeReportArea = _this2.closeReportArea.bind(_this2);
@@ -60,6 +61,7 @@ var Comment = function (_React$Component2) {
         _this2.closeEditArea = _this2.closeEditArea.bind(_this2);
         _this2.openDeleteArea = _this2.openDeleteArea.bind(_this2);
         _this2.closeDeleteArea = _this2.closeDeleteArea.bind(_this2);
+        _this2.confirmDelete = _this2.confirmDelete.bind(_this2);
         return _this2;
     }
 
@@ -108,6 +110,22 @@ var Comment = function (_React$Component2) {
             });
         }
     }, {
+        key: "confirmDelete",
+        value: function confirmDelete() {
+            this.setState({
+                form: "loading"
+            });
+            setTimeout(function () {
+                this.setState({
+                    form: "message",
+                    message: {
+                        messageType: "success",
+                        messageText: "Başarılı bir şekilde yorumunuz kaldırıldı"
+                    }
+                });
+            }.bind(this), 1000);
+        }
+    }, {
         key: "render",
         value: function render() {
             if (this.state.form == "normal") {
@@ -143,7 +161,19 @@ var Comment = function (_React$Component2) {
             } else if (this.state.form == "edit") {
                 return React.createElement(EditArea, { tags: this.props.tags, handleCancelButton: this.closeEditArea, commentText: this.props.text, owner: this.props.owner });
             } else if (this.state.form == "delete") {
-                return React.createElement(DeleteArea, { handleCancelButton: this.closeDeleteArea });
+                return React.createElement(DeleteArea, { handleCancelButton: this.closeDeleteArea, handleConfirmButton: this.confirmDelete });
+            } else if (this.state.form == "message") {
+                return React.createElement(
+                    Row,
+                    { size: "one" },
+                    React.createElement(
+                        Column,
+                        null,
+                        React.createElement(BasicMessage, { messageType: this.state.message.messageType, text: this.state.message.messageText })
+                    )
+                );
+            } else if (this.state.form == "loading") {
+                return React.createElement(RowLoadingSpin, null);
             }
         }
     }]);
@@ -1153,10 +1183,16 @@ var DeleteArea = function (_React$Component14) {
         var _this14 = _possibleConstructorReturn(this, (DeleteArea.__proto__ || Object.getPrototypeOf(DeleteArea)).call(this, props));
 
         _this14.cancelFunc = _this14.cancelFunc.bind(_this14);
+        _this14.confirmFunc = _this14.confirmFunc.bind(_this14);
         return _this14;
     }
 
     _createClass(DeleteArea, [{
+        key: "confirmFunc",
+        value: function confirmFunc() {
+            this.props.handleConfirmButton();
+        }
+    }, {
         key: "cancelFunc",
         value: function cancelFunc() {
             this.props.handleCancelButton();
@@ -1193,7 +1229,7 @@ var DeleteArea = function (_React$Component14) {
                                     null,
                                     React.createElement(
                                         "button",
-                                        { className: "ui green button" },
+                                        { className: "ui green button", onClick: this.confirmFunc },
                                         "Evet"
                                     )
                                 )
