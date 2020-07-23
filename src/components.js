@@ -302,11 +302,11 @@ class RowLoadingSpin extends React.Component {
 class BasicMessage extends React.Component {
     constructor(props) {
         super(props);
-        if(this.props.messageType=="success") {
+        if(this.props.type=="success") {
             this.className = "ui blue message";
-        } else if(this.props.messageType=="warning") {
+        } else if(this.props.type=="warning") {
             this.className = "ui yellow message";
-        } else if(this.props.messageType=="danger") {
+        } else if(this.props.type=="danger") {
             this.className = "ui red message";
         }
     }

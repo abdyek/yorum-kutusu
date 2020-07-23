@@ -629,11 +629,11 @@ var BasicMessage = function (_React$Component20) {
 
         var _this20 = _possibleConstructorReturn(this, (BasicMessage.__proto__ || Object.getPrototypeOf(BasicMessage)).call(this, props));
 
-        if (_this20.props.messageType == "success") {
+        if (_this20.props.type == "success") {
             _this20.className = "ui blue message";
-        } else if (_this20.props.messageType == "warning") {
+        } else if (_this20.props.type == "warning") {
             _this20.className = "ui yellow message";
-        } else if (_this20.props.messageType == "danger") {
+        } else if (_this20.props.type == "danger") {
             _this20.className = "ui red message";
         }
         return _this20;

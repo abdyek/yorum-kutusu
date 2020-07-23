@@ -52,7 +52,7 @@ var Comment = function (_React$Component2) {
         _this2.state = {
             // normal, report, edit, delete, message, loading
             form: "normal",
-            showMessage: _this2.props.showMessage,
+            topMessage: _this2.props.topMessage,
             message: _this2.props.message
         };
         _this2.openReportArea = _this2.openReportArea.bind(_this2);
@@ -84,7 +84,7 @@ var Comment = function (_React$Component2) {
         value: function openEditArea() {
             this.setState({
                 form: "edit",
-                showMessage: null
+                topMessage: null
             });
         }
     }, {
@@ -99,7 +99,7 @@ var Comment = function (_React$Component2) {
         value: function openDeleteArea() {
             this.setState({
                 form: "delete",
-                showMessage: null
+                topMessage: null
             });
         }
     }, {
@@ -132,13 +132,13 @@ var Comment = function (_React$Component2) {
                 return React.createElement(
                     "div",
                     null,
-                    this.state.showMessage ? React.createElement(
+                    this.state.topMessage ? React.createElement(
                         Row,
                         { size: "one" },
                         React.createElement(
                             Column,
                             null,
-                            React.createElement(BasicMessage, { messageType: this.state.showMessage.messageType, text: this.state.showMessage.text })
+                            React.createElement(BasicMessage, { type: this.state.topMessage.type, text: this.state.topMessage.text })
                         )
                     ) : "",
                     React.createElement(
@@ -169,7 +169,7 @@ var Comment = function (_React$Component2) {
                     React.createElement(
                         Column,
                         null,
-                        React.createElement(BasicMessage, { messageType: this.state.message.messageType, text: this.state.message.messageText })
+                        React.createElement(BasicMessage, { type: this.state.message.messageType, text: this.state.message.messageText })
                     )
                 );
             } else if (this.state.form == "loading") {
@@ -583,7 +583,7 @@ var ReportArea = function (_React$Component7) {
                                             }] })
                                     )
                                 ),
-                                this.state.selectOptionWarning ? React.createElement(BasicMessage, { messageType: "warning", text: "'Neden' bo\u015F b\u0131rak\u0131lamaz!" }) : '',
+                                this.state.selectOptionWarning ? React.createElement(BasicMessage, { type: "warning", text: "'Neden' bo\u015F b\u0131rak\u0131lamaz!" }) : '',
                                 React.createElement(
                                     Row,
                                     { size: "one" },
@@ -606,7 +606,7 @@ var ReportArea = function (_React$Component7) {
                                         )
                                     )
                                 ),
-                                this.state.reportTextLimitWarning ? React.createElement(BasicMessage, { messageType: "warning", text: "A\xE7\u0131klama bu kadar uzun olamaz!" }) : '',
+                                this.state.reportTextLimitWarning ? React.createElement(BasicMessage, { type: "warning", text: "A\xE7\u0131klama bu kadar uzun olamaz!" }) : '',
                                 React.createElement(
                                     Row,
                                     { size: "one" },
@@ -739,7 +739,7 @@ var Reported = function (_React$Component9) {
                                 React.createElement(
                                     Column,
                                     null,
-                                    React.createElement(BasicMessage, { messageType: this.props.messageType, text: this.props.text })
+                                    React.createElement(BasicMessage, { type: this.props.messageType, text: this.props.text })
                                 )
                             )
                         )
@@ -778,10 +778,10 @@ var WriteComment = function (_React$Component10) {
             form: "normal",
             messageType: "success", // success, warning, danger
             messageText: "mahmutcan",
+            message: null,
             commentText: _this10.props.commentText,
             sendButtonClassName: _this10.var.buttonClassName,
-            topMessageType: "",
-            topMessageText: ""
+            topMessage: null
         };
         _this10.sendComment = _this10.sendComment.bind(_this10);
         _this10.changeComment = _this10.changeComment.bind(_this10);
@@ -806,9 +806,20 @@ var WriteComment = function (_React$Component10) {
             //}
             // başarısız olma durumunda kullanılabilecek bir üst mesaj
             this.setState({
-                topMessageType: "warning",
-                topMessageText: "bir yorun oldu"
+                topMessage: {
+                    type: "warning",
+                    text: "bir sorun oldu"
+                }
             });
+            /*
+            this.setState({
+                form:"sent",
+                message: {
+                    type:"warning",
+                    text:"hata hata!!"
+                }
+            });
+            */
         }
     }, {
         key: "changeComment",
@@ -836,13 +847,13 @@ var WriteComment = function (_React$Component10) {
                     React.createElement(
                         Column,
                         null,
-                        this.state.topMessageText ? React.createElement(
+                        this.state.topMessage ? React.createElement(
                             Row,
                             { size: "one" },
                             React.createElement(
                                 Column,
                                 null,
-                                React.createElement(BasicMessage, { messageType: this.state.topMessageType, text: this.state.topMessageText })
+                                React.createElement(BasicMessage, { type: this.state.topMessage.type, text: this.state.topMessage.text })
                             )
                         ) : "",
                         React.createElement(
@@ -926,7 +937,7 @@ var WriteComment = function (_React$Component10) {
                     React.createElement(
                         Column,
                         null,
-                        React.createElement(BasicMessage, { messageType: this.state.messageType, text: this.state.messageText })
+                        React.createElement(BasicMessage, { type: this.state.message.type, text: this.state.message.text })
                     )
                 );
             } else if (this.state.form == "edited") {
@@ -959,8 +970,8 @@ var WriteComment = function (_React$Component10) {
                             rateValue: "-"
                         }],
                         owner: true,
-                        showMessage: {
-                            messageType: "success",
+                        topMessage: {
+                            type: "success",
                             text: "Yorumunuz başarılı bir şekilde düzenlendi"
                         }
                     })
@@ -1215,7 +1226,7 @@ var DeleteArea = function (_React$Component14) {
                             React.createElement(
                                 Column,
                                 null,
-                                React.createElement(BasicMessage, { messageType: "warning", text: "Bu yorumu kal\u0131c\u0131 olarak silmek istedi\u011Finizden emin misiniz?" })
+                                React.createElement(BasicMessage, { type: "danger", text: "Bu yorumu kal\u0131c\u0131 olarak silmek istedi\u011Finizden emin misiniz?" })
                             )
                         ),
                         React.createElement(

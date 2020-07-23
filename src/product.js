@@ -61,7 +61,7 @@ class Content extends React.Component {
             return(
                 <Row size="one">
                     <Column>
-                        <BasicMessage messageType="warning" text="Böyle bir ürün yok" />
+                        <BasicMessage type="warning" text="Böyle bir ürün yok" />
                         <Center>
                             <a href="urun-olustur">
                                 Yeni Bir Ürün Oluştur

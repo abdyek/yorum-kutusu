@@ -22,7 +22,7 @@ class Comment extends React.Component {
         this.state = {
             // normal, report, edit, delete, message, loading
             form:"normal",
-            showMessage: this.props.showMessage,
+            topMessage: this.props.topMessage,
             message: this.props.message
         };
         this.openReportArea = this.openReportArea.bind(this);
@@ -46,7 +46,7 @@ class Comment extends React.Component {
     openEditArea() {
         this.setState({
             form:"edit",
-            showMessage: null
+            topMessage: null
         });
     }
     closeEditArea() {
@@ -57,7 +57,7 @@ class Comment extends React.Component {
     openDeleteArea() {
         this.setState({
             form:"delete",
-            showMessage: null
+            topMessage: null
         });
     }
     closeDeleteArea() {
@@ -83,10 +83,10 @@ class Comment extends React.Component {
         if(this.state.form=="normal") {
             return(
                 <div>
-                    {(this.state.showMessage)? 
+                    {(this.state.topMessage)? 
                         <Row size="one">
                             <Column>
-                                <BasicMessage messageType={this.state.showMessage.messageType} text={this.state.showMessage.text} />
+                                <BasicMessage type={this.state.topMessage.type} text={this.state.topMessage.text} />
                             </Column>
                         </Row>
                     :""}
@@ -116,7 +116,7 @@ class Comment extends React.Component {
             return(
                 <Row size="one">
                     <Column>
-                        <BasicMessage messageType={this.state.message.messageType} text={this.state.message.messageText} />
+                        <BasicMessage type={this.state.message.messageType} text={this.state.message.messageText} />
                     </Column>
                 </Row>
             )
@@ -386,7 +386,7 @@ class ReportArea extends React.Component {
                                     </Column>
                                 </Row>
                                 {this.state.selectOptionWarning ?
-                                    <BasicMessage messageType="warning" text="'Neden' boş bırakılamaz!"/>
+                                    <BasicMessage type="warning" text="'Neden' boş bırakılamaz!"/>
                                 : ''}
                                 <Row size="one">
                                     <Column>
@@ -399,7 +399,7 @@ class ReportArea extends React.Component {
                                     </Column>
                                 </Row>
                                 {this.state.reportTextLimitWarning ?
-                                    <BasicMessage messageType="warning" text="Açıklama bu kadar uzun olamaz!"/>
+                                    <BasicMessage type="warning" text="Açıklama bu kadar uzun olamaz!"/>
                                 : ''}
                                 <Row size="one">
                                     <Column>
@@ -469,7 +469,7 @@ class Reported extends React.Component {
                         <RaisedSegment>
                             <Row size="one">
                                 <Column>
-                                    <BasicMessage messageType={this.props.messageType} text={this.props.text}/>
+                                    <BasicMessage type={this.props.messageType} text={this.props.text}/>
                                 </Column>
                             </Row>
                         </RaisedSegment>
@@ -501,10 +501,10 @@ class WriteComment extends React.Component {
             form:"normal",
             messageType:"success",  // success, warning, danger
             messageText:"mahmutcan",
+            message: null,
             commentText:this.props.commentText,
             sendButtonClassName: this.var.buttonClassName,
-            topMessageType:"",
-            topMessageText:""
+            topMessage: null
         };
         this.sendComment = this.sendComment.bind(this);
         this.changeComment = this.changeComment.bind(this);
@@ -525,9 +525,20 @@ class WriteComment extends React.Component {
         //}
         // başarısız olma durumunda kullanılabilecek bir üst mesaj
         this.setState({
-            topMessageType:"warning",
-            topMessageText:"bir yorun oldu"
+            topMessage: {
+                type:"warning",
+                text:"bir sorun oldu"
+            }
         });
+        /*
+        this.setState({
+            form:"sent",
+            message: {
+                type:"warning",
+                text:"hata hata!!"
+            }
+        });
+        */
     }
     changeComment(e) {
         if(!e.target.value.length) {
@@ -548,10 +559,10 @@ class WriteComment extends React.Component {
             return(
                 <Row size="one">
                     <Column>
-                        {(this.state.topMessageText)?
+                        {(this.state.topMessage)?
                             <Row size="one">
                                 <Column>
-                                    <BasicMessage messageType={this.state.topMessageType} text={this.state.topMessageText} />
+                                    <BasicMessage type={this.state.topMessage.type} text={this.state.topMessage.text} />
                                 </Column>
                             </Row>
                         :""}
@@ -606,7 +617,7 @@ class WriteComment extends React.Component {
             return (
                 <Row size="one">
                     <Column>
-                        <BasicMessage messageType={this.state.messageType} text={this.state.messageText} />
+                        <BasicMessage type={this.state.message.type} text={this.state.message.text} />
                     </Column>
                 </Row>
             )
@@ -654,8 +665,8 @@ Nulla non mollis risus. Fusce cursus quam nec est suscipit accumsan. Sed sit ame
                         ]
                     }
                     owner={true}
-                    showMessage={{
-                        messageType: "success",
+                    topMessage={{
+                        type: "success",
                         text: "Yorumunuz başarılı bir şekilde düzenlendi"
                     }}
                 />
@@ -788,7 +799,7 @@ class DeleteArea extends React.Component {
                     <RaisedSegment>
                         <Row size="one">
                             <Column>
-                                <BasicMessage messageType="warning" text="Bu yorumu kalıcı olarak silmek istediğinizden emin misiniz?" />
+                                <BasicMessage type="danger" text="Bu yorumu kalıcı olarak silmek istediğinizden emin misiniz?" />
                             </Column>
                         </Row>
                         <Row size="two" nonStackable={true}>

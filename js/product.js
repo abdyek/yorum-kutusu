@@ -72,7 +72,7 @@ var Content = function (_React$Component) {
                     React.createElement(
                         Column,
                         null,
-                        React.createElement(BasicMessage, { messageType: "warning", text: "B\xF6yle bir \xFCr\xFCn yok" }),
+                        React.createElement(BasicMessage, { type: "warning", text: "B\xF6yle bir \xFCr\xFCn yok" }),
                         React.createElement(
                             Center,
                             null,
