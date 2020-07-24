@@ -1,289 +1,40 @@
 class Content extends React.Component {
-    constructor(props) {
-        super(props);
-        // normal, loading, notFound
-        this.state = {
-            form:"normal"
-        }
-    }
     render() {
-        if(this.state.form=="normal") {
-            return(
-                <ProfileInfo />
-            )
-        } else if(this.state.form=="loading") {
-            return(
-                <RowLoadingSpin nonSegment={true} />
-            )
-        } else if(this.state.form=="notFound") {
-            return <NotFound />
-        }
+        return(
+            <div>
+                <Account />
+            </div>
+        )
     }
 }
 
-owner = true;
-isMobile = false;
-
-class ProfileInfo extends React.Component {
-    constructor(props) {
+class Account extends React.Component {
+    constructor(props){
         super(props);
         this.state = {
-            settingOpened: false,
-            oldPassword: "",
-            newPassword: "",
-            newPassword2: "",
-            readyPasswordForm: true,
-            message: false,
-            messageText: "",
-            messageType: "",
-            logout:"",
-            deleteOpened: false,
-            emailToDelete: "",
-            usernameToDelete: "",
-            passwordToDelete: "",
-            deleteAccount:"",
-            deleteMessage:"",
-            verification: false
-        }
-        this.toggleSetting = this.toggleSetting.bind(this);
-        this.logout = this.logout.bind(this);
-        this.changeOldPassword= this.changeOldPassword.bind(this);
-        this.changeNewPassword = this.changeNewPassword.bind(this);
-        this.changeNewPassword2= this.changeNewPassword2.bind(this);
-        this.tryChange = this.tryChange.bind(this);
-        this.deleteAccount = this.deleteAccount.bind(this);
-        this.changeEmailToDelete = this.changeEmailToDelete.bind(this);
-        this.changeUsernameToDelete = this.changeUsernameToDelete.bind(this);
-        this.changePasswordToDelete= this.changePasswordToDelete.bind(this);
+            openedSetting: false
+        };
+        this.openSettingArea = this.openSettingArea.bind(this);
+        this.closeSettingArea = this.closeSettingArea.bind(this);
     }
-    toggleSetting() {
-        if(this.state.settingOpened) {
-            this.setState({
-                settingOpened: false
-            })
-        } else {
-            this.setState({
-                settingOpened: true
-            })
-        }
-    }
-    deleteAccount() {
-        if(this.state.deleteOpened) {
-            console.log("burada hesap silmek için gerekli veriler API'ye gönderilecek");
-            this.setState({
-                deleteAccount: "loading"
-            })
-            /*
-            this.setState({
-                deleteMessage: "buraya API'den gelen mesajı yazıyoruz"
-            })
-            ^ bununla gelen mesajı doğrudan veriyoruz
-            */
-        } else {
-            this.setState({
-                deleteOpened: true
-            })
-        }
-    }
-    logout() {
-        console.log("çıkıp yapmak için php'ye ajax ile çıkış şeyi gönderilecek")
-        // butona spin ekliyoruz, başarılı çıkış sağlanırsa başarıyla çıkış yaptınız sayfasına yönlendirilebilir
+    openSettingArea() {
         this.setState({
-            logout:"loading"
-        })
+            openedSetting:true
+        });
     }
-    changeOldPassword(e) {
+    closeSettingArea() {
         this.setState({
-            oldPassword: e.target.value
-        })
-    }
-    changeNewPassword(e) {
-        this.setState({
-            newPassword: e.target.value
-        })
-    }
-    changeNewPassword2(e) {
-        this.setState({
-            newPassword2: e.target.value
-        })
-    }
-    tryChange() {
-        // API tarafında yeni parola tekrarı istenmediğinden bu kısım client'a kaldı
-        if(this.state.newPassword!=this.state.newPassword2) {
-            this.setState({
-                message:true,
-                messageText: "Yeni parola tekrarı ile uyumlu değil",
-                messageType:"red"
-            })
-        } else {
-            this.setState({
-                message:false
-            })
-            console.log("burada API'ye gönderme işlemi yapıcaz");
-            // burada API'ye gönderme işlemi yapıcaz bu sırada da kullanıcıya spin göstericez
-            // ayrıca gelen mesaj olumlu ise messageType'ı blue yapıyoruz, ya da uygun diğer bir renk
-        }
-    }
-    changeEmailToDelete(e) {
-        this.setState({
-            emailToDelete: e.target.value
-        })
-    }
-    changeUsernameToDelete(e) {
-        this.setState({
-            usernameToDelete:e.target.value
-        })
-    }
-    changePasswordToDelete(e) {
-        this.setState({
-            passwordToDelete:e.target.value
-        })
+            openedSetting:false
+        });
     }
     render() {
-        if(this.state.settingOpened) {
-            this.setting = (
-                <div>
-                    <Row size="one">
-                        <Column>
-                            <H type="2" textAlign="center" text="Ayarlar" />
-                            <Row size="four">
-                                <WideColumn size="three"></WideColumn>
-                                <WideColumn size="five">
-                                    <Segment>
-                                        <H type="3" textAlign="left" text="Parola Değiştir" />
-                                        { this.state.readyPasswordForm ? 
-                                            <div className="ui form">
-                                                <div className="field">
-                                                    <label>Eski Parola</label>
-                                                    <input type="password" value={this.state.oldPassword} onChange={this.changeOldPassword} />
-                                                </div>
-                                                <div className="field">
-                                                    <label>Yeni Parola</label>
-                                                    <input type="password" value={this.state.newPassword} onChange={this.changeNewPassword}/>
-                                                </div>
-                                                <div className="field">
-                                                    <label>Yeni Parola Tekrar</label>
-                                                    <input type="password" value={this.state.newPassword2} onChange={this.changeNewPassword2}/>
-                                                </div>
-                                            </div>
-                                        :
-                                            <RowLoading />
-                                        }
-                                        { this.state.message ?
-                                            <Row size="one">
-                                                <Column>
-                                                    <div id="passwordChangeMessage" className={"ui "+this.state.messageType+" message"}>{this.state.messageText}</div>
-                                                </Column>
-                                            </Row>
-                                            : ""
-                                        }
-                                        <Row size="one">
-                                            <Column>
-                                                <FloatRight>
-                                                    <button id="passwordChangeButton" className="ui primary button" onClick={this.tryChange}>
-                                                        Değiştir
-                                                    </button>
-                                                </FloatRight>
-                                            </Column>
-                                        </Row>
-                                    </Segment>
-                                </WideColumn>
-                                <WideColumn size="five">
-                                    <Segment>
-                                        <H type="3" textAlign="left" text="Hesap Sil" />
-                                        <div className="ui orange message">
-                                            <div className="header">
-                                                Dikkat!
-                                            </div>
-                                            <p>Hesabınızı silerseniz bütün yorumlarınız da kalıcı olarak silinir.</p>
-                                        </div>
-                                        <Row size="one">
-                                            <Column>
-                                                {this.state.deleteOpened?
-                                                    <div>
-                                                        <div className="ui yellow message">E-Posta, kullanıcı adı ve parolanızı girin.</div>
-                                                        <div className="ui form">
-                                                            <div className="field">
-                                                                <label>E-Posta</label>
-                                                                <input type="text" value={this.state.emailToDelete} onChange={this.changeEmailToDelete} />
-                                                            </div>
-                                                            <div className="field">
-                                                                <label>Kullanıcı Adı</label>
-                                                                <input type="text" value={this.state.changeUsernameToDelete} onChange={this.changeUsernameToDelete}/>
-                                                            </div>
-                                                            <div className="field">
-                                                                <label>Parola</label>
-                                                                <input type="password" value={this.state.changePasswordToDelete} onChange={this.changePasswordToDelete}/>
-                                                            </div>
-                                                        </div>
-                                                        { this.state.deleteMessage? <div className="ui teal message">{this.state.deleteMessage}</div> :   "" }
-                                                        <FloatRight>
-                                                            <button id="deleteAccount" className={"ui red "+this.state.deleteAccount+" button"} onClick={this.deleteAccount}>
-                                                                Sil
-                                                            </button>
-                                                        </FloatRight>
-                                                    </div>
-                                                :
-                                                    <FloatRight>
-                                                        <button id="deleteAccount" className="ui red button" onClick={this.deleteAccount}>
-                                                            Sil
-                                                        </button>
-                                                    </FloatRight>
-                                            }
-                                            </Column>
-                                        </Row>
-                                    </Segment>
-                                </WideColumn>
-                                <WideColumn size="three"></WideColumn>
-                            </Row>
-                        </Column>
-                    </Row>
-                </div>
-
-            )
-        } else {
-            this.setting = <div></div>
-        }
         return(
             <div>
-                {   !this.state.verification? 
-                    <Verification />:
-                    ""
-                }
                 <Row size="one">
                     <Column>
-                        <Center>
-                            <i id="userIcon">
-                                <i className="fa fa-user-circle" aria-hidden="true"></i>
-                            </i>
-                            <H type="1" text={"önemsiz"}/>
-                            {
-                                owner ?
-                                    <div>
-                                        <button className="ui grey button" onClick={this.toggleSetting} >
-                                            <i className="icon">
-                                                <i className="fa fa-cog" aria-hidden="true"></i>
-                                            </i>
-                                            Ayarlar
-                                        </button>
-                                        <button className={"ui red "+this.state.logout+" button"} onClick={this.logout}>
-                                            <i className="icon">
-                                                <i className="fa fa-paper-plane" aria-hidden="true"></i>
-                                            </i>
-                                            Çıkış Yap
-                                        </button>
-                                    </div>
-                                : ""
-                            }
-                        </Center>
-                    </Column>
-                </Row>
-                    {this.setting}
-                <Row size="one">
-                    <Column>
-                        <div className="yorumlarHeader">
-                            <H  type="1" textAlign="center" text="Yorumlar" />
-                        </div>
+                        {(this.state.openedSetting)?
+                        <SettingArea closeSettingArea={this.closeSettingArea}/>
+                        : <AccountInfo handleOpenSettingArea={this.openSettingArea}/> }
                     </Column>
                 </Row>
                 <Comments />
@@ -292,418 +43,221 @@ class ProfileInfo extends React.Component {
     }
 }
 
-class Verification extends React.Component {
+class AccountInfo extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            form:"normal",
-            verification:false,
-            verificationHeadMessage: true,
-            verificationAPIMessage: "",
-            verificationAPIMessageType: ""
-        }
-        this.sendVerification = this.sendVerification.bind(this);
+        this.openSettingArea = this.openSettingArea.bind(this);
     }
-    sendVerification() {
-        // burada gönderim işi yaplıacak
+    openSettingArea() {
+        this.props.handleOpenSettingArea();
     }
     render() {
-        if(this.state.form=="normal") {
-            this.body = 
-                <Row size="sixteen">
-                    <WideColumn size="five"></WideColumn>
-                    <WideColumn size="six">
-                        <div className="ui form">
-                            <div className="field">
-                                <label>Aktivasyon Kodu</label>
-                                <input type="text" />
-                            </div>
-                        </div>
+        return (
+            <Center>
+                <i id="account-icon" className="fa fa-user-circle" aria-hidden="true"></i>
+                <H type="1" text="abdyek" />
+                <button className="compact ui teal button" onClick={this.openSettingArea}>
+                    <i className="icon">
+                        <i className="fa fa-cog" aria-hidden="true"></i>
+                    </i>
+                    Ayarlar
+                </button> 
+            </Center>
+        )
+    }
+}
+
+class SettingArea extends React.Component {
+    render() {
+        return(
+            <div>
+                <Row size="two" nonStackable={true}>
+                    <Column>
+                        <H type="3" text="Ayarlar" />
+                    </Column>
+                    <Column>
                         <FloatRight>
-                            <button id="sendActivation" className="ui blue button" onClick={this.sendVerification}>
-                                Gönder
-                            </button>
+                            <CancelButton handleCancelButton={this.props.closeSettingArea}/>
                         </FloatRight>
+                    </Column>
+                </Row>
+                <Row size="sixteen">
+                    <WideColumn size="three"></WideColumn>
+                    <WideColumn size="ten">
+                        <ChangeItems />
                     </WideColumn>
                 </Row>
-        } else if(this.state.form=="loading") {
-            this.body = <RowLoading />
-        }
-        if(this.state.verificationAPIMessage) {
-            this.apiMessage =
-                <div>
-                    <Row size="one">
-                        <Column>
-                            <div class={"ui "+this.state.verificationAPIMessageType+" message"}>{this.state.verificationAPIMessage}</div>
-                        </Column>
-                    </Row>
-                </div>
-        } else {
-            this.apiMessage = "";
-        }
-        return (
-            <div>
-                {
-                    this.state.verificationHeadMessage?
-                    <Row size="one">
-                        <Column>
-                        <div className="ui negative message">
-                            <div className="header">
-                                E-posta Aktivasyonu Başarısız!
-                            </div>
-                            <p>Lütfen E-postanıza gönderdiğimiz kod ile e-posta aktivasyonunuzu yapınız
-                            </p>
-                        </div>
-                        </Column>
-                    </Row>:
-                    ""
-                }
-                {this.apiMessage}
-                {this.body}
             </div>
         )
     }
 }
 
-class NotFound extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-    render() {
-        return(
-            <Row size="one">
-                <Column>
-                    <BasicMessage messageType="danger" text="Böyle bir hesap yok!" />
-                </Column>
-            </Row>
-        )
-    }
-}
-
-class Comments extends React.Component {
-    constructor(props) {
-        super(props);
-        if(!isMobile) {
-            this.buttonText = {
-                editButtonText : "Düzenle",
-                deleteButtonText : "Sil",
-                approveDeleteButtonText : "Sil",
-                cancelDeleteButtonText : "İptal",
-                cancelEditButtonText : "İptal",
-                reVoteButtonText : "Yeniden Oyla",
-                saveButtonText : "Kaydet"
-            }
-        } else {
-            this.buttonText = {
-                editButtonText : "",
-                deleteButtonText : "",
-                approveDeleteButtonText : "",
-                cancelDeleteButtonText : "",
-                cancelEditButtonText : "",
-                reVoteButtonText: "",
-                saveButtonText : ""
-            }
-        }
-    }
-    render() {
-        return(
-            <div>
-                <Comment productName="iphone-x" commentText="çok güzel telefon ama çok pahalı" buttonText={this.buttonText}/>
-                <Comment productName="le-cola" commentText="tam bir kanser yapıcı" buttonText={this.buttonText}/>
-                <Comment productName="sürahi" commentText='Yaygın inancın tersine, Lorem Ipsum rastgele sözcüklerden oluşmaz. Kökleri M.Ö. 45 tarihinden bu yana klasik Latin edebiyatına kadar uzanan 2000 yıllık bir geçmişi vardır. Virginiadaki Hampden-Sydney Collegedan Latince profesörü Richard McClintock, bir Lorem Ipsum pasajında geçen ve anlaşılması en güç sözcüklerden biri olan consectetur sözcüğünün klasik edebiyattaki örneklerini incelediğinde kesin bir kaynağa ulaşmıştır. Lorm Ipsum, Çiçero tarafından M.Ö. 45 tarihinde kaleme alınan "de Finibus Bonorum et Malorum" (İyi ve Kötünün Uç Sınırları) eserinin 1.10.32 ve 1.10.33 sayılı bölümlerinden gelmektedir. Bu kitap, ahlak kuramı üzerine bir tezdir ve Rönesans döneminde çok popüler olmuştur. Lorem Ipsum pasajının ilk satırı olan "Lorem ipsum dolor sit amet" 1.10.32 sayılı bölümdeki bir satırdan gelmektedir.' buttonText={this.buttonText} />
-                <Comment productName="honor 9 lite" commentText="gelebilirse yeni telefonum olacak şuan kargoda" buttonText={this.buttonText}/>
-                <Comment productName="ülker çikolatalı gofret" commentText="eski tadı yok bunun" buttonText={this.buttonText}/>
-            </div>
-        )
-    }
-}
-
-class Comment extends React.Component {
+class ChangeItems extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            form:"normal",
-            reVote:"none",
-            commentText: this.props.commentText,
-            commentTextOld: this.props.commentText
-        }
-        this.inputRanges = [];
-        this.openEdit = this.openEdit.bind(this);
-        this.openDelete = this.openDelete.bind(this);
-        this.returnToNormal = this.returnToNormal.bind(this);
-        this.commentWriting = this.commentWriting.bind(this);
-        this.openReVote = this.openReVote.bind(this);
+            passwordSelected: true,
+            passwordButtonClass:"mini ui blue button",
+            emailSelected: false,
+            emailButtonClass: "mini ui button",
+            input1:"",
+            input2:"",
+            input3:""
+        };
+        this.selectEmail = this.selectEmail.bind(this);
+        this.selectPassword = this.selectPassword.bind(this);
+        this.changeInput1 = this.changeInput1.bind(this);
+        this.changeInput2 = this.changeInput2.bind(this);
+        this.changeInput3 = this.changeInput3.bind(this);
     }
-    openEdit() {
-        console.log("düzenleme işlemi burada yapılacak");
+    selectEmail() {
         this.setState({
-            form:"edit"
+            passwordSelected: false,
+            passwordButtonClass:"mini ui button",
+            emailButtonClass: "mini ui blue button",
+            input1:"",
+            input2:"",
+            input3:""
+        });
+    }
+    selectPassword() {
+        this.setState({
+            passwordSelected: true,
+            passwordButtonClass:"mini ui blue button",
+            emailButtonClass: "mini ui button",
+            input1:"",
+            input2:"",
+            input3:""
         })
     }
-    openDelete() {
+    changeInput1(e) {
         this.setState({
-            form:"delete"
-        })
+            input1:e.target.value
+        });
     }
-    returnToNormal() {
+    changeInput2(e) {
         this.setState({
-            form: "normal"
-        })
+            input2:e.target.value
+        });
     }
-    commentWriting(e) {
+    changeInput3(e) {
         this.setState({
-            commentText:e.target.value
-        })
+            input3:e.target.value
+        });
     }
-    openReVote() {
-        this.setState({
-            reVote:"loading"
-        })
-        for(let i=0;i<3;i++) {
-            this.inputRanges.push(
-                <div className="inputRangeWrapper" key={i}>
-                    <label className="inputRangeLabel">
-                        {"buraya isim gelecek"}
-                    </label>
-                    <input className="inputRange" type="range" id="" name="" defaultValue={this.state.value} step="1" min="0" max="10" onChange={this.change}></input>
-                    <label className="inputRangeValue">
-                        {"5.5"}
-                    </label>
-                </div>
-            )
-        }
-        this.setState({
-            reVote:"ready"
-        })
-    }
+
     render() {
-        if(isMobile) {
-            /* ekran boyutu 750'den küçük cihazlar için (mobil) butonların textini yok ediyoruz (sadece yüklenmede kontrol ediyor) */
-            this.editButtonText = "";
-            this.deleteButtonText = "";
-            this.approveDeleteButtonText = "";
-            this.cancelDeleteButtonText = "";
-            this.cancelEditButtonText = "";
-        }
-        if(this.state.reVote=="ready") {
-            this.reVoteArea = (
-                <div>
-                    {this.inputRanges}
-                </div>
-            )
-        } else if(this.state.reVote=="none") {
-            this.reVoteArea = (
-                <Center>
-                    <button className="ui teal button" onClick={this.openReVote}>
-                        <i className="icon">
-                            <i className="fa fa-line-chart" aria-hidden="true"></i>
-                        </i>
-                        {this.props.buttonText.reVoteButtonText}
-                    </button>
-                </Center>
-            )
-        } else if(this.state.reVote=="loading") {
-            this.reVoteArea = (
-                <RowLoading />
-            )
-        }
-        if(owner){
-            this.onlyOwner = (
-                <div>
-                    <button className="ui icon teal button" onClick={this.openEdit}>
-                            <i className="icon">
-                                <i className="fa fa-pencil-square-o" aria-hidden="true"></i>
-                        </i>
-                        {this.props.buttonText.editButtonText}
-                    </button>
-                    <button className="ui icon orange button" onClick={this.openDelete}>
-                        <i className="icon">
-                            <i className="fa fa-trash" aria-hidden="true"></i>
-                        </i>
-                        {this.props.buttonText.deleteButtonText}
-                    </button>
-                </div>
-            )
-        } else {
-            this.onlyOwner = null;
-        }
-        if(this.state.form=="normal") {
-            return(
-                <div>
-                    <Row size="one">
-                        <Column>
-                            <RaisedSegment>
-                                <Row size="two">
-                                    <Column>
-                                        <div className="product-name">
-                                            <H type="3" text="Iphone 5s" />
-                                        </div>
-                                    </Column>
-                                    <Column>
-                                        <FloatRight>
-                                            <div>
-                                                {this.onlyOwner}
-                                            </div>
-                                        </FloatRight>
-                                    </Column>
-                                </Row>
-                                <Row size="one">
-                                    <Column>
-                                        <div className="comment-text">
-                                            {this.state.commentTextOld}
-                                        </div>
-                                    </Column>
-                                </Row>
-                                <Row size="one">
-                                    <Column>
-                                        <FloatRight>
-                                            <LikeButton value={1} likeOrDislike={"like"}/>
-                                            {!owner?<ComplaintButton />: "" }
-                                        </FloatRight>
-                                    </Column>
-                                </Row>
-                            </RaisedSegment>
-                        </Column>
-                    </Row>
-                </div>
-            )
-        } else if(this.state.form=="edit") {
-            return(
-                <div>
-                    <Row size="one">
-                        <Column>
-                            <RaisedSegment>
-                                <Row size="two" nonStackable={true}>
-                                    <Column>
-                                        <H type="3" text={this.props.productName} />
-                                    </Column>
-                                    <Column>
-                                        <FloatRight>
-                                            <button className="ui icon red button" onClick={this.returnToNormal}>
-                                                <i className="icon">
-                                                    <i className="fa fa-times" aria-hidden="true"></i>
-                                                </i>
-                                                {this.props.buttonText.cancelEditButtonText}
-                                            </button>
-                                        </FloatRight>
-                                    </Column>
-                                </Row>
-                                <Row size="one">
-                                    <Column>
-                                            <Row size="sixteen">
-                                                <WideColumn size="ten">
-                                                    <div className="ui form">
-                                                        <div className="field">
-                                                            <label>Yorum Düzenle</label>
-                                                            <textarea value={this.state.commentText} onChange={this.commentWriting}></textarea>
-                                                        </div>
-                                                    </div>
-                                                </WideColumn>
-                                                <WideColumn size="six">
-                                                    {this.reVoteArea}
-                                                </WideColumn>
-                                            </Row>
-                                            <Row size="one">
-                                                <Column>
-                                                    <FloatRight>
-                                                        <div>
-                                                            <button className="ui teal button">
-                                                                <i className="icon">
-                                                                    <i className="fa fa-floppy-o" aria-hidden="true"></i>
-                                                                </i>
-                                                                {this.props.buttonText.saveButtonText}
-                                                            </button>
-                                                        </div>
-                                                    </FloatRight>
-                                                </Column>
-                                            </Row>
-                                    </Column>
-                                </Row>
-                            </RaisedSegment>
-                        </Column>
-                    </Row>
-                </div>
-            )
-        } else if(this.state.form=="delete") {
-            return(
-                <div>
-                    <Row size="one">
-                        <Column>
-                            <RaisedSegment>
-                                <Row size="two">
-                                    <Column>
-                                        Yorumunuzu kalıcı olarak silmek ister misiniz?
-                                    </Column>
-                                    <Column>
-                                        <FloatRight>
-                                            <button className="ui icon blue button">
-                                                <i className="icon">
-                                                    <i className="fa fa-check" aria-hidden="true"></i>
-                                                </i>
-                                                {this.props.buttonText.approveDeleteButtonText}
-                                            </button>
-                                            <button className="ui icon red button" onClick={this.returnToNormal}>
-                                                <i className="icon">
-                                                    <i className="fa fa-times" aria-hidden="true"></i>
-                                                </i>
-                                                {this.props.buttonText.cancelDeleteButtonText}
-                                            </button>
-                                        </FloatRight>
-                                    </Column>
-                                </Row>
-                            </RaisedSegment>
-                        </Column>
-                    </Row>
-                </div>
-            )
-        }
+        return(
+            <div>
+                <Row size="two" nonStackable={true}>
+                    <Column>
+                        <H type="3" text="Değiştir" />
+                    </Column>
+                    <Column>
+                        <FloatRight>
+                            <div id="password-email-change">
+                                <button className={this.state.passwordButtonClass} onClick={this.selectPassword}>
+                                    Parola
+                                </button>
+                                <button className={this.state.emailButtonClass} onClick={this.selectEmail}>
+                                    E-posta
+                                </button>
+                            </div>
+                        </FloatRight>
+                    </Column>
+                </Row>
+                <div className="ui form">
+                    <h4 className="ui dividing header">{(this.state.passwordSelected)?"Parola":"E-posta"} Değiştir</h4>
+                    <div className="field">
+                        <label>{(this.state.passwordSelected)?"Mevcut Parola": "Yeni E-posta"}</label>
+                        <input type={(this.state.passwordSelected)?"password": "text"} value={this.state.input1} onChange={this.changeInput1}/>
+                    </div>
+                    <div className="field">
+                        <label>
+                            {(this.state.passwordSelected)?"Yeni Parola": "Yeni E-posta Tekrar"}
+                        </label>
+                        <input type={(this.state.passwordSelected)?"password": "text"} value={this.state.input2} onChange={this.changeInput2}/>
+                    </div>
+                    <div className="field">
+                        <label>
+                            {(this.state.passwordSelected)?"Yeni Parola Tekrar": "Parola"}
+                        </label>
+                        <input type="password" value={this.state.input3} onChange={this.changeInput3}/>
+                    </div>
+                    <FloatRight>
+                        <button className="ui blue button">
+                            {(this.state.passwordSelected)?"Parola": "E-posta"} Değiştir
+                        </button>
+                    </FloatRight>
+                </div> 
+            </div>
+        )
     }
 }
 
-class RatingBar extends React.Component {
-    constructor(props) {
-        super(props);
-        this.percent = this.props.ratingAverage * 10;
-        // bu kısım drawcircle ile aynı refactor ederken buna bir çare bulabilirsin
-        this.limitColor = {
-            0: {
-                min: 0,
-                max: 5,
-                color: "#db2828"
-            },
-            1: {
-                min: 5,
-                max: 7,
-                color: "#f2711c"
-            },
-            2: {
-                min: 7,
-                max: 10,
-                color: "#21ba45"
-            }
-        }
-        this.color = this.limitColor[0].color;
-        for(let i=0; i<Object.keys(this.limitColor).length; i++) {
-            if(this.limitColor[i].min <= this.props.ratingAverage && this.props.ratingAverage< this.limitColor[i].max) {
-                this.color = this.limitColor[i].color;
-                break;
-            }
-        }
-        // ^^^
-        this.widthOfFill = this.props.ratingAverage * 15 + "px";
-    }
+
+class Comments extends React.Component {
     render() {
         return(
-            <div className="ratingBar">
-                <span className="barValue">
-                    {this.props.ratingAverage}
-                </span>
-                <div className="barStickWrapper">
-                    <div className="barStick barStickFull">
-                    </div>
-                    <div className="barStick barStickFill" style={{backgroundColor:this.color, width:this.widthOfFill}}>
-                    </div>
-                </div>
+            <div>
+                <Row size="one">
+                    <Column>
+                        <H type="2" text="Yorumlar" />
+                    </Column>
+                </Row>
+                <Comment text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+                    likeCount="0"
+                    liked={false}
+                    title="Iphone"
+                    date="14 Aralık 2019- 18:49"
+                    tags={[{
+                            id:3,
+                            passive:false,
+                            text:"Batarya",
+                            color:"yellow",
+                            rateValue: "5"
+                        },
+                        {
+                            id:4,
+                            passive:false,
+                            text:"Kamera",
+                            color:"orange",
+                            rateValue: "4"
+                        },
+                        {
+                            id:5,
+                            passive:false,
+                            text:"Tasarım",
+                            color:"",
+                            rateValue: "-"
+                        }
+                        ]
+                    }
+                    owner={true}
+                />
+                <Comment text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+                    likeCount="0"
+                    liked={false}
+                    title="Le-cola"
+                    date="14 Aralık 2019- 18:49"
+                    tags={[{
+                            id:3,
+                            passive:false,
+                            text:"Tad",
+                            color:"yellow",
+                            rateValue: "5"
+                        },
+                        {
+                            id:4,
+                            passive:false,
+                            text:"Fiyat/Performans",
+                            color:"red",
+                            rateValue: "1"
+                        },
+                        ]
+                    }
+                    owner={true}
+                />
             </div>
         )
     }

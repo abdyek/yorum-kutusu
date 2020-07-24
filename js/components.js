@@ -470,7 +470,7 @@ var Logo = function (_React$Component15) {
             return React.createElement(
                 "div",
                 { id: "logo" },
-                React.createElement(H, { type: "1", text: "Yorumlaa" })
+                React.createElement(H, { type: "1", text: "Yorum Kutusu" })
             );
         }
     }]);

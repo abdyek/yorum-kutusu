@@ -1,7 +1,12 @@
-.product-name {
-    padding:0.5rem;
+#account-icon {
+    font-size:10rem;
+    color:#4183c4;
 }
 
-.comment-text {
-    padding:0.5rem;
+#setting-area {
+    margin-bottom:4rem;
+}
+
+#password-email-change {
+    margin-bottom:2rem;
 }

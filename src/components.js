@@ -223,7 +223,7 @@ class Logo extends React.Component {
     render() {
         return(
             <div id="logo">
-                <H type="1" text="Yorumlaa" />
+                <H type="1" text="Yorum Kutusu" />
             </div>
         )
     }
