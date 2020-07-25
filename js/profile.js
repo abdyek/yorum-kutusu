@@ -18,9 +18,13 @@ var Content = function (_React$Component) {
     _createClass(Content, [{
         key: "render",
         value: function render() {
+            /* 
+                EmailValidation componentine validated={true} vermen yeterli görünmemesini sağlamak için
+            */
             return React.createElement(
                 "div",
                 null,
+                React.createElement(EmailValidation, null),
                 React.createElement(Account, { owner: true })
             );
         }
@@ -29,20 +33,183 @@ var Content = function (_React$Component) {
     return Content;
 }(React.Component);
 
-var Account = function (_React$Component2) {
-    _inherits(Account, _React$Component2);
+var EmailValidation = function (_React$Component2) {
+    _inherits(EmailValidation, _React$Component2);
+
+    function EmailValidation(props) {
+        _classCallCheck(this, EmailValidation);
+
+        var _this2 = _possibleConstructorReturn(this, (EmailValidation.__proto__ || Object.getPrototypeOf(EmailValidation)).call(this, props));
+
+        _this2.state = {
+            // normal, loading, success
+            form: _this2.props.validated ? "none" : "normal",
+            topMessage: null,
+            code: ""
+        };
+        _this2.changeCode = _this2.changeCode.bind(_this2);
+        _this2.verify = _this2.verify.bind(_this2);
+        _this2.sendAgain = _this2.sendAgain.bind(_this2);
+        _this2.showTopMessage = _this2.showTopMessage.bind(_this2);
+        return _this2;
+    }
+
+    _createClass(EmailValidation, [{
+        key: "changeCode",
+        value: function changeCode(e) {
+            this.setState({
+                code: e.target.value
+            });
+        }
+    }, {
+        key: "verify",
+        value: function verify() {
+            console.log("doğrulama işlemleri");
+            this.showTopMessage("warning", "hata mesajları falan 2");
+        }
+    }, {
+        key: "sendAgain",
+        value: function sendAgain() {
+            this.showTopMessage("warning", "hata mesajları falan");
+        }
+    }, {
+        key: "showTopMessage",
+        value: function showTopMessage(type, text) {
+            this.setState({
+                topMessage: {
+                    type: type,
+                    text: text
+                }
+            });
+        }
+    }, {
+        key: "render",
+        value: function render() {
+            if (this.state.form == "normal") {
+                return React.createElement(
+                    Row,
+                    { size: "one" },
+                    React.createElement(
+                        Column,
+                        null,
+                        React.createElement(
+                            Segment,
+                            null,
+                            React.createElement(
+                                "div",
+                                { "class": "ui negative message" },
+                                React.createElement(
+                                    "div",
+                                    { "class": "header" },
+                                    "E-Posta Do\u011Frulama Ba\u015Far\u0131s\u0131z"
+                                ),
+                                React.createElement(
+                                    "p",
+                                    null,
+                                    "L\xFCtfen e-posta kutunuzu kontrol ediniz. Size g\xF6nderdi\u011Fimiz mail'deki kodu a\u015Fa\u011F\u0131daki kutucu\u011Fa giriniz:"
+                                )
+                            ),
+                            this.state.topMessage ? React.createElement(
+                                Row,
+                                { size: "one" },
+                                React.createElement(
+                                    Column,
+                                    null,
+                                    React.createElement(BasicMessage, { type: this.state.topMessage.type, text: this.state.topMessage.text })
+                                )
+                            ) : "",
+                            React.createElement(
+                                Row,
+                                { size: "three" },
+                                React.createElement(Column, null),
+                                React.createElement(
+                                    Column,
+                                    null,
+                                    React.createElement(
+                                        "form",
+                                        { "class": "ui form attached fluid" },
+                                        React.createElement(
+                                            "div",
+                                            { "class": "field" },
+                                            React.createElement(
+                                                "label",
+                                                null,
+                                                "Kod"
+                                            ),
+                                            React.createElement("input", { placeholder: "Kod", type: "text", value: this.state.code, onChange: this.changeCode })
+                                        )
+                                    )
+                                )
+                            ),
+                            React.createElement(
+                                Row,
+                                { size: "three" },
+                                React.createElement(Column, null),
+                                React.createElement(
+                                    Column,
+                                    null,
+                                    React.createElement(
+                                        "div",
+                                        null,
+                                        React.createElement(
+                                            "button",
+                                            { "class": "ui teal button", onClick: this.sendAgain },
+                                            "Yeniden G\xF6nder"
+                                        ),
+                                        React.createElement(
+                                            FloatRight,
+                                            null,
+                                            React.createElement(
+                                                "button",
+                                                { "class": "ui primary button", onClick: this.verify },
+                                                "Do\u011Frula"
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                );
+            } else if (this.state.form == "loading") {
+                return React.createElement(
+                    "div",
+                    null,
+                    React.createElement(RowLoadingSpin, null)
+                );
+            } else if (this.state.form == "success") {
+                return React.createElement(
+                    Row,
+                    { size: "one" },
+                    React.createElement(
+                        Column,
+                        null,
+                        React.createElement(BasicMessage, { type: "success", text: "E-posta do\u011Frulama ba\u015Far\u0131l\u0131 bir \u015Fekilde ger\xE7ekle\u015Fti." })
+                    )
+                );
+            } else if (this.state.form == "none") {
+                return "";
+            }
+        }
+    }]);
+
+    return EmailValidation;
+}(React.Component);
+
+var Account = function (_React$Component3) {
+    _inherits(Account, _React$Component3);
 
     function Account(props) {
         _classCallCheck(this, Account);
 
-        var _this2 = _possibleConstructorReturn(this, (Account.__proto__ || Object.getPrototypeOf(Account)).call(this, props));
+        var _this3 = _possibleConstructorReturn(this, (Account.__proto__ || Object.getPrototypeOf(Account)).call(this, props));
 
-        _this2.state = {
+        _this3.state = {
             openedSetting: false
         };
-        _this2.openSettingArea = _this2.openSettingArea.bind(_this2);
-        _this2.closeSettingArea = _this2.closeSettingArea.bind(_this2);
-        return _this2;
+        _this3.openSettingArea = _this3.openSettingArea.bind(_this3);
+        _this3.closeSettingArea = _this3.closeSettingArea.bind(_this3);
+        return _this3;
     }
 
     _createClass(Account, [{
@@ -82,16 +249,16 @@ var Account = function (_React$Component2) {
     return Account;
 }(React.Component);
 
-var AccountInfo = function (_React$Component3) {
-    _inherits(AccountInfo, _React$Component3);
+var AccountInfo = function (_React$Component4) {
+    _inherits(AccountInfo, _React$Component4);
 
     function AccountInfo(props) {
         _classCallCheck(this, AccountInfo);
 
-        var _this3 = _possibleConstructorReturn(this, (AccountInfo.__proto__ || Object.getPrototypeOf(AccountInfo)).call(this, props));
+        var _this4 = _possibleConstructorReturn(this, (AccountInfo.__proto__ || Object.getPrototypeOf(AccountInfo)).call(this, props));
 
-        _this3.openSettingArea = _this3.openSettingArea.bind(_this3);
-        return _this3;
+        _this4.openSettingArea = _this4.openSettingArea.bind(_this4);
+        return _this4;
     }
 
     _createClass(AccountInfo, [{
@@ -124,8 +291,8 @@ var AccountInfo = function (_React$Component3) {
     return AccountInfo;
 }(React.Component);
 
-var SettingArea = function (_React$Component4) {
-    _inherits(SettingArea, _React$Component4);
+var SettingArea = function (_React$Component5) {
+    _inherits(SettingArea, _React$Component5);
 
     function SettingArea() {
         _classCallCheck(this, SettingArea);
@@ -174,15 +341,15 @@ var SettingArea = function (_React$Component4) {
     return SettingArea;
 }(React.Component);
 
-var ChangeItems = function (_React$Component5) {
-    _inherits(ChangeItems, _React$Component5);
+var ChangeItems = function (_React$Component6) {
+    _inherits(ChangeItems, _React$Component6);
 
     function ChangeItems(props) {
         _classCallCheck(this, ChangeItems);
 
-        var _this5 = _possibleConstructorReturn(this, (ChangeItems.__proto__ || Object.getPrototypeOf(ChangeItems)).call(this, props));
+        var _this6 = _possibleConstructorReturn(this, (ChangeItems.__proto__ || Object.getPrototypeOf(ChangeItems)).call(this, props));
 
-        _this5.state = {
+        _this6.state = {
             form: "normal",
             topMessage: null,
             passwordSelected: true,
@@ -193,14 +360,14 @@ var ChangeItems = function (_React$Component5) {
             input2: "",
             input3: ""
         };
-        _this5.selectEmail = _this5.selectEmail.bind(_this5);
-        _this5.selectPassword = _this5.selectPassword.bind(_this5);
-        _this5.changeInput1 = _this5.changeInput1.bind(_this5);
-        _this5.changeInput2 = _this5.changeInput2.bind(_this5);
-        _this5.changeInput3 = _this5.changeInput3.bind(_this5);
-        _this5.send = _this5.send.bind(_this5);
-        _this5.showTopMessage = _this5.showTopMessage.bind(_this5);
-        return _this5;
+        _this6.selectEmail = _this6.selectEmail.bind(_this6);
+        _this6.selectPassword = _this6.selectPassword.bind(_this6);
+        _this6.changeInput1 = _this6.changeInput1.bind(_this6);
+        _this6.changeInput2 = _this6.changeInput2.bind(_this6);
+        _this6.changeInput3 = _this6.changeInput3.bind(_this6);
+        _this6.send = _this6.send.bind(_this6);
+        _this6.showTopMessage = _this6.showTopMessage.bind(_this6);
+        return _this6;
     }
 
     _createClass(ChangeItems, [{
@@ -388,8 +555,8 @@ var ChangeItems = function (_React$Component5) {
     return ChangeItems;
 }(React.Component);
 
-var Comments = function (_React$Component6) {
-    _inherits(Comments, _React$Component6);
+var Comments = function (_React$Component7) {
+    _inherits(Comments, _React$Component7);
 
     function Comments() {
         _classCallCheck(this, Comments);
