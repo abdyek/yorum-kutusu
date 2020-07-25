@@ -21,7 +21,7 @@ var Content = function (_React$Component) {
             return React.createElement(
                 "div",
                 null,
-                React.createElement(Account, null)
+                React.createElement(Account, { owner: true })
             );
         }
     }]);
@@ -71,7 +71,7 @@ var Account = function (_React$Component2) {
                     React.createElement(
                         Column,
                         null,
-                        this.state.openedSetting ? React.createElement(SettingArea, { closeSettingArea: this.closeSettingArea }) : React.createElement(AccountInfo, { handleOpenSettingArea: this.openSettingArea })
+                        this.state.openedSetting ? React.createElement(SettingArea, { closeSettingArea: this.closeSettingArea }) : React.createElement(AccountInfo, { handleOpenSettingArea: this.openSettingArea, owner: this.props.owner })
                     )
                 ),
                 React.createElement(Comments, null)
@@ -107,7 +107,7 @@ var AccountInfo = function (_React$Component3) {
                 null,
                 React.createElement("i", { id: "account-icon", className: "fa fa-user-circle", "aria-hidden": "true" }),
                 React.createElement(H, { type: "1", text: "abdyek" }),
-                React.createElement(
+                this.props.owner ? React.createElement(
                     "button",
                     { className: "compact ui teal button", onClick: this.openSettingArea },
                     React.createElement(
@@ -116,7 +116,7 @@ var AccountInfo = function (_React$Component3) {
                         React.createElement("i", { className: "fa fa-cog", "aria-hidden": "true" })
                     ),
                     "Ayarlar"
-                )
+                ) : ""
             );
         }
     }]);
@@ -183,6 +183,8 @@ var ChangeItems = function (_React$Component5) {
         var _this5 = _possibleConstructorReturn(this, (ChangeItems.__proto__ || Object.getPrototypeOf(ChangeItems)).call(this, props));
 
         _this5.state = {
+            form: "normal",
+            topMessage: null,
             passwordSelected: true,
             passwordButtonClass: "mini ui blue button",
             emailSelected: false,
@@ -196,6 +198,8 @@ var ChangeItems = function (_React$Component5) {
         _this5.changeInput1 = _this5.changeInput1.bind(_this5);
         _this5.changeInput2 = _this5.changeInput2.bind(_this5);
         _this5.changeInput3 = _this5.changeInput3.bind(_this5);
+        _this5.send = _this5.send.bind(_this5);
+        _this5.showTopMessage = _this5.showTopMessage.bind(_this5);
         return _this5;
     }
 
@@ -208,7 +212,8 @@ var ChangeItems = function (_React$Component5) {
                 emailButtonClass: "mini ui blue button",
                 input1: "",
                 input2: "",
-                input3: ""
+                input3: "",
+                topMessage: null
             });
         }
     }, {
@@ -220,7 +225,8 @@ var ChangeItems = function (_React$Component5) {
                 emailButtonClass: "mini ui button",
                 input1: "",
                 input2: "",
-                input3: ""
+                input3: "",
+                topMessage: null
             });
         }
     }, {
@@ -245,93 +251,137 @@ var ChangeItems = function (_React$Component5) {
             });
         }
     }, {
+        key: "send",
+        value: function send() {
+            if (this.state.passwordSelected) {
+                // parola
+                if (this.state.input2 != this.state.input3) {
+                    this.showTopMessage("warning", "Parola tekrarı ile eşleşmiyor!");
+                } else {
+                    // burada gönderim yapılacak
+                }
+            } else {
+                // e-posta
+                if (!validateEmail(this.state.input1)) {
+                    this.showTopMessage("warning", "Yeni E-posta geçersiz!");
+                } else if (!validateEmail(this.state.input2)) {
+                    this.showTopMessage("warning", "Yeni E-posta Tekrarı geçersiz!");
+                } else {
+                    // burada gönderim yapılacak
+                }
+            }
+        }
+    }, {
+        key: "showTopMessage",
+        value: function showTopMessage(type, text) {
+            this.setState({
+                topMessage: {
+                    type: type,
+                    text: text
+                }
+            });
+        }
+    }, {
         key: "render",
         value: function render() {
-            return React.createElement(
-                "div",
-                null,
-                React.createElement(
-                    Row,
-                    { size: "two", nonStackable: true },
+            if (this.state.form == "normal") {
+                return React.createElement(
+                    "div",
+                    null,
                     React.createElement(
-                        Column,
-                        null,
-                        React.createElement(H, { type: "3", text: "De\u011Fi\u015Ftir" })
+                        Row,
+                        { size: "one" },
+                        React.createElement(
+                            Column,
+                            null,
+                            React.createElement(H, { type: "3", text: "De\u011Fi\u015Ftir", textAlign: "center" }),
+                            React.createElement(
+                                Center,
+                                null,
+                                React.createElement(
+                                    "div",
+                                    { id: "password-email-change" },
+                                    React.createElement(
+                                        "button",
+                                        { className: this.state.passwordButtonClass, onClick: this.selectPassword },
+                                        "Parola"
+                                    ),
+                                    React.createElement(
+                                        "button",
+                                        { className: this.state.emailButtonClass, onClick: this.selectEmail },
+                                        "E-posta"
+                                    )
+                                )
+                            )
+                        )
                     ),
+                    this.state.topMessage ? React.createElement(
+                        Row,
+                        { size: "one" },
+                        React.createElement(
+                            Column,
+                            null,
+                            React.createElement(
+                                "div",
+                                { id: "change-top-message" },
+                                React.createElement(BasicMessage, { type: this.state.topMessage.type, text: this.state.topMessage.text })
+                            )
+                        )
+                    ) : "",
                     React.createElement(
-                        Column,
-                        null,
+                        "div",
+                        { className: "ui form" },
+                        React.createElement(
+                            "h4",
+                            { className: "ui dividing header" },
+                            this.state.passwordSelected ? "Parola" : "E-posta",
+                            " De\u011Fi\u015Ftir"
+                        ),
+                        React.createElement(
+                            "div",
+                            { className: "field" },
+                            React.createElement(
+                                "label",
+                                null,
+                                this.state.passwordSelected ? "Mevcut Parola" : "Yeni E-posta"
+                            ),
+                            React.createElement("input", { type: this.state.passwordSelected ? "password" : "text", value: this.state.input1, onChange: this.changeInput1 })
+                        ),
+                        React.createElement(
+                            "div",
+                            { className: "field" },
+                            React.createElement(
+                                "label",
+                                null,
+                                this.state.passwordSelected ? "Yeni Parola" : "Yeni E-posta Tekrar"
+                            ),
+                            React.createElement("input", { type: this.state.passwordSelected ? "password" : "text", value: this.state.input2, onChange: this.changeInput2 })
+                        ),
+                        React.createElement(
+                            "div",
+                            { className: "field" },
+                            React.createElement(
+                                "label",
+                                null,
+                                this.state.passwordSelected ? "Yeni Parola Tekrar" : "Parola"
+                            ),
+                            React.createElement("input", { type: "password", value: this.state.input3, onChange: this.changeInput3 })
+                        ),
                         React.createElement(
                             FloatRight,
                             null,
                             React.createElement(
-                                "div",
-                                { id: "password-email-change" },
-                                React.createElement(
-                                    "button",
-                                    { className: this.state.passwordButtonClass, onClick: this.selectPassword },
-                                    "Parola"
-                                ),
-                                React.createElement(
-                                    "button",
-                                    { className: this.state.emailButtonClass, onClick: this.selectEmail },
-                                    "E-posta"
-                                )
+                                "button",
+                                { className: "ui blue button", onClick: this.send },
+                                this.state.passwordSelected ? "Parola" : "E-posta",
+                                " De\u011Fi\u015Ftir"
                             )
                         )
                     )
-                ),
-                React.createElement(
-                    "div",
-                    { className: "ui form" },
-                    React.createElement(
-                        "h4",
-                        { className: "ui dividing header" },
-                        this.state.passwordSelected ? "Parola" : "E-posta",
-                        " De\u011Fi\u015Ftir"
-                    ),
-                    React.createElement(
-                        "div",
-                        { className: "field" },
-                        React.createElement(
-                            "label",
-                            null,
-                            this.state.passwordSelected ? "Mevcut Parola" : "Yeni E-posta"
-                        ),
-                        React.createElement("input", { type: this.state.passwordSelected ? "password" : "text", value: this.state.input1, onChange: this.changeInput1 })
-                    ),
-                    React.createElement(
-                        "div",
-                        { className: "field" },
-                        React.createElement(
-                            "label",
-                            null,
-                            this.state.passwordSelected ? "Yeni Parola" : "Yeni E-posta Tekrar"
-                        ),
-                        React.createElement("input", { type: this.state.passwordSelected ? "password" : "text", value: this.state.input2, onChange: this.changeInput2 })
-                    ),
-                    React.createElement(
-                        "div",
-                        { className: "field" },
-                        React.createElement(
-                            "label",
-                            null,
-                            this.state.passwordSelected ? "Yeni Parola Tekrar" : "Parola"
-                        ),
-                        React.createElement("input", { type: "password", value: this.state.input3, onChange: this.changeInput3 })
-                    ),
-                    React.createElement(
-                        FloatRight,
-                        null,
-                        React.createElement(
-                            "button",
-                            { className: "ui blue button" },
-                            this.state.passwordSelected ? "Parola" : "E-posta",
-                            " De\u011Fi\u015Ftir"
-                        )
-                    )
-                )
-            );
+                );
+            } else if (this.state.form == "loading") {
+                return React.createElement(RowLoadingSpin, { nonSegment: true });
+            }
         }
     }]);
 

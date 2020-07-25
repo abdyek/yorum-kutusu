@@ -2,7 +2,7 @@ class Content extends React.Component {
     render() {
         return(
             <div>
-                <Account />
+                <Account  owner={true}/>
             </div>
         )
     }
@@ -33,8 +33,8 @@ class Account extends React.Component {
                 <Row size="one">
                     <Column>
                         {(this.state.openedSetting)?
-                        <SettingArea closeSettingArea={this.closeSettingArea}/>
-                        : <AccountInfo handleOpenSettingArea={this.openSettingArea}/> }
+                        <SettingArea closeSettingArea={this.closeSettingArea} />
+                        : <AccountInfo handleOpenSettingArea={this.openSettingArea} owner={this.props.owner} /> }
                     </Column>
                 </Row>
                 <Comments />
@@ -56,12 +56,14 @@ class AccountInfo extends React.Component {
             <Center>
                 <i id="account-icon" className="fa fa-user-circle" aria-hidden="true"></i>
                 <H type="1" text="abdyek" />
-                <button className="compact ui teal button" onClick={this.openSettingArea}>
-                    <i className="icon">
-                        <i className="fa fa-cog" aria-hidden="true"></i>
-                    </i>
-                    Ayarlar
-                </button> 
+                {(this.props.owner)?
+                    <button className="compact ui teal button" onClick={this.openSettingArea}>
+                        <i className="icon">
+                            <i className="fa fa-cog" aria-hidden="true"></i>
+                        </i>
+                        Ayarlar
+                    </button> 
+                :""}
             </Center>
         )
     }
@@ -96,6 +98,8 @@ class ChangeItems extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            form:"normal",
+            topMessage:null,
             passwordSelected: true,
             passwordButtonClass:"mini ui blue button",
             emailSelected: false,
@@ -109,6 +113,8 @@ class ChangeItems extends React.Component {
         this.changeInput1 = this.changeInput1.bind(this);
         this.changeInput2 = this.changeInput2.bind(this);
         this.changeInput3 = this.changeInput3.bind(this);
+        this.send = this.send.bind(this);
+        this.showTopMessage = this.showTopMessage.bind(this);
     }
     selectEmail() {
         this.setState({
@@ -117,7 +123,8 @@ class ChangeItems extends React.Component {
             emailButtonClass: "mini ui blue button",
             input1:"",
             input2:"",
-            input3:""
+            input3:"",
+            topMessage: null
         });
     }
     selectPassword() {
@@ -127,7 +134,8 @@ class ChangeItems extends React.Component {
             emailButtonClass: "mini ui button",
             input1:"",
             input2:"",
-            input3:""
+            input3:"",
+            topMessage: null
         })
     }
     changeInput1(e) {
@@ -145,53 +153,94 @@ class ChangeItems extends React.Component {
             input3:e.target.value
         });
     }
+    send() {
+        if(this.state.passwordSelected) {
+            // parola
+            if(this.state.input2!=this.state.input3) {
+                this.showTopMessage("warning", "Parola tekrarı ile eşleşmiyor!");
+            } else {
+                // burada gönderim yapılacak
+            }
+        } else {
+            // e-posta
+            if(!validateEmail(this.state.input1)) {
+                this.showTopMessage("warning", "Yeni E-posta geçersiz!");
+            } else if(!validateEmail(this.state.input2)) {
+                this.showTopMessage("warning", "Yeni E-posta Tekrarı geçersiz!");
+            } else {
+                // burada gönderim yapılacak
+            }
+        }
+    }
+
+    showTopMessage(type, text) {
+        this.setState({
+            topMessage: {
+                type: type,
+                text: text
+            }
+        });
+    }
 
     render() {
-        return(
-            <div>
-                <Row size="two" nonStackable={true}>
-                    <Column>
-                        <H type="3" text="Değiştir" />
-                    </Column>
-                    <Column>
+        if(this.state.form=="normal") {
+            return(
+                <div>
+                    <Row size="one">
+                        <Column>
+                            <H type="3" text="Değiştir" textAlign="center" />
+                            <Center>
+                                <div id="password-email-change">
+                                    <button className={this.state.passwordButtonClass} onClick={this.selectPassword}>
+                                        Parola
+                                    </button>
+                                    <button className={this.state.emailButtonClass} onClick={this.selectEmail}>
+                                        E-posta
+                                    </button>
+                                </div>
+                            </Center>
+                        </Column>
+                    </Row>
+                    {(this.state.topMessage)?
+                        <Row size="one">
+                            <Column>
+                                <div id="change-top-message">
+                                    <BasicMessage type={this.state.topMessage.type} text={this.state.topMessage.text} />
+                                </div>
+                            </Column>
+                        </Row>
+                    :""}
+                    <div className="ui form">
+                        <h4 className="ui dividing header">{(this.state.passwordSelected)?"Parola":"E-posta"} Değiştir</h4>
+                        <div className="field">
+                            <label>{(this.state.passwordSelected)?"Mevcut Parola": "Yeni E-posta"}</label>
+                            <input type={(this.state.passwordSelected)?"password": "text"} value={this.state.input1} onChange={this.changeInput1}/>
+                        </div>
+                        <div className="field">
+                            <label>
+                                {(this.state.passwordSelected)?"Yeni Parola": "Yeni E-posta Tekrar"}
+                            </label>
+                            <input type={(this.state.passwordSelected)?"password": "text"} value={this.state.input2} onChange={this.changeInput2}/>
+                        </div>
+                        <div className="field">
+                            <label>
+                                {(this.state.passwordSelected)?"Yeni Parola Tekrar": "Parola"}
+                            </label>
+                            <input type="password" value={this.state.input3} onChange={this.changeInput3}/>
+                        </div>
                         <FloatRight>
-                            <div id="password-email-change">
-                                <button className={this.state.passwordButtonClass} onClick={this.selectPassword}>
-                                    Parola
-                                </button>
-                                <button className={this.state.emailButtonClass} onClick={this.selectEmail}>
-                                    E-posta
-                                </button>
-                            </div>
+                            <button className="ui blue button" onClick={this.send}>
+                                {(this.state.passwordSelected)?"Parola": "E-posta"} Değiştir
+                            </button>
                         </FloatRight>
-                    </Column>
-                </Row>
-                <div className="ui form">
-                    <h4 className="ui dividing header">{(this.state.passwordSelected)?"Parola":"E-posta"} Değiştir</h4>
-                    <div className="field">
-                        <label>{(this.state.passwordSelected)?"Mevcut Parola": "Yeni E-posta"}</label>
-                        <input type={(this.state.passwordSelected)?"password": "text"} value={this.state.input1} onChange={this.changeInput1}/>
-                    </div>
-                    <div className="field">
-                        <label>
-                            {(this.state.passwordSelected)?"Yeni Parola": "Yeni E-posta Tekrar"}
-                        </label>
-                        <input type={(this.state.passwordSelected)?"password": "text"} value={this.state.input2} onChange={this.changeInput2}/>
-                    </div>
-                    <div className="field">
-                        <label>
-                            {(this.state.passwordSelected)?"Yeni Parola Tekrar": "Parola"}
-                        </label>
-                        <input type="password" value={this.state.input3} onChange={this.changeInput3}/>
-                    </div>
-                    <FloatRight>
-                        <button className="ui blue button">
-                            {(this.state.passwordSelected)?"Parola": "E-posta"} Değiştir
-                        </button>
-                    </FloatRight>
-                </div> 
-            </div>
-        )
+                    </div> 
+                </div>
+            )
+        } else if(this.state.form=="loading") {
+            return(
+                <RowLoadingSpin nonSegment={true} />
+            )
+        }
     }
 }
 
