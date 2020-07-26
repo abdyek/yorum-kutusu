@@ -2,7 +2,7 @@
     require 'tool.php';
     generatePage([
         'pageTitle' => 'Ürün Sayfası',
-        'reactScriptFile' => ['product.js', 'comment.js', 'tag.js'],
+        'reactScriptFile' => ['product.js', 'comment.js', 'tag.js', 'pageNavigation.js'],
         'styleFile' => 'product.css'
     ]);
 ?>

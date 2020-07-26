@@ -49,6 +49,7 @@ class Content extends React.Component {
             return(
                 <div>
                     <Product tags={this.tagsInfo}/>
+                    <PageNavigation />
                     <Comments />
                     <WriteComment tags={this.tagsInfo}/>
                 </div>
@@ -80,14 +81,12 @@ class Product extends React.Component {
             <div>
                 <Row size="one">
                     <Column>
-                        <Center>
-                            <Tags tags={this.props.tags} activeOnly={false}/>
-                        </Center>
+                        <H type="1" text="Iphone 5s" />
                     </Column>
                 </Row>
                 <Row size="one">
                     <Column>
-                        <H type="1" text="Iphone 5s" />
+                        <Tags tags={this.props.tags} activeOnly={false}/>
                     </Column>
                 </Row>
             </div>

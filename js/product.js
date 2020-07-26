@@ -60,6 +60,7 @@ var Content = function (_React$Component) {
                     "div",
                     null,
                     React.createElement(Product, { tags: this.tagsInfo }),
+                    React.createElement(PageNavigation, null),
                     React.createElement(Comments, null),
                     React.createElement(WriteComment, { tags: this.tagsInfo })
                 );
@@ -112,11 +113,7 @@ var Product = function (_React$Component2) {
                     React.createElement(
                         Column,
                         null,
-                        React.createElement(
-                            Center,
-                            null,
-                            React.createElement(Tags, { tags: this.props.tags, activeOnly: false })
-                        )
+                        React.createElement(H, { type: "1", text: "Iphone 5s" })
                     )
                 ),
                 React.createElement(
@@ -125,7 +122,7 @@ var Product = function (_React$Component2) {
                     React.createElement(
                         Column,
                         null,
-                        React.createElement(H, { type: "1", text: "Iphone 5s" })
+                        React.createElement(Tags, { tags: this.props.tags, activeOnly: false })
                     )
                 )
             );

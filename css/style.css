@@ -17,6 +17,11 @@ header > div {
     float:right;
 }
 
+/* bu kısmı PageNavigation için ekledim diğer sayfalar patlarsa bundandır */
+.floatRight > * {
+    float:left;
+}
+
 .commentHeader {
     padding:0.5rem 0.9rem;
 }
