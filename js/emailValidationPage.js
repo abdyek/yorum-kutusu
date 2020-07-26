@@ -21,7 +21,7 @@ var Content = function (_React$Component) {
             return React.createElement(
                 "div",
                 null,
-                "bu deneme sayfas\u0131"
+                React.createElement(EmailValidation, { newUser: true })
             );
         }
     }]);

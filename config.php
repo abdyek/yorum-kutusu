@@ -1,5 +1,5 @@
 <?php
 
-    $siteUrl = "https://localhost/yorum-kutusu/";
+    $siteUrl = "http://localhost/yorum-kutusu/";
 
 ?>
