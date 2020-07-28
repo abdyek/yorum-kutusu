@@ -1,22 +1,22 @@
 {
-  "name": "yorumlaa",
+  "name": "yorum-kutusu",
   "version": "1.0.0",
   "description": "",
-  "main": "ajax.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/abdyek/yorumlaa-front-end.git"
+    "url": "git+https://github.com/abdyek/yorum-kutusu-front-end.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/abdyek/yorumlaa-front-end/issues"
+    "url": "https://github.com/abdyek/yorum-kutusu-front-end/issues"
   },
-  "homepage": "https://github.com/abdyek/yorumlaa-front-end#readme",
+  "homepage": "https://github.com/abdyek/yorum-kutusu-front-end#readme",
   "dependencies": {
     "babel-cli": "^6.26.0",
     "babel-preset-react-app": "^3.1.2"

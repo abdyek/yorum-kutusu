@@ -9,13 +9,30 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var PageNavigation = function (_React$Component) {
     _inherits(PageNavigation, _React$Component);
 
-    function PageNavigation() {
+    function PageNavigation(props) {
         _classCallCheck(this, PageNavigation);
 
-        return _possibleConstructorReturn(this, (PageNavigation.__proto__ || Object.getPrototypeOf(PageNavigation)).apply(this, arguments));
+        var _this = _possibleConstructorReturn(this, (PageNavigation.__proto__ || Object.getPrototypeOf(PageNavigation)).call(this, props));
+
+        _this.state = {
+            sort: _this.props.sortBy
+        };
+        _this.sortByLike = _this.sortByLike.bind(_this);
+        _this.sortByTime = _this.sortByTime.bind(_this);
+        return _this;
     }
 
     _createClass(PageNavigation, [{
+        key: "sortByLike",
+        value: function sortByLike() {
+            this.props.handleChangeSortBy("like");
+        }
+    }, {
+        key: "sortByTime",
+        value: function sortByTime() {
+            this.props.handleChangeSortBy("time");
+        }
+    }, {
         key: "render",
         value: function render() {
             return React.createElement(
@@ -44,20 +61,20 @@ var PageNavigation = function (_React$Component) {
                         null,
                         React.createElement(
                             "button",
-                            { className: "ui blue icon button" },
+                            { className: this.props.sortBy == "like" ? "ui blue icon button" : "ui icon button", onClick: this.sortByLike },
                             React.createElement(
                                 "i",
                                 { className: "icon" },
-                                React.createElement("i", { "class": "fa fa-line-chart", "aria-hidden": "true" })
+                                React.createElement("i", { className: "fa fa-thumbs-up", "aria-hidden": "true" })
                             )
                         ),
                         React.createElement(
                             "button",
-                            { className: "ui icon button" },
+                            { className: this.props.sortBy == "time" ? "ui blue icon button" : "ui icon button", onClick: this.sortByTime },
                             React.createElement(
                                 "i",
                                 { className: "icon" },
-                                React.createElement("i", { "class": "fa fa-clock-o", "aria-hidden": "true" })
+                                React.createElement("i", { className: "fa fa-clock-o", "aria-hidden": "true" })
                             )
                         ),
                         React.createElement(

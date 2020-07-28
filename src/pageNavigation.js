@@ -1,4 +1,18 @@
 class PageNavigation extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			sort: this.props.sortBy
+		}
+		this.sortByLike = this.sortByLike.bind(this);
+		this.sortByTime = this.sortByTime.bind(this);
+	}
+	sortByLike() {
+		this.props.handleChangeSortBy("like");
+	}
+	sortByTime() {
+		this.props.handleChangeSortBy("time");
+	}
     render() {
         return(
             <div>
@@ -16,14 +30,14 @@ class PageNavigation extends React.Component {
                 </Row>
                 <Row size="one">
                     <Column>
-                        <button className="ui blue icon button">
+                        <button className={(this.props.sortBy=="like")?"ui blue icon button":"ui icon button"} onClick={this.sortByLike}>
                             <i className="icon">
-                                <i class="fa fa-line-chart" aria-hidden="true"></i>
+								<i className="fa fa-thumbs-up" aria-hidden="true"></i>
                             </i>
                         </button>
-                        <button className="ui icon button">
+                        <button className={(this.props.sortBy=="time")?"ui blue icon button":"ui icon button"} onClick={this.sortByTime}>
                             <i className="icon">
-                                <i class="fa fa-clock-o" aria-hidden="true"></i>
+                               <i className="fa fa-clock-o" aria-hidden="true"></i>
                             </i>
                         </button>
                         <FloatRight>
