@@ -17,7 +17,8 @@ var Content = function (_React$Component) {
 								_this.state = {
 												// normal, loading, notFound
 												form: "normal",
-												commentsSortBy: "time",
+												sortBy: "time",
+												pageNumber: 3,
 												comments: [{
 																id: 0,
 																text: "burası yorumun text'i",
@@ -106,6 +107,7 @@ var Content = function (_React$Component) {
 												rateValue: "9.3"
 								}];
 								_this.changeSortBy = _this.changeSortBy.bind(_this);
+								_this.changePageNumber = _this.changePageNumber.bind(_this);
 								_this.refreshComments = _this.refreshComments.bind(_this);
 								return _this;
 				}
@@ -113,14 +115,31 @@ var Content = function (_React$Component) {
 				_createClass(Content, [{
 								key: "changeSortBy",
 								value: function changeSortBy(value) {
+												if (value != this.state.sortBy) {
+																this.setState({
+																				sortBy: value
+																});
+																this.refreshComments();
+												}
+								}
+				}, {
+								key: "changePageNumber",
+								value: function changePageNumber(value) {
 												this.setState({
-																commentsSortBy: value
+																pageNumber: value
 												});
+												this.refreshComments();
 								}
 				}, {
 								key: "refreshComments",
 								value: function refreshComments() {
 												// yorum getirme kısmı burada olacak
+												/*
+            setTimeout(function() {
+            	console.log(this.state.sortBy + ", " + this.state.pageNumber);
+            }.bind(this), 2000);
+            */
+												// buradaki değerlerle istekte bulunuyoruz gelen değerle state'teki Comment keyini değiştiriyoruz ve değişiyor
 								}
 				}, {
 								key: "render",
@@ -130,7 +149,7 @@ var Content = function (_React$Component) {
 																				"div",
 																				null,
 																				React.createElement(Product, { tags: this.tagsInfo }),
-																				React.createElement(PageNavigation, { sortBy: this.state.commentsSortBy, handleChangeSortBy: this.changeSortBy, handleRefreshComments: this.refreshComments }),
+																				React.createElement(PageNavigation, { sortBy: this.state.sortBy, handleChangeSortBy: this.changeSortBy, pageCount: "6", currentPage: this.state.pageNumber, handleChangePageNumber: this.changePageNumber }),
 																				React.createElement(Comments, { comments: this.state.comments }),
 																				React.createElement(WriteComment, { tags: this.tagsInfo })
 																);
@@ -224,7 +243,6 @@ var Comments = function (_React$Component3) {
 																this.comments = [];
 																for (var i = 0; i < this.props.comments.length; i++) {
 																				var com = this.props.comments[i];
-																				console.log("burası çalışıyor");
 																				this.comments.push(React.createElement(Comment, {
 																								key: com.id,
 																								text: com.text,

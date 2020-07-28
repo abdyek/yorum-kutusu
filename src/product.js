@@ -4,7 +4,8 @@ class Content extends React.Component {
         this.state = {
             // normal, loading, notFound
 			form:"normal",
-			commentsSortBy: "time",
+			sortBy: "time",
+			pageNumber: 3,
 			comments: [
 				{
 					id:0,
@@ -109,22 +110,38 @@ class Content extends React.Component {
             },
         ];
 		this.changeSortBy = this.changeSortBy.bind(this);
+		this.changePageNumber = this.changePageNumber.bind(this);
 		this.refreshComments = this.refreshComments.bind(this);
     }
 	changeSortBy(value) {
+		if(value!=this.state.sortBy) {
+			this.setState({
+				sortBy:value
+			});
+			this.refreshComments();
+		}
+	}
+	changePageNumber(value){
 		this.setState({
-			commentsSortBy:value
+			pageNumber: value
 		});
+		this.refreshComments();
 	}
 	refreshComments() {
 		// yorum getirme kısmı burada olacak
+		/*
+		setTimeout(function() {
+			console.log(this.state.sortBy + ", " + this.state.pageNumber);
+		}.bind(this), 2000);
+		*/
+		// buradaki değerlerle istekte bulunuyoruz gelen değerle state'teki Comment keyini değiştiriyoruz ve değişiyor
 	}
     render() {
         if(this.state.form=="normal") {
             return(
                 <div>
                     <Product tags={this.tagsInfo}/>
-                    <PageNavigation sortBy={this.state.commentsSortBy} handleChangeSortBy={this.changeSortBy} handleRefreshComments={this.refreshComments} />
+                    <PageNavigation sortBy={this.state.sortBy} handleChangeSortBy={this.changeSortBy} pageCount="6" currentPage={this.state.pageNumber} handleChangePageNumber={this.changePageNumber} />
                     <Comments comments={this.state.comments}/>
                     <WriteComment tags={this.tagsInfo}/>
                 </div>
@@ -183,7 +200,6 @@ class Comments extends React.Component {
 			this.comments = [];
 			for(let i=0;i<this.props.comments.length;i++) {
 				let com = this.props.comments[i];
-				console.log("burası çalışıyor");
 				this.comments.push(
 					<Comment
 						key={com.id}
