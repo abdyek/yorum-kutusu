@@ -4,6 +4,8 @@ class Content extends React.Component {
         this.state = {
             // normal, loading, notFound
 			form:"normal",
+			// normal, loading, noComment
+			commentsForm: "normal",
 			sortBy: "time",
 			pageNumber: 3,
 			comments: [
@@ -114,7 +116,8 @@ class Content extends React.Component {
 		this.refreshComments = this.refreshComments.bind(this);
     }
 	changeSortBy(value) {
-		if(value!=this.state.sortBy) {
+		if(value!=this.state.sortBy && this.state.commentsForm!="loading") {
+			// ^ bu ve changePageNumber metodundaki kontrolü kullanıcının aynı anda birden fazla seçim yapmasını engellemek için koydum
 			this.setState({
 				sortBy:value
 			});
@@ -122,19 +125,18 @@ class Content extends React.Component {
 		}
 	}
 	changePageNumber(value){
-		this.setState({
-			pageNumber: value
-		});
-		this.refreshComments();
+		if(value!=this.state.pageNumber && this.state.commentsForm!="loading") {
+			this.setState({
+				pageNumber: value
+			});
+			this.refreshComments();
+		}
 	}
 	refreshComments() {
-		// yorum getirme kısmı burada olacak
-		/*
-		setTimeout(function() {
-			console.log(this.state.sortBy + ", " + this.state.pageNumber);
-		}.bind(this), 2000);
-		*/
-		// buradaki değerlerle istekte bulunuyoruz gelen değerle state'teki Comment keyini değiştiriyoruz ve değişiyor
+		// yorum getirme işlemi burada olacak ve yorum geleseğe kadar loading'e dönecek
+		this.setState({
+			commentsForm:"loading"
+		});
 	}
     render() {
         if(this.state.form=="normal") {
@@ -142,7 +144,8 @@ class Content extends React.Component {
                 <div>
                     <Product tags={this.tagsInfo}/>
                     <PageNavigation sortBy={this.state.sortBy} handleChangeSortBy={this.changeSortBy} pageCount="6" currentPage={this.state.pageNumber} handleChangePageNumber={this.changePageNumber} />
-                    <Comments comments={this.state.comments}/>
+                    <Comments comments={this.state.comments} form={this.state.commentsForm}/>
+                    <PageNavigation sortBy={this.state.sortBy} handleChangeSortBy={this.changeSortBy} pageCount="6" currentPage={this.state.pageNumber} handleChangePageNumber={this.changePageNumber} />
                     <WriteComment tags={this.tagsInfo}/>
                 </div>
             )
@@ -188,15 +191,8 @@ class Product extends React.Component {
 
 
 class Comments extends React.Component {
-	constructor(props){
-		super(props);
-		this.state = {
-			// normal, loading
-			form:"normal",
-		}
-	}
     render() {
-		if(this.state.form=="normal") {
+		if(this.props.form=="normal") {
 			this.comments = [];
 			for(let i=0;i<this.props.comments.length;i++) {
 				let com = this.props.comments[i];
@@ -218,9 +214,19 @@ class Comments extends React.Component {
 					{this.comments}
 				</div>
 			)
-		} else if(this.state.form=="loading"){
+		} else if(this.props.form=="loading"){
 			return(
 				<RowLoadingSpin nonSegment={true} />
+			)
+		} else if(this.props.form=="noComment") {
+			return(
+				<Row size="one">
+					<Column>
+						<div class="ui massive green message">
+							Bu ürün henüz yorumlanmamış. İlk yorumu sen yap!
+						</div>
+					</Column>
+				</Row>
 			)
 		}
     }

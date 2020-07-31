@@ -1,9 +1,6 @@
 class PageNavigation extends React.Component {
 	constructor(props) {
         super(props);
-        this.state={
-            currentPage:this.props.currentPage
-        };
 		this.sortByLike = this.sortByLike.bind(this);
         this.sortByTime = this.sortByTime.bind(this);
         this.selectOption = this.selectOption.bind(this);
@@ -24,12 +21,12 @@ class PageNavigation extends React.Component {
         });
     }
     nextPage() {
-        if(this.state.currentPage<this.props.pageCount) {
+        if(this.props.currentPage<this.props.pageCount) {
             this.selectOption(parseInt(this.state.currentPage)+1);
         }
     }
     prevPage() {
-        if(this.state.currentPage>1) {
+        if(this.props.currentPage>1) {
             this.selectOption(parseInt(this.state.currentPage)-1);
         }
     }
@@ -62,7 +59,7 @@ class PageNavigation extends React.Component {
                             </button>
                             <div className="ui form">
                                 <div className="field">
-                                    <select onChange={this.selectOption} value={this.state.currentPage}>
+                                    <select onChange={this.selectOption} value={this.props.currentPage}>
                                         {this.options}
                                     </select>
                                 </div>

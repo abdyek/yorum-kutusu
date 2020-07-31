@@ -16,9 +16,6 @@ var PageNavigation = function (_React$Component) {
 
         var _this = _possibleConstructorReturn(this, (PageNavigation.__proto__ || Object.getPrototypeOf(PageNavigation)).call(this, props));
 
-        _this.state = {
-            currentPage: _this.props.currentPage
-        };
         _this.sortByLike = _this.sortByLike.bind(_this);
         _this.sortByTime = _this.sortByTime.bind(_this);
         _this.selectOption = _this.selectOption.bind(_this);
@@ -49,14 +46,14 @@ var PageNavigation = function (_React$Component) {
     }, {
         key: "nextPage",
         value: function nextPage() {
-            if (this.state.currentPage < this.props.pageCount) {
+            if (this.props.currentPage < this.props.pageCount) {
                 this.selectOption(parseInt(this.state.currentPage) + 1);
             }
         }
     }, {
         key: "prevPage",
         value: function prevPage() {
-            if (this.state.currentPage > 1) {
+            if (this.props.currentPage > 1) {
                 this.selectOption(parseInt(this.state.currentPage) - 1);
             }
         }
@@ -118,7 +115,7 @@ var PageNavigation = function (_React$Component) {
                                     { className: "field" },
                                     React.createElement(
                                         "select",
-                                        { onChange: this.selectOption, value: this.state.currentPage },
+                                        { onChange: this.selectOption, value: this.props.currentPage },
                                         this.options
                                     )
                                 )
