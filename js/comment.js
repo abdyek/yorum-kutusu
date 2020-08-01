@@ -6,63 +6,28 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var CancelButton = function (_React$Component) {
-    _inherits(CancelButton, _React$Component);
-
-    function CancelButton(props) {
-        _classCallCheck(this, CancelButton);
-
-        var _this = _possibleConstructorReturn(this, (CancelButton.__proto__ || Object.getPrototypeOf(CancelButton)).call(this, props));
-
-        _this.closeFunc = _this.closeFunc.bind(_this);
-        return _this;
-    }
-
-    _createClass(CancelButton, [{
-        key: "closeFunc",
-        value: function closeFunc() {
-            this.props.handleCancelButton();
-        }
-    }, {
-        key: "render",
-        value: function render() {
-            return React.createElement(
-                "button",
-                { className: "ui icon red button", onClick: this.closeFunc },
-                React.createElement(
-                    "i",
-                    { className: "icon" },
-                    React.createElement("i", { className: "fa fa-times", "aria-hidden": "true" })
-                )
-            );
-        }
-    }]);
-
-    return CancelButton;
-}(React.Component);
-
-var Comment = function (_React$Component2) {
-    _inherits(Comment, _React$Component2);
+var Comment = function (_React$Component) {
+    _inherits(Comment, _React$Component);
 
     function Comment(props) {
         _classCallCheck(this, Comment);
 
-        var _this2 = _possibleConstructorReturn(this, (Comment.__proto__ || Object.getPrototypeOf(Comment)).call(this, props));
+        var _this = _possibleConstructorReturn(this, (Comment.__proto__ || Object.getPrototypeOf(Comment)).call(this, props));
 
-        _this2.state = {
+        _this.state = {
             // normal, report, edit, delete, message, loading
             form: "normal",
-            topMessage: _this2.props.topMessage,
-            message: _this2.props.message
+            topMessage: _this.props.topMessage,
+            message: _this.props.message
         };
-        _this2.openReportArea = _this2.openReportArea.bind(_this2);
-        _this2.closeReportArea = _this2.closeReportArea.bind(_this2);
-        _this2.openEditArea = _this2.openEditArea.bind(_this2);
-        _this2.closeEditArea = _this2.closeEditArea.bind(_this2);
-        _this2.openDeleteArea = _this2.openDeleteArea.bind(_this2);
-        _this2.closeDeleteArea = _this2.closeDeleteArea.bind(_this2);
-        _this2.confirmDelete = _this2.confirmDelete.bind(_this2);
-        return _this2;
+        _this.openReportArea = _this.openReportArea.bind(_this);
+        _this.closeReportArea = _this.closeReportArea.bind(_this);
+        _this.openEditArea = _this.openEditArea.bind(_this);
+        _this.closeEditArea = _this.closeEditArea.bind(_this);
+        _this.openDeleteArea = _this.openDeleteArea.bind(_this);
+        _this.closeDeleteArea = _this.closeDeleteArea.bind(_this);
+        _this.confirmDelete = _this.confirmDelete.bind(_this);
+        return _this;
     }
 
     _createClass(Comment, [{
@@ -181,17 +146,17 @@ var Comment = function (_React$Component2) {
     return Comment;
 }(React.Component);
 
-var TopOfComment = function (_React$Component3) {
-    _inherits(TopOfComment, _React$Component3);
+var TopOfComment = function (_React$Component2) {
+    _inherits(TopOfComment, _React$Component2);
 
     function TopOfComment(props) {
         _classCallCheck(this, TopOfComment);
 
-        var _this3 = _possibleConstructorReturn(this, (TopOfComment.__proto__ || Object.getPrototypeOf(TopOfComment)).call(this, props));
+        var _this2 = _possibleConstructorReturn(this, (TopOfComment.__proto__ || Object.getPrototypeOf(TopOfComment)).call(this, props));
 
-        _this3.openEditArea = _this3.openEditArea.bind(_this3);
-        _this3.openDeleteArea = _this3.openDeleteArea.bind(_this3);
-        return _this3;
+        _this2.openEditArea = _this2.openEditArea.bind(_this2);
+        _this2.openDeleteArea = _this2.openDeleteArea.bind(_this2);
+        return _this2;
     }
 
     _createClass(TopOfComment, [{
@@ -275,8 +240,8 @@ var TopOfComment = function (_React$Component3) {
     return TopOfComment;
 }(React.Component);
 
-var BottomOfComment = function (_React$Component4) {
-    _inherits(BottomOfComment, _React$Component4);
+var BottomOfComment = function (_React$Component3) {
+    _inherits(BottomOfComment, _React$Component3);
 
     function BottomOfComment() {
         _classCallCheck(this, BottomOfComment);
@@ -341,20 +306,20 @@ var BottomOfComment = function (_React$Component4) {
     return BottomOfComment;
 }(React.Component);
 
-var LikeButton = function (_React$Component5) {
-    _inherits(LikeButton, _React$Component5);
+var LikeButton = function (_React$Component4) {
+    _inherits(LikeButton, _React$Component4);
 
     function LikeButton(props) {
         _classCallCheck(this, LikeButton);
 
-        var _this5 = _possibleConstructorReturn(this, (LikeButton.__proto__ || Object.getPrototypeOf(LikeButton)).call(this, props));
+        var _this4 = _possibleConstructorReturn(this, (LikeButton.__proto__ || Object.getPrototypeOf(LikeButton)).call(this, props));
 
-        _this5.state = {
-            liked: _this5.props.liked,
-            likeCount: _this5.props.likeCount
+        _this4.state = {
+            liked: _this4.props.liked,
+            likeCount: _this4.props.likeCount
         };
-        _this5.like = _this5.like.bind(_this5);
-        return _this5;
+        _this4.like = _this4.like.bind(_this4);
+        return _this4;
     }
 
     _createClass(LikeButton, [{
@@ -395,17 +360,17 @@ var LikeButton = function (_React$Component5) {
     return LikeButton;
 }(React.Component);
 
-var ReportButton = function (_React$Component6) {
-    _inherits(ReportButton, _React$Component6);
+var ReportButton = function (_React$Component5) {
+    _inherits(ReportButton, _React$Component5);
 
     function ReportButton(props) {
         _classCallCheck(this, ReportButton);
 
-        var _this6 = _possibleConstructorReturn(this, (ReportButton.__proto__ || Object.getPrototypeOf(ReportButton)).call(this, props));
+        var _this5 = _possibleConstructorReturn(this, (ReportButton.__proto__ || Object.getPrototypeOf(ReportButton)).call(this, props));
 
-        _this6.openReportArea = _this6.openReportArea.bind(_this6);
-        _this6.buttonClass = _this6.props.disabled ? "ui icon disabled button" : "ui icon button";
-        return _this6;
+        _this5.openReportArea = _this5.openReportArea.bind(_this5);
+        _this5.buttonClass = _this5.props.disabled ? "ui icon disabled button" : "ui icon button";
+        return _this5;
     }
 
     _createClass(ReportButton, [{
@@ -431,16 +396,16 @@ var ReportButton = function (_React$Component6) {
     return ReportButton;
 }(React.Component);
 
-var ReportArea = function (_React$Component7) {
-    _inherits(ReportArea, _React$Component7);
+var ReportArea = function (_React$Component6) {
+    _inherits(ReportArea, _React$Component6);
 
     function ReportArea(props) {
         _classCallCheck(this, ReportArea);
 
-        var _this7 = _possibleConstructorReturn(this, (ReportArea.__proto__ || Object.getPrototypeOf(ReportArea)).call(this, props));
+        var _this6 = _possibleConstructorReturn(this, (ReportArea.__proto__ || Object.getPrototypeOf(ReportArea)).call(this, props));
 
-        _this7.limitOfReportText = 200;
-        _this7.state = {
+        _this6.limitOfReportText = 200;
+        _this6.state = {
             // normal, loading, reported
             form: "normal",
             messageType: "success", // success, warning, danger
@@ -451,11 +416,11 @@ var ReportArea = function (_React$Component7) {
             reportTextSize: 0,
             reportTextLimitWarning: false
         };
-        _this7.closeReportArea = _this7.closeReportArea.bind(_this7);
-        _this7.sendReport = _this7.sendReport.bind(_this7);
-        _this7.changeReason = _this7.changeReason.bind(_this7);
-        _this7.changeTextarea = _this7.changeTextarea.bind(_this7);
-        return _this7;
+        _this6.closeReportArea = _this6.closeReportArea.bind(_this6);
+        _this6.sendReport = _this6.sendReport.bind(_this6);
+        _this6.changeReason = _this6.changeReason.bind(_this6);
+        _this6.changeTextarea = _this6.changeTextarea.bind(_this6);
+        return _this6;
     }
 
     _createClass(ReportArea, [{
@@ -653,16 +618,16 @@ var ReportArea = function (_React$Component7) {
     return ReportArea;
 }(React.Component);
 
-var ReportReason = function (_React$Component8) {
-    _inherits(ReportReason, _React$Component8);
+var ReportReason = function (_React$Component7) {
+    _inherits(ReportReason, _React$Component7);
 
     function ReportReason(props) {
         _classCallCheck(this, ReportReason);
 
-        var _this8 = _possibleConstructorReturn(this, (ReportReason.__proto__ || Object.getPrototypeOf(ReportReason)).call(this, props));
+        var _this7 = _possibleConstructorReturn(this, (ReportReason.__proto__ || Object.getPrototypeOf(ReportReason)).call(this, props));
 
-        _this8.changeReason = _this8.changeReason.bind(_this8);
-        return _this8;
+        _this7.changeReason = _this7.changeReason.bind(_this7);
+        return _this7;
     }
 
     _createClass(ReportReason, [{
@@ -709,8 +674,8 @@ var ReportReason = function (_React$Component8) {
     return ReportReason;
 }(React.Component);
 
-var Reported = function (_React$Component9) {
-    _inherits(Reported, _React$Component9);
+var Reported = function (_React$Component8) {
+    _inherits(Reported, _React$Component8);
 
     function Reported() {
         _classCallCheck(this, Reported);
@@ -752,40 +717,40 @@ var Reported = function (_React$Component9) {
     return Reported;
 }(React.Component);
 
-var WriteComment = function (_React$Component10) {
-    _inherits(WriteComment, _React$Component10);
+var WriteComment = function (_React$Component9) {
+    _inherits(WriteComment, _React$Component9);
 
     function WriteComment(props) {
         _classCallCheck(this, WriteComment);
 
-        var _this10 = _possibleConstructorReturn(this, (WriteComment.__proto__ || Object.getPrototypeOf(WriteComment)).call(this, props));
+        var _this9 = _possibleConstructorReturn(this, (WriteComment.__proto__ || Object.getPrototypeOf(WriteComment)).call(this, props));
 
-        if (_this10.props.forEdit) {
-            _this10.var = {
+        if (_this9.props.forEdit) {
+            _this9.var = {
                 title: "Yorum Düzenle",
                 buttonName: "Düzenle",
                 buttonClassName: "ui green button"
             };
         } else {
-            _this10.var = {
+            _this9.var = {
                 title: "Yorum Yaz",
                 buttonName: "Gönder",
                 buttonClassName: "ui green disabled button"
             };
         }
-        _this10.state = {
+        _this9.state = {
             // normal, loading, sent, edited
             form: "normal",
             messageType: "success", // success, warning, danger
             messageText: "mahmutcan",
             message: null,
-            commentText: _this10.props.commentText,
-            sendButtonClassName: _this10.var.buttonClassName,
+            commentText: _this9.props.commentText,
+            sendButtonClassName: _this9.var.buttonClassName,
             topMessage: null
         };
-        _this10.sendComment = _this10.sendComment.bind(_this10);
-        _this10.changeComment = _this10.changeComment.bind(_this10);
-        return _this10;
+        _this9.sendComment = _this9.sendComment.bind(_this9);
+        _this9.changeComment = _this9.changeComment.bind(_this9);
+        return _this9;
     }
 
     _createClass(WriteComment, [{
@@ -983,21 +948,21 @@ var WriteComment = function (_React$Component10) {
     return WriteComment;
 }(React.Component);
 
-var Rating = function (_React$Component11) {
-    _inherits(Rating, _React$Component11);
+var Rating = function (_React$Component10) {
+    _inherits(Rating, _React$Component10);
 
     function Rating(props) {
         _classCallCheck(this, Rating);
 
-        var _this11 = _possibleConstructorReturn(this, (Rating.__proto__ || Object.getPrototypeOf(Rating)).call(this, props));
+        var _this10 = _possibleConstructorReturn(this, (Rating.__proto__ || Object.getPrototypeOf(Rating)).call(this, props));
 
-        _this11.ratingLines = [];
-        for (var i = 0; i < _this11.props.tags.length; i++) {
-            if (!_this11.props.tags[i].passive) {
-                _this11.ratingLines.push(React.createElement(RatingLine, { key: _this11.props.tags[i].id, tagKey: _this11.props.tags[i].id, tagName: _this11.props.tags[i].text, forEdit: _this11.props.forEdit, rateValue: _this11.props.tags[i].rateValue }));
+        _this10.ratingLines = [];
+        for (var i = 0; i < _this10.props.tags.length; i++) {
+            if (!_this10.props.tags[i].passive) {
+                _this10.ratingLines.push(React.createElement(RatingLine, { key: _this10.props.tags[i].id, tagKey: _this10.props.tags[i].id, tagName: _this10.props.tags[i].text, forEdit: _this10.props.forEdit, rateValue: _this10.props.tags[i].rateValue }));
             }
         }
-        return _this11;
+        return _this10;
     }
 
     _createClass(Rating, [{
@@ -1019,16 +984,16 @@ var Rating = function (_React$Component11) {
     return Rating;
 }(React.Component);
 
-var RatingLine = function (_React$Component12) {
-    _inherits(RatingLine, _React$Component12);
+var RatingLine = function (_React$Component11) {
+    _inherits(RatingLine, _React$Component11);
 
     function RatingLine(props) {
         _classCallCheck(this, RatingLine);
 
-        var _this12 = _possibleConstructorReturn(this, (RatingLine.__proto__ || Object.getPrototypeOf(RatingLine)).call(this, props));
+        var _this11 = _possibleConstructorReturn(this, (RatingLine.__proto__ || Object.getPrototypeOf(RatingLine)).call(this, props));
 
-        _this12.rateValue = _this12.props.forEdit ? _this12.props.rateValue : "-";
-        _this12.colors = {
+        _this11.rateValue = _this11.props.forEdit ? _this11.props.rateValue : "-";
+        _this11.colors = {
             "-": "",
             1: "red",
             2: "red",
@@ -1041,12 +1006,12 @@ var RatingLine = function (_React$Component12) {
             9: "blue",
             10: "blue"
         };
-        _this12.state = {
-            rateValue: _this12.rateValue,
-            color: _this12.colors[_this12.rateValue]
+        _this11.state = {
+            rateValue: _this11.rateValue,
+            color: _this11.colors[_this11.rateValue]
         };
-        _this12.selectOption = _this12.selectOption.bind(_this12);
-        return _this12;
+        _this11.selectOption = _this11.selectOption.bind(_this11);
+        return _this11;
     }
 
     _createClass(RatingLine, [{
@@ -1162,8 +1127,8 @@ var RatingLine = function (_React$Component12) {
     return RatingLine;
 }(React.Component);
 
-var EditArea = function (_React$Component13) {
-    _inherits(EditArea, _React$Component13);
+var EditArea = function (_React$Component12) {
+    _inherits(EditArea, _React$Component12);
 
     function EditArea(props) {
         _classCallCheck(this, EditArea);
@@ -1185,17 +1150,17 @@ var EditArea = function (_React$Component13) {
     return EditArea;
 }(React.Component);
 
-var DeleteArea = function (_React$Component14) {
-    _inherits(DeleteArea, _React$Component14);
+var DeleteArea = function (_React$Component13) {
+    _inherits(DeleteArea, _React$Component13);
 
     function DeleteArea(props) {
         _classCallCheck(this, DeleteArea);
 
-        var _this14 = _possibleConstructorReturn(this, (DeleteArea.__proto__ || Object.getPrototypeOf(DeleteArea)).call(this, props));
+        var _this13 = _possibleConstructorReturn(this, (DeleteArea.__proto__ || Object.getPrototypeOf(DeleteArea)).call(this, props));
 
-        _this14.cancelFunc = _this14.cancelFunc.bind(_this14);
-        _this14.confirmFunc = _this14.confirmFunc.bind(_this14);
-        return _this14;
+        _this13.cancelFunc = _this13.cancelFunc.bind(_this13);
+        _this13.confirmFunc = _this13.confirmFunc.bind(_this13);
+        return _this13;
     }
 
     _createClass(DeleteArea, [{
