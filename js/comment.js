@@ -954,20 +954,19 @@ var Rating = function (_React$Component10) {
     function Rating(props) {
         _classCallCheck(this, Rating);
 
-        var _this10 = _possibleConstructorReturn(this, (Rating.__proto__ || Object.getPrototypeOf(Rating)).call(this, props));
-
-        _this10.ratingLines = [];
-        for (var i = 0; i < _this10.props.tags.length; i++) {
-            if (!_this10.props.tags[i].passive) {
-                _this10.ratingLines.push(React.createElement(RatingLine, { key: _this10.props.tags[i].id, tagKey: _this10.props.tags[i].id, tagName: _this10.props.tags[i].text, forEdit: _this10.props.forEdit, rateValue: _this10.props.tags[i].rateValue }));
-            }
-        }
-        return _this10;
+        return _possibleConstructorReturn(this, (Rating.__proto__ || Object.getPrototypeOf(Rating)).call(this, props));
     }
 
     _createClass(Rating, [{
         key: "render",
         value: function render() {
+            this.ratingLines = [];
+            var keyArr = Object.keys(this.props.tags);
+            for (var i = 0; i < keyArr.length; i++) {
+                if (!this.props.tags[keyArr[i]].passive) {
+                    this.ratingLines.push(React.createElement(RatingLine, { key: keyArr[i], tagKey: this.props.tags[keyArr[i]].id, tagName: this.props.tags[keyArr[i]].text, forEdit: this.props.forEdit, rateValue: this.props.tags[keyArr[i]].rateValue }));
+                }
+            }
             return React.createElement(
                 Row,
                 { size: "sixteen" },

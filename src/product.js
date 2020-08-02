@@ -44,70 +44,62 @@ class Content extends React.Component {
 					liked:true,
 					title:"ahmet",
 					date:"19 Temmuz - 21:45",
-					tags:[{
-							id:3,
+					tags:{
+						3:{
 							passive:false,
 							text:"Batarya",
 							color:"yellow",
 							rateValue: "5"
 						},
-						{
-							id:4,
+						4:{
 							passive:false,
 							text:"Kamera",
 							color:"orange",
 							rateValue: "4"
 						},
-						{
-							id:5,
+						5:{
 							passive:false,
 							text:"Tasarım",
 							color:"",
 							rateValue: "-"
 						}
-					],
+					},
 					owner:false
 				},
 			]
 		};
-        this.tagsInfo = [
-            {
-                id:0,
+        this.tagsInfo = {
+            0:{
                 passive:true,
                 text:"Akıllı Telefon",
             },
-            {
-                id:1,
+            1:{
                 passive:true,
                 text:"Apple"
             },
-            {
-                id:2,
+            2:{
                 passive:true,
                 text:"Ipone"
             },
-            {
-                id:3,
+            3:{
                 passive:false,
                 text:"Batarya",
                 color:"yellow",
                 rateValue: "5.5"
             },
-            {
-                id:4,
+            4:{
                 passive:false,
                 text:"Kamera",
                 color:"orange",
                 rateValue: "4.2"
             },
-            {
-                id:5,
+            5:{
                 passive:false,
                 text:"Ekran",
                 color:"green",
                 rateValue: "9.3"
             },
-        ];
+		};
 		this.changeSortBy = this.changeSortBy.bind(this);
 		this.changePageNumber = this.changePageNumber.bind(this);
 		this.refreshComments = this.refreshComments.bind(this);

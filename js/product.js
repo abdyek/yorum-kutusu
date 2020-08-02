@@ -55,59 +55,61 @@ var Content = function (_React$Component) {
 				liked: true,
 				title: "ahmet",
 				date: "19 Temmuz - 21:45",
-				tags: [{
-					id: 3,
-					passive: false,
-					text: "Batarya",
-					color: "yellow",
-					rateValue: "5"
-				}, {
-					id: 4,
-					passive: false,
-					text: "Kamera",
-					color: "orange",
-					rateValue: "4"
-				}, {
-					id: 5,
-					passive: false,
-					text: "Tasarım",
-					color: "",
-					rateValue: "-"
-				}],
+				tags: {
+					3: {
+						passive: false,
+						text: "Batarya",
+						color: "yellow",
+						rateValue: "5"
+					},
+					4: {
+						passive: false,
+						text: "Kamera",
+						color: "orange",
+						rateValue: "4"
+					},
+					5: {
+						passive: false,
+						text: "Tasarım",
+						color: "",
+						rateValue: "-"
+					}
+				},
 				owner: false
 			}]
 		};
-		_this.tagsInfo = [{
-			id: 0,
-			passive: true,
-			text: "Akıllı Telefon"
-		}, {
-			id: 1,
-			passive: true,
-			text: "Apple"
-		}, {
-			id: 2,
-			passive: true,
-			text: "Ipone"
-		}, {
-			id: 3,
-			passive: false,
-			text: "Batarya",
-			color: "yellow",
-			rateValue: "5.5"
-		}, {
-			id: 4,
-			passive: false,
-			text: "Kamera",
-			color: "orange",
-			rateValue: "4.2"
-		}, {
-			id: 5,
-			passive: false,
-			text: "Ekran",
-			color: "green",
-			rateValue: "9.3"
-		}];
+		_this.tagsInfo = {
+			0: {
+				passive: true,
+				text: "Akıllı Telefon"
+			},
+			1: {
+				passive: true,
+				text: "Apple"
+			},
+			2: {
+				passive: true,
+				text: "Ipone"
+			},
+			3: {
+				passive: false,
+				text: "Batarya",
+				color: "yellow",
+				rateValue: "5.5"
+			},
+			4: {
+				passive: false,
+				text: "Kamera",
+				color: "orange",
+				rateValue: "4.2"
+			},
+			5: {
+				passive: false,
+				text: "Ekran",
+				color: "green",
+				rateValue: "9.3"
+			}
+		};
 		_this.changeSortBy = _this.changeSortBy.bind(_this);
 		_this.changePageNumber = _this.changePageNumber.bind(_this);
 		_this.refreshComments = _this.refreshComments.bind(_this);

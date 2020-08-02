@@ -19,24 +19,32 @@ var Content = function (_React$Component) {
             productUrl: "",
             tagSearchInput: "",
             tagsInList: {
-                3: {
-                    passive: false,
-                    text: "Batarya",
-                    color: "yellow",
-                    rateValue: ""
+                /*
+                3:{
+                    passive:false,
+                    text:"Batarya",
+                    color:"yellow",
+                    rateValue: "-"
                 },
-                4: {
-                    passive: false,
-                    text: "Kamera",
-                    color: "orange",
-                    rateValue: ""
+                4:{
+                    passive:false,
+                    text:"Kamera",
+                    color:"orange",
+                    rateValue: "-"
                 },
-                5: {
-                    passive: false,
-                    text: "Tasarım",
-                    color: "",
+                5:{
+                    passive:false,
+                    text:"Tasarım",
+                    color:"",
+                    rateValue: "-"
+                },
+                99:{
+                    passive:true,
+                    text:"Pasif Etiket",
+                    color:"",
                     rateValue: "-"
                 }
+                */
             },
             selectedTags: {},
             newTagIndex: 0
@@ -165,6 +173,16 @@ var Content = function (_React$Component) {
                                 React.createElement(TagList, { labelText: "Etiket Ekle", placeholderText: "Etiket \u0130smi", tags: this.state.tagsInList, handleSelectTag: this.selectTag, tagSearchInput: this.state.tagSearchInput, handleChangeTagSearchInput: this.onChangeTagSearchInput })
                             )
                         )
+                    )
+                ),
+                React.createElement(
+                    Row,
+                    { size: "sixteen" },
+                    React.createElement(WideColumn, { size: "two" }),
+                    React.createElement(
+                        WideColumn,
+                        { size: "twelve" },
+                        React.createElement(WriteComment, { tags: this.state.selectedTags })
                     )
                 )
             );

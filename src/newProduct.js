@@ -6,24 +6,32 @@ class Content extends React.Component {
             productUrl: "",
             tagSearchInput:"",
             tagsInList:{
+                /*
                 3:{
                     passive:false,
                     text:"Batarya",
                     color:"yellow",
-                    rateValue: ""
+                    rateValue: "-"
                 },
                 4:{
                     passive:false,
                     text:"Kamera",
                     color:"orange",
-                    rateValue: ""
+                    rateValue: "-"
                 },
                 5:{
                     passive:false,
                     text:"Tasarım",
                     color:"",
                     rateValue: "-"
+                },
+                99:{
+                    passive:true,
+                    text:"Pasif Etiket",
+                    color:"",
+                    rateValue: "-"
                 }
+                */
             },
             selectedTags: {},
             newTagIndex:0
@@ -119,6 +127,12 @@ class Content extends React.Component {
                             </WideColumn>
                         </Row>
                     </Column>
+                </Row>
+                <Row size="sixteen">
+                    <WideColumn size="two"></WideColumn>
+                    <WideColumn size="twelve">
+                        <WriteComment tags={this.state.selectedTags}/>
+                    </WideColumn>
                 </Row>
             </div>
         )

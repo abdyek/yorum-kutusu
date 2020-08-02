@@ -660,16 +660,17 @@ Nulla non mollis risus. Fusce cursus quam nec est suscipit accumsan. Sed sit ame
 class Rating extends React.Component {
     constructor(props){
         super(props);
+    }
+    render() {
         this.ratingLines = [];
-        for(let i=0;i<this.props.tags.length;i++) {
-            if(!this.props.tags[i].passive) {
+        let keyArr = Object.keys(this.props.tags);
+        for(let i=0;i<keyArr.length;i++) {
+            if(!this.props.tags[keyArr[i]].passive) {
                 this.ratingLines.push(
-                    <RatingLine key={this.props.tags[i].id} tagKey={this.props.tags[i].id} tagName={this.props.tags[i].text} forEdit={this.props.forEdit} rateValue={this.props.tags[i].rateValue}/>
+                    <RatingLine key={keyArr[i]} tagKey={this.props.tags[keyArr[i]].id} tagName={this.props.tags[keyArr[i]].text} forEdit={this.props.forEdit} rateValue={this.props.tags[keyArr[i]].rateValue}/>
                 )
             }
         }
-    }
-    render() {
         return(
             <Row size="sixteen">
                 <WideColumn size="two">
