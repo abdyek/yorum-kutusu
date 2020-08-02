@@ -6,7 +6,6 @@ class Content extends React.Component {
             productUrl: "",
             tagSearchInput:"",
             tagsInList:{
-                /*
                 3:{
                     passive:false,
                     text:"Batarya",
@@ -25,7 +24,6 @@ class Content extends React.Component {
                     color:"",
                     rateValue: "-"
                 }
-                */
             },
             selectedTags: {},
             newTagIndex:0
@@ -42,6 +40,7 @@ class Content extends React.Component {
         this.generateProductUrl = this.generateProductUrl.bind(this);
         this.onChangeTagSearchInput = this.onChangeTagSearchInput.bind(this);
         this.selectTag = this.selectTag.bind(this);
+        this.unselectTag = this.unselectTag.bind(this);
         this.refreshTagsInList = this.refreshTagsInList.bind(this);
     }
     onChangeProductName(e) {
@@ -76,19 +75,26 @@ class Content extends React.Component {
         if(id=="new") {
             const newTagName = this.state.tagSearchInput;
             const newTag = {
-                passive:true,
+                passive:false,
                 text:newTagName,
                 color:"",
-                rateValue: ""
+                rateValue: "?"
             };
             selectedTag[newTagName] = newTag;
         } else {
             selectedTag[id] = this.state.tagsInList[id];
         }
         this.setState({
-            selectedTags: selectedTag
+            selectedTags: selectedTag,
+            tagSearchInput:""
         });
-        console.log(this.state);
+    }
+    unselectTag(e) {
+        let selectedTag = this.state.selectedTags;
+        delete selectedTag[e.target.attributes.name.value];
+        this.setState({
+            selectedTags: selectedTag,
+        });
     }
     refreshTagsInList() {
         // gidip etiket çekecek gelen veriyi tagsInList olarak güncelleyeceksin böylelikle tag listesi değişmiş olacak
@@ -108,7 +114,7 @@ class Content extends React.Component {
                                         <input type="text" placeholder="Ürün İsmi" onChange={this.onChangeProductName} value={this.state.productName}/>
                                     </div>
                                 </div>
-                                <SelectedTags tags={this.state.selectedTags}/>
+                                <SelectedTags tags={this.state.selectedTags} handleOnClick={this.unselectTag}/>
                                 <TagList labelText="Etiket Ekle" placeholderText="Etiket İsmi" tags={this.state.tagsInList} handleSelectTag={this.selectTag} tagSearchInput={this.state.tagSearchInput} handleChangeTagSearchInput={this.onChangeTagSearchInput}/>
                             </WideColumn>
                         </Row>
@@ -127,7 +133,8 @@ class SelectedTags extends React.Component {
                     <div id="selected-tags">
                         <H type="3" text="Etiketler" />
                     </div>
-                    <Tags tags={this.props.tags} activeOnly={false}/>
+                    <Tags tags={this.props.tags} activeOnly={false} handleOnClick={this.props.handleOnClick}/>
+                    <span className="info-span">(kaldırmak için etikete dokunun)</span>
                 </div>
             )
         } else {

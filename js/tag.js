@@ -16,6 +16,11 @@ var Tag = function (_React$Component) {
     }
 
     _createClass(Tag, [{
+        key: "onClick",
+        value: function onClick() {
+            this.props.handleOnClick();
+        }
+    }, {
         key: "render",
         value: function render() {
             if (this.props.passive) {
@@ -27,7 +32,7 @@ var Tag = function (_React$Component) {
             }
             return React.createElement(
                 "a",
-                { className: "ui " + this.props.color + " large label tag-abdyek" },
+                { name: this.props.id, className: "ui " + this.props.color + " large label tag-abdyek", onClick: this.props.handleOnClick },
                 this.props.text,
                 React.createElement(
                     "div",
@@ -57,10 +62,12 @@ var Tags = function (_React$Component2) {
             var keyArr = Object.keys(this.props.tags);
             for (var i = 0; i < keyArr.length; i++) {
                 this.tags.push(React.createElement(Tag, { key: keyArr[i],
-                    passive: this.props.tags[keyArr[i]].passive,
+                    id: keyArr[i] // Tag'ın içerisinde this.props.key olarak erişmeye izin vermediği için bu şekilde göndermem gerekti
+                    , passive: this.props.tags[keyArr[i]].passive,
                     text: this.props.tags[keyArr[i]].text,
                     color: this.props.tags[keyArr[i]].color,
-                    rateValue: this.props.tags[keyArr[i]].rateValue
+                    rateValue: this.props.tags[keyArr[i]].rateValue,
+                    handleOnClick: this.props.handleOnClick
                 }));
             }
             return React.createElement(

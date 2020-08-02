@@ -19,26 +19,24 @@ var Content = function (_React$Component) {
             productUrl: "",
             tagSearchInput: "",
             tagsInList: {
-                /*
-                3:{
-                    passive:false,
-                    text:"Batarya",
-                    color:"yellow",
+                3: {
+                    passive: false,
+                    text: "Batarya",
+                    color: "yellow",
                     rateValue: ""
                 },
-                4:{
-                    passive:false,
-                    text:"Kamera",
-                    color:"orange",
+                4: {
+                    passive: false,
+                    text: "Kamera",
+                    color: "orange",
                     rateValue: ""
                 },
-                5:{
-                    passive:false,
-                    text:"Tasarım",
-                    color:"",
+                5: {
+                    passive: false,
+                    text: "Tasarım",
+                    color: "",
                     rateValue: "-"
                 }
-                */
             },
             selectedTags: {},
             newTagIndex: 0
@@ -55,6 +53,7 @@ var Content = function (_React$Component) {
         _this.generateProductUrl = _this.generateProductUrl.bind(_this);
         _this.onChangeTagSearchInput = _this.onChangeTagSearchInput.bind(_this);
         _this.selectTag = _this.selectTag.bind(_this);
+        _this.unselectTag = _this.unselectTag.bind(_this);
         _this.refreshTagsInList = _this.refreshTagsInList.bind(_this);
         return _this;
     }
@@ -99,19 +98,28 @@ var Content = function (_React$Component) {
             if (id == "new") {
                 var newTagName = this.state.tagSearchInput;
                 var newTag = {
-                    passive: true,
+                    passive: false,
                     text: newTagName,
                     color: "",
-                    rateValue: ""
+                    rateValue: "?"
                 };
                 selectedTag[newTagName] = newTag;
             } else {
                 selectedTag[id] = this.state.tagsInList[id];
             }
             this.setState({
+                selectedTags: selectedTag,
+                tagSearchInput: ""
+            });
+        }
+    }, {
+        key: "unselectTag",
+        value: function unselectTag(e) {
+            var selectedTag = this.state.selectedTags;
+            delete selectedTag[e.target.attributes.name.value];
+            this.setState({
                 selectedTags: selectedTag
             });
-            console.log(this.state);
         }
     }, {
         key: "refreshTagsInList",
@@ -153,7 +161,7 @@ var Content = function (_React$Component) {
                                         React.createElement("input", { type: "text", placeholder: "\xDCr\xFCn \u0130smi", onChange: this.onChangeProductName, value: this.state.productName })
                                     )
                                 ),
-                                React.createElement(SelectedTags, { tags: this.state.selectedTags }),
+                                React.createElement(SelectedTags, { tags: this.state.selectedTags, handleOnClick: this.unselectTag }),
                                 React.createElement(TagList, { labelText: "Etiket Ekle", placeholderText: "Etiket \u0130smi", tags: this.state.tagsInList, handleSelectTag: this.selectTag, tagSearchInput: this.state.tagSearchInput, handleChangeTagSearchInput: this.onChangeTagSearchInput })
                             )
                         )
@@ -187,7 +195,12 @@ var SelectedTags = function (_React$Component2) {
                         { id: "selected-tags" },
                         React.createElement(H, { type: "3", text: "Etiketler" })
                     ),
-                    React.createElement(Tags, { tags: this.props.tags, activeOnly: false })
+                    React.createElement(Tags, { tags: this.props.tags, activeOnly: false, handleOnClick: this.props.handleOnClick }),
+                    React.createElement(
+                        "span",
+                        { className: "info-span" },
+                        "(kald\u0131rmak i\xE7in etikete dokunun)"
+                    )
                 );
             } else {
                 return React.createElement("div", null);

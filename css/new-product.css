@@ -11,3 +11,8 @@
     margin-top:1rem;
     margin-bottom:0.5rem;
 }
+
+.info-span {
+    color: grey !important;
+    font-size:0.9rem;
+}
