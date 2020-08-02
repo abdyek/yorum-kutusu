@@ -16,28 +16,25 @@ class Content extends React.Component {
 					liked:true,
 					title:"ahmet",
 					date:"19 Temmuz - 21:45",
-					tags:[{
-							id:3,
+					tags:{3:{
 							passive:false,
 							text:"Batarya",
 							color:"yellow",
 							rateValue: "5"
 						},
-						{
-							id:4,
+						4:{
 							passive:false,
 							text:"Kamera",
 							color:"orange",
 							rateValue: "4"
 						},
-						{
-							id:5,
+						5:{
 							passive:false,
 							text:"Tasarım",
 							color:"",
 							rateValue: "-"
 						}
-					],
+					},
 					owner:false
 				},
 				{

@@ -17,32 +17,31 @@ var Content = function (_React$Component) {
         _this.state = {
             productName: "",
             productUrl: "",
-            tagsInList: [{
-                id: 3,
-                passive: false,
-                text: "Batarya",
-                color: "yellow",
-                rateValue: "5"
-            }, {
-                id: 4,
-                passive: false,
-                text: "Kamera",
-                color: "orange",
-                rateValue: "4"
-            }, {
-                id: 5,
-                passive: false,
-                text: "Tasarım",
-                color: "",
-                rateValue: "-"
-            }],
-            selectedTags: [{
-                id: 5,
-                passive: false,
-                text: "Tasarım",
-                color: "",
-                rateValue: "-"
-            }]
+            tagSearchInput: "",
+            tagsInList: {
+                /*
+                3:{
+                    passive:false,
+                    text:"Batarya",
+                    color:"yellow",
+                    rateValue: ""
+                },
+                4:{
+                    passive:false,
+                    text:"Kamera",
+                    color:"orange",
+                    rateValue: ""
+                },
+                5:{
+                    passive:false,
+                    text:"Tasarım",
+                    color:"",
+                    rateValue: "-"
+                }
+                */
+            },
+            selectedTags: {},
+            newTagIndex: 0
         };
         _this.turkishChars = {
             "ğ": "g",
@@ -54,7 +53,9 @@ var Content = function (_React$Component) {
         };
         _this.onChangeProductName = _this.onChangeProductName.bind(_this);
         _this.generateProductUrl = _this.generateProductUrl.bind(_this);
+        _this.onChangeTagSearchInput = _this.onChangeTagSearchInput.bind(_this);
         _this.selectTag = _this.selectTag.bind(_this);
+        _this.refreshTagsInList = _this.refreshTagsInList.bind(_this);
         return _this;
     }
 
@@ -65,6 +66,7 @@ var Content = function (_React$Component) {
                 productName: e.target.value,
                 productUrl: this.generateProductUrl(e.target.value)
             });
+            this.refreshTagsInList();
         }
     }, {
         key: "generateProductUrl",
@@ -84,8 +86,38 @@ var Content = function (_React$Component) {
             return url;
         }
     }, {
+        key: "onChangeTagSearchInput",
+        value: function onChangeTagSearchInput(e) {
+            this.setState({
+                tagSearchInput: e.target.value
+            });
+        }
+    }, {
         key: "selectTag",
-        value: function selectTag(id) {}
+        value: function selectTag(id) {
+            var selectedTag = this.state.selectedTags;
+            if (id == "new") {
+                var newTagName = this.state.tagSearchInput;
+                var newTag = {
+                    passive: true,
+                    text: newTagName,
+                    color: "",
+                    rateValue: ""
+                };
+                selectedTag[newTagName] = newTag;
+            } else {
+                selectedTag[id] = this.state.tagsInList[id];
+            }
+            this.setState({
+                selectedTags: selectedTag
+            });
+            console.log(this.state);
+        }
+    }, {
+        key: "refreshTagsInList",
+        value: function refreshTagsInList() {
+            // gidip etiket çekecek gelen veriyi tagsInList olarak güncelleyeceksin böylelikle tag listesi değişmiş olacak
+        }
     }, {
         key: "render",
         value: function render() {
@@ -122,7 +154,7 @@ var Content = function (_React$Component) {
                                     )
                                 ),
                                 React.createElement(SelectedTags, { tags: this.state.selectedTags }),
-                                React.createElement(TagList, { labelText: "Etiket Ekle", placeholderText: "Etiket \u0130smi", tags: this.state.tagsInList, handleSelectTag: this.selectTag })
+                                React.createElement(TagList, { labelText: "Etiket Ekle", placeholderText: "Etiket \u0130smi", tags: this.state.tagsInList, handleSelectTag: this.selectTag, tagSearchInput: this.state.tagSearchInput, handleChangeTagSearchInput: this.onChangeTagSearchInput })
                             )
                         )
                     )
@@ -146,11 +178,20 @@ var SelectedTags = function (_React$Component2) {
     _createClass(SelectedTags, [{
         key: "render",
         value: function render() {
-            return React.createElement(
-                "div",
-                null,
-                React.createElement(Tags, { tags: this.props.tags, activeOnly: false })
-            );
+            if (Object.keys(this.props.tags).length) {
+                return React.createElement(
+                    "div",
+                    null,
+                    React.createElement(
+                        "div",
+                        { id: "selected-tags" },
+                        React.createElement(H, { type: "3", text: "Etiketler" })
+                    ),
+                    React.createElement(Tags, { tags: this.props.tags, activeOnly: false })
+                );
+            } else {
+                return React.createElement("div", null);
+            }
         }
     }]);
 
@@ -171,6 +212,7 @@ var TagList = function (_React$Component3) {
         _this3.onFocusInput = _this3.onFocusInput.bind(_this3);
         _this3.onBlurInput = _this3.onBlurInput.bind(_this3);
         _this3.selectTag = _this3.selectTag.bind(_this3);
+        _this3.onChangeInput = _this3.onChangeInput.bind(_this3);
         return _this3;
     }
 
@@ -195,19 +237,40 @@ var TagList = function (_React$Component3) {
         key: "selectTag",
         value: function selectTag(e) {
             this.props.handleSelectTag(e.target.attributes.name.value);
-            //console.log(e.target.innerHTML);
             this.onBlurInput();
+        }
+    }, {
+        key: "onChangeInput",
+        value: function onChangeInput(e) {
+            this.props.handleChangeTagSearchInput(e);
         }
     }, {
         key: "render",
         value: function render() {
             this.tags = [];
-            for (var i = 0; i < this.props.tags.length; i++) {
+            var keyArr = Object.keys(this.props.tags);
+            for (var i = 0; i < keyArr.length; i++) {
                 this.tags.push(React.createElement(
                     "div",
-                    { className: "item", key: this.props.tags[i].key, name: this.props.tags[i].id, onClick: this.selectTag },
-                    this.props.tags[i].text
+                    { className: "item", key: keyArr[i], name: keyArr[i], onMouseDown: this.selectTag },
+                    this.props.tags[keyArr[i]].text
                 ));
+            }
+            if (this.tags.length == 0 && this.props.tagSearchInput.length != 0) {
+                this.tags = React.createElement(
+                    "div",
+                    null,
+                    React.createElement(
+                        "span",
+                        null,
+                        "B\xF6yle bir etiket yok "
+                    ),
+                    React.createElement(
+                        "a",
+                        { name: "new", onMouseDown: this.selectTag },
+                        "yine de ekle"
+                    )
+                );
             }
             return React.createElement(
                 "div",
@@ -223,7 +286,7 @@ var TagList = function (_React$Component3) {
                             null,
                             this.props.labelText
                         ),
-                        React.createElement("input", { type: "text", placeholder: this.props.placeholderText, onFocus: this.onFocusInput, onBlur: this.onBlurInput })
+                        React.createElement("input", { type: "text", placeholder: this.props.placeholderText, onFocus: this.onFocusInput, onBlur: this.onBlurInput, value: this.props.tagSearchInput, onChange: this.onChangeInput })
                     )
                 ),
                 this.state.tableVisible ? React.createElement(

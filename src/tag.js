@@ -22,16 +22,14 @@ class Tags extends React.Component {
     }
     render() {
         this.tags = []
-        for(let i=0;i<this.props.tags.length;i++) {
-            if(this.props.activeOnly && this.props.tags[i].passive) {
-                continue;
-            }
+        let keyArr = Object.keys(this.props.tags);
+        for(let i=0;i<keyArr.length;i++) {
             this.tags.push(
-                <Tag key={this.props.tags[i].id}
-                    passive={this.props.tags[i].passive}
-                    text={this.props.tags[i].text}
-                    color={this.props.tags[i].color}
-                    rateValue={this.props.tags[i].rateValue}
+                <Tag key={keyArr[i]}
+                    passive={this.props.tags[keyArr[i]].passive}
+                    text={this.props.tags[keyArr[i]].text}
+                    color={this.props.tags[keyArr[i]].color}
+                    rateValue={this.props.tags[keyArr[i]].rateValue}
                 />
             )
         }

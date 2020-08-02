@@ -6,3 +6,8 @@
 .tags-in-list .list {
     cursor:default;
 }
+
+#selected-tags {
+    margin-top:1rem;
+    margin-bottom:0.5rem;
+}

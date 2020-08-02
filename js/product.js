@@ -28,25 +28,25 @@ var Content = function (_React$Component) {
 				liked: true,
 				title: "ahmet",
 				date: "19 Temmuz - 21:45",
-				tags: [{
-					id: 3,
-					passive: false,
-					text: "Batarya",
-					color: "yellow",
-					rateValue: "5"
-				}, {
-					id: 4,
-					passive: false,
-					text: "Kamera",
-					color: "orange",
-					rateValue: "4"
-				}, {
-					id: 5,
-					passive: false,
-					text: "Tasarım",
-					color: "",
-					rateValue: "-"
-				}],
+				tags: { 3: {
+						passive: false,
+						text: "Batarya",
+						color: "yellow",
+						rateValue: "5"
+					},
+					4: {
+						passive: false,
+						text: "Kamera",
+						color: "orange",
+						rateValue: "4"
+					},
+					5: {
+						passive: false,
+						text: "Tasarım",
+						color: "",
+						rateValue: "-"
+					}
+				},
 				owner: false
 			}, {
 				id: 99,
