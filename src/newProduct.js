@@ -2,6 +2,9 @@ class Content extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            // input, showInfo, loading
+            form:"input",
+            topMessage: null,
             productName: "",
             productUrl: "",
             tagSearchInput:"",
@@ -34,7 +37,8 @@ class Content extends React.Component {
                 */
             },
             selectedTags: {},
-            newTagIndex:0
+            newTagIndex:0,
+            createProductButtonName: "Oluştur"
         };
         this.turkishChars = {
             "ğ": "g",
@@ -50,6 +54,7 @@ class Content extends React.Component {
         this.selectTag = this.selectTag.bind(this);
         this.unselectTag = this.unselectTag.bind(this);
         this.refreshTagsInList = this.refreshTagsInList.bind(this);
+        this.createProduct = this.createProduct.bind(this);
     }
     onChangeProductName(e) {
         this.setState({
@@ -65,7 +70,6 @@ class Content extends React.Component {
             if(productName[i]==" ") {
                 url += "-";
             } else if(this.turkishChars[productName[i]]){
-                console.log("burası çalışmıyor");
                 url += this.turkishChars[productName[i]];
             } else {
                 url += productName[i];
@@ -98,44 +102,88 @@ class Content extends React.Component {
         });
     }
     unselectTag(e) {
-        let selectedTag = this.state.selectedTags;
-        delete selectedTag[e.target.attributes.name.value];
-        this.setState({
-            selectedTags: selectedTag,
-        });
+        if(this.state.form=="input") {
+            let selectedTag = this.state.selectedTags;
+            delete selectedTag[e.target.attributes.name.value];
+            this.setState({
+                selectedTags: selectedTag,
+            });
+        }
     }
     refreshTagsInList() {
         // gidip etiket çekecek gelen veriyi tagsInList olarak güncelleyeceksin böylelikle tag listesi değişmiş olacak
     }
+    createProduct() {
+        if(this.state.form=="input") {
+            this.setState({
+                form:"showInfo",
+                createProductButtonName: "Düzenle",
+                topMessage: {
+                    type:"success",
+                    text:"Başarılı bir şekilde gönderildi, yönetici onaylaması durumunda bu ürün eklenecek"
+                }
+            });
+        } else {
+            this.setState({
+                form:"input",
+                createProductButtonName: "Oluştur"
+            });
+        }
+    }
     render() {
-        return(
-            <div>
-                <Row size="one">
-                    <Column>
-                        <Row size="sixteen">
-                            <WideColumn size="two"></WideColumn>
-                            <WideColumn size="twelve">
-                                <H type="1" text="Yeni Ürün" />
-                                <div className="ui form">
-                                    <div className="field">
-                                        <label>yorumkutusu.com/urun/{this.state.productUrl}</label>
-                                        <input type="text" placeholder="Ürün İsmi" onChange={this.onChangeProductName} value={this.state.productName}/>
+        if(this.state.form=="loading") {
+            return(
+                <RowLoadingSpin nonSegment={true}/>
+            )
+        } else {
+            return(
+                <div>
+                    <Row size="one">
+                        <Column>
+                            <Row size="sixteen">
+                                <WideColumn size="two"></WideColumn>
+                                <WideColumn size="twelve">
+                                    {(this.state.topMessage)?
+                                        <BasicMessage type={this.state.topMessage.type} text={this.state.topMessage.text} />
+                                    :""}
+                                    <H type="1" text="Yeni Ürün" />
+                                    <div className="ui form">
+                                        <div className="field">
+                                            <label>yorumkutusu.com/urun/{this.state.productUrl}</label>
+                                            {(this.state.form=="input")?
+                                                <input type="text" placeholder="Ürün İsmi" onChange={this.onChangeProductName} value={this.state.productName}/>
+                                            :
+                                                <H type="3" text={this.state.productName} /> 
+                                            }
+                                        </div>
                                     </div>
-                                </div>
-                                <SelectedTags tags={this.state.selectedTags} handleOnClick={this.unselectTag}/>
-                                <TagList labelText="Etiket Ekle" placeholderText="Etiket İsmi" tags={this.state.tagsInList} handleSelectTag={this.selectTag} tagSearchInput={this.state.tagSearchInput} handleChangeTagSearchInput={this.onChangeTagSearchInput}/>
-                            </WideColumn>
-                        </Row>
-                    </Column>
-                </Row>
-                <Row size="sixteen">
-                    <WideColumn size="two"></WideColumn>
-                    <WideColumn size="twelve">
-                        <WriteComment tags={this.state.selectedTags}/>
-                    </WideColumn>
-                </Row>
-            </div>
-        )
+                                    <SelectedTags tags={this.state.selectedTags} handleOnClick={this.unselectTag} form={this.state.form}/>
+                                    {(this.state.form=="input")?
+                                        <TagList labelText="Etiket Ekle" placeholderText="Etiket İsmi" tags={this.state.tagsInList} handleSelectTag={this.selectTag} tagSearchInput={this.state.tagSearchInput} handleChangeTagSearchInput={this.onChangeTagSearchInput}/>
+                                    :""}
+                                </WideColumn>
+                            </Row>
+                        </Column>
+                    </Row>
+                    <Row size="sixteen">
+                        <WideColumn size="two"> </WideColumn>
+                        <WideColumn size="twelve">
+                            <FloatRight>
+                                <button class={(this.state.productName.length)?"ui green button":"ui green disabled button"} onClick={this.createProduct}>
+                                    {this.state.createProductButtonName}
+                                </button>
+                            </FloatRight>
+                        </WideColumn>
+                    </Row>
+                    <Row size="sixteen">
+                        <WideColumn size="two"></WideColumn>
+                        <WideColumn size="twelve">
+                            <WriteComment tags={this.state.selectedTags}/>
+                        </WideColumn>
+                    </Row>
+                </div>
+            )
+        }
     }
 }
 
@@ -145,10 +193,14 @@ class SelectedTags extends React.Component {
             return(
                 <div>
                     <div id="selected-tags">
-                        <H type="3" text="Etiketler" />
+                        {(this.props.form=="input")?
+                            <H type="3" text="Etiketler" />
+                        :""}
                     </div>
                     <Tags tags={this.props.tags} activeOnly={false} handleOnClick={this.props.handleOnClick}/>
-                    <span className="info-span">(kaldırmak için etikete dokunun)</span>
+                    {(this.props.form=="input")?
+                        <span className="info-span">(kaldırmak için etikete dokunun)</span>
+                    :""}
                 </div>
             )
         } else {
