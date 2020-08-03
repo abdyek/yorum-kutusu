@@ -739,17 +739,24 @@ var WriteComment = function (_React$Component9) {
             };
         }
         _this9.state = {
-            // normal, loading, sent, edited
+            // normal, loading, sent
             form: "normal",
             messageType: "success", // success, warning, danger
-            messageText: "mahmutcan",
-            message: null,
+            messageText: "bu neyin mesajı bilmiyorum",
+            message: {
+                type: "success",
+                text: "başarılı bir message"
+            },
             commentText: _this9.props.commentText,
             sendButtonClassName: _this9.var.buttonClassName,
-            topMessage: null
+            topMessage: {
+                type: null,
+                text: null
+            }
         };
         _this9.sendComment = _this9.sendComment.bind(_this9);
         _this9.changeComment = _this9.changeComment.bind(_this9);
+        _this9.showTopMessage = _this9.showTopMessage.bind(_this9);
         return _this9;
     }
 
@@ -770,11 +777,9 @@ var WriteComment = function (_React$Component9) {
             //}.bind(this), 1000);
             //}
             // başarısız olma durumunda kullanılabilecek bir üst mesaj
+            this.showTopMessage("success", "başarılı bir şekilde yorumunuz gönderildi");
             this.setState({
-                topMessage: {
-                    type: "warning",
-                    text: "bir sorun oldu"
-                }
+                form: "sent"
             });
             /*
             this.setState({
@@ -800,6 +805,17 @@ var WriteComment = function (_React$Component9) {
             }
             this.setState({
                 commentText: e.target.value
+            });
+        }
+    }, {
+        key: "showTopMessage",
+        value: function showTopMessage(type, text) {
+            var topMessage = {
+                type: type,
+                text: text
+            };
+            this.setState({
+                topMessage: topMessage
             });
         }
     }, {
@@ -896,24 +912,14 @@ var WriteComment = function (_React$Component9) {
             } else if (this.state.form == "loading") {
                 return React.createElement(RowLoadingSpin, null);
             } else if (this.state.form == "sent") {
-                return React.createElement(
-                    Row,
-                    { size: "one" },
-                    React.createElement(
-                        Column,
-                        null,
-                        React.createElement(BasicMessage, { type: this.state.message.type, text: this.state.message.text })
-                    )
-                );
-            } else if (this.state.form == "edited") {
                 return (
                     // bu kısım başarılı olması durumunda gösterilecek
                     // API ile konuşturan yunus emre'ye not: buradaki Comment componentinin özelliklerini WriteComment'in state'i üzerinde tuttuğun API reponse'u değerleri
                     // üzerinden dolduracaksın
-                    React.createElement(Comment, { text: " Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus condimentum elementum est, eget condimentum purus venenatis id. Aliquam ultrices lacinia lacus vitae congue. Fusce id elit sapien. Etiam velit diam, hendrerit vitae tincidunt vel, tempor sed leo. Quisque iaculis dolor non ultrices suscipit. Donec consectetur, lorem vel molestie blandit, mi mi sagittis nisl, ac pretium nibh nulla ut odio. Proin vitae auctor dolor, vitae ultricies lectus. Fusce a lectus sodales, tincidunt libero imperdiet, vulputate est. Vestibulum euismod, ante at malesuada finibus, quam urna aliquam leo, at tristique orci nunc sit amet tellus. Donec nibh tellus, suscipit ac euismod nec, scelerisque sed dui. Aliquam pellentesque tincidunt felis et sollicitudin. Quisque molestie consequat tellus, commodo pharetra lacus. Etiam scelerisque dui non leo feugiat, ut ornare nibh accumsan. Cras eget ex cursus, tristique dolor non, molestie libero. Duis dolor felis, hendrerit eu ligula ut, iaculis semper mi. Maecenas venenatis quis turpis nec sodales. Duis consequat nulla sed efficitur consequat. Integer suscipit blandit mollis. Proin posuere, lacus sed posuere lacinia, tortor est tristique augue, sed consectetur augue eros et augue. Quisque mauris diam, rhoncus sed vulputate quis, gravida in massa. Praesent purus leo, porta in elit ut, porta blandit risus. Integer ipsum dolor, luctus sed tincidunt ac, ullamcorper ornare libero. Curabitur porta arcu elit, sit amet varius orci rutrum vitae. Pellentesque luctus dolor tortor. Nulla fringilla odio massa, vitae laoreet felis fringilla in. Vestibulum maximus condimentum velit vel ultrices. Maecenas commodo, lorem et mollis maximus, felis elit tempus arcu, a volutpat ex justo eu urna. Sed aliquet semper feugiat. Ut ornare ipsum at posuere faucibus. Nullam vitae massa blandit, tristique lectus in, volutpat dolor. Curabitur non nisi et erat maximus eleifend vitae quis dui. Cras at ultrices nulla. Maecenas viverra dapibus tortor, ac commodo risus finibus ac. Nullam ultrices tortor nec posuere luctus. Vivamus viverra, tellus suscipit dignissim euismod, tellus dolor pulvinar tellus, vitae placerat libero enim aliquet libero. Aenean gravida sem at odio dapibus, quis aliquet sem malesuada. Vestibulum dictum metus ac orci mattis egestas. Suspendisse vel auctor elit, et suscipit nulla. Aliquam feugiat neque nisl, ac convallis metus dignissim non. Morbi dapibus vitae est sed egestas. Integer laoreet ac elit vitae facilisis. Quisque fermentum ipsum eu sagittis mattis. Duis pellentesque ante quis aliquam volutpat. Proin eget arcu quis orci sagittis fringilla. Cras elementum tempus quam. Nulla non mollis risus. Fusce cursus quam nec est suscipit accumsan. Sed sit amet nisi lacus. Etiam a libero in nisi vehicula efficitur. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Maecenas in velit vitae eros consequat feugiat. Sed vitae sapien et turpis egestas tempor sit amet vel purus. Duis non arcu dolor. Nam eget accumsan elit, sit amet ultrices nunc. Proin eget lacinia nunc. Sed tortor ex, vehicula ut interdum nec, aliquam eget risus. Phasellus ligula lorem, dapibus quis diam in, iaculis volutpat orci. Nulla facilisi. In dignissim viverra elit sit amet accumsan. ",
-                        likeCount: "145",
+                    React.createElement(Comment, { text: this.state.commentText,
+                        likeCount: "0",
                         liked: false,
-                        title: "Mahmut",
+                        title: "Buraya kullan\u0131c\u0131 ad\u0131 gelecek",
                         date: "19 Temmuz - 21:45",
                         tags: [{
                             id: 3,
@@ -936,8 +942,8 @@ var WriteComment = function (_React$Component9) {
                         }],
                         owner: true,
                         topMessage: {
-                            type: "success",
-                            text: "Yorumunuz başarılı bir şekilde düzenlendi"
+                            type: this.state.topMessage.type,
+                            text: this.state.topMessage.text
                         }
                     })
                 );
