@@ -160,13 +160,58 @@ class Content extends React.Component {
 }
 
 class Product extends React.Component {
+	constructor(props) {
+		super(props);
+		this.followButtonAtt = {
+			follow: {
+				followed: false,
+				buttonName: "Takip Et",
+				buttonClassName: "ui teal button",
+				icon: <i class="fa fa-plus" aria-hidden="true"></i>
+			},
+			unfollow: {
+				followed: true,
+				buttonName: "Takibi Bırak",
+				buttonClassName: "ui gray button",
+				icon: <i class="fa fa-times" aria-hidden="true"></i>
+			}
+		}
+		this.state = {
+			followed: false,
+			followButtonAtt: this.followButtonAtt.follow,
+		};
+		this.followButton = this.followButton.bind(this);
+	}
+	followButton() {
+		if(this.state.followed) {
+			this.setState({
+				followed: false,
+				followButtonAtt: this.followButtonAtt.follow
+			});
+		} else {
+			this.setState({
+				followed: true,
+				followButtonAtt: this.followButtonAtt.unfollow
+			});
+		}
+	}
     render() {
         return (
             <div>
-                <Row size="one">
+                <Row size="two" nonStackable={true}>
                     <Column>
-                        <H type="1" text="Iphone 5s" />
+                        <H type="1" text="Mahmut Efendi Kahveleri" />
                     </Column>
+					<Column>
+						<FloatRight>
+							<button class={this.state.followButtonAtt.buttonClassName} onClick={this.followButton}>
+								<i class="icon">
+									{this.state.followButtonAtt.icon}
+								</i>
+									{this.state.followButtonAtt.buttonName}
+							</button>
+						</FloatRight>
+					</Column>
                 </Row>
                 <Row size="one">
                     <Column>

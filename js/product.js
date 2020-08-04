@@ -189,13 +189,49 @@ var Content = function (_React$Component) {
 var Product = function (_React$Component2) {
 	_inherits(Product, _React$Component2);
 
-	function Product() {
+	function Product(props) {
 		_classCallCheck(this, Product);
 
-		return _possibleConstructorReturn(this, (Product.__proto__ || Object.getPrototypeOf(Product)).apply(this, arguments));
+		var _this2 = _possibleConstructorReturn(this, (Product.__proto__ || Object.getPrototypeOf(Product)).call(this, props));
+
+		_this2.followButtonAtt = {
+			follow: {
+				followed: false,
+				buttonName: "Takip Et",
+				buttonClassName: "ui teal button",
+				icon: React.createElement("i", { "class": "fa fa-plus", "aria-hidden": "true" })
+			},
+			unfollow: {
+				followed: true,
+				buttonName: "Takibi Bırak",
+				buttonClassName: "ui gray button",
+				icon: React.createElement("i", { "class": "fa fa-times", "aria-hidden": "true" })
+			}
+		};
+		_this2.state = {
+			followed: false,
+			followButtonAtt: _this2.followButtonAtt.follow
+		};
+		_this2.followButton = _this2.followButton.bind(_this2);
+		return _this2;
 	}
 
 	_createClass(Product, [{
+		key: "followButton",
+		value: function followButton() {
+			if (this.state.followed) {
+				this.setState({
+					followed: false,
+					followButtonAtt: this.followButtonAtt.follow
+				});
+			} else {
+				this.setState({
+					followed: true,
+					followButtonAtt: this.followButtonAtt.unfollow
+				});
+			}
+		}
+	}, {
 		key: "render",
 		value: function render() {
 			return React.createElement(
@@ -203,11 +239,29 @@ var Product = function (_React$Component2) {
 				null,
 				React.createElement(
 					Row,
-					{ size: "one" },
+					{ size: "two", nonStackable: true },
 					React.createElement(
 						Column,
 						null,
-						React.createElement(H, { type: "1", text: "Iphone 5s" })
+						React.createElement(H, { type: "1", text: "Mahmut Efendi Kahveleri" })
+					),
+					React.createElement(
+						Column,
+						null,
+						React.createElement(
+							FloatRight,
+							null,
+							React.createElement(
+								"button",
+								{ "class": this.state.followButtonAtt.buttonClassName, onClick: this.followButton },
+								React.createElement(
+									"i",
+									{ "class": "icon" },
+									this.state.followButtonAtt.icon
+								),
+								this.state.followButtonAtt.buttonName
+							)
+						)
 					)
 				),
 				React.createElement(
