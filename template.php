@@ -7,7 +7,15 @@
     <title><?php echo $pageInfo['pageTitle'];?></title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/loading.css">
-    <link rel="stylesheet" href="css/<?php echo $pageInfo['styleFile']; ?>">
+    <?php
+        if(is_array($pageInfo['styleFile'])) {
+            foreach ($pageInfo['styleFile'] as $styleFile) {
+                echo '<link rel="stylesheet" href="css/'.$styleFile.'">';
+            }
+        } else {
+            echo '<link rel="stylesheet" href="css/'.$pageInfo['styleFile'].'">';
+        }
+    ?>
     <!-- her sayfanın css sayfasını ayırmak istiyorum buradaki gibi -->
     <link rel="stylesheet" href="css/semantic.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css" integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous">
