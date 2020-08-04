@@ -90,9 +90,18 @@ class Header extends React.Component {
 class Footer extends React.Component {
     render() {
         return(
-            <div>
-
-            </div>
+            <footer>
+                <div class="ui inverted vertical footer segment">
+                    <div class="ui container">
+                        <div>
+                            yorumkutusu.com
+                            <FloatRight>
+                                © Tüm hakları saklıdır | 2020
+                            </FloatRight>
+                        </div>
+                    </div>
+                </div> 
+            </footer>
         )
     }
 }
@@ -103,7 +112,7 @@ class App extends React.Component {
     }
     render() {
         return (
-            <div>
+            <div id="app">
                 <Header />
                 <Content />
                 <Footer />

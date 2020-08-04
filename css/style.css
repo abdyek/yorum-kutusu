@@ -184,3 +184,17 @@ header > div {
     margin-top:1.5rem;
     margin-bottom:1.5rem;
 }
+
+/* footer'ı aşağı sabitlemek için*/
+html{ height:100%; }
+
+body, #root, #app{ min-height:100%; padding:0; margin:0; position:relative; }
+
+body, #root, #app::after{ content:''; display:block; height:100px; }
+
+footer{ 
+  position:absolute; 
+  bottom:0; 
+  width:100%; 
+  height:48px; 
+}

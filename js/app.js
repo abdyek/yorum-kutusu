@@ -185,7 +185,28 @@ var Footer = function (_React$Component6) {
     _createClass(Footer, [{
         key: "render",
         value: function render() {
-            return React.createElement("div", null);
+            return React.createElement(
+                "footer",
+                null,
+                React.createElement(
+                    "div",
+                    { "class": "ui inverted vertical footer segment" },
+                    React.createElement(
+                        "div",
+                        { "class": "ui container" },
+                        React.createElement(
+                            "div",
+                            null,
+                            "yorumkutusu.com",
+                            React.createElement(
+                                FloatRight,
+                                null,
+                                "\xA9 T\xFCm haklar\u0131 sakl\u0131d\u0131r | 2020"
+                            )
+                        )
+                    )
+                )
+            );
         }
     }]);
 
@@ -206,7 +227,7 @@ var App = function (_React$Component7) {
         value: function render() {
             return React.createElement(
                 "div",
-                null,
+                { id: "app" },
                 React.createElement(Header, null),
                 React.createElement(Content, null),
                 React.createElement(Footer, null)
