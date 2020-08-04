@@ -233,7 +233,7 @@ var TopOfComment = function (_React$Component2) {
                                         { className: "icon" },
                                         React.createElement("i", { className: "fa fa-pencil-square-o", "aria-hidden": "true" })
                                     ),
-                                    "D\xFCzenle"
+                                    !isMobile() ? "Düzenle" : ""
                                 ),
                                 React.createElement(
                                     "button",
@@ -243,7 +243,7 @@ var TopOfComment = function (_React$Component2) {
                                         { className: "icon" },
                                         React.createElement("i", { className: "fa fa-trash", "aria-hidden": "true" })
                                     ),
-                                    "Sil"
+                                    !isMobile() ? "Sil" : ""
                                 )
                             ) : ""
                         )

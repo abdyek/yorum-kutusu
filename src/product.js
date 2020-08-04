@@ -35,7 +35,7 @@ class Content extends React.Component {
 							rateValue: "-"
 						}
 					},
-					owner:false
+					owner:true
 				},
 				{
 					id:99,

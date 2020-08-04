@@ -164,13 +164,13 @@ class TopOfComment extends React.Component{
                                             <i className="icon">
                                                 <i className="fa fa-pencil-square-o" aria-hidden="true"></i>
                                         </i>
-                                        Düzenle
+                                        {(!isMobile())?"Düzenle":""}
                                     </button>
                                     <button className="ui icon orange button" onClick={this.openDeleteArea}>
                                         <i className="icon">
                                             <i className="fa fa-trash" aria-hidden="true"></i>
                                         </i>
-                                        Sil
+                                        {(!isMobile())?"Sil":""}
                                     </button>
                                 </div>
                                 :""
