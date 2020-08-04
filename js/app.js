@@ -190,10 +190,10 @@ var Footer = function (_React$Component6) {
                 null,
                 React.createElement(
                     "div",
-                    { "class": "ui inverted vertical footer segment" },
+                    { className: "ui inverted vertical footer segment" },
                     React.createElement(
                         "div",
-                        { "class": "ui container" },
+                        { className: "ui container" },
                         React.createElement(
                             "div",
                             null,

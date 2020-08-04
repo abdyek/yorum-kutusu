@@ -154,8 +154,21 @@ var TopOfComment = function (_React$Component2) {
 
         var _this2 = _possibleConstructorReturn(this, (TopOfComment.__proto__ || Object.getPrototypeOf(TopOfComment)).call(this, props));
 
+        _this2.minifyLimit = 750;
+        _this2.state = {
+            readAll: false
+        };
         _this2.openEditArea = _this2.openEditArea.bind(_this2);
         _this2.openDeleteArea = _this2.openDeleteArea.bind(_this2);
+        _this2.readAll = _this2.readAll.bind(_this2);
+        _this2.minifyText = _this2.minifyText.bind(_this2);
+        if (_this2.props.text.length > _this2.minifyLimit) {
+            _this2.minifiedText = _this2.minifyText(_this2.props.text, _this2.minifyLimit);
+        } else {
+            _this2.state = {
+                readAll: true
+            };
+        }
         return _this2;
     }
 
@@ -168,6 +181,22 @@ var TopOfComment = function (_React$Component2) {
         key: "openDeleteArea",
         value: function openDeleteArea() {
             this.props.handleOpenDeleteArea();
+        }
+    }, {
+        key: "readAll",
+        value: function readAll() {
+            this.setState({
+                readAll: true
+            });
+        }
+    }, {
+        key: "minifyText",
+        value: function minifyText(text, limit) {
+            var minifiedText = "";
+            for (var i = 0; i < limit; i++) {
+                minifiedText += text[i];
+            }
+            return minifiedText;
         }
     }, {
         key: "render",
@@ -229,10 +258,27 @@ var TopOfComment = function (_React$Component2) {
                         React.createElement(
                             "div",
                             { className: "comment-text" },
-                            this.props.text
+                            this.state.readAll ? this.props.text : this.minifiedText
                         )
                     )
-                )
+                ),
+                !this.state.readAll ? React.createElement(
+                    Row,
+                    { size: "one" },
+                    React.createElement(
+                        Column,
+                        null,
+                        React.createElement(
+                            FloatRight,
+                            null,
+                            React.createElement(
+                                "a",
+                                { className: "read-all", onClick: this.readAll },
+                                "Devam\u0131n\u0131 Oku"
+                            )
+                        )
+                    )
+                ) : ""
             );
         }
     }]);

@@ -113,14 +113,39 @@ class Comment extends React.Component {
 class TopOfComment extends React.Component{
     constructor(props) {
         super(props);
+        this.minifyLimit = 750;
+        this.state = {
+            readAll:false,
+        };
         this.openEditArea = this.openEditArea.bind(this);
         this.openDeleteArea = this.openDeleteArea.bind(this);
+        this.readAll = this.readAll.bind(this);
+        this.minifyText = this.minifyText.bind(this);
+        if(this.props.text.length>this.minifyLimit) {
+            this.minifiedText = this.minifyText(this.props.text, this.minifyLimit);
+        } else {
+            this.state = {
+                readAll:true
+            };
+        }
     }
     openEditArea() {
         this.props.handleOpenEditArea();
     }
     openDeleteArea() {
         this.props.handleOpenDeleteArea();
+    }
+    readAll() {
+        this.setState({
+            readAll: true
+        });
+    }
+    minifyText(text, limit) {
+        let minifiedText = "";
+        for(let i=0;i<limit;i++) {
+            minifiedText += text[i];
+        }
+        return minifiedText;
     }
     render() {
         return (
@@ -156,10 +181,19 @@ class TopOfComment extends React.Component{
                 <Row size="one">
                     <Column>
                         <div className="comment-text">
-                            {this.props.text}
+                            {(this.state.readAll)?this.props.text:this.minifiedText}
                         </div>
                     </Column>
                 </Row>
+                {(!this.state.readAll)?
+                    <Row size="one">
+                        <Column>
+                            <FloatRight>
+                                <a className="read-all" onClick={this.readAll}>Devamını Oku</a>
+                            </FloatRight>
+                        </Column>
+                    </Row>
+                :""}
             </div>
         )
     }

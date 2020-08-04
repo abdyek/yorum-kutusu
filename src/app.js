@@ -91,8 +91,8 @@ class Footer extends React.Component {
     render() {
         return(
             <footer>
-                <div class="ui inverted vertical footer segment">
-                    <div class="ui container">
+                <div className="ui inverted vertical footer segment">
+                    <div className="ui container">
                         <div>
                             yorumkutusu.com
                             <FloatRight>

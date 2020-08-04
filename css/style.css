@@ -198,3 +198,8 @@ footer{
   width:100%; 
   height:48px; 
 }
+
+/* comment'deki devamını oku butonu*/
+.read-all {
+    margin-right:2rem;
+}
