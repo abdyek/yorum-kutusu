@@ -1,35 +1,16 @@
 class Menu extends React.Component {
     constructor(props) {
         super(props);
-    }
-    render() {
-        if(false) {
-            return(
-                <LogInButton />
-            )
-        }
-        return(
-            <AccountButton userName={"mahmut"} />
-        )
-    }
-}
-
-class LogInButton extends React.Component {
-    constructor(props) {
-        super(props);
+        this.userName = "Yunus Emre";
     }
     render() {
         return(
-            <a href="girisYap">
-                <div id="menu" className="ui secondary  menu">
-                    <div id="hesap" className="ui button">
-                        <i className="icon">
-                            <i className="fa fa-user" aria-hidden="true"></i>
-                        </i>
-                        Giriş Yap
-                    </div>
-                </div>
-            </a>
+            <div id="menu">
+                <FloatRight>
+                    <AccountButton userName={this.userName} />
+                    <LogoutButton userName={this.userName}/>
+                </FloatRight>
+            </div>
         )
     }
 }
@@ -37,17 +18,48 @@ class LogInButton extends React.Component {
 class AccountButton extends React.Component {
     constructor(props) {
         super(props);
+        this.click = this.click.bind(this);
+    }
+    click() {
+        if(this.props.userName) {
+            // kullanıcının hesabına yönlendirme yapılacak
+        } else {
+            // Giriş yap sayfasına yönledirme yapılacak
+        }
     }
     render() {
         return(
-            <a href={"profil/"+this.props.userName}>
-                <div id="menu" className="ui secondary  menu">
-                    <div id="hesap" className="ui button">
-                        <i className="fa fa-user" aria-hidden="true"></i> {this.props.userName}
-                    </div>
-                </div>
-            </a>
+            <button class="ui blue button" onClick={this.click}>
+                <i class="icon">
+                    <i class="fa fa-user" aria-hidden="true"></i>
+                </i>
+                {(this.props.userName==undefined)?
+                    <span>Giriş Yap</span>:
+                    <span>Hesap</span>
+                }
+            </button>
         )
+    }
+}
+
+class LogoutButton extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+    render() {
+        if(this.props.userName) {
+            return(
+                <button class="ui icon brown button">
+                    <i class="icon">
+                        <i class="fa fa-sign-out" aria-hidden="true"></i>
+                    </i>
+                </button>
+            )
+        } else {
+            return(
+                <span></span>
+            )
+        }
     }
 }
 
@@ -75,9 +87,7 @@ class Header extends React.Component {
                                 <SearchBar />
                             </WideColumn>
                             <WideColumn size="four">
-                                <FloatRight>
-                                    <Menu />
-                                </FloatRight>
+                                <Menu />
                             </WideColumn>
                         </Row>
                     </Column>

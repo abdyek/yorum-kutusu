@@ -60,14 +60,6 @@ header > div {
     font-size:10rem;
 }
 
-#menu {
-    margin-top:9px;
-}
-
-#menu .item {
-    color:#FBFBFF;
-}
-
 #hesap {
     background-color:#1391c3;
     color:#eee;
@@ -202,4 +194,9 @@ footer{
 /* comment'deki devamını oku butonu*/
 .read-all {
     margin-right:2rem;
+}
+
+/* header'daki menü (soldaki butonlar) */
+#menu {
+    margin-top:11px;
 }

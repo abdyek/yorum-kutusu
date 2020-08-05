@@ -12,89 +12,108 @@ var Menu = function (_React$Component) {
     function Menu(props) {
         _classCallCheck(this, Menu);
 
-        return _possibleConstructorReturn(this, (Menu.__proto__ || Object.getPrototypeOf(Menu)).call(this, props));
+        var _this = _possibleConstructorReturn(this, (Menu.__proto__ || Object.getPrototypeOf(Menu)).call(this, props));
+
+        _this.userName = "Yunus Emre";
+        return _this;
     }
 
     _createClass(Menu, [{
         key: "render",
         value: function render() {
-            if (false) {
-                return React.createElement(LogInButton, null);
-            }
-            return React.createElement(AccountButton, { userName: "mahmut" });
+            return React.createElement(
+                "div",
+                { id: "menu" },
+                React.createElement(
+                    FloatRight,
+                    null,
+                    React.createElement(AccountButton, { userName: this.userName }),
+                    React.createElement(LogoutButton, { userName: this.userName })
+                )
+            );
         }
     }]);
 
     return Menu;
 }(React.Component);
 
-var LogInButton = function (_React$Component2) {
-    _inherits(LogInButton, _React$Component2);
-
-    function LogInButton(props) {
-        _classCallCheck(this, LogInButton);
-
-        return _possibleConstructorReturn(this, (LogInButton.__proto__ || Object.getPrototypeOf(LogInButton)).call(this, props));
-    }
-
-    _createClass(LogInButton, [{
-        key: "render",
-        value: function render() {
-            return React.createElement(
-                "a",
-                { href: "girisYap" },
-                React.createElement(
-                    "div",
-                    { id: "menu", className: "ui secondary  menu" },
-                    React.createElement(
-                        "div",
-                        { id: "hesap", className: "ui button" },
-                        React.createElement(
-                            "i",
-                            { className: "icon" },
-                            React.createElement("i", { className: "fa fa-user", "aria-hidden": "true" })
-                        ),
-                        "Giri\u015F Yap"
-                    )
-                )
-            );
-        }
-    }]);
-
-    return LogInButton;
-}(React.Component);
-
-var AccountButton = function (_React$Component3) {
-    _inherits(AccountButton, _React$Component3);
+var AccountButton = function (_React$Component2) {
+    _inherits(AccountButton, _React$Component2);
 
     function AccountButton(props) {
         _classCallCheck(this, AccountButton);
 
-        return _possibleConstructorReturn(this, (AccountButton.__proto__ || Object.getPrototypeOf(AccountButton)).call(this, props));
+        var _this2 = _possibleConstructorReturn(this, (AccountButton.__proto__ || Object.getPrototypeOf(AccountButton)).call(this, props));
+
+        _this2.click = _this2.click.bind(_this2);
+        return _this2;
     }
 
     _createClass(AccountButton, [{
+        key: "click",
+        value: function click() {
+            if (this.props.userName) {
+                // kullanıcının hesabına yönlendirme yapılacak
+            } else {
+                    // Giriş yap sayfasına yönledirme yapılacak
+                }
+        }
+    }, {
         key: "render",
         value: function render() {
             return React.createElement(
-                "a",
-                { href: "profil/" + this.props.userName },
+                "button",
+                { "class": "ui blue button", onClick: this.click },
                 React.createElement(
-                    "div",
-                    { id: "menu", className: "ui secondary  menu" },
-                    React.createElement(
-                        "div",
-                        { id: "hesap", className: "ui button" },
-                        React.createElement("i", { className: "fa fa-user", "aria-hidden": "true" }),
-                        " ",
-                        this.props.userName
-                    )
+                    "i",
+                    { "class": "icon" },
+                    React.createElement("i", { "class": "fa fa-user", "aria-hidden": "true" })
+                ),
+                this.props.userName == undefined ? React.createElement(
+                    "span",
+                    null,
+                    "Giri\u015F Yap"
+                ) : React.createElement(
+                    "span",
+                    null,
+                    "Hesap"
                 )
             );
         }
     }]);
 
     return AccountButton;
+}(React.Component);
+
+var LogoutButton = function (_React$Component3) {
+    _inherits(LogoutButton, _React$Component3);
+
+    function LogoutButton(props) {
+        _classCallCheck(this, LogoutButton);
+
+        return _possibleConstructorReturn(this, (LogoutButton.__proto__ || Object.getPrototypeOf(LogoutButton)).call(this, props));
+    }
+
+    _createClass(LogoutButton, [{
+        key: "render",
+        value: function render() {
+            if (this.props.userName) {
+                return React.createElement(
+                    "button",
+                    { "class": "ui icon brown button" },
+                    React.createElement(
+                        "i",
+                        { "class": "icon" },
+                        React.createElement("i", { "class": "fa fa-sign-out", "aria-hidden": "true" })
+                    )
+                );
+            } else {
+                return React.createElement("span", null);
+            }
+        }
+    }]);
+
+    return LogoutButton;
 }(React.Component);
 
 var SearchBar = function (_React$Component4) {
@@ -157,11 +176,7 @@ var Header = function (_React$Component5) {
                             React.createElement(
                                 WideColumn,
                                 { size: "four" },
-                                React.createElement(
-                                    FloatRight,
-                                    null,
-                                    React.createElement(Menu, null)
-                                )
+                                React.createElement(Menu, null)
                             )
                         )
                     )
