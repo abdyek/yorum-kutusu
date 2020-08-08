@@ -1,14 +1,21 @@
 class Menu extends React.Component {
     constructor(props) {
         super(props);
-        this.userName = "Yunus Emre";
+        this.state = {
+            userName : "Yunus Emre",
+            userUrl: "yunus-emre",
+            unreadComments: 123, /* okunmamış yorumlar */
+        };
     }
     render() {
         return(
             <div id="menu">
                 <FloatRight>
-                    <AccountButton userName={this.userName} />
-                    <LogoutButton userName={this.userName}/>
+                    {(this.state.unreadComments)?
+                        <UnreadComments unreadComments={this.state.unreadComments} userUrl={this.state.userUrl} />
+                        :<AccountButton userName={this.state.userName} userUrl={this.state.userUrl} />
+                    }
+                    <LogoutButton userName={this.state.userName}/>
                 </FloatRight>
             </div>
         )
@@ -23,6 +30,7 @@ class AccountButton extends React.Component {
     click() {
         if(this.props.userName) {
             // kullanıcının hesabına yönlendirme yapılacak
+            this.props.userUrl; // url bir üstten geliyor yönlendirmede kullanırım
         } else {
             // Giriş yap sayfasına yönledirme yapılacak
         }
@@ -42,6 +50,27 @@ class AccountButton extends React.Component {
     }
 }
 
+class UnreadComments extends React.Component {
+    constructor(props) {
+        super(props);
+        this.goUserProfile = this.goUserProfile.bind(this);
+    }
+    goUserProfile() {
+        // profile takip edilen ürünleri açacak şekilde yönlendirmesi lazım
+        this.props.userUrl; // url bir üstten geliyor yönlendirmede kullanırım
+    }
+    render() {
+        return(
+            <button className="ui blue button" onClick={this.goUserProfile}>
+                <i className="icon">
+                    <i id="unread-comments" className="fa fa-comments" aria-hidden="true"></i>
+                </i>
+                {this.props.unreadComments}
+            </button> 
+        )
+    }
+}
+
 class LogoutButton extends React.Component {
     constructor(props) {
         super(props);
@@ -49,9 +78,9 @@ class LogoutButton extends React.Component {
     render() {
         if(this.props.userName) {
             return(
-                <button class="ui icon brown button">
+                <button class="ui icon blue button">
                     <i class="icon">
-                        <i class="fa fa-sign-out" aria-hidden="true"></i>
+                        <i id="logout-button" class="fa fa-sign-out" aria-hidden="true"></i>
                     </i>
                 </button>
             )

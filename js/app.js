@@ -14,7 +14,11 @@ var Menu = function (_React$Component) {
 
         var _this = _possibleConstructorReturn(this, (Menu.__proto__ || Object.getPrototypeOf(Menu)).call(this, props));
 
-        _this.userName = "Yunus Emre";
+        _this.state = {
+            userName: "Yunus Emre",
+            userUrl: "yunus-emre",
+            unreadComments: 123 /* okunmamış yorumlar */
+        };
         return _this;
     }
 
@@ -27,8 +31,8 @@ var Menu = function (_React$Component) {
                 React.createElement(
                     FloatRight,
                     null,
-                    React.createElement(AccountButton, { userName: this.userName }),
-                    React.createElement(LogoutButton, { userName: this.userName })
+                    this.state.unreadComments ? React.createElement(UnreadComments, { unreadComments: this.state.unreadComments, userUrl: this.state.userUrl }) : React.createElement(AccountButton, { userName: this.state.userName, userUrl: this.state.userUrl }),
+                    React.createElement(LogoutButton, { userName: this.state.userName })
                 )
             );
         }
@@ -54,6 +58,7 @@ var AccountButton = function (_React$Component2) {
         value: function click() {
             if (this.props.userName) {
                 // kullanıcının hesabına yönlendirme yapılacak
+                this.props.userUrl; // url bir üstten geliyor yönlendirmede kullanırım
             } else {
                     // Giriş yap sayfasına yönledirme yapılacak
                 }
@@ -85,8 +90,45 @@ var AccountButton = function (_React$Component2) {
     return AccountButton;
 }(React.Component);
 
-var LogoutButton = function (_React$Component3) {
-    _inherits(LogoutButton, _React$Component3);
+var UnreadComments = function (_React$Component3) {
+    _inherits(UnreadComments, _React$Component3);
+
+    function UnreadComments(props) {
+        _classCallCheck(this, UnreadComments);
+
+        var _this3 = _possibleConstructorReturn(this, (UnreadComments.__proto__ || Object.getPrototypeOf(UnreadComments)).call(this, props));
+
+        _this3.goUserProfile = _this3.goUserProfile.bind(_this3);
+        return _this3;
+    }
+
+    _createClass(UnreadComments, [{
+        key: "goUserProfile",
+        value: function goUserProfile() {
+            // profile takip edilen ürünleri açacak şekilde yönlendirmesi lazım
+            this.props.userUrl; // url bir üstten geliyor yönlendirmede kullanırım
+        }
+    }, {
+        key: "render",
+        value: function render() {
+            return React.createElement(
+                "button",
+                { className: "ui blue button", onClick: this.goUserProfile },
+                React.createElement(
+                    "i",
+                    { className: "icon" },
+                    React.createElement("i", { id: "unread-comments", className: "fa fa-comments", "aria-hidden": "true" })
+                ),
+                this.props.unreadComments
+            );
+        }
+    }]);
+
+    return UnreadComments;
+}(React.Component);
+
+var LogoutButton = function (_React$Component4) {
+    _inherits(LogoutButton, _React$Component4);
 
     function LogoutButton(props) {
         _classCallCheck(this, LogoutButton);
@@ -100,11 +142,11 @@ var LogoutButton = function (_React$Component3) {
             if (this.props.userName) {
                 return React.createElement(
                     "button",
-                    { "class": "ui icon brown button" },
+                    { "class": "ui icon blue button" },
                     React.createElement(
                         "i",
                         { "class": "icon" },
-                        React.createElement("i", { "class": "fa fa-sign-out", "aria-hidden": "true" })
+                        React.createElement("i", { id: "logout-button", "class": "fa fa-sign-out", "aria-hidden": "true" })
                     )
                 );
             } else {
@@ -116,8 +158,8 @@ var LogoutButton = function (_React$Component3) {
     return LogoutButton;
 }(React.Component);
 
-var SearchBar = function (_React$Component4) {
-    _inherits(SearchBar, _React$Component4);
+var SearchBar = function (_React$Component5) {
+    _inherits(SearchBar, _React$Component5);
 
     function SearchBar() {
         _classCallCheck(this, SearchBar);
@@ -139,8 +181,8 @@ var SearchBar = function (_React$Component4) {
     return SearchBar;
 }(React.Component);
 
-var Header = function (_React$Component5) {
-    _inherits(Header, _React$Component5);
+var Header = function (_React$Component6) {
+    _inherits(Header, _React$Component6);
 
     function Header() {
         _classCallCheck(this, Header);
@@ -188,8 +230,8 @@ var Header = function (_React$Component5) {
     return Header;
 }(React.Component);
 
-var Footer = function (_React$Component6) {
-    _inherits(Footer, _React$Component6);
+var Footer = function (_React$Component7) {
+    _inherits(Footer, _React$Component7);
 
     function Footer() {
         _classCallCheck(this, Footer);
@@ -228,8 +270,8 @@ var Footer = function (_React$Component6) {
     return Footer;
 }(React.Component);
 
-var App = function (_React$Component7) {
-    _inherits(App, _React$Component7);
+var App = function (_React$Component8) {
+    _inherits(App, _React$Component8);
 
     function App(props) {
         _classCallCheck(this, App);

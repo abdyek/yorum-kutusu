@@ -6,7 +6,7 @@ class Content extends React.Component {
         return(
             <div>
                 <EmailValidation />
-                <Account  owner={false}/>
+                <Account  owner={true} userName="Yunus Emre" />
             </div>
         )
     }
@@ -16,29 +16,47 @@ class Account extends React.Component {
     constructor(props){
         super(props);
         this.state = {
+            // info, setting, followedProducts
+            form:"info",
             openedSetting: false
         };
         this.openSettingArea = this.openSettingArea.bind(this);
         this.closeSettingArea = this.closeSettingArea.bind(this);
+        this.openFollowedProducts = this.openFollowedProducts.bind(this);
+        this.closeFollowedProducts = this.closeFollowedProducts.bind(this);
+        this.changeForm = this.changeForm.bind(this);
     }
     openSettingArea() {
-        this.setState({
-            openedSetting:true
-        });
+        this.changeForm("setting");
     }
     closeSettingArea() {
+        this.changeForm("info");
+    }
+    openFollowedProducts() {
+        this.changeForm("followedProducts");
+    }
+    closeFollowedProducts() {
+        this.changeForm("info");
+    }
+    changeForm(form) {
         this.setState({
-            openedSetting:false
+            form:form
         });
     }
     render() {
+        this.form;
+        if(this.state.form=="info") {
+            this.form = <AccountInfo handleOpenSettingArea={this.openSettingArea} handleOpenFollowedProducts={this.openFollowedProducts} owner={this.props.owner} userName={this.props.userName}/>
+        } else if(this.state.form=="setting") {
+            this.form = <SettingArea closeSettingArea={this.closeSettingArea} />
+        } else if(this.state.form=="followedProducts") {
+            this.form = <FollowedProducts closeFollowedProducts={this.closeFollowedProducts} />
+        }
         return(
             <div>
                 <Row size="one">
                     <Column>
-                        {(this.state.openedSetting)?
-                        <SettingArea closeSettingArea={this.closeSettingArea} />
-                        : <AccountInfo handleOpenSettingArea={this.openSettingArea} owner={this.props.owner} /> }
+                        {this.form}
                     </Column>
                 </Row>
                 <Comments />
@@ -51,22 +69,34 @@ class AccountInfo extends React.Component {
     constructor(props) {
         super(props);
         this.openSettingArea = this.openSettingArea.bind(this);
+        this.openFollowedProducts = this.openFollowedProducts.bind(this);
     }
     openSettingArea() {
         this.props.handleOpenSettingArea();
+    }
+    openFollowedProducts() {
+        this.props.handleOpenFollowedProducts();
     }
     render() {
         return (
             <Center>
                 <i id="account-icon" className="fa fa-user-circle" aria-hidden="true"></i>
-                <H type="1" text="abdyek" />
+                <H type="1" text={this.props.userName} />
                 {(this.props.owner)?
-                    <button className="compact ui teal button" onClick={this.openSettingArea}>
-                        <i className="icon">
-                            <i className="fa fa-cog" aria-hidden="true"></i>
-                        </i>
-                        Ayarlar
-                    </button> 
+                    <div>
+                        <button className="compact ui teal button" onClick={this.openSettingArea}>
+                            <i className="icon">
+                                <i className="fa fa-cog" aria-hidden="true"></i>
+                            </i>
+                            Ayarlar
+                        </button> 
+                        <button className="compact ui teal button" onClick={this.openFollowedProducts}>
+                            <i className="icon">
+                                <i class="fa fa-cube" aria-hidden="true"></i>
+                            </i>
+                            Takipteki Ürünler
+                        </button> 
+                    </div>
                 :""}
             </Center>
         )
@@ -91,6 +121,135 @@ class SettingArea extends React.Component {
                     <WideColumn size="three"></WideColumn>
                     <WideColumn size="ten">
                         <ChangeItems />
+                    </WideColumn>
+                </Row>
+            </div>
+        )
+    }
+}
+
+class FollowedProducts extends React.Component {
+    constructor(props) {
+        super(props);
+        /*
+            gelen url içerisinde kaç mesaj göstereceği gibi bilgileri de içerecek,
+            yani bu url'e tıklandığı zaman kullanıcı okumadığı yorumları görüntüleyecek
+        */
+        this.state = {
+            followedProductsInfo : {
+                0:{
+                    url:"iphone-5s", 
+                    productName:"Iphone 5s",
+                    newCommentCount: "5"
+                },
+                1: {
+                    url:"le-cola",
+                    productName:"Le-Cola",
+                    newCommentCount: "9312"
+                },
+                9: {
+                    url:"mahmut-efendi-kahveleri",
+                    productName:"Mahmut Efendi Kahveleri",
+                    newCommentCount: "0"
+                }
+            },
+            isThereMore: true,
+        }
+        this.addMoreFollowed = this.addMoreFollowed.bind(this);
+    }
+    addMoreFollowed() {
+        // buradaki mor JSON'ı ajax ile gelen şey olacak
+        let more = {
+            0:{
+                url:"iphone-5s", 
+                productName:"Iphone 5s",
+                newCommentCount: "5"
+            },
+            1: {
+                url:"le-cola",
+                productName:"Le-Cola",
+                newCommentCount: "9312"
+            },
+            9: {
+                url:"mahmut-efendi-kahveleri",
+                productName:"Mahmut Efendi Kahveleri",
+                newCommentCount: "0"
+            },
+            99: {
+                url:"yeni-gelen",
+                productName:"Falan filen",
+                newCommentCount: "19"
+            }
+        }
+        this.setState({
+            followedProductsInfo: more
+        });
+    }
+    render() {
+        this.trs = [];
+        let info = this.state.followedProductsInfo;
+        let keys = Object.keys(info);
+        for(let i=0;i<keys.length;i++) {
+            this.trs.push(
+                <tr key={keys[i]}>
+                    <td>
+                        <Center>
+                            <a href={"urun/" + info[keys[i]].url}>
+                                {info[keys[i]].productName}
+                            </a>
+                        </Center>
+                    </td>
+                    <td>
+                        <Center>
+                            {info[keys[i]].newCommentCount}
+                        </Center>
+                    </td>
+                </tr>
+            );
+        }
+        return(
+            <div>
+                <Row size="two" nonStackable={true}>
+                    <Column>
+                        <H type="3" text="Takip Edilen Ürünler" />
+                    </Column>
+                    <Column>
+                        <FloatRight>
+                            <CancelButton handleCancelButton={this.props.closeFollowedProducts} />
+                        </FloatRight>
+                    </Column>
+                </Row>
+                <Row size="sixteen">
+                    <WideColumn size="three"></WideColumn>
+                    <WideColumn size="ten" >
+                        <table className="ui striped table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <Center>
+                                            Ürün
+                                        </Center>
+                                    </th>
+                                    <th>
+                                        <Center>Yeni Yorum</Center>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {this.trs}
+                            </tbody>
+                        </table>
+                        {(this.state.isThereMore)?
+                            <Row size="one">
+                                <Column>
+                                    <FloatRight>
+                                        <a onClick={this.addMoreFollowed}>
+                                            Daha Fazla
+                                        </a>
+                                    </FloatRight>
+                                </Column>
+                            </Row>
+                        :""}
                     </WideColumn>
                 </Row>
             </div>
