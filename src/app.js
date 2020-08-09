@@ -93,10 +93,61 @@ class LogoutButton extends React.Component {
 }
 
 class SearchBar extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            inputValue: "",
+            results: { }
+        };
+        this.refreshResults = this.refreshResults.bind(this);
+        this.prepareATags = this.prepareATags.bind(this);
+        this.changeInput = this.changeInput.bind(this);
+        this.deleteResults = this.deleteResults.bind(this);
+    }
+    refreshResults() {
+        // burada sunucu ile konuşucaz gelen veriyi results'a atıyoruz ve işlem tamamdır
+        this.setState({
+            results: {
+                88: {
+                    productName: "Le-Cola",
+                    productUrl: "le-cola"
+                }
+            }
+        });
+    }
+    prepareATags() {
+        this.aTags = [];
+        let keys = Object.keys(this.state.results);
+        for(let i=0;i<keys.length;i++) {
+            this.aTags.push(
+                <a key={keys[i]} className="result" href={"urun/" + this.state.results[keys[i]].productUrl}>{this.state.results[keys[i]].productName}</a>
+            )
+        }
+    }
+    changeInput(e) {
+        this.setState({
+            inputValue:e.target.value
+        });
+        // bu kısımda bir delay'a ihtiyacım olabilir çünkü her harfte yenileme yaparsam back-end sıkıntı çekebilir
+        this.refreshResults();
+    }
+    deleteResults() {
+        this.setState({
+            results: {}
+        })
+    }
     render() {
+        if(Object.keys(this.state.results).length) {
+            this.prepareATags();
+        }
         return(
             <div id="search" className="ui search">
-                <input className="prompt" type="text" placeholder="Ara..." />
+                <input className="prompt" type="text" placeholder="Ara..." value={this.state.inputValue} onChange={this.changeInput} onBlur={this.deleteResults} />
+                {(Object.keys(this.state.results).length)?
+                    <div id="search-results" className="results transition visible">
+                        {this.aTags}
+                    </div>
+                :""}
             </div>
         )
     }

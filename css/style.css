@@ -1,5 +1,5 @@
 header {
-    margin-bottom:30px;
+    margin-bottom:1rem;
     background-color: #01BAEF;
     box-shadow: 0 0.3rem 2.5rem #00000080;
 }
@@ -76,13 +76,6 @@ header > div {
     background-color:#20BF55 !important;
 }
 
-#search {
-    margin-top:9px;
-}
-
-#search input {
-    width:100%;
-}
 
 #galleryButtons {
     width:auto;
@@ -199,4 +192,15 @@ footer{
 /* header'daki menü (soldaki butonlar) */
 #menu {
     margin-top:11px;
+}
+
+/* arama çubuğu için */
+#search {
+    margin-top:9px;
+}
+#search input {
+    width:100%;
+}
+#search-results {
+    width: 100%;
 }

@@ -161,19 +161,79 @@ var LogoutButton = function (_React$Component4) {
 var SearchBar = function (_React$Component5) {
     _inherits(SearchBar, _React$Component5);
 
-    function SearchBar() {
+    function SearchBar(props) {
         _classCallCheck(this, SearchBar);
 
-        return _possibleConstructorReturn(this, (SearchBar.__proto__ || Object.getPrototypeOf(SearchBar)).apply(this, arguments));
+        var _this5 = _possibleConstructorReturn(this, (SearchBar.__proto__ || Object.getPrototypeOf(SearchBar)).call(this, props));
+
+        _this5.state = {
+            inputValue: "",
+            results: {}
+        };
+        _this5.refreshResults = _this5.refreshResults.bind(_this5);
+        _this5.prepareATags = _this5.prepareATags.bind(_this5);
+        _this5.changeInput = _this5.changeInput.bind(_this5);
+        _this5.deleteResults = _this5.deleteResults.bind(_this5);
+        return _this5;
     }
 
     _createClass(SearchBar, [{
+        key: "refreshResults",
+        value: function refreshResults() {
+            // burada sunucu ile konuşucaz gelen veriyi results'a atıyoruz ve işlem tamamdır
+            this.setState({
+                results: {
+                    88: {
+                        productName: "Le-Cola",
+                        productUrl: "le-cola"
+                    }
+                }
+            });
+        }
+    }, {
+        key: "prepareATags",
+        value: function prepareATags() {
+            this.aTags = [];
+            var keys = Object.keys(this.state.results);
+            for (var i = 0; i < keys.length; i++) {
+                this.aTags.push(React.createElement(
+                    "a",
+                    { key: keys[i], className: "result", href: "urun/" + this.state.results[keys[i]].productUrl },
+                    this.state.results[keys[i]].productName
+                ));
+            }
+        }
+    }, {
+        key: "changeInput",
+        value: function changeInput(e) {
+            this.setState({
+                inputValue: e.target.value
+            });
+            // bu kısımda bir delay'a ihtiyacım olabilir çünkü her harfte yenileme yaparsam back-end sıkıntı çekebilir
+            this.refreshResults();
+        }
+    }, {
+        key: "deleteResults",
+        value: function deleteResults() {
+            this.setState({
+                results: {}
+            });
+        }
+    }, {
         key: "render",
         value: function render() {
+            if (Object.keys(this.state.results).length) {
+                this.prepareATags();
+            }
             return React.createElement(
                 "div",
                 { id: "search", className: "ui search" },
-                React.createElement("input", { className: "prompt", type: "text", placeholder: "Ara..." })
+                React.createElement("input", { className: "prompt", type: "text", placeholder: "Ara...", value: this.state.inputValue, onChange: this.changeInput, onBlur: this.deleteResults }),
+                Object.keys(this.state.results).length ? React.createElement(
+                    "div",
+                    { id: "search-results", className: "results transition visible" },
+                    this.aTags
+                ) : ""
             );
         }
     }]);
