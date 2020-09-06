@@ -4,7 +4,7 @@ class Menu extends React.Component {
         this.state = {
             userName : "Yunus Emre",
             userUrl: "yunus-emre",
-            unreadComments: 123, /* okunmamış yorumlar */
+            unreadComments: 0, /* okunmamış yorumlar */
         };
     }
     render() {
