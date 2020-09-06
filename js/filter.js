@@ -6,37 +6,34 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var CancelButton = function (_React$Component) {
-    _inherits(CancelButton, _React$Component);
+var Content = function (_React$Component) {
+    _inherits(Content, _React$Component);
 
-    function CancelButton(props) {
-        _classCallCheck(this, CancelButton);
+    function Content() {
+        _classCallCheck(this, Content);
 
-        var _this = _possibleConstructorReturn(this, (CancelButton.__proto__ || Object.getPrototypeOf(CancelButton)).call(this, props));
-
-        _this.closeFunc = _this.closeFunc.bind(_this);
-        return _this;
+        return _possibleConstructorReturn(this, (Content.__proto__ || Object.getPrototypeOf(Content)).apply(this, arguments));
     }
 
-    _createClass(CancelButton, [{
-        key: "closeFunc",
-        value: function closeFunc() {
-            this.props.handleCancelButton();
-        }
-    }, {
+    _createClass(Content, [{
         key: "render",
         value: function render() {
             return React.createElement(
-                "button",
-                { className: "ui icon red button", onClick: this.closeFunc },
+                "div",
+                null,
                 React.createElement(
-                    "i",
-                    { className: "icon" },
-                    React.createElement("i", { className: "fa fa-times", "aria-hidden": "true" })
+                    Row,
+                    { size: "sixteen" },
+                    React.createElement(WideColumn, { size: "two" }),
+                    React.createElement(
+                        WideColumn,
+                        { size: "twelve" },
+                        React.createElement(H, { type: "1", text: "Filtrele" })
+                    )
                 )
             );
         }
     }]);
 
-    return CancelButton;
+    return Content;
 }(React.Component);
