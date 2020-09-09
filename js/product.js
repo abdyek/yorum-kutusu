@@ -6,13 +6,13 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var Content = function (_React$Component) {
-	_inherits(Content, _React$Component);
+var Product = function (_React$Component) {
+	_inherits(Product, _React$Component);
 
-	function Content(props) {
-		_classCallCheck(this, Content);
+	function Product(props) {
+		_classCallCheck(this, Product);
 
-		var _this = _possibleConstructorReturn(this, (Content.__proto__ || Object.getPrototypeOf(Content)).call(this, props));
+		var _this = _possibleConstructorReturn(this, (Product.__proto__ || Object.getPrototypeOf(Product)).call(this, props));
 
 		_this.state = {
 			// normal, loading, notFound
@@ -116,7 +116,7 @@ var Content = function (_React$Component) {
 		return _this;
 	}
 
-	_createClass(Content, [{
+	_createClass(Product, [{
 		key: "changeSortBy",
 		value: function changeSortBy(value) {
 			if (value != this.state.sortBy && this.state.commentsForm != "loading") {
@@ -152,7 +152,7 @@ var Content = function (_React$Component) {
 				return React.createElement(
 					"div",
 					null,
-					React.createElement(Product, { tags: this.tagsInfo }),
+					React.createElement(ProductInfo, { tags: this.tagsInfo }),
 					React.createElement(PageNavigation, { sortBy: this.state.sortBy, handleChangeSortBy: this.changeSortBy, pageCount: "6", currentPage: this.state.pageNumber, handleChangePageNumber: this.changePageNumber }),
 					React.createElement(Comments, { comments: this.state.comments, form: this.state.commentsForm }),
 					React.createElement(PageNavigation, { sortBy: this.state.sortBy, handleChangeSortBy: this.changeSortBy, pageCount: "6", currentPage: this.state.pageNumber, handleChangePageNumber: this.changePageNumber }),
@@ -183,16 +183,16 @@ var Content = function (_React$Component) {
 		}
 	}]);
 
-	return Content;
+	return Product;
 }(React.Component);
 
-var Product = function (_React$Component2) {
-	_inherits(Product, _React$Component2);
+var ProductInfo = function (_React$Component2) {
+	_inherits(ProductInfo, _React$Component2);
 
-	function Product(props) {
-		_classCallCheck(this, Product);
+	function ProductInfo(props) {
+		_classCallCheck(this, ProductInfo);
 
-		var _this2 = _possibleConstructorReturn(this, (Product.__proto__ || Object.getPrototypeOf(Product)).call(this, props));
+		var _this2 = _possibleConstructorReturn(this, (ProductInfo.__proto__ || Object.getPrototypeOf(ProductInfo)).call(this, props));
 
 		_this2.followButtonAtt = {
 			follow: {
@@ -216,7 +216,7 @@ var Product = function (_React$Component2) {
 		return _this2;
 	}
 
-	_createClass(Product, [{
+	_createClass(ProductInfo, [{
 		key: "followButton",
 		value: function followButton() {
 			if (this.state.followed) {
@@ -277,7 +277,7 @@ var Product = function (_React$Component2) {
 		}
 	}]);
 
-	return Product;
+	return ProductInfo;
 }(React.Component);
 
 var Comments = function (_React$Component3) {

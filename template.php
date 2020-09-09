@@ -1,21 +1,21 @@
+<script>
+    <?php echo 'const className = "' . $className . '"'?>
+</script>
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <base href="<?php echo $siteUrl ?>" >
+    <base href="<?php echo Config::SITEURL ?>" >
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo $pageInfo['pageTitle'];?></title>
+    <title><?php echo $pageTitle ?></title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/loading.css">
-    <?php
-        if(is_array($pageInfo['styleFile'])) {
-            foreach ($pageInfo['styleFile'] as $styleFile) {
-                echo '<link rel="stylesheet" href="css/'.$styleFile.'">';
-            }
-        } else {
-            echo '<link rel="stylesheet" href="css/'.$pageInfo['styleFile'].'">';
-        }
-    ?>
+
+    <link rel="stylesheet" href="css/comment.css">
+    <link rel="stylesheet" href="css/filter.css">
+    <link rel="stylesheet" href="css/new-product.css">
+    <link rel="stylesheet" href="css/profile.css">
+
     <!-- her sayfanın css sayfasını ayırmak istiyorum buradaki gibi -->
     <link rel="stylesheet" href="css/semantic.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css" integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous">
@@ -32,15 +32,21 @@
 
     <!-- React bileşenimizi yükleyin. -->
     <script src="js/components.js"></script>
-    <?php
-        if(is_array($pageInfo['reactScriptFile'])) {
-            foreach ($pageInfo['reactScriptFile'] as $scriptFile) {
-                echo '<script src="js/'.$scriptFile.'"></script> ';
-            }
-        } else {
-            echo '<script src="js/'.$pageInfo['reactScriptFile'].'"></script>';
-        }
-    ?>
+
+    <script src="js/cancelButton.js"></script>
+    <script src="js/comment.js"></script>
+    <script src="js/emailValidation.js"></script>
+    <script src="js/emailValidationPage.js"></script>
+    <script src="js/filter.js"></script>
+    <script src="js/index.js"></script>
+    <script src="js/login.js"></script>
+    <script src="js/newProduct.js"></script>
+    <script src="js/pageNavigation.js"></script>
+    <script src="js/product.js"></script>
+    <script src="js/profile.js"></script>
+    <script src="js/signup.js"></script>
+    <script src="js/tag.js"></script>
+
     <script src="js/app.js"></script>
 
 </body>

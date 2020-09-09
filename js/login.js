@@ -258,16 +258,16 @@ var Head = function (_React$Component5) {
     return Head;
 }(React.Component);
 
-var Content = function (_React$Component6) {
-    _inherits(Content, _React$Component6);
+var Login = function (_React$Component6) {
+    _inherits(Login, _React$Component6);
 
-    function Content(props) {
-        _classCallCheck(this, Content);
+    function Login(props) {
+        _classCallCheck(this, Login);
 
-        return _possibleConstructorReturn(this, (Content.__proto__ || Object.getPrototypeOf(Content)).call(this, props));
+        return _possibleConstructorReturn(this, (Login.__proto__ || Object.getPrototypeOf(Login)).call(this, props));
     }
 
-    _createClass(Content, [{
+    _createClass(Login, [{
         key: "render",
         value: function render() {
             return React.createElement(
@@ -280,5 +280,5 @@ var Content = function (_React$Component6) {
         }
     }]);
 
-    return Content;
+    return Login;
 }(React.Component);

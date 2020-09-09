@@ -6,13 +6,13 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var Content = function (_React$Component) {
-    _inherits(Content, _React$Component);
+var NewProduct = function (_React$Component) {
+    _inherits(NewProduct, _React$Component);
 
-    function Content(props) {
-        _classCallCheck(this, Content);
+    function NewProduct(props) {
+        _classCallCheck(this, NewProduct);
 
-        var _this = _possibleConstructorReturn(this, (Content.__proto__ || Object.getPrototypeOf(Content)).call(this, props));
+        var _this = _possibleConstructorReturn(this, (NewProduct.__proto__ || Object.getPrototypeOf(NewProduct)).call(this, props));
 
         _this.state = {
             // input, showInfo, loading
@@ -71,7 +71,7 @@ var Content = function (_React$Component) {
         return _this;
     }
 
-    _createClass(Content, [{
+    _createClass(NewProduct, [{
         key: "onChangeProductName",
         value: function onChangeProductName(e) {
             this.setState({
@@ -241,7 +241,7 @@ var Content = function (_React$Component) {
         }
     }]);
 
-    return Content;
+    return NewProduct;
 }(React.Component);
 
 var SelectedTags = function (_React$Component2) {

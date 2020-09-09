@@ -6,13 +6,13 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var Content = function (_React$Component) {
-    _inherits(Content, _React$Component);
+var Signup = function (_React$Component) {
+    _inherits(Signup, _React$Component);
 
-    function Content(props) {
-        _classCallCheck(this, Content);
+    function Signup(props) {
+        _classCallCheck(this, Signup);
 
-        var _this = _possibleConstructorReturn(this, (Content.__proto__ || Object.getPrototypeOf(Content)).call(this, props));
+        var _this = _possibleConstructorReturn(this, (Signup.__proto__ || Object.getPrototypeOf(Signup)).call(this, props));
 
         _this.state = {
             form: "normal",
@@ -38,7 +38,7 @@ var Content = function (_React$Component) {
         return _this;
     }
 
-    _createClass(Content, [{
+    _createClass(Signup, [{
         key: "signUpClick",
         value: function signUpClick(e) {
             if (this.state.passwordText != this.state.passwordVerificationText) {
@@ -196,5 +196,5 @@ var Content = function (_React$Component) {
         }
     }]);
 
-    return Content;
+    return Signup;
 }(React.Component);

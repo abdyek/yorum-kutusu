@@ -1,4 +1,4 @@
-class Content extends React.Component {
+class Profile extends React.Component {
     render() {
         /* 
             EmailValidation componentine validated={true} vermen yeterli görünmemesini sağlamak için

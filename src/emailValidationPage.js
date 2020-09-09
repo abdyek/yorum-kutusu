@@ -1,4 +1,4 @@
-class Content extends React.Component {
+class EmailValidationPage extends React.Component {
     render() {
         return(
             <div>

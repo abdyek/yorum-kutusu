@@ -196,6 +196,69 @@ class Footer extends React.Component {
     }
 }
 
+class Component extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            "content":this.props.content
+        };
+        this.changeContent = this.changeContent.bind(this);
+    }
+    changeContent(content) {
+        this.setState({
+            "content":content
+        });
+    }
+    render() {
+        switch(this.state.content) {
+            case "index":
+                return (
+                    <Index changeContent={this.changeContent}/>
+                )
+                break;
+            case "profile":
+                return (
+                    <Profile />
+                )
+                break;
+            case "product":
+                return (
+                    <Product />
+                )
+                break;
+            case "newProduct":
+                return (
+                    <NewProduct/>
+                )
+                break;
+            case "login":
+                return (
+                    <Login />
+                )
+                break;
+            case "signup":
+                return (
+                    <Signup />
+                )
+                break;
+            case "filter":
+                return (
+                    <Filter />
+                )
+                break;
+            case "emailValidationPage":
+                return (
+                    <EmailValidationPage />
+                )
+                break;
+            default:
+                return (
+                    <div>Böyle bir sayfa yok</div>
+                )
+        } 
+    }
+}
+
 class App extends React.Component {
     constructor(props) {
         super(props);
@@ -204,7 +267,7 @@ class App extends React.Component {
         return (
             <div id="app">
                 <Header />
-                <Content />
+                <Component content={className}/>
                 <Footer />
             </div>
         )

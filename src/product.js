@@ -1,4 +1,4 @@
-class Content extends React.Component {
+class Product extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -131,7 +131,7 @@ class Content extends React.Component {
         if(this.state.form=="normal") {
             return(
                 <div>
-                    <Product tags={this.tagsInfo}/>
+                    <ProductInfo tags={this.tagsInfo}/>
                     <PageNavigation sortBy={this.state.sortBy} handleChangeSortBy={this.changeSortBy} pageCount="6" currentPage={this.state.pageNumber} handleChangePageNumber={this.changePageNumber} />
                     <Comments comments={this.state.comments} form={this.state.commentsForm}/>
                     <PageNavigation sortBy={this.state.sortBy} handleChangeSortBy={this.changeSortBy} pageCount="6" currentPage={this.state.pageNumber} handleChangePageNumber={this.changePageNumber} />
@@ -159,7 +159,7 @@ class Content extends React.Component {
     }
 }
 
-class Product extends React.Component {
+class ProductInfo extends React.Component {
 	constructor(props) {
 		super(props);
 		this.followButtonAtt = {

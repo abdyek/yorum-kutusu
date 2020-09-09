@@ -143,7 +143,7 @@ class Head extends React.Component {
     }
 }
 
-class Content extends React.Component {
+class Login extends React.Component {
     constructor(props) {
         super(props);
     }

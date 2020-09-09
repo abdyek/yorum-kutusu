@@ -330,8 +330,71 @@ var Footer = function (_React$Component7) {
     return Footer;
 }(React.Component);
 
-var App = function (_React$Component8) {
-    _inherits(App, _React$Component8);
+var Component = function (_React$Component8) {
+    _inherits(Component, _React$Component8);
+
+    function Component(props) {
+        _classCallCheck(this, Component);
+
+        var _this8 = _possibleConstructorReturn(this, (Component.__proto__ || Object.getPrototypeOf(Component)).call(this, props));
+
+        _this8.state = {
+            "content": _this8.props.content
+        };
+        _this8.changeContent = _this8.changeContent.bind(_this8);
+        return _this8;
+    }
+
+    _createClass(Component, [{
+        key: "changeContent",
+        value: function changeContent(content) {
+            this.setState({
+                "content": content
+            });
+        }
+    }, {
+        key: "render",
+        value: function render() {
+            switch (this.state.content) {
+                case "index":
+                    return React.createElement(Index, { changeContent: this.changeContent });
+                    break;
+                case "profile":
+                    return React.createElement(Profile, null);
+                    break;
+                case "product":
+                    return React.createElement(Product, null);
+                    break;
+                case "newProduct":
+                    return React.createElement(NewProduct, null);
+                    break;
+                case "login":
+                    return React.createElement(Login, null);
+                    break;
+                case "signup":
+                    return React.createElement(Signup, null);
+                    break;
+                case "filter":
+                    return React.createElement(Filter, null);
+                    break;
+                case "emailValidationPage":
+                    return React.createElement(EmailValidationPage, null);
+                    break;
+                default:
+                    return React.createElement(
+                        "div",
+                        null,
+                        "B\xF6yle bir sayfa yok"
+                    );
+            }
+        }
+    }]);
+
+    return Component;
+}(React.Component);
+
+var App = function (_React$Component9) {
+    _inherits(App, _React$Component9);
 
     function App(props) {
         _classCallCheck(this, App);
@@ -346,7 +409,7 @@ var App = function (_React$Component8) {
                 "div",
                 { id: "app" },
                 React.createElement(Header, null),
-                React.createElement(Content, null),
+                React.createElement(Component, { content: className }),
                 React.createElement(Footer, null)
             );
         }

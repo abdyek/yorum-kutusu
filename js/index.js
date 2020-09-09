@@ -6,25 +6,38 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var Content = function (_React$Component) {
-    _inherits(Content, _React$Component);
+var Index = function (_React$Component) {
+    _inherits(Index, _React$Component);
 
-    function Content() {
-        _classCallCheck(this, Content);
+    function Index(props) {
+        _classCallCheck(this, Index);
 
-        return _possibleConstructorReturn(this, (Content.__proto__ || Object.getPrototypeOf(Content)).apply(this, arguments));
+        var _this = _possibleConstructorReturn(this, (Index.__proto__ || Object.getPrototypeOf(Index)).call(this, props));
+
+        _this.changeContent = _this.changeContent.bind(_this);
+        return _this;
     }
 
-    _createClass(Content, [{
+    _createClass(Index, [{
+        key: "changeContent",
+        value: function changeContent(content) {
+            //console.log(content);
+            this.props.changeContent(content);
+        }
+    }, {
         key: "render",
         value: function render() {
+            var _this2 = this;
+
             return React.createElement(
                 "div",
-                null,
+                { onClick: function onClick(e) {
+                        return _this2.changeContent("login", e);
+                    } },
                 React.createElement(H, { type: "1", text: "buras\u0131 ana sayfa" })
             );
         }
     }]);
 
-    return Content;
+    return Index;
 }(React.Component);

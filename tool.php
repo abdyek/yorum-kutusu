@@ -35,12 +35,13 @@ function CallAPI($method, $url, $data = false) {
     return $result;
 }
 
-function generatePage($pageInfo) {
-    require 'session.php';
-    require 'config.php';
-
-    $username = 'mahmut';  // bu şimdilik
-    include 'template.php';
+class Tool {
+    public static function generatePage($pageName) {
+        $pageTitle = Config::PAGEURL[$pageName]['title'];
+        $className = Config::PAGEURL[$pageName]['className'];
+        $username = 'mahmut';  // bu şimdilik
+        include 'template.php';
+    }
 }
 
 ?>
