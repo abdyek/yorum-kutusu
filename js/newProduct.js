@@ -269,7 +269,7 @@ var SelectedTags = function (_React$Component2) {
                     this.props.form == "input" ? React.createElement(
                         "span",
                         { className: "info-span" },
-                        "(kald\u0131rmak i\xE7in etikete dokunun)"
+                        "[se\xE7imi iptal etmek i\xE7in etikete dokunun]"
                     ) : ""
                 );
             } else {

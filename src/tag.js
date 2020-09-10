@@ -1,3 +1,206 @@
+class TagPicker extends React.Component {
+    // newProduct'ın içindeki yapı tagPicker'a benziyor ancak değil. Onu daha önceden yazmıştım bu sebeple daha karışık.
+    constructor(props) {
+        super(props);
+        this.items;
+        this.state = {
+            tags:{
+                3:{
+                    passive:false,
+                    text:"Batarya",
+                    color:"yellow",
+                    rateValue: "-"
+                },
+                4:{
+                    passive:false,
+                    text:"Kamera",
+                    color:"orange",
+                    rateValue: "-"
+                },
+                5:{
+                    passive:false,
+                    text:"Tasarım",
+                    color:"",
+                    rateValue: "-"
+                },
+                99:{
+                    passive:true,
+                    text:"Pasif Etiket",
+                    color:"",
+                    rateValue: "-"
+                }
+            },
+            selectedTags: {
+            },
+            searchInput: "",
+            typing: false,
+            typingTimeout: 0,
+            showItems:false,
+            product: {
+                0:{
+                    title:"Mahmut Efendi Kahveleri",
+                    tags: {
+                        0:{
+                            passive:true,
+                            text:"Akıllı Telefon",
+                        },
+                        1:{
+                            passive:true,
+                            text:"Apple"
+                        },
+                        2:{
+                            passive:true,
+                            text:"Ipone"
+                        },
+                        3:{
+                            passive:false,
+                            text:"Batarya",
+                            color:"yellow",
+                            rateValue: "5.5"
+                        },
+                        4:{
+                            passive:false,
+                            text:"Kamera",
+                            color:"orange",
+                            rateValue: "4.2"
+                        },
+                        5:{
+                            passive:false,
+                            text:"Ekran",
+                            color:"green",
+                            rateValue: "9.3"
+                        }
+                    }
+                },
+                1:{
+                    title:"IPhone 5s",
+                    tags: {
+                        0:{
+                            passive:true,
+                            text:"Akıllı Telefon",
+                        },
+                        3:{
+                            passive:false,
+                            text:"Batarya",
+                            color:"yellow",
+                            rateValue: "5.5"
+                        },
+                        4:{
+                            passive:false,
+                            text:"Kamera",
+                            color:"orange",
+                            rateValue: "4.2"
+                        },
+                        5:{
+                            passive:false,
+                            text:"Ekran",
+                            color:"green",
+                            rateValue: "9.3"
+                        }
+                    }
+                },
+
+            }
+        }
+        this.refreshTags = this.refreshTags.bind(this);
+        this.refreshProduct = this.refreshProduct.bind(this);
+        this.deleteTag = this.deleteTag.bind(this);
+        this.onFocusInput = this.onFocusInput.bind(this);
+        this.onBlurInput = this.onBlurInput.bind(this);
+        this.changeInput = this.changeInput.bind(this);
+        this.selectTag = this.selectTag.bind(this);
+        this.prepareItems = this.prepareItems.bind(this);
+    }
+    refreshTags() {
+        console.log("etiket yenileme isteği buraya");
+    }
+    refreshProduct() {
+        console.log("ürün yenileme isteği buraya");
+    }
+    deleteTag(e) {
+        let selectedTags = this.state.selectedTags;
+        delete selectedTags[e.target.attributes.name.value];
+        this.setState({
+            'selectedTags':selectedTags
+        });
+        this.refreshProduct();
+    }
+    onFocusInput() {
+        this.setState({
+            "showItems":true
+        });
+    }
+    onBlurInput() {
+        this.setState({
+            "showItems":false
+        });
+    }
+    changeInput(e){
+        if (this.state.typingTimeout) {
+            clearTimeout(this.state.typingTimeout);
+        }
+        this.setState({
+            searchInput:e.target.value,
+            typing:false,
+            typingTimeout:setTimeout(function() {
+                this.refreshTags();
+            }.bind(this), 500)
+        });
+    }
+    selectTag(e) {
+        //console.log(e.target.attributes.name.value);
+        let value = e.target.attributes.name.value
+        let selectedTags = this.state.selectedTags;
+        selectedTags[value] = this.state.tags[value];
+        this.setState({
+            selectedTags: selectedTags
+        });
+        this.refreshProduct();
+    }
+    prepareItems() {
+        if(this.state.showItems) {
+            this.items = [];
+            let keyArr = Object.keys(this.state.tags);
+            for(let i=0;i<keyArr.length;i++) {
+                this.items.push(
+                    <div className="item" key={keyArr[i]} name={keyArr[i]} onMouseDown={this.selectTag}>{this.state.tags[keyArr[i]].text}</div>
+                )
+            }
+        } else {
+            this.items = [];
+        }
+    }
+    render() {
+        this.prepareItems();
+        let headerText = (Object.keys(this.state.selectedTags).length)?"Etiket":"[Etiket Seçilmedi]";
+        let infoSpan = (Object.keys(this.state.selectedTags).length)?<span className="info-span">[seçimi iptal etmek için etikete dokunun]</span>:""
+        return(
+            <div>
+                <Row size="one">
+                    <Column>
+                        <H type="4" text={headerText} />
+                        <Tags tags={this.state.selectedTags} activeOnly={false} handleOnClick={this.deleteTag}/>
+                        {infoSpan}
+                        <div className="ui form">
+                            <div className="field">
+                                <label>Etiket Ekle</label>
+                                <input type="text" placeholder={"Etiket İsmi"} onFocus={this.onFocusInput} onBlur={this.onBlurInput} value={this.state.searchInput} onChange={this.changeInput}/>
+                            </div>
+                        </div>
+                        <div className="tags-in-list">
+                            <div className="ui list">
+                                {this.items}
+                            </div>
+                        </div>
+                    </Column>
+                </Row>
+                <ProductList product={this.state.product} />
+            </div>
+        )
+    }
+}
+
+
 class Tag extends React.Component {
     constructor(props){
         super(props);
@@ -6,11 +209,14 @@ class Tag extends React.Component {
         this.props.handleOnClick();
     }
     render() {
+        /*
+        // böyle bir kontrolü neden yapmışım bilmiyorum
         if(this.props.passive) {
             return (
                 <a className="ui large label tag-abdyek">{this.props.text}</a>
             )
         }
+        */
         return (
             <a name={this.props.id} className={"ui "+this.props.color+" large label tag-abdyek"} onClick={this.props.handleOnClick}>{this.props.text}
                 <div className="detail">{this.props.rateValue}</div> 
@@ -40,7 +246,7 @@ class Tags extends React.Component {
         }
         return(
             <div>
-                <div>
+                <div class="tags">
                     {this.tags}
                 </div>
             </div>

@@ -204,3 +204,24 @@ footer{
 #search-results {
     width: 100%;
 }
+
+/* etiket için */
+.tags {
+    margin-bottom: 0.6rem;
+}
+
+/* seçimi iptal etmek için dokunun uyarısı */
+.info-span {
+    color: grey !important;
+    font-size:0.9rem;
+    margin-bottom:1rem;
+    display: block;
+}
+
+/* productList için */
+.notFoundInProductList {
+    margin-top:2rem;
+}
+.productListItemHeader {
+    cursor:pointer;
+}
