@@ -139,13 +139,22 @@ var LogIn = function (_React$Component) {
 var SignUp = function (_React$Component2) {
     _inherits(SignUp, _React$Component2);
 
-    function SignUp() {
+    function SignUp(props) {
         _classCallCheck(this, SignUp);
 
-        return _possibleConstructorReturn(this, (SignUp.__proto__ || Object.getPrototypeOf(SignUp)).apply(this, arguments));
+        var _this2 = _possibleConstructorReturn(this, (SignUp.__proto__ || Object.getPrototypeOf(SignUp)).call(this, props));
+
+        _this2.changeContent = _this2.changeContent.bind(_this2);
+        return _this2;
     }
 
     _createClass(SignUp, [{
+        key: "changeContent",
+        value: function changeContent(e) {
+            e.preventDefault();
+            this.props.changeContent(e.target.href);
+        }
+    }, {
         key: "render",
         value: function render() {
             return React.createElement(
@@ -164,7 +173,7 @@ var SignUp = function (_React$Component2) {
                             React.createElement("br", null),
                             React.createElement(
                                 "a",
-                                { href: "uye-ol" },
+                                { href: "uye-ol", onClick: this.changeContent },
                                 "\u015Eimdi \xDCye ol"
                             )
                         )
@@ -275,7 +284,7 @@ var Login = function (_React$Component6) {
                 null,
                 React.createElement(Head, null),
                 React.createElement(LogIn, null),
-                React.createElement(SignUp, null)
+                React.createElement(SignUp, { changeContent: this.props.changeContent })
             );
         }
     }]);

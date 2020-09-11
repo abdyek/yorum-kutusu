@@ -1,6 +1,6 @@
 <script>
     let firstContent = "<?php echo $content ?>";
-    const SITEURL = "<?php Config::SITEURL ?>";
+    const SITEURL = "<?php echo Config::SITEURL ?>";
 </script>
 <!DOCTYPE html>
 <html lang="tr">

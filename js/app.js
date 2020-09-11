@@ -15,26 +15,159 @@ var Menu = function (_React$Component) {
         var _this = _possibleConstructorReturn(this, (Menu.__proto__ || Object.getPrototypeOf(Menu)).call(this, props));
 
         _this.state = {
+            // user-empty-unread, user-has-unread, login
+            form: "user-empty-unread",
             userName: "Yunus Emre",
-            userUrl: "yunus-emre",
-            unreadComments: 0 /* okunmamış yorumlar */
+            userURL: "yunus-emre",
+            unreadComments: 115 /* okunmamış yorumlar */
         };
+        _this.refreshUnreadComments = _this.refreshUnreadComments.bind(_this);
+        _this.logout = _this.logout.bind(_this);
+        _this.openUnreadComments = _this.openUnreadComments.bind(_this);
+        _this.openProfile = _this.openProfile.bind(_this);
         return _this;
     }
 
     _createClass(Menu, [{
+        key: "refreshUnreadComments",
+        value: function refreshUnreadComments() {
+            // burada istekle yeni okunmamış mesajları çekicez
+        }
+    }, {
+        key: "logout",
+        value: function logout(e) {
+            e.preventDefault();
+            this.setState({
+                form: "login"
+            });
+        }
+    }, {
+        key: "openUnreadComments",
+        value: function openUnreadComments(e) {
+            e.preventDefault();
+            this.props.changeContent("profil/" + this.state.userURL);
+            // ek olarak okunmamış yorumları açacak bir mekanizma
+        }
+    }, {
+        key: "openProfile",
+        value: function openProfile(e) {
+            e.preventDefault();
+            this.props.changeContent("profil/" + this.state.userURL);
+        }
+    }, {
         key: "render",
         value: function render() {
+            var core = void 0;
+            if (this.state.form == "user-has-unread") {
+                core = React.createElement(
+                    FloatRight,
+                    null,
+                    React.createElement(
+                        "a",
+                        { href: this.state.href, onClick: this.openUnreadComments },
+                        React.createElement(
+                            "button",
+                            { className: "ui blue button", onClick: this.goUserProfile },
+                            React.createElement(
+                                "i",
+                                { className: "icon" },
+                                React.createElement("i", { id: "unread-comments", className: "fa fa-comments", "aria-hidden": "true" })
+                            ),
+                            this.state.unreadComments
+                        )
+                    ),
+                    React.createElement(
+                        "a",
+                        { onClick: this.logout },
+                        React.createElement(
+                            "button",
+                            { "class": "ui icon blue button" },
+                            React.createElement(
+                                "i",
+                                { "class": "icon" },
+                                React.createElement("i", { id: "logout-button", "class": "fa fa-sign-out", "aria-hidden": "true" })
+                            )
+                        )
+                    )
+                );
+            } else if (this.state.form == "user-empty-unread") {
+                core = React.createElement(
+                    FloatRight,
+                    null,
+                    React.createElement(
+                        "a",
+                        { onClick: this.openProfile },
+                        React.createElement(
+                            "button",
+                            { "class": "ui blue button" },
+                            React.createElement(
+                                "i",
+                                { "class": "icon" },
+                                React.createElement("i", { "class": "fa fa-user", "aria-hidden": "true" })
+                            ),
+                            React.createElement(
+                                "span",
+                                null,
+                                "Hesap"
+                            )
+                        )
+                    ),
+                    React.createElement(
+                        "a",
+                        { onClick: this.logout },
+                        React.createElement(
+                            "button",
+                            { "class": "ui icon blue button" },
+                            React.createElement(
+                                "i",
+                                { "class": "icon" },
+                                React.createElement("i", { id: "logout-button", "class": "fa fa-sign-out", "aria-hidden": "true" })
+                            )
+                        )
+                    )
+                );
+            } else if (this.state.form == "login") {
+                core = React.createElement(
+                    FloatRight,
+                    null,
+                    React.createElement(
+                        "a",
+                        { onClick: this.click },
+                        React.createElement(
+                            "button",
+                            { "class": "ui blue button" },
+                            React.createElement(
+                                "i",
+                                { "class": "icon" },
+                                React.createElement("i", { "class": "fa fa-user", "aria-hidden": "true" })
+                            ),
+                            React.createElement(
+                                "span",
+                                null,
+                                "Giri\u015F Yap"
+                            )
+                        )
+                    )
+                );
+            }
             return React.createElement(
                 "div",
                 { id: "menu" },
-                React.createElement(
-                    FloatRight,
-                    null,
-                    this.state.unreadComments ? React.createElement(UnreadComments, { unreadComments: this.state.unreadComments, userUrl: this.state.userUrl }) : React.createElement(AccountButton, { userName: this.state.userName, userUrl: this.state.userUrl }),
-                    React.createElement(LogoutButton, { userName: this.state.userName })
-                )
+                core
             );
+            {/*
+                return(
+                  <div id="menu">
+                      <FloatRight>
+                          {(this.state.unreadComments)?
+                              <UnreadComments unreadComments={this.state.unreadComments} userUrl={this.state.userUrl} />
+                              :<AccountButton userName={this.state.userName} userUrl={this.state.userUrl} changeContent={this.props.changeContent} />
+                          }
+                          <LogoutButton userName={this.state.userName}/>
+                      </FloatRight>
+                  </div>
+                )
+                      */}
         }
     }]);
 
@@ -49,39 +182,44 @@ var AccountButton = function (_React$Component2) {
 
         var _this2 = _possibleConstructorReturn(this, (AccountButton.__proto__ || Object.getPrototypeOf(AccountButton)).call(this, props));
 
+        _this2.state = {
+            form: "profile", // profile, login
+            href: "profil/" + _this2.props.userUrl
+        };
         _this2.click = _this2.click.bind(_this2);
         return _this2;
     }
 
     _createClass(AccountButton, [{
         key: "click",
-        value: function click() {
-            if (this.props.userName) {
-                // kullanıcının hesabına yönlendirme yapılacak
-                this.props.userUrl; // url bir üstten geliyor yönlendirmede kullanırım
-            } else {
-                    // Giriş yap sayfasına yönledirme yapılacak
-                }
+        value: function click(e) {
+            e.preventDefault();
+            var href = this.state.href;
+            this.props.changeContent(href);
         }
     }, {
         key: "render",
         value: function render() {
             return React.createElement(
-                "button",
-                { "class": "ui blue button", onClick: this.click },
+                "a",
+                { href: this.state.href, onClick: this.click },
                 React.createElement(
-                    "i",
-                    { "class": "icon" },
-                    React.createElement("i", { "class": "fa fa-user", "aria-hidden": "true" })
-                ),
-                this.props.userName == undefined ? React.createElement(
-                    "span",
-                    null,
-                    "Giri\u015F Yap"
-                ) : React.createElement(
-                    "span",
-                    null,
-                    "Hesap"
+                    "button",
+                    { "class": "ui blue button" },
+                    React.createElement(
+                        "i",
+                        { "class": "icon" },
+                        React.createElement("i", { "class": "fa fa-user", "aria-hidden": "true" })
+                    ),
+                    this.state.form == "login" ? React.createElement(
+                        "span",
+                        null,
+                        "Giri\u015F Yap"
+                    ) : React.createElement(
+                        "span",
+                        null,
+                        "Hesap"
+                    )
                 )
             );
         }
@@ -278,7 +416,7 @@ var Header = function (_React$Component6) {
                             React.createElement(
                                 WideColumn,
                                 { size: "four" },
-                                React.createElement(Menu, null)
+                                React.createElement(Menu, { changeContent: this.props.changeContent })
                             )
                         )
                     )
@@ -333,77 +471,39 @@ var Footer = function (_React$Component7) {
 var Content = function (_React$Component8) {
     _inherits(Content, _React$Component8);
 
-    function Content(props) {
+    function Content() {
         _classCallCheck(this, Content);
 
-        var _this8 = _possibleConstructorReturn(this, (Content.__proto__ || Object.getPrototypeOf(Content)).call(this, props));
-
-        _this8.state = {
-            "content": _this8.props.content
-        };
-        _this8.slug = {
-            index: "",
-            product: "urun",
-            profile: "profil",
-            newProduct: "yeni-urun",
-            signup: "uye-ol",
-            login: "giris-yap",
-            emailValidationPage: "e-posta-dogrula",
-            filter: "filtrele"
-        };
-        window.onpopstate = function (event) {
-            if (event) {
-                if (window.history.state == null) {
-                    window.history.back();
-                } else {
-                    this.setState({
-                        content: window.history.state.content
-                    });
-                }
-            } else {
-                // Continue user action through link or button
-            }
-        }.bind(_this8);
-
-        _this8.changeContent = _this8.changeContent.bind(_this8);
-        return _this8;
+        return _possibleConstructorReturn(this, (Content.__proto__ || Object.getPrototypeOf(Content)).apply(this, arguments));
     }
 
     _createClass(Content, [{
-        key: "changeContent",
-        value: function changeContent(content) {
-            window.history.pushState({ content: content }, "Title", SITEURL + this.slug[content]);
-            this.setState({
-                "content": content
-            });
-        }
-    }, {
         key: "render",
         value: function render() {
-            switch (this.state.content) {
+            switch (this.props.content) {
                 case "index":
-                    return React.createElement(Index, { changeContent: this.changeContent });
+                    return React.createElement(Index, { changeContent: this.props.changeContent });
                     break;
                 case "profile":
-                    return React.createElement(Profile, null);
+                    return React.createElement(Profile, { changeContent: this.props.changeContent });
                     break;
                 case "product":
-                    return React.createElement(Product, null);
+                    return React.createElement(Product, { changeContent: this.props.changeContent });
                     break;
                 case "newProduct":
-                    return React.createElement(NewProduct, null);
+                    return React.createElement(NewProduct, { changeContent: this.props.changeContent });
                     break;
                 case "login":
-                    return React.createElement(Login, null);
+                    return React.createElement(Login, { changeContent: this.props.changeContent });
                     break;
                 case "signup":
-                    return React.createElement(Signup, null);
+                    return React.createElement(Signup, { changeContent: this.props.changeContent });
                     break;
                 case "filter":
-                    return React.createElement(Filter, null);
+                    return React.createElement(Filter, { changeContent: this.props.changeContent });
                     break;
                 case "emailValidationPage":
-                    return React.createElement(EmailValidationPage, null);
+                    return React.createElement(EmailValidationPage, { changeContent: this.changeContent });
                     break;
                 default:
                     return React.createElement(
@@ -425,17 +525,61 @@ var App = function (_React$Component9) {
     function App(props) {
         _classCallCheck(this, App);
 
-        return _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
+        var _this9 = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
+
+        _this9.state = {
+            "content": _this9.props.content
+        };
+        _this9.contentFromSlug = {
+            "": "index",
+            "urun": "product",
+            "profil": "profile",
+            "yeni-urun": "newProduct",
+            "uye-ol": "signup",
+            "giris-yap": "login",
+            "e-posta-dogrula": "emailValidationPage",
+            "filtrele": "filter"
+        };
+        window.onpopstate = function (event) {
+            if (event) {
+                if (window.history.state == null) {
+                    window.history.back();
+                } else {
+                    this.setState({
+                        content: window.history.state.content
+                    });
+                }
+            } else {
+                // Continue user action through link or button
+            }
+        }.bind(_this9);
+
+        _this9.changeContent = _this9.changeContent.bind(_this9);
+        return _this9;
     }
 
     _createClass(App, [{
+        key: "changeContent",
+        value: function changeContent(href) {
+            //console.log(event.target.href);
+            //window.history.pushState({content:content}, "Title", SITEURL+ this.slug[content]);
+            var foo = href.split(SITEURL);
+            var bar = foo[foo.length - 1];
+            slug = bar.split("/")[0];
+            var content = this.contentFromSlug[slug];
+            window.history.pushState({ content: content }, "Title", bar);
+            this.setState({
+                "content": content
+            });
+        }
+    }, {
         key: "render",
         value: function render() {
             return React.createElement(
                 "div",
                 { id: "app" },
-                React.createElement(Header, null),
-                React.createElement(Content, { content: firstContent }),
+                React.createElement(Header, { changeContent: this.changeContent }),
+                React.createElement(Content, { content: this.state.content, changeContent: this.changeContent }),
                 React.createElement(Footer, null)
             );
         }
@@ -444,4 +588,4 @@ var App = function (_React$Component9) {
     return App;
 }(React.Component);
 
-ReactDOM.render(React.createElement(App, null), document.getElementById('root'));
+ReactDOM.render(React.createElement(App, { content: firstContent }), document.getElementById('root'));

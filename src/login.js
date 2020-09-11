@@ -91,6 +91,14 @@ class LogIn extends React.Component {
 }
 
 class SignUp extends React.Component {
+    constructor(props) {
+        super(props);
+        this.changeContent = this.changeContent.bind(this);
+    }
+    changeContent(e) {
+        e.preventDefault();
+        this.props.changeContent(e.target.href);
+    }
     render() {
         return(
             <div>
@@ -98,7 +106,7 @@ class SignUp extends React.Component {
                     <Column>
                         <Center>
                             Hesabın mı yok?<br />
-                            <a href="uye-ol">
+                            <a href="uye-ol" onClick={this.changeContent}>
                                 Şimdi Üye ol
                             </a>
                         </Center>
@@ -152,7 +160,7 @@ class Login extends React.Component {
             <div>
                 <Head />
                 <LogIn />
-                <SignUp />
+                <SignUp changeContent={this.props.changeContent} />
             </div>
         )
     }

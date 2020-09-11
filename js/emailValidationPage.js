@@ -9,13 +9,21 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var EmailValidationPage = function (_React$Component) {
     _inherits(EmailValidationPage, _React$Component);
 
-    function EmailValidationPage() {
+    function EmailValidationPage(props) {
         _classCallCheck(this, EmailValidationPage);
 
-        return _possibleConstructorReturn(this, (EmailValidationPage.__proto__ || Object.getPrototypeOf(EmailValidationPage)).apply(this, arguments));
+        var _this = _possibleConstructorReturn(this, (EmailValidationPage.__proto__ || Object.getPrototypeOf(EmailValidationPage)).call(this, props));
+
+        _this.changeContent = _this.changeContent.bind(_this);
+        return _this;
     }
 
     _createClass(EmailValidationPage, [{
+        key: "changeContent",
+        value: function changeContent(content) {
+            this.props.changeContent(content);
+        }
+    }, {
         key: "render",
         value: function render() {
             return React.createElement(

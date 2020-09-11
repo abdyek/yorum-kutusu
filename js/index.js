@@ -20,20 +20,21 @@ var Index = function (_React$Component) {
 
     _createClass(Index, [{
         key: "changeContent",
-        value: function changeContent(content) {
-            //console.log(content);
-            this.props.changeContent(content);
+        value: function changeContent(e) {
+            e.preventDefault();
+            this.props.changeContent(e.target.href);
         }
     }, {
         key: "render",
         value: function render() {
-            var _this2 = this;
-
             return React.createElement(
                 "div",
-                { onClick: function onClick(e) {
-                        return _this2.changeContent("login", e);
-                    } },
+                null,
+                React.createElement(
+                    "a",
+                    { href: "giris-yap", onClick: this.changeContent },
+                    "Giri\u015F Yap"
+                ),
                 React.createElement(H, { type: "1", text: "buras\u0131 ana sayfa" })
             );
         }
