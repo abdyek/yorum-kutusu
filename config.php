@@ -4,33 +4,37 @@
     class Config {
         const SITEURL = "http://localhost/yorum-kutusu/";
         const PAGEURL = [
+            'ana-sayfa'=>[
+                'title'=>'Ana Sayfa',
+                'content'=>'index'
+            ],
             'urun'=>[
                 'title'=>'Ürün Sayfası',
-                'className'=>'product'
+                'content'=>'product'
             ],
             'profil'=>[
                 'title'=>'Profil',
-                'className'=>'profile'
+                'content'=>'profile'
             ],
             'yeni-urun'=>[
                 'title'=>'Yeni Ürün Oluştur',
-                'className'=>'newProduct'
+                'content'=>'newProduct'
             ],
             'uye-ol'=>[
                 'title'=>'Üye Ol',
-                'className'=>'signup'
+                'content'=>'signup'
             ],
             'giris-yap'=>[
                 'title'=>'Giriş Yap',
-                'className'=>'login'
+                'content'=>'login'
             ],
             'e-posta-dogrula'=>[
                 'title'=>'E-Posta Doğrula',
-                'className'=>'emailValidationPage'
+                'content'=>'emailValidationPage'
             ],
             'filtrele'=>[
                 'title'=>'Filtrele',
-                'className'=>'filter'
+                'content'=>'filter'
             ]
         ];
     }

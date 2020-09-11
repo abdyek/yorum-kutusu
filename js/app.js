@@ -330,24 +330,49 @@ var Footer = function (_React$Component7) {
     return Footer;
 }(React.Component);
 
-var Component = function (_React$Component8) {
-    _inherits(Component, _React$Component8);
+var Content = function (_React$Component8) {
+    _inherits(Content, _React$Component8);
 
-    function Component(props) {
-        _classCallCheck(this, Component);
+    function Content(props) {
+        _classCallCheck(this, Content);
 
-        var _this8 = _possibleConstructorReturn(this, (Component.__proto__ || Object.getPrototypeOf(Component)).call(this, props));
+        var _this8 = _possibleConstructorReturn(this, (Content.__proto__ || Object.getPrototypeOf(Content)).call(this, props));
 
         _this8.state = {
             "content": _this8.props.content
         };
+        _this8.slug = {
+            index: "",
+            product: "urun",
+            profile: "profil",
+            newProduct: "yeni-urun",
+            signup: "uye-ol",
+            login: "giris-yap",
+            emailValidationPage: "e-posta-dogrula",
+            filter: "filtrele"
+        };
+        window.onpopstate = function (event) {
+            if (event) {
+                if (window.history.state == null) {
+                    window.history.back();
+                } else {
+                    this.setState({
+                        content: window.history.state.content
+                    });
+                }
+            } else {
+                // Continue user action through link or button
+            }
+        }.bind(_this8);
+
         _this8.changeContent = _this8.changeContent.bind(_this8);
         return _this8;
     }
 
-    _createClass(Component, [{
+    _createClass(Content, [{
         key: "changeContent",
         value: function changeContent(content) {
+            window.history.pushState({ content: content }, "Title", SITEURL + this.slug[content]);
             this.setState({
                 "content": content
             });
@@ -384,13 +409,14 @@ var Component = function (_React$Component8) {
                     return React.createElement(
                         "div",
                         null,
-                        "B\xF6yle bir sayfa yok"
+                        "Böyle bir sayfa yok" + this.state.content,
+                        " "
                     );
             }
         }
     }]);
 
-    return Component;
+    return Content;
 }(React.Component);
 
 var App = function (_React$Component9) {
@@ -409,7 +435,7 @@ var App = function (_React$Component9) {
                 "div",
                 { id: "app" },
                 React.createElement(Header, null),
-                React.createElement(Component, { content: className }),
+                React.createElement(Content, { content: firstContent }),
                 React.createElement(Footer, null)
             );
         }

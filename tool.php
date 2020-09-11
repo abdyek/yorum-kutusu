@@ -38,7 +38,7 @@ function CallAPI($method, $url, $data = false) {
 class Tool {
     public static function generatePage($pageName) {
         $pageTitle = Config::PAGEURL[$pageName]['title'];
-        $className = Config::PAGEURL[$pageName]['className'];
+        $content = Config::PAGEURL[$pageName]['content'];
         $username = 'mahmut';  // bu şimdilik
         include 'template.php';
     }

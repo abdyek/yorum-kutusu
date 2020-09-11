@@ -8,7 +8,7 @@ require 'vendor/autoload.php';
 $router = new Buki\Router();
 
 $router->get('/', function() {
-    return 'Hello World!';
+    Tool::generatePage('ana-sayfa');
 });
 
 $router->get('/urun/:string', function($productURL) {

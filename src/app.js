@@ -196,15 +196,41 @@ class Footer extends React.Component {
     }
 }
 
-class Component extends React.Component {
+class Content extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             "content":this.props.content
         };
+        this.slug = {
+            index:"",
+            product:"urun",
+            profile:"profil",
+            newProduct:"yeni-urun",
+            signup:"uye-ol",
+            login:"giris-yap",
+            emailValidationPage:"e-posta-dogrula",
+            filter:"filtrele"
+        }
+        window.onpopstate = function(event) {
+            if(event){
+                if(window.history.state==null) {
+                    window.history.back();
+                } else {
+                    this.setState({
+                        content:window.history.state.content
+                    });
+                }
+            }
+            else{
+                // Continue user action through link or button
+            }
+        }.bind(this);
+
         this.changeContent = this.changeContent.bind(this);
     }
     changeContent(content) {
+        window.history.pushState({content:content}, "Title", SITEURL+ this.slug[content]);
         this.setState({
             "content":content
         });
@@ -253,7 +279,7 @@ class Component extends React.Component {
                 break;
             default:
                 return (
-                    <div>Böyle bir sayfa yok</div>
+                    <div>{"Böyle bir sayfa yok" + this.state.content} </div>
                 )
         } 
     }
@@ -267,7 +293,7 @@ class App extends React.Component {
         return (
             <div id="app">
                 <Header />
-                <Component content={className}/>
+                <Content content={firstContent}/>
                 <Footer />
             </div>
         )
