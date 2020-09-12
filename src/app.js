@@ -12,6 +12,7 @@ class Menu extends React.Component {
         this.logout = this.logout.bind(this);
         this.openUnreadComments = this.openUnreadComments.bind(this);
         this.openProfile = this.openProfile.bind(this);
+        this.openLogin = this.openLogin.bind(this);
     }
     refreshUnreadComments() {
         // burada istekle yeni okunmamış mesajları çekicez
@@ -30,6 +31,10 @@ class Menu extends React.Component {
     openProfile(e) {
         e.preventDefault();
         this.props.changeContent("profil/"+this.state.userURL);
+    }
+    openLogin(e) {
+        e.preventDefault();
+        this.props.changeContent("giris-yap");
     }
     render() {
         let core;
@@ -77,7 +82,7 @@ class Menu extends React.Component {
         } else if(this.state.form=="login") {
             core = (
                 <FloatRight>
-                    <a onClick={this.click}>
+                    <a onClick={this.openLogin}>
                         <button class="ui blue button">
                             <i class="icon">
                                 <i class="fa fa-user" aria-hidden="true"></i>
@@ -93,92 +98,23 @@ class Menu extends React.Component {
                 {core}
             </div>
         )
-         {/*
+    }
+}
+
+class Logo extends React.Component {
+    constructor(props){
+        super(props);
+        this.goHome = this.goHome.bind(this);
+    }
+    goHome(e) {
+        this.props.changeContent(" ");
+    }
+    render() {
         return(
-            <div id="menu">
-                <FloatRight>
-                    {(this.state.unreadComments)?
-                        <UnreadComments unreadComments={this.state.unreadComments} userUrl={this.state.userUrl} />
-                        :<AccountButton userName={this.state.userName} userUrl={this.state.userUrl} changeContent={this.props.changeContent} />
-                    }
-                    <LogoutButton userName={this.state.userName}/>
-                </FloatRight>
+            <div id="logo" onClick={this.goHome}>
+                <H type="1" text="Yorum Kutusu" />
             </div>
         )
-                */}
-    }
-}
-
-class AccountButton extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            form:"profile",  // profile, login
-            href:"profil/"+this.props.userUrl
-        }
-        this.click = this.click.bind(this);
-    }
-    click(e) {
-        e.preventDefault();
-        let href = this.state.href;
-        this.props.changeContent(href);
-    }
-    render() {
-        return(
-            <a href={this.state.href} onClick={this.click}>
-                <button class="ui blue button">
-                    <i class="icon">
-                        <i class="fa fa-user" aria-hidden="true"></i>
-                    </i>
-                    {(this.state.form=="login")?
-                        <span>Giriş Yap</span>:
-                        <span>Hesap</span>
-                    }
-                </button>
-            </a>
-        )
-    }
-}
-
-class UnreadComments extends React.Component {
-    constructor(props) {
-        super(props);
-        this.goUserProfile = this.goUserProfile.bind(this);
-    }
-    goUserProfile() {
-        // profile takip edilen ürünleri açacak şekilde yönlendirmesi lazım
-        this.props.userUrl; // url bir üstten geliyor yönlendirmede kullanırım
-    }
-    render() {
-        return(
-            <button className="ui blue button" onClick={this.goUserProfile}>
-                <i className="icon">
-                    <i id="unread-comments" className="fa fa-comments" aria-hidden="true"></i>
-                </i>
-                {this.props.unreadComments}
-            </button> 
-        )
-    }
-}
-
-class LogoutButton extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-    render() {
-        if(this.props.userName) {
-            return(
-                <button class="ui icon blue button">
-                    <i class="icon">
-                        <i id="logout-button" class="fa fa-sign-out" aria-hidden="true"></i>
-                    </i>
-                </button>
-            )
-        } else {
-            return(
-                <span></span>
-            )
-        }
     }
 }
 
@@ -251,7 +187,7 @@ class Header extends React.Component {
                     <Column>
                         <Row>
                             <WideColumn size="four">
-                                <Logo />
+                                <Logo changeContent={this.props.changeContent} />
                             </WideColumn>
                             <WideColumn size="eight">
                                 <SearchBar />
@@ -344,7 +280,7 @@ class App extends React.Component {
             "content":this.props.content
         };
         this.contentFromSlug = {
-            "":"index",
+            " ":"index",
             "urun":"product",
             "profil":"profile",
             "yeni-urun":"newProduct",

@@ -25,6 +25,7 @@ var Menu = function (_React$Component) {
         _this.logout = _this.logout.bind(_this);
         _this.openUnreadComments = _this.openUnreadComments.bind(_this);
         _this.openProfile = _this.openProfile.bind(_this);
+        _this.openLogin = _this.openLogin.bind(_this);
         return _this;
     }
 
@@ -53,6 +54,12 @@ var Menu = function (_React$Component) {
         value: function openProfile(e) {
             e.preventDefault();
             this.props.changeContent("profil/" + this.state.userURL);
+        }
+    }, {
+        key: "openLogin",
+        value: function openLogin(e) {
+            e.preventDefault();
+            this.props.changeContent("giris-yap");
         }
     }, {
         key: "render",
@@ -132,7 +139,7 @@ var Menu = function (_React$Component) {
                     null,
                     React.createElement(
                         "a",
-                        { onClick: this.click },
+                        { onClick: this.openLogin },
                         React.createElement(
                             "button",
                             { "class": "ui blue button" },
@@ -155,164 +162,60 @@ var Menu = function (_React$Component) {
                 { id: "menu" },
                 core
             );
-            {/*
-                return(
-                  <div id="menu">
-                      <FloatRight>
-                          {(this.state.unreadComments)?
-                              <UnreadComments unreadComments={this.state.unreadComments} userUrl={this.state.userUrl} />
-                              :<AccountButton userName={this.state.userName} userUrl={this.state.userUrl} changeContent={this.props.changeContent} />
-                          }
-                          <LogoutButton userName={this.state.userName}/>
-                      </FloatRight>
-                  </div>
-                )
-                      */}
         }
     }]);
 
     return Menu;
 }(React.Component);
 
-var AccountButton = function (_React$Component2) {
-    _inherits(AccountButton, _React$Component2);
+var Logo = function (_React$Component2) {
+    _inherits(Logo, _React$Component2);
 
-    function AccountButton(props) {
-        _classCallCheck(this, AccountButton);
+    function Logo(props) {
+        _classCallCheck(this, Logo);
 
-        var _this2 = _possibleConstructorReturn(this, (AccountButton.__proto__ || Object.getPrototypeOf(AccountButton)).call(this, props));
+        var _this2 = _possibleConstructorReturn(this, (Logo.__proto__ || Object.getPrototypeOf(Logo)).call(this, props));
 
-        _this2.state = {
-            form: "profile", // profile, login
-            href: "profil/" + _this2.props.userUrl
-        };
-        _this2.click = _this2.click.bind(_this2);
+        _this2.goHome = _this2.goHome.bind(_this2);
         return _this2;
     }
 
-    _createClass(AccountButton, [{
-        key: "click",
-        value: function click(e) {
-            e.preventDefault();
-            var href = this.state.href;
-            this.props.changeContent(href);
+    _createClass(Logo, [{
+        key: "goHome",
+        value: function goHome(e) {
+            this.props.changeContent(" ");
         }
     }, {
         key: "render",
         value: function render() {
             return React.createElement(
-                "a",
-                { href: this.state.href, onClick: this.click },
-                React.createElement(
-                    "button",
-                    { "class": "ui blue button" },
-                    React.createElement(
-                        "i",
-                        { "class": "icon" },
-                        React.createElement("i", { "class": "fa fa-user", "aria-hidden": "true" })
-                    ),
-                    this.state.form == "login" ? React.createElement(
-                        "span",
-                        null,
-                        "Giri\u015F Yap"
-                    ) : React.createElement(
-                        "span",
-                        null,
-                        "Hesap"
-                    )
-                )
+                "div",
+                { id: "logo", onClick: this.goHome },
+                React.createElement(H, { type: "1", text: "Yorum Kutusu" })
             );
         }
     }]);
 
-    return AccountButton;
+    return Logo;
 }(React.Component);
 
-var UnreadComments = function (_React$Component3) {
-    _inherits(UnreadComments, _React$Component3);
-
-    function UnreadComments(props) {
-        _classCallCheck(this, UnreadComments);
-
-        var _this3 = _possibleConstructorReturn(this, (UnreadComments.__proto__ || Object.getPrototypeOf(UnreadComments)).call(this, props));
-
-        _this3.goUserProfile = _this3.goUserProfile.bind(_this3);
-        return _this3;
-    }
-
-    _createClass(UnreadComments, [{
-        key: "goUserProfile",
-        value: function goUserProfile() {
-            // profile takip edilen ürünleri açacak şekilde yönlendirmesi lazım
-            this.props.userUrl; // url bir üstten geliyor yönlendirmede kullanırım
-        }
-    }, {
-        key: "render",
-        value: function render() {
-            return React.createElement(
-                "button",
-                { className: "ui blue button", onClick: this.goUserProfile },
-                React.createElement(
-                    "i",
-                    { className: "icon" },
-                    React.createElement("i", { id: "unread-comments", className: "fa fa-comments", "aria-hidden": "true" })
-                ),
-                this.props.unreadComments
-            );
-        }
-    }]);
-
-    return UnreadComments;
-}(React.Component);
-
-var LogoutButton = function (_React$Component4) {
-    _inherits(LogoutButton, _React$Component4);
-
-    function LogoutButton(props) {
-        _classCallCheck(this, LogoutButton);
-
-        return _possibleConstructorReturn(this, (LogoutButton.__proto__ || Object.getPrototypeOf(LogoutButton)).call(this, props));
-    }
-
-    _createClass(LogoutButton, [{
-        key: "render",
-        value: function render() {
-            if (this.props.userName) {
-                return React.createElement(
-                    "button",
-                    { "class": "ui icon blue button" },
-                    React.createElement(
-                        "i",
-                        { "class": "icon" },
-                        React.createElement("i", { id: "logout-button", "class": "fa fa-sign-out", "aria-hidden": "true" })
-                    )
-                );
-            } else {
-                return React.createElement("span", null);
-            }
-        }
-    }]);
-
-    return LogoutButton;
-}(React.Component);
-
-var SearchBar = function (_React$Component5) {
-    _inherits(SearchBar, _React$Component5);
+var SearchBar = function (_React$Component3) {
+    _inherits(SearchBar, _React$Component3);
 
     function SearchBar(props) {
         _classCallCheck(this, SearchBar);
 
-        var _this5 = _possibleConstructorReturn(this, (SearchBar.__proto__ || Object.getPrototypeOf(SearchBar)).call(this, props));
+        var _this3 = _possibleConstructorReturn(this, (SearchBar.__proto__ || Object.getPrototypeOf(SearchBar)).call(this, props));
 
-        _this5.state = {
+        _this3.state = {
             inputValue: "",
             results: {}
         };
-        _this5.refreshResults = _this5.refreshResults.bind(_this5);
-        _this5.prepareATags = _this5.prepareATags.bind(_this5);
-        _this5.changeInput = _this5.changeInput.bind(_this5);
-        _this5.deleteResults = _this5.deleteResults.bind(_this5);
-        return _this5;
+        _this3.refreshResults = _this3.refreshResults.bind(_this3);
+        _this3.prepareATags = _this3.prepareATags.bind(_this3);
+        _this3.changeInput = _this3.changeInput.bind(_this3);
+        _this3.deleteResults = _this3.deleteResults.bind(_this3);
+        return _this3;
     }
 
     _createClass(SearchBar, [{
@@ -379,8 +282,8 @@ var SearchBar = function (_React$Component5) {
     return SearchBar;
 }(React.Component);
 
-var Header = function (_React$Component6) {
-    _inherits(Header, _React$Component6);
+var Header = function (_React$Component4) {
+    _inherits(Header, _React$Component4);
 
     function Header() {
         _classCallCheck(this, Header);
@@ -406,7 +309,7 @@ var Header = function (_React$Component6) {
                             React.createElement(
                                 WideColumn,
                                 { size: "four" },
-                                React.createElement(Logo, null)
+                                React.createElement(Logo, { changeContent: this.props.changeContent })
                             ),
                             React.createElement(
                                 WideColumn,
@@ -428,8 +331,8 @@ var Header = function (_React$Component6) {
     return Header;
 }(React.Component);
 
-var Footer = function (_React$Component7) {
-    _inherits(Footer, _React$Component7);
+var Footer = function (_React$Component5) {
+    _inherits(Footer, _React$Component5);
 
     function Footer() {
         _classCallCheck(this, Footer);
@@ -468,8 +371,8 @@ var Footer = function (_React$Component7) {
     return Footer;
 }(React.Component);
 
-var Content = function (_React$Component8) {
-    _inherits(Content, _React$Component8);
+var Content = function (_React$Component6) {
+    _inherits(Content, _React$Component6);
 
     function Content() {
         _classCallCheck(this, Content);
@@ -519,19 +422,19 @@ var Content = function (_React$Component8) {
     return Content;
 }(React.Component);
 
-var App = function (_React$Component9) {
-    _inherits(App, _React$Component9);
+var App = function (_React$Component7) {
+    _inherits(App, _React$Component7);
 
     function App(props) {
         _classCallCheck(this, App);
 
-        var _this9 = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
+        var _this7 = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
 
-        _this9.state = {
-            "content": _this9.props.content
+        _this7.state = {
+            "content": _this7.props.content
         };
-        _this9.contentFromSlug = {
-            "": "index",
+        _this7.contentFromSlug = {
+            " ": "index",
             "urun": "product",
             "profil": "profile",
             "yeni-urun": "newProduct",
@@ -552,10 +455,10 @@ var App = function (_React$Component9) {
             } else {
                 // Continue user action through link or button
             }
-        }.bind(_this9);
+        }.bind(_this7);
 
-        _this9.changeContent = _this9.changeContent.bind(_this9);
-        return _this9;
+        _this7.changeContent = _this7.changeContent.bind(_this7);
+        return _this7;
     }
 
     _createClass(App, [{

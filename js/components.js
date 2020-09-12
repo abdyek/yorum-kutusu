@@ -461,49 +461,23 @@ var Buttons = function (_React$Component14) {
     return Buttons;
 }(React.Component);
 
-/* bu bütün sayfalarda kullanılabilecek bir bileşendir */
-
-
-var Logo = function (_React$Component15) {
-    _inherits(Logo, _React$Component15);
-
-    function Logo() {
-        _classCallCheck(this, Logo);
-
-        return _possibleConstructorReturn(this, (Logo.__proto__ || Object.getPrototypeOf(Logo)).apply(this, arguments));
-    }
-
-    _createClass(Logo, [{
-        key: "render",
-        value: function render() {
-            return React.createElement(
-                "div",
-                { id: "logo" },
-                React.createElement(H, { type: "1", text: "Yorum Kutusu" })
-            );
-        }
-    }]);
-
-    return Logo;
-}(React.Component);
-
 // bunlar 2 sayfada bulunduğu için componentJS'ye taşınmasını uygun buldum
 
 
-var LikeButton = function (_React$Component16) {
-    _inherits(LikeButton, _React$Component16);
+var LikeButton = function (_React$Component15) {
+    _inherits(LikeButton, _React$Component15);
 
     function LikeButton(props) {
         _classCallCheck(this, LikeButton);
 
-        var _this16 = _possibleConstructorReturn(this, (LikeButton.__proto__ || Object.getPrototypeOf(LikeButton)).call(this, props));
+        var _this15 = _possibleConstructorReturn(this, (LikeButton.__proto__ || Object.getPrototypeOf(LikeButton)).call(this, props));
 
-        if (_this16.props.likeOrDislike == "like") {
-            _this16.liked = " likedComment";
+        if (_this15.props.likeOrDislike == "like") {
+            _this15.liked = " likedComment";
         } else {
-            _this16.liked = " ";
+            _this15.liked = " ";
         }
-        return _this16;
+        return _this15;
     }
 
     _createClass(LikeButton, [{
@@ -525,8 +499,8 @@ var LikeButton = function (_React$Component16) {
     return LikeButton;
 }(React.Component);
 
-var ComplaintButton = function (_React$Component17) {
-    _inherits(ComplaintButton, _React$Component17);
+var ComplaintButton = function (_React$Component16) {
+    _inherits(ComplaintButton, _React$Component16);
 
     function ComplaintButton() {
         _classCallCheck(this, ComplaintButton);
@@ -549,8 +523,8 @@ var ComplaintButton = function (_React$Component17) {
 }(React.Component);
 // ^ bunlar 2 sayfada bulunduğu için componentJS'ye taşınmasını uygun buldum
 
-var LoadingSpin = function (_React$Component18) {
-    _inherits(LoadingSpin, _React$Component18);
+var LoadingSpin = function (_React$Component17) {
+    _inherits(LoadingSpin, _React$Component17);
 
     function LoadingSpin() {
         _classCallCheck(this, LoadingSpin);
@@ -579,8 +553,8 @@ var LoadingSpin = function (_React$Component18) {
     return LoadingSpin;
 }(React.Component);
 
-var RowLoadingSpin = function (_React$Component19) {
-    _inherits(RowLoadingSpin, _React$Component19);
+var RowLoadingSpin = function (_React$Component18) {
+    _inherits(RowLoadingSpin, _React$Component18);
 
     function RowLoadingSpin() {
         _classCallCheck(this, RowLoadingSpin);
@@ -630,22 +604,22 @@ var RowLoadingSpin = function (_React$Component19) {
     return RowLoadingSpin;
 }(React.Component);
 
-var BasicMessage = function (_React$Component20) {
-    _inherits(BasicMessage, _React$Component20);
+var BasicMessage = function (_React$Component19) {
+    _inherits(BasicMessage, _React$Component19);
 
     function BasicMessage(props) {
         _classCallCheck(this, BasicMessage);
 
-        var _this20 = _possibleConstructorReturn(this, (BasicMessage.__proto__ || Object.getPrototypeOf(BasicMessage)).call(this, props));
+        var _this19 = _possibleConstructorReturn(this, (BasicMessage.__proto__ || Object.getPrototypeOf(BasicMessage)).call(this, props));
 
-        if (_this20.props.type == "success") {
-            _this20.className = "ui blue message";
-        } else if (_this20.props.type == "warning") {
-            _this20.className = "ui yellow message";
-        } else if (_this20.props.type == "danger") {
-            _this20.className = "ui red message";
+        if (_this19.props.type == "success") {
+            _this19.className = "ui blue message";
+        } else if (_this19.props.type == "warning") {
+            _this19.className = "ui yellow message";
+        } else if (_this19.props.type == "danger") {
+            _this19.className = "ui red message";
         }
-        return _this20;
+        return _this19;
     }
 
     _createClass(BasicMessage, [{

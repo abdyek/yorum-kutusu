@@ -226,18 +226,6 @@ class Buttons extends React.Component {
 }
 
 
-
-/* bu bütün sayfalarda kullanılabilecek bir bileşendir */
-class Logo extends React.Component {
-    render() {
-        return(
-            <div id="logo">
-                <H type="1" text="Yorum Kutusu" />
-            </div>
-        )
-    }
-}
-
 // bunlar 2 sayfada bulunduğu için componentJS'ye taşınmasını uygun buldum
 class LikeButton extends React.Component {
     constructor(props) {

@@ -49,12 +49,6 @@ header > div {
     color:#db2828;
 }
 
-#logo h1 {
-    line-height:60px;
-    font-family: 'Dancing Script', cursive;
-    color:#eee;
-    padding-left:25px;
-}
 
 #userIcon {
     font-size:10rem;
@@ -223,5 +217,14 @@ footer{
     margin-top:2rem;
 }
 .productListItemHeader {
+    cursor:pointer;
+}
+
+/* header */
+#logo h1 {
+    line-height:60px;
+    font-family: 'Dancing Script', cursive;
+    color:#eee;
+    padding-left:25px;
     cursor:pointer;
 }
