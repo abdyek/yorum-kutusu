@@ -26,6 +26,7 @@ var EmailValidationPage = function (_React$Component) {
     }, {
         key: "render",
         value: function render() {
+            document.title = "E-Posta Doğrula";
             return React.createElement(
                 "div",
                 null,

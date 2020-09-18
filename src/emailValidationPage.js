@@ -7,6 +7,7 @@ class EmailValidationPage extends React.Component {
         this.props.changeContent(content);
     }
     render() {
+        document.title = "E-Posta Doğrula";
         return(
             <div>
                 <EmailValidation newUser={true} />

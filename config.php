@@ -9,7 +9,7 @@
                 'content'=>'index'
             ],
             'urun'=>[
-                'title'=>'Ürün Sayfası',
+                'title'=>'Ürün',
                 'content'=>'product'
             ],
             'profil'=>[

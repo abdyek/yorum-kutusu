@@ -131,6 +131,7 @@ class NewProduct extends React.Component {
         }
     }
     render() {
+        document.title = "Yeni Ürün Oluştur";
         if(this.state.form=="loading") {
             return(
                 <RowLoadingSpin nonSegment={true}/>

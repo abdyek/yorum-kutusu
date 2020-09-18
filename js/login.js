@@ -83,6 +83,7 @@ var LogIn = function (_React$Component) {
     }, {
         key: "render",
         value: function render() {
+            document.title = "Giriş Yap";
             if (this.state.loading) {
                 return React.createElement(RowLoading, null);
             } else {

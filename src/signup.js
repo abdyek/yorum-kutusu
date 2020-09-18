@@ -57,6 +57,7 @@ class Signup extends React.Component {
         })
     }
     render() {
+        document.title = "Üye Ol";
         if(this.state.error) {
             this.errorMessageContent = [];
             for(let i=0;i<this.state.error.length;i++) {

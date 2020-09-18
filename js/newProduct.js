@@ -162,6 +162,7 @@ var NewProduct = function (_React$Component) {
     }, {
         key: "render",
         value: function render() {
+            document.title = "Yeni Ürün Oluştur";
             if (this.state.form == "loading") {
                 return React.createElement(RowLoadingSpin, { nonSegment: true });
             } else {

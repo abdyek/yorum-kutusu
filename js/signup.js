@@ -84,6 +84,7 @@ var Signup = function (_React$Component) {
     }, {
         key: "render",
         value: function render() {
+            document.title = "Üye Ol";
             if (this.state.error) {
                 this.errorMessageContent = [];
                 for (var i = 0; i < this.state.error.length; i++) {

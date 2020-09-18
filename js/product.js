@@ -18,6 +18,7 @@ var Product = function (_React$Component) {
 			// normal, loading, notFound
 			form: "normal",
 			// normal, loading, noComment
+			productName: "Iphone 5s",
 			commentsForm: "normal",
 			sortBy: "time",
 			pageNumber: 3,
@@ -149,18 +150,21 @@ var Product = function (_React$Component) {
 		key: "render",
 		value: function render() {
 			if (this.state.form == "normal") {
+				document.title = this.state.productName;
 				return React.createElement(
 					"div",
 					null,
-					React.createElement(ProductInfo, { tags: this.tagsInfo }),
+					React.createElement(ProductInfo, { tags: this.tagsInfo, productName: this.state.productName }),
 					React.createElement(PageNavigation, { sortBy: this.state.sortBy, handleChangeSortBy: this.changeSortBy, pageCount: "6", currentPage: this.state.pageNumber, handleChangePageNumber: this.changePageNumber }),
 					React.createElement(Comments, { comments: this.state.comments, form: this.state.commentsForm }),
 					React.createElement(PageNavigation, { sortBy: this.state.sortBy, handleChangeSortBy: this.changeSortBy, pageCount: "6", currentPage: this.state.pageNumber, handleChangePageNumber: this.changePageNumber }),
 					React.createElement(WriteComment, { tags: this.tagsInfo })
 				);
 			} else if (this.state.form == "loading") {
+				document.title = "Ürün";
 				return React.createElement(RowLoadingSpin, { nonSegment: true });
 			} else if (this.state.form == "notFound") {
+				document.title = "Ürün Bulunamadı";
 				return React.createElement(
 					Row,
 					{ size: "one" },
@@ -243,7 +247,7 @@ var ProductInfo = function (_React$Component2) {
 					React.createElement(
 						Column,
 						null,
-						React.createElement(H, { type: "1", text: "Mahmut Efendi Kahveleri" })
+						React.createElement(H, { type: "1", text: this.props.productName })
 					),
 					React.createElement(
 						Column,

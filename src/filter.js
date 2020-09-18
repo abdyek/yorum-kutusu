@@ -3,6 +3,7 @@ class Filter extends React.Component {
         super(props);
     }
     render() {
+        document.title="Filtrele";
         return(
             <div>
                 <Row  size="sixteen">

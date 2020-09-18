@@ -5,6 +5,7 @@ class Product extends React.Component {
             // normal, loading, notFound
 			form:"normal",
 			// normal, loading, noComment
+			productName:"Iphone 5s",
 			commentsForm: "normal",
 			sortBy: "time",
 			pageNumber: 3,
@@ -129,9 +130,10 @@ class Product extends React.Component {
 	}
     render() {
         if(this.state.form=="normal") {
+			document.title = this.state.productName;
             return(
                 <div>
-                    <ProductInfo tags={this.tagsInfo}/>
+                    <ProductInfo tags={this.tagsInfo} productName={this.state.productName}/>
                     <PageNavigation sortBy={this.state.sortBy} handleChangeSortBy={this.changeSortBy} pageCount="6" currentPage={this.state.pageNumber} handleChangePageNumber={this.changePageNumber} />
                     <Comments comments={this.state.comments} form={this.state.commentsForm}/>
                     <PageNavigation sortBy={this.state.sortBy} handleChangeSortBy={this.changeSortBy} pageCount="6" currentPage={this.state.pageNumber} handleChangePageNumber={this.changePageNumber} />
@@ -139,10 +141,12 @@ class Product extends React.Component {
                 </div>
             )
         } else if(this.state.form=="loading") {
+			document.title = "Ürün";
             return(
                 <RowLoadingSpin nonSegment={true}/>
             )
         } else if(this.state.form=="notFound") {
+			document.title = "Ürün Bulunamadı";
             return(
                 <Row size="one">
                     <Column>
@@ -200,7 +204,7 @@ class ProductInfo extends React.Component {
             <div>
                 <Row size="two" nonStackable={true}>
                     <Column>
-                        <H type="1" text="Mahmut Efendi Kahveleri" />
+                        <H type="1" text={this.props.productName} />
                     </Column>
 					<Column>
 						<FloatRight>

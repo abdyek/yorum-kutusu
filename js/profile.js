@@ -199,10 +199,13 @@ var Account = function (_React$Component2) {
             } else {
                 this.form;
                 if (this.state.form == "info") {
+                    document.title = this.state.info.userName;
                     this.form = React.createElement(AccountInfo, { handleOpenSettingArea: this.openSettingArea, handleOpenFollowedProducts: this.openFollowedProducts, info: this.state.info });
                 } else if (this.state.form == "setting") {
+                    document.title = "Ayarlar";
                     this.form = React.createElement(SettingArea, { closeSettingArea: this.closeSettingArea });
                 } else if (this.state.form == "followedProducts") {
+                    document.title = "Takip Edilen Ürünler";
                     this.form = React.createElement(FollowedProducts, { closeFollowedProducts: this.closeFollowedProducts, followedProductsInfo: this.state.followedProductsInfo, isThereMoreProduct: this.state.isThereMoreProduct, addMoreFollowed: this.addMoreFollowed });
                 }
                 return React.createElement(

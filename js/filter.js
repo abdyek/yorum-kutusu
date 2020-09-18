@@ -18,6 +18,7 @@ var Filter = function (_React$Component) {
     _createClass(Filter, [{
         key: "render",
         value: function render() {
+            document.title = "Filtrele";
             return React.createElement(
                 "div",
                 null,
