@@ -18,14 +18,10 @@ var Profile = function (_React$Component) {
     _createClass(Profile, [{
         key: "render",
         value: function render() {
-            /* 
-                EmailValidation componentine validated={true} vermen yeterli görünmemesini sağlamak için
-            */
             return React.createElement(
                 "div",
                 null,
-                React.createElement(EmailValidation, null),
-                React.createElement(Account, { owner: true, userName: "Yunus Emre" })
+                React.createElement(Account, null)
             );
         }
     }]);
@@ -44,17 +40,99 @@ var Account = function (_React$Component2) {
         _this2.state = {
             // info, setting, followedProducts
             form: "info",
-            openedSetting: false
+            loading: false,
+            openedSetting: false,
+            info: {
+                userName: "Yunus Emre",
+                owner: true
+            },
+            followedProductsInfo: {
+                0: {
+                    url: "iphone-5s",
+                    productName: "Iphone 5s",
+                    newCommentCount: "5"
+                },
+                1: {
+                    url: "le-cola",
+                    productName: "Le-Cola",
+                    newCommentCount: "9312"
+                },
+                9: {
+                    url: "mahmut-efendi-kahveleri",
+                    productName: "Mahmut Efendi Kahveleri",
+                    newCommentCount: "0"
+                }
+            },
+            isThereMoreProduct: true,
+            comments: [{
+                title: "IPhone 5s",
+                text: "burası yorum text alanı",
+                likeCount: 15,
+                liked: false,
+                date: "14 Aralık 2019 - 18:49",
+                tags: [{
+                    id: 3,
+                    passive: false,
+                    text: "Batarya",
+                    color: "yellow",
+                    rateValue: "5"
+                }, {
+                    id: 4,
+                    passive: false,
+                    text: "Kamera",
+                    color: "orange",
+                    rateValue: "4"
+                }, {
+                    id: 5,
+                    passive: false,
+                    text: "Tasarım",
+                    color: "",
+                    rateValue: "-"
+                }],
+                owner: false
+            }, {
+                title: "Le Cola Zero",
+                text: "burası yorum text alanı",
+                likeCount: 15,
+                liked: true,
+                date: "14 Aralık 1999- 00:01",
+                tags: [{
+                    id: 3,
+                    passive: false,
+                    text: "Batarya",
+                    color: "yellow",
+                    rateValue: "5"
+                }, {
+                    id: 4,
+                    passive: false,
+                    text: "Kamera",
+                    color: "orange",
+                    rateValue: "4"
+                }, {
+                    id: 5,
+                    passive: false,
+                    text: "Tasarım",
+                    color: "",
+                    rateValue: "-"
+                }],
+                owner: false
+            }]
         };
         _this2.openSettingArea = _this2.openSettingArea.bind(_this2);
         _this2.closeSettingArea = _this2.closeSettingArea.bind(_this2);
         _this2.openFollowedProducts = _this2.openFollowedProducts.bind(_this2);
         _this2.closeFollowedProducts = _this2.closeFollowedProducts.bind(_this2);
         _this2.changeForm = _this2.changeForm.bind(_this2);
+        _this2.addMoreFollowed = _this2.addMoreFollowed.bind(_this2);
         return _this2;
     }
 
     _createClass(Account, [{
+        key: "load",
+        value: function load() {
+            // yüklenme kodları buraya gelecek
+        }
+    }, {
         key: "openSettingArea",
         value: function openSettingArea() {
             this.changeForm("setting");
@@ -82,30 +160,67 @@ var Account = function (_React$Component2) {
             });
         }
     }, {
+        key: "addMoreFollowed",
+        value: function addMoreFollowed() {
+            // buradaki more ve isThereMore JSON'ı ajax ile gelen şey olacak
+            var more = {
+                0: {
+                    url: "iphone-5s",
+                    productName: "Iphone 5s",
+                    newCommentCount: "5"
+                },
+                1: {
+                    url: "le-cola",
+                    productName: "Le-Cola",
+                    newCommentCount: "9312"
+                },
+                9: {
+                    url: "mahmut-efendi-kahveleri",
+                    productName: "Mahmut Efendi Kahveleri",
+                    newCommentCount: "0"
+                },
+                99: {
+                    url: "yeni-gelen",
+                    productName: "Falan filen",
+                    newCommentCount: "19"
+                }
+            };
+            var isThereMore = false;
+            this.setState({
+                followedProductsInfo: more,
+                isThereMoreProduct: isThereMore
+            });
+        }
+    }, {
         key: "render",
         value: function render() {
-            this.form;
-            if (this.state.form == "info") {
-                this.form = React.createElement(AccountInfo, { handleOpenSettingArea: this.openSettingArea, handleOpenFollowedProducts: this.openFollowedProducts, owner: this.props.owner, userName: this.props.userName });
-            } else if (this.state.form == "setting") {
-                this.form = React.createElement(SettingArea, { closeSettingArea: this.closeSettingArea });
-            } else if (this.state.form == "followedProducts") {
-                this.form = React.createElement(FollowedProducts, { closeFollowedProducts: this.closeFollowedProducts });
-            }
-            return React.createElement(
-                "div",
-                null,
-                React.createElement(
-                    Row,
-                    { size: "one" },
+            if (this.state.loading) {
+                return React.createElement(RowLoadingSpin, { nonSegment: true });
+            } else {
+                this.form;
+                if (this.state.form == "info") {
+                    this.form = React.createElement(AccountInfo, { handleOpenSettingArea: this.openSettingArea, handleOpenFollowedProducts: this.openFollowedProducts, info: this.state.info });
+                } else if (this.state.form == "setting") {
+                    this.form = React.createElement(SettingArea, { closeSettingArea: this.closeSettingArea });
+                } else if (this.state.form == "followedProducts") {
+                    this.form = React.createElement(FollowedProducts, { closeFollowedProducts: this.closeFollowedProducts, followedProductsInfo: this.state.followedProductsInfo, isThereMoreProduct: this.state.isThereMoreProduct, addMoreFollowed: this.addMoreFollowed });
+                }
+                return React.createElement(
+                    "div",
+                    null,
+                    React.createElement(EmailValidation, { validated: false }),
                     React.createElement(
-                        Column,
-                        null,
-                        this.form
-                    )
-                ),
-                React.createElement(Comments, null)
-            );
+                        Row,
+                        { size: "one" },
+                        React.createElement(
+                            Column,
+                            null,
+                            this.form
+                        )
+                    ),
+                    React.createElement(Comments, { comments: this.state.comments })
+                );
+            }
         }
     }]);
 
@@ -142,8 +257,8 @@ var AccountInfo = function (_React$Component3) {
                 Center,
                 null,
                 React.createElement("i", { id: "account-icon", className: "fa fa-user-circle", "aria-hidden": "true" }),
-                React.createElement(H, { type: "1", text: this.props.userName }),
-                this.props.owner ? React.createElement(
+                React.createElement(H, { type: "1", text: this.props.info.userName }),
+                this.props.info.owner ? React.createElement(
                     "div",
                     null,
                     React.createElement(
@@ -230,32 +345,8 @@ var FollowedProducts = function (_React$Component5) {
     function FollowedProducts(props) {
         _classCallCheck(this, FollowedProducts);
 
-        /*
-            gelen url içerisinde kaç mesaj göstereceği gibi bilgileri de içerecek,
-            yani bu url'e tıklandığı zaman kullanıcı okumadığı yorumları görüntüleyecek
-        */
         var _this5 = _possibleConstructorReturn(this, (FollowedProducts.__proto__ || Object.getPrototypeOf(FollowedProducts)).call(this, props));
 
-        _this5.state = {
-            followedProductsInfo: {
-                0: {
-                    url: "iphone-5s",
-                    productName: "Iphone 5s",
-                    newCommentCount: "5"
-                },
-                1: {
-                    url: "le-cola",
-                    productName: "Le-Cola",
-                    newCommentCount: "9312"
-                },
-                9: {
-                    url: "mahmut-efendi-kahveleri",
-                    productName: "Mahmut Efendi Kahveleri",
-                    newCommentCount: "0"
-                }
-            },
-            isThereMore: true
-        };
         _this5.addMoreFollowed = _this5.addMoreFollowed.bind(_this5);
         return _this5;
     }
@@ -263,38 +354,13 @@ var FollowedProducts = function (_React$Component5) {
     _createClass(FollowedProducts, [{
         key: "addMoreFollowed",
         value: function addMoreFollowed() {
-            // buradaki mor JSON'ı ajax ile gelen şey olacak
-            var more = {
-                0: {
-                    url: "iphone-5s",
-                    productName: "Iphone 5s",
-                    newCommentCount: "5"
-                },
-                1: {
-                    url: "le-cola",
-                    productName: "Le-Cola",
-                    newCommentCount: "9312"
-                },
-                9: {
-                    url: "mahmut-efendi-kahveleri",
-                    productName: "Mahmut Efendi Kahveleri",
-                    newCommentCount: "0"
-                },
-                99: {
-                    url: "yeni-gelen",
-                    productName: "Falan filen",
-                    newCommentCount: "19"
-                }
-            };
-            this.setState({
-                followedProductsInfo: more
-            });
+            this.props.addMoreFollowed();
         }
     }, {
         key: "render",
         value: function render() {
             this.trs = [];
-            var info = this.state.followedProductsInfo;
+            var info = this.props.followedProductsInfo;
             var keys = Object.keys(info);
             for (var i = 0; i < keys.length; i++) {
                 this.trs.push(React.createElement(
@@ -387,7 +453,7 @@ var FollowedProducts = function (_React$Component5) {
                                 this.trs
                             )
                         ),
-                        this.state.isThereMore ? React.createElement(
+                        this.props.isThereMoreProduct ? React.createElement(
                             Row,
                             { size: "one" },
                             React.createElement(
@@ -630,15 +696,39 @@ var ChangeItems = function (_React$Component6) {
 var Comments = function (_React$Component7) {
     _inherits(Comments, _React$Component7);
 
-    function Comments() {
+    function Comments(props) {
         _classCallCheck(this, Comments);
 
-        return _possibleConstructorReturn(this, (Comments.__proto__ || Object.getPrototypeOf(Comments)).apply(this, arguments));
+        var _this7 = _possibleConstructorReturn(this, (Comments.__proto__ || Object.getPrototypeOf(Comments)).call(this, props));
+
+        _this7.prepareComments = _this7.prepareComments.bind(_this7);
+        return _this7;
     }
 
     _createClass(Comments, [{
+        key: "prepareComments",
+        value: function prepareComments() {
+            var comments = [];
+            var com = void 0;
+            for (var i = 0; i < this.props.comments.length; i++) {
+                com = this.props.comments[i];
+                comments.push(React.createElement(Comment, {
+                    key: i,
+                    title: com.title,
+                    text: com.text,
+                    likeCount: com.likeCount,
+                    liked: com.liked,
+                    date: com.date,
+                    tags: com.tags,
+                    owner: com.owner
+                }));
+            }
+            return comments;
+        }
+    }, {
         key: "render",
         value: function render() {
+            this.comments = this.prepareComments();
             return React.createElement(
                 "div",
                 null,
@@ -651,52 +741,7 @@ var Comments = function (_React$Component7) {
                         React.createElement(H, { type: "2", text: "Yorumlar" })
                     )
                 ),
-                React.createElement(Comment, { text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-                    likeCount: "0",
-                    liked: false,
-                    title: "Iphone",
-                    date: "14 Aral\u0131k 2019- 18:49",
-                    tags: [{
-                        id: 3,
-                        passive: false,
-                        text: "Batarya",
-                        color: "yellow",
-                        rateValue: "5"
-                    }, {
-                        id: 4,
-                        passive: false,
-                        text: "Kamera",
-                        color: "orange",
-                        rateValue: "4"
-                    }, {
-                        id: 5,
-                        passive: false,
-                        text: "Tasarım",
-                        color: "",
-                        rateValue: "-"
-                    }],
-                    owner: false
-                }),
-                React.createElement(Comment, { text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-                    likeCount: "0",
-                    liked: false,
-                    title: "Le-cola",
-                    date: "14 Aral\u0131k 2019- 18:49",
-                    tags: [{
-                        id: 3,
-                        passive: false,
-                        text: "Tad",
-                        color: "yellow",
-                        rateValue: "5"
-                    }, {
-                        id: 4,
-                        passive: false,
-                        text: "Fiyat/Performans",
-                        color: "red",
-                        rateValue: "1"
-                    }],
-                    owner: false
-                })
+                this.comments
             );
         }
     }]);

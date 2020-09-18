@@ -1,12 +1,8 @@
 class Profile extends React.Component {
     render() {
-        /* 
-            EmailValidation componentine validated={true} vermen yeterli görünmemesini sağlamak için
-        */
         return(
             <div>
-                <EmailValidation />
-                <Account  owner={true} userName="Yunus Emre" />
+                <Account />
             </div>
         )
     }
@@ -18,13 +14,104 @@ class Account extends React.Component {
         this.state = {
             // info, setting, followedProducts
             form:"info",
-            openedSetting: false
+            loading:false,
+            openedSetting: false,
+            info: {
+                userName:"Yunus Emre",
+                owner:true,
+            },
+            followedProductsInfo: {
+                0:{
+                    url:"iphone-5s", 
+                    productName:"Iphone 5s",
+                    newCommentCount: "5"
+                },
+                1: {
+                    url:"le-cola",
+                    productName:"Le-Cola",
+                    newCommentCount: "9312"
+                },
+                9: {
+                    url:"mahmut-efendi-kahveleri",
+                    productName:"Mahmut Efendi Kahveleri",
+                    newCommentCount: "0"
+                }
+            },
+            isThereMoreProduct: true,
+            comments: [
+                {
+                    title:"IPhone 5s",
+                    text:"burası yorum text alanı",
+                    likeCount:15,
+                    liked:false,
+                    date:"14 Aralık 2019 - 18:49",
+                    tags: [
+                        {
+                            id:3,
+                            passive:false,
+                            text:"Batarya",
+                            color:"yellow",
+                            rateValue: "5"
+                        },
+                        {
+                            id:4,
+                            passive:false,
+                            text:"Kamera",
+                            color:"orange",
+                            rateValue: "4"
+                        },
+                        {
+                            id:5,
+                            passive:false,
+                            text:"Tasarım",
+                            color:"",
+                            rateValue: "-"
+                        }
+                    ],
+                    owner:false
+                },
+                {
+                    title:"Le Cola Zero",
+                    text:"burası yorum text alanı",
+                    likeCount:15,
+                    liked:true,
+                    date:"14 Aralık 1999- 00:01",
+                    tags: [
+                        {
+                            id:3,
+                            passive:false,
+                            text:"Batarya",
+                            color:"yellow",
+                            rateValue: "5"
+                        },
+                        {
+                            id:4,
+                            passive:false,
+                            text:"Kamera",
+                            color:"orange",
+                            rateValue: "4"
+                        },
+                        {
+                            id:5,
+                            passive:false,
+                            text:"Tasarım",
+                            color:"",
+                            rateValue: "-"
+                        }
+                    ],
+                    owner:false
+                },
+            ],
         };
         this.openSettingArea = this.openSettingArea.bind(this);
         this.closeSettingArea = this.closeSettingArea.bind(this);
         this.openFollowedProducts = this.openFollowedProducts.bind(this);
         this.closeFollowedProducts = this.closeFollowedProducts.bind(this);
         this.changeForm = this.changeForm.bind(this);
+        this.addMoreFollowed = this.addMoreFollowed.bind(this);
+    }
+    load() {
+        // yüklenme kodları buraya gelecek
     }
     openSettingArea() {
         this.changeForm("setting");
@@ -43,25 +130,62 @@ class Account extends React.Component {
             form:form
         });
     }
-    render() {
-        this.form;
-        if(this.state.form=="info") {
-            this.form = <AccountInfo handleOpenSettingArea={this.openSettingArea} handleOpenFollowedProducts={this.openFollowedProducts} owner={this.props.owner} userName={this.props.userName}/>
-        } else if(this.state.form=="setting") {
-            this.form = <SettingArea closeSettingArea={this.closeSettingArea} />
-        } else if(this.state.form=="followedProducts") {
-            this.form = <FollowedProducts closeFollowedProducts={this.closeFollowedProducts} />
+    addMoreFollowed() {
+        // buradaki more ve isThereMore JSON'ı ajax ile gelen şey olacak
+        let more = {
+            0:{
+                url:"iphone-5s", 
+                productName:"Iphone 5s",
+                newCommentCount: "5"
+            },
+            1: {
+                url:"le-cola",
+                productName:"Le-Cola",
+                newCommentCount: "9312"
+            },
+            9: {
+                url:"mahmut-efendi-kahveleri",
+                productName:"Mahmut Efendi Kahveleri",
+                newCommentCount: "0"
+            },
+            99: {
+                url:"yeni-gelen",
+                productName:"Falan filen",
+                newCommentCount: "19"
+            }
         }
-        return(
-            <div>
-                <Row size="one">
-                    <Column>
-                        {this.form}
-                    </Column>
-                </Row>
-                <Comments />
-            </div>
-        )
+        let isThereMore = false;
+        this.setState({
+            followedProductsInfo: more,
+            isThereMoreProduct: isThereMore
+        });
+    }
+    render() {
+        if(this.state.loading) {
+            return(
+                <RowLoadingSpin nonSegment={true}/>
+            )
+        } else {
+            this.form;
+            if(this.state.form=="info") {
+                this.form = <AccountInfo handleOpenSettingArea={this.openSettingArea} handleOpenFollowedProducts={this.openFollowedProducts} info={this.state.info}/>
+            } else if(this.state.form=="setting") {
+                this.form = <SettingArea closeSettingArea={this.closeSettingArea} />
+            } else if(this.state.form=="followedProducts") {
+                this.form = <FollowedProducts closeFollowedProducts={this.closeFollowedProducts} followedProductsInfo={this.state.followedProductsInfo} isThereMoreProduct={this.state.isThereMoreProduct} addMoreFollowed={this.addMoreFollowed}/>
+            }
+            return(
+                <div>
+                    <EmailValidation validated={false}/>
+                    <Row size="one">
+                        <Column>
+                            {this.form}
+                        </Column>
+                    </Row>
+                    <Comments comments={this.state.comments}/>
+                </div>
+            )
+        }
     }
 }
 
@@ -81,8 +205,8 @@ class AccountInfo extends React.Component {
         return (
             <Center>
                 <i id="account-icon" className="fa fa-user-circle" aria-hidden="true"></i>
-                <H type="1" text={this.props.userName} />
-                {(this.props.owner)?
+                <H type="1" text={this.props.info.userName} />
+                {(this.props.info.owner)?
                     <div>
                         <button className="compact ui teal button" onClick={this.openSettingArea}>
                             <i className="icon">
@@ -131,63 +255,14 @@ class SettingArea extends React.Component {
 class FollowedProducts extends React.Component {
     constructor(props) {
         super(props);
-        /*
-            gelen url içerisinde kaç mesaj göstereceği gibi bilgileri de içerecek,
-            yani bu url'e tıklandığı zaman kullanıcı okumadığı yorumları görüntüleyecek
-        */
-        this.state = {
-            followedProductsInfo : {
-                0:{
-                    url:"iphone-5s", 
-                    productName:"Iphone 5s",
-                    newCommentCount: "5"
-                },
-                1: {
-                    url:"le-cola",
-                    productName:"Le-Cola",
-                    newCommentCount: "9312"
-                },
-                9: {
-                    url:"mahmut-efendi-kahveleri",
-                    productName:"Mahmut Efendi Kahveleri",
-                    newCommentCount: "0"
-                }
-            },
-            isThereMore: true,
-        }
         this.addMoreFollowed = this.addMoreFollowed.bind(this);
     }
     addMoreFollowed() {
-        // buradaki mor JSON'ı ajax ile gelen şey olacak
-        let more = {
-            0:{
-                url:"iphone-5s", 
-                productName:"Iphone 5s",
-                newCommentCount: "5"
-            },
-            1: {
-                url:"le-cola",
-                productName:"Le-Cola",
-                newCommentCount: "9312"
-            },
-            9: {
-                url:"mahmut-efendi-kahveleri",
-                productName:"Mahmut Efendi Kahveleri",
-                newCommentCount: "0"
-            },
-            99: {
-                url:"yeni-gelen",
-                productName:"Falan filen",
-                newCommentCount: "19"
-            }
-        }
-        this.setState({
-            followedProductsInfo: more
-        });
+        this.props.addMoreFollowed();
     }
     render() {
         this.trs = [];
-        let info = this.state.followedProductsInfo;
+        let info = this.props.followedProductsInfo;
         let keys = Object.keys(info);
         for(let i=0;i<keys.length;i++) {
             this.trs.push(
@@ -239,7 +314,7 @@ class FollowedProducts extends React.Component {
                                 {this.trs}
                             </tbody>
                         </table>
-                        {(this.state.isThereMore)?
+                        {(this.props.isThereMoreProduct)?
                             <Row size="one">
                                 <Column>
                                     <FloatRight>
@@ -409,7 +484,32 @@ class ChangeItems extends React.Component {
 
 
 class Comments extends React.Component {
+    constructor(props){
+        super(props);
+        this.prepareComments = this.prepareComments.bind(this);
+    }
+    prepareComments() {
+        let comments = [];
+        let com;
+        for(let i=0;i<this.props.comments.length;i++) {
+            com = this.props.comments[i];
+            comments.push(
+                <Comment
+                    key={i}
+                    title={com.title}
+                    text={com.text}
+                    likeCount={com.likeCount}
+                    liked={com.liked}
+                    date={com.date}
+                    tags={com.tags}
+                    owner={com.owner}
+                />
+            )
+        }
+        return comments;
+    }
     render() {
+        this.comments = this.prepareComments();
         return(
             <div>
                 <Row size="one">
@@ -417,59 +517,7 @@ class Comments extends React.Component {
                         <H type="2" text="Yorumlar" />
                     </Column>
                 </Row>
-                <Comment text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
-                    likeCount="0"
-                    liked={false}
-                    title="Iphone"
-                    date="14 Aralık 2019- 18:49"
-                    tags={[{
-                            id:3,
-                            passive:false,
-                            text:"Batarya",
-                            color:"yellow",
-                            rateValue: "5"
-                        },
-                        {
-                            id:4,
-                            passive:false,
-                            text:"Kamera",
-                            color:"orange",
-                            rateValue: "4"
-                        },
-                        {
-                            id:5,
-                            passive:false,
-                            text:"Tasarım",
-                            color:"",
-                            rateValue: "-"
-                        }
-                        ]
-                    }
-                    owner={false}
-                />
-                <Comment text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
-                    likeCount="0"
-                    liked={false}
-                    title="Le-cola"
-                    date="14 Aralık 2019- 18:49"
-                    tags={[{
-                            id:3,
-                            passive:false,
-                            text:"Tad",
-                            color:"yellow",
-                            rateValue: "5"
-                        },
-                        {
-                            id:4,
-                            passive:false,
-                            text:"Fiyat/Performans",
-                            color:"red",
-                            rateValue: "1"
-                        },
-                        ]
-                    }
-                    owner={false}
-                />
+                {this.comments}
             </div>
         )
     }
