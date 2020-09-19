@@ -282,43 +282,53 @@ var H = function (_React$Component9) {
         } else {
             _this9.optional = _this9.props.optional;
         }
+        _this9.a = React.createElement(
+            "a",
+            { href: _this9.props.href, onClick: _this9.props.handleOnClick },
+            _this9.props.text
+        );
+        if (_this9.props.type == "1") {
+            _this9.h = React.createElement(
+                "h1",
+                { className: "ui " + _this9.textAlign + " header h-title " + _this9.optional },
+                _this9.a
+            );
+        } else if (_this9.props.type == "2") {
+            _this9.h = React.createElement(
+                "h2",
+                { className: "ui " + _this9.textAlign + " header h-title " + _this9.optional },
+                _this9.a
+            );
+        } else if (_this9.props.type == "3") {
+            _this9.h = React.createElement(
+                "h3",
+                { className: "ui " + _this9.textAlign + " header h-title " + _this9.optional },
+                _this9.a
+            );
+        } else if (_this9.props.type == "4") {
+            _this9.h = React.createElement(
+                "h4",
+                { className: "ui " + _this9.textAlign + "header h-title " + _this9.optional },
+                _this9.a
+            );
+        } else if (_this9.props.type == "5") {
+            _this9.h = React.createElement(
+                "h5",
+                { className: "ui " + _this9.textAlign + "header h-title " + _this9.optional },
+                _this9.a
+            );
+        }
         return _this9;
     }
 
     _createClass(H, [{
         key: "render",
         value: function render() {
-            if (this.props.type == "1") {
-                return React.createElement(
-                    "h1",
-                    { className: "ui " + this.textAlign + " header " + this.optional },
-                    this.props.text
-                );
-            } else if (this.props.type == "2") {
-                return React.createElement(
-                    "h2",
-                    { className: "ui " + this.textAlign + " header " + this.optional },
-                    this.props.text
-                );
-            } else if (this.props.type == "3") {
-                return React.createElement(
-                    "h3",
-                    { className: "ui " + this.textAlign + " header " + this.optional },
-                    this.props.text
-                );
-            } else if (this.props.type == "4") {
-                return React.createElement(
-                    "h4",
-                    { className: "ui " + this.textAlign + "header " + this.optional },
-                    this.props.text
-                );
-            } else if (this.props.type == "5") {
-                return React.createElement(
-                    "h5",
-                    { className: "ui " + this.textAlign + "header " + this.optional },
-                    this.props.text
-                );
-            }
+            return React.createElement(
+                "div",
+                null,
+                this.h
+            );
         }
     }]);
 

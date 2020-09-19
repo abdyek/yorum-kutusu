@@ -41,6 +41,7 @@ class Account extends React.Component {
             comments: [
                 {
                     title:"IPhone 5s",
+                    slug:"iphone-5s",
                     text:"burası yorum text alanı",
                     likeCount:15,
                     liked:false,
@@ -75,6 +76,7 @@ class Account extends React.Component {
                 },
                 {
                     title:"Le Cola Zero",
+                    slug:"le-cola-zero",
                     text:"burası yorum text alanı",
                     likeCount:15,
                     liked:true,
@@ -188,7 +190,7 @@ class Account extends React.Component {
                             {this.form}
                         </Column>
                     </Row>
-                    <Comments comments={this.state.comments} form={"normal"} changeContent={this.props.changeContent}/>
+                    <Comments comments={this.state.comments} form={"normal"} changeContent={this.props.changeContent} type="product" />
                 </div>
             )
         }
@@ -487,45 +489,3 @@ class ChangeItems extends React.Component {
         }
     }
 }
-
-/*
-class Comments extends React.Component {
-    constructor(props){
-        super(props);
-        this.prepareComments = this.prepareComments.bind(this);
-    }
-    prepareComments() {
-        let comments = [];
-        let com;
-        for(let i=0;i<this.props.comments.length;i++) {
-            com = this.props.comments[i];
-            comments.push(
-                <Comment
-                    key={i}
-                    title={com.title}
-                    text={com.text}
-                    likeCount={com.likeCount}
-                    liked={com.liked}
-                    date={com.date}
-                    tags={com.tags}
-                    owner={com.owner}
-                />
-            )
-        }
-        return comments;
-    }
-    render() {
-        this.comments = this.prepareComments();
-        return(
-            <div>
-                <Row size="one">
-                    <Column>
-                        <H type="2" text="Yorumlar" />
-                    </Column>
-                </Row>
-                {this.comments}
-            </div>
-        )
-    }
-}
-*/

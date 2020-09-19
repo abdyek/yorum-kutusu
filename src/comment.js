@@ -75,7 +75,7 @@ class Comment extends React.Component {
                     <Row size="one">
                         <Column>
                             <RaisedSegment>
-                                <TopOfComment text={this.props.text} title={this.props.title} owner={this.props.owner} handleOpenEditArea={this.openEditArea} handleOpenDeleteArea={this.openDeleteArea} />
+                                <TopOfComment text={this.props.text} slug={this.props.slug} title={this.props.title} owner={this.props.owner} handleOpenEditArea={this.openEditArea} handleOpenDeleteArea={this.openDeleteArea} changeContent={this.props.changeContent} type={this.props.type}/>
                                 <BottomOfComment likeCount={this.props.likeCount} liked={this.props.liked} date={this.props.date} handleOpenReportArea={this.openReportArea} handleCloseReportArea={this.closeReportArea} tags={this.props.tags} owner={this.props.owner} changeContent={this.props.changeContent} />
                             </RaisedSegment>
                         </Column>
@@ -114,6 +114,8 @@ class TopOfComment extends React.Component{
     constructor(props) {
         super(props);
         this.minifyLimit = 750;
+        this.slugPrefix = (this.props.type=="profile")?"profil":"urun";
+        // ^ comment'i iki yerde kullandığım ve 2 tür title yapısı olduğu için böyle bir çözüm buldum
         this.state = {
             readAll:false,
         };
@@ -152,8 +154,8 @@ class TopOfComment extends React.Component{
             <div>
                 <Row size="two" nonStackable={true}>
                     <Column>
-                        <div className="user-name">
-                            <H type="3" text={this.props.title} />
+                        <div className="comment-header-wrapper">
+                            <H type="3" text={this.props.title} optional="comment-header" href={this.slugPrefix + "/" + this.props.slug} handleOnClick={(e)=>{e.preventDefault();this.props.changeContent(e.target.href)}}/>
                         </div>
                     </Column>
                     <Column>
@@ -208,22 +210,16 @@ class BottomOfComment extends React.Component {
                         <Tags tags={this.props.tags} activeOnly={true} handleOnClick={this.props.changeContent}/>
                     </Column>
                 </Row>
-                <Row size="one">
+                <Row size="two" nonStackable={true}>
                     <Column>
-                        <FloatRight>
-                            <div className="comment-date">
-                                {this.props.date}
-                            </div>
-                        </FloatRight>
+                        <div className="comment-date">
+                            {this.props.date}
+                        </div>
                     </Column>
-                </Row>
-                <Row size="one" nonStackable={true}>
                     <Column>
                         <FloatRight>
-                            <div>
-                                <LikeButton likeCount={this.props.likeCount} liked={this.props.liked}/>
-                                <ReportButton handleOpenReportArea={this.props.handleOpenReportArea} disabled={this.props.owner}/>
-                            </div>
+                            <LikeButton likeCount={this.props.likeCount} liked={this.props.liked}/>
+                            <ReportButton handleOpenReportArea={this.props.handleOpenReportArea} disabled={this.props.owner}/>
                         </FloatRight>
                     </Column>
                 </Row>
@@ -849,7 +845,9 @@ class Comments extends React.Component {
 					<Comment
 						changeContent={this.props.changeContent}
 						key={com.id}
-						text={com.text}
+                        text={com.text}
+                        type={com.type}
+                        slug={com.slug}
 						likeCount={com.likeCount}
 						liked={com.liked}
 						title={com.title}

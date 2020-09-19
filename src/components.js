@@ -145,29 +145,25 @@ class H extends React.Component {
         } else {
             this.optional = this.props.optional;
         }
+        this.a = <a href={this.props.href} onClick={this.props.handleOnClick}>{this.props.text}</a>
+        if(this.props.type=="1") {
+            this.h = <h1 className={"ui "+this.textAlign+" header h-title " + this.optional}>{this.a}</h1>
+        } else if(this.props.type=="2") {
+            this.h = <h2 className={"ui "+this.textAlign+" header h-title " + this.optional}>{this.a}</h2>
+        } else if(this.props.type=="3") {
+            this.h = <h3 className={"ui "+this.textAlign+" header h-title " + this.optional}>{this.a}</h3>
+        } else if(this.props.type=="4") {
+            this.h = <h4 className={"ui "+this.textAlign+"header h-title " + this.optional}>{this.a}</h4>
+        } else if(this.props.type=="5") {
+            this.h = <h5 className={"ui "+this.textAlign+"header h-title " + this.optional}>{this.a}</h5>
+        }
     }
     render() {
-        if(this.props.type=="1") {
-            return (
-                <h1 className={"ui "+this.textAlign+" header " + this.optional}>{this.props.text}</h1>
-            )
-        } else if(this.props.type=="2") {
-            return (
-                <h2 className={"ui "+this.textAlign+" header " + this.optional}>{this.props.text}</h2>
-            )
-        } else if(this.props.type=="3") {
-            return (
-                <h3 className={"ui "+this.textAlign+" header " + this.optional}>{this.props.text}</h3>
-            )
-        } else if(this.props.type=="4") {
-            return (
-                <h4 className={"ui "+this.textAlign+"header " + this.optional}>{this.props.text}</h4>
-            )
-        } else if(this.props.type=="5") {
-            return (
-                <h5 className={"ui "+this.textAlign+"header " + this.optional}>{this.props.text}</h5>
-            )
-        }
+        return(
+            <div>
+                {this.h}
+            </div>
+        )
     }
 }
 

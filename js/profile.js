@@ -66,6 +66,7 @@ var Account = function (_React$Component2) {
             isThereMoreProduct: true,
             comments: [{
                 title: "IPhone 5s",
+                slug: "iphone-5s",
                 text: "burası yorum text alanı",
                 likeCount: 15,
                 liked: false,
@@ -95,6 +96,7 @@ var Account = function (_React$Component2) {
                 owner: false
             }, {
                 title: "Le Cola Zero",
+                slug: "le-cola-zero",
                 text: "burası yorum text alanı",
                 likeCount: 15,
                 liked: true,
@@ -224,7 +226,7 @@ var Account = function (_React$Component2) {
                             this.form
                         )
                     ),
-                    React.createElement(Comments, { comments: this.state.comments, form: "normal", changeContent: this.props.changeContent })
+                    React.createElement(Comments, { comments: this.state.comments, form: "normal", changeContent: this.props.changeContent, type: "product" })
                 );
             }
         }
@@ -702,45 +704,3 @@ var ChangeItems = function (_React$Component6) {
 
     return ChangeItems;
 }(React.Component);
-
-/*
-class Comments extends React.Component {
-    constructor(props){
-        super(props);
-        this.prepareComments = this.prepareComments.bind(this);
-    }
-    prepareComments() {
-        let comments = [];
-        let com;
-        for(let i=0;i<this.props.comments.length;i++) {
-            com = this.props.comments[i];
-            comments.push(
-                <Comment
-                    key={i}
-                    title={com.title}
-                    text={com.text}
-                    likeCount={com.likeCount}
-                    liked={com.liked}
-                    date={com.date}
-                    tags={com.tags}
-                    owner={com.owner}
-                />
-            )
-        }
-        return comments;
-    }
-    render() {
-        this.comments = this.prepareComments();
-        return(
-            <div>
-                <Row size="one">
-                    <Column>
-                        <H type="2" text="Yorumlar" />
-                    </Column>
-                </Row>
-                {this.comments}
-            </div>
-        )
-    }
-}
-*/
