@@ -30,6 +30,7 @@
     <script src="https://unpkg.com/react-router/umd/react-router.min.js"></script>
 
     <script src="https://code.jquery.com/jquery-3.5.0.min.js" integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ=" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="script/semantic.min.js"></script>
     <script src="script/script.js"></script>
 

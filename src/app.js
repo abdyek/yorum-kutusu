@@ -307,8 +307,8 @@ class App extends React.Component {
         this.changeContent = this.changeContent.bind(this);
     }
     changeContent(href) {
-        //console.log(event.target.href);
-        //window.history.pushState({content:content}, "Title", SITEURL+ this.slug[content]);
+        firstLoading=false;
+        // ^ filtrele sayfası sadece ilk yüklemede loasingSpin'e düşeceği için ihtiyaç duydum
         let foo = href.split(SITEURL);
         let bar = foo[foo.length-1];
         slug = bar.split("/")[0];

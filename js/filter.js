@@ -12,28 +12,162 @@ var Filter = function (_React$Component) {
     function Filter(props) {
         _classCallCheck(this, Filter);
 
-        return _possibleConstructorReturn(this, (Filter.__proto__ || Object.getPrototypeOf(Filter)).call(this, props));
+        var _this = _possibleConstructorReturn(this, (Filter.__proto__ || Object.getPrototypeOf(Filter)).call(this, props));
+
+        _this.state = {
+            loading: firstLoading,
+            selectedTags: {},
+            product: {}
+        };
+        if (firstLoading) {
+            _this.load();
+        }
+        return _this;
     }
 
     _createClass(Filter, [{
-        key: "render",
+        key: 'load',
+        value: function load() {
+            var _this2 = this;
+
+            $.ajax({
+                method: 'GET',
+                url: 'http://localhost/yorum-kutusu/api/endpoints/example.php',
+                data: {
+                    'engelKaldir': 3 // şimdilik yaptım
+                },
+                success: function success(response) {
+                    _this2.setState({
+                        'loading': false,
+                        'selectedTags': response['selectedTags']
+                    });
+                }
+            });
+
+            // burada slug'daki etiketlerin kontrolünü yapıyoruz, eğer bir tanesi bile sunucu tarafında yoksa boş filtrele sayfası açıyoruz
+            var currentUrl = window.location.href;
+            var slugs = currentUrl.split("filtrele/")[1].split(",");
+            console.log(slugs);
+            // yüklenecek olası ürün
+            this.product = {
+                0: {
+                    title: "Mahmut Efendi Kahveleri",
+                    slug: "mahmut-efendi-kahveleri",
+                    tags: {
+                        0: {
+                            passive: true,
+                            text: "Akıllı Telefon",
+                            slug: "akilli-telefon"
+                        },
+                        1: {
+                            passive: true,
+                            text: "Apple",
+                            slug: "apple"
+                        },
+                        2: {
+                            passive: true,
+                            text: "IPhone",
+                            slug: "iphone"
+                        },
+                        3: {
+                            passive: false,
+                            text: "Batarya",
+                            color: "yellow",
+                            rateValue: "5.5",
+                            slug: "batarya"
+                        },
+                        4: {
+                            passive: false,
+                            text: "Kamera",
+                            color: "orange",
+                            rateValue: "4.2",
+                            slug: "kamera"
+                        },
+                        5: {
+                            passive: false,
+                            text: "Ekran",
+                            color: "green",
+                            rateValue: "9.3",
+                            slug: "ekran"
+                        }
+                    }
+                },
+                1: {
+                    title: "IPhone 5s",
+                    slug: "iphone-5s",
+                    tags: {
+                        0: {
+                            passive: true,
+                            text: "Akıllı Telefon",
+                            slug: "akilli-telefon"
+                        },
+                        3: {
+                            passive: false,
+                            text: "Batarya",
+                            color: "yellow",
+                            rateValue: "5.5",
+                            slug: "batarya"
+                        },
+                        4: {
+                            passive: false,
+                            text: "Kamera",
+                            color: "orange",
+                            rateValue: "4.2",
+                            slug: "kamera"
+                        },
+                        5: {
+                            passive: false,
+                            text: "Ekran",
+                            color: "green",
+                            rateValue: "9.3",
+                            slug: "ekran"
+                        }
+                    }
+                }
+                // yüklenecek olası seçili etiketler
+                /*
+                this.selectedTags = {
+                    3:{
+                        passive:false,
+                        text:"Batarya",
+                        color:"yellow",
+                        rateValue: "-",
+                        slug:"batarya"
+                    },
+                    4:{
+                        passive:false,
+                        text:"Kamera",
+                        color:"orange",
+                        rateValue: "-",
+                        slug:"kamera"
+                    },
+                }
+                */
+            };
+        }
+    }, {
+        key: 'render',
         value: function render() {
             document.title = "Filtrele";
-            return React.createElement(
-                "div",
-                null,
-                React.createElement(
-                    Row,
-                    { size: "sixteen" },
-                    React.createElement(WideColumn, { size: "two" }),
+            if (this.state.loading) {
+                return React.createElement(RowLoadingSpin, { nonSegment: true });
+            } else {
+                return React.createElement(
+                    'div',
+                    null,
                     React.createElement(
-                        WideColumn,
-                        { size: "twelve" },
-                        React.createElement(H, { type: "1", text: "Filtrele" }),
-                        React.createElement(TagPicker, { changeContent: this.props.changeContent })
+                        Row,
+                        { size: 'sixteen' },
+                        React.createElement(WideColumn, { size: 'two' }),
+                        React.createElement(
+                            WideColumn,
+                            { size: 'twelve' },
+                            React.createElement(H, { type: '1', text: 'Filtrele' }),
+                            React.createElement(TagPicker, { changeContent: this.props.changeContent, product: this.state.product, selectedTags: this.state.selectedTags })
+                        )
                     )
-                )
-            );
+                );
+            }
         }
     }]);
 
@@ -46,56 +180,56 @@ var ProductList = function (_React$Component2) {
     function ProductList(props) {
         _classCallCheck(this, ProductList);
 
-        var _this2 = _possibleConstructorReturn(this, (ProductList.__proto__ || Object.getPrototypeOf(ProductList)).call(this, props));
+        var _this3 = _possibleConstructorReturn(this, (ProductList.__proto__ || Object.getPrototypeOf(ProductList)).call(this, props));
 
-        _this2.state = {
+        _this3.state = {
             form: "normal" // normal, loading, notFound
         };
-        _this2.prepareProductListItems = _this2.prepareProductListItems.bind(_this2);
-        return _this2;
+        _this3.prepareProductListItems = _this3.prepareProductListItems.bind(_this3);
+        return _this3;
     }
 
     _createClass(ProductList, [{
-        key: "prepareProductListItems",
+        key: 'prepareProductListItems',
         value: function prepareProductListItems() {
             this.items = [];
             var product = this.props.product;
             var productKeys = Object.keys(product);
             var count = productKeys.length;
             for (var i = 0; i < count; i++) {
-                this.items.push(React.createElement(ProductListItem, { key: productKeys[i], productTitle: product[i].title, tags: product[i].tags, changeContent: this.props.changeContent }));
+                this.items.push(React.createElement(ProductListItem, { key: productKeys[i], productTitle: product[i].title, productSlug: product[i].slug, tags: product[i].tags, changeContent: this.props.changeContent }));
             }
         }
     }, {
-        key: "render",
+        key: 'render',
         value: function render() {
             if (this.state.form == "normal") {
                 this.prepareProductListItems();
                 return React.createElement(
-                    "div",
+                    'div',
                     null,
                     React.createElement(
                         Row,
-                        { size: "one" },
+                        { size: 'one' },
                         React.createElement(
                             Column,
                             null,
-                            React.createElement(H, { type: "2", text: "\xDCr\xFCnler" }),
+                            React.createElement(H, { type: '2', text: '\xDCr\xFCnler' }),
                             this.items
                         )
                     )
                 );
             } else if (this.state.form == "loading") {
                 return React.createElement(
-                    "div",
+                    'div',
                     null,
                     React.createElement(RowLoadingSpin, { nonSegment: true })
                 );
             } else if (this.state.form == "notFound") {
                 return React.createElement(
-                    "div",
-                    { className: "notFoundInProductList" },
-                    React.createElement(H, { type: "3", text: "Arad\u0131\u011F\u0131n\u0131z kriterde \xFCr\xFCn yok", textAlign: "center" })
+                    'div',
+                    { className: 'notFoundInProductList' },
+                    React.createElement(H, { type: '3', text: 'Arad\u0131\u011F\u0131n\u0131z kriterde \xFCr\xFCn yok', textAlign: 'center' })
                 );
             }
         }
@@ -114,14 +248,16 @@ var ProductListItem = function (_React$Component3) {
     }
 
     _createClass(ProductListItem, [{
-        key: "render",
+        key: 'render',
         value: function render() {
+            var _this5 = this;
+
             return React.createElement(
-                "div",
+                'div',
                 null,
                 React.createElement(
                     Row,
-                    { size: "one" },
+                    { size: 'one' },
                     React.createElement(
                         Column,
                         null,
@@ -130,16 +266,18 @@ var ProductListItem = function (_React$Component3) {
                             null,
                             React.createElement(
                                 Row,
-                                { size: "one" },
+                                { size: 'one' },
                                 React.createElement(
                                     Column,
                                     null,
-                                    React.createElement(H, { type: "3", optional: "productListItemHeader", text: this.props.productTitle })
+                                    React.createElement(H, { type: '3', optional: 'productListItemHeader', text: this.props.productTitle, href: "urun/" + this.props.productSlug, handleOnClick: function handleOnClick(e) {
+                                            e.preventDefault();_this5.props.changeContent(e.target.href);
+                                        } })
                                 )
                             ),
                             React.createElement(
                                 Row,
-                                { size: "one" },
+                                { size: 'one' },
                                 React.createElement(
                                     Column,
                                     null,

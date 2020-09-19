@@ -464,8 +464,8 @@ var App = function (_React$Component7) {
     _createClass(App, [{
         key: "changeContent",
         value: function changeContent(href) {
-            //console.log(event.target.href);
-            //window.history.pushState({content:content}, "Title", SITEURL+ this.slug[content]);
+            firstLoading = false;
+            // ^ filtrele sayfası sadece ilk yüklemede loasingSpin'e düşeceği için ihtiyaç duydum
             var foo = href.split(SITEURL);
             var bar = foo[foo.length - 1];
             slug = bar.split("/")[0];

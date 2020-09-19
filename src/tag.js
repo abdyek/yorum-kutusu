@@ -34,83 +34,12 @@ class TagPicker extends React.Component {
                     slug:"pasif-etiket"
                 }
             },
-            selectedTags: {
-            },
+            selectedTags: this.props.selectedTags,
             searchInput: "",
             typing: false,
             typingTimeout: 0,
             showItems:false,
-            product: {
-                0:{
-                    title:"Mahmut Efendi Kahveleri",
-                    tags: {
-                        0:{
-                            passive:true,
-                            text:"Akıllı Telefon",
-                            slug:"akilli-telefon"
-                        },
-                        1:{
-                            passive:true,
-                            text:"Apple",
-                            slug:"apple"
-                        },
-                        2:{
-                            passive:true,
-                            text:"IPhone",
-                            slug:"iphone"
-                        },
-                        3:{
-                            passive:false,
-                            text:"Batarya",
-                            color:"yellow",
-                            rateValue: "5.5",
-                            slug:"batarya"
-                        },
-                        4:{
-                            passive:false,
-                            text:"Kamera",
-                            color:"orange",
-                            rateValue: "4.2",
-                            slug:"kamera"
-                        },
-                        5:{
-                            passive:false,
-                            text:"Ekran",
-                            color:"green",
-                            rateValue: "9.3",
-                            slug:"ekran"
-                        }
-                    }
-                },
-                1:{
-                    title:"IPhone 5s",
-                    tags: {
-                        0:{
-                            passive:true,
-                            text:"Akıllı Telefon",
-                        },
-                        3:{
-                            passive:false,
-                            text:"Batarya",
-                            color:"yellow",
-                            rateValue: "5.5"
-                        },
-                        4:{
-                            passive:false,
-                            text:"Kamera",
-                            color:"orange",
-                            rateValue: "4.2"
-                        },
-                        5:{
-                            passive:false,
-                            text:"Ekran",
-                            color:"green",
-                            rateValue: "9.3"
-                        }
-                    }
-                },
-
-            }
+            product:this.props.product
         }
         this.refreshTags = this.refreshTags.bind(this);
         this.refreshProduct = this.refreshProduct.bind(this);

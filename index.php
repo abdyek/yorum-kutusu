@@ -35,7 +35,7 @@ $router->get('/e-posta-dogrula', function() {
     Tool::generatePage('e-posta-dogrula');
 });
 
-$router->get('/filtrele/:slug?', function() {
+$router->get('/filtrele/:any?', function() {
     Tool::generatePage('filtrele');
 });
 
