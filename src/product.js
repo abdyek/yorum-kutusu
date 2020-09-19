@@ -21,19 +21,22 @@ class Product extends React.Component {
 							passive:false,
 							text:"Batarya",
 							color:"yellow",
-							rateValue: "5"
+							rateValue: "5",
+							slug:"batarya"
 						},
 						4:{
 							passive:false,
 							text:"Kamera",
 							color:"orange",
-							rateValue: "4"
+							rateValue: "4",
+							slug:"kamera"
 						},
 						5:{
 							passive:false,
 							text:"Tasarım",
 							color:"",
-							rateValue: "-"
+							rateValue: "-",
+							slug:"tasarim"
 						}
 					},
 					owner:true
@@ -50,19 +53,22 @@ class Product extends React.Component {
 							passive:false,
 							text:"Batarya",
 							color:"yellow",
-							rateValue: "5"
+							rateValue: "5",
+							slug:"batarya"
 						},
 						4:{
 							passive:false,
 							text:"Kamera",
 							color:"orange",
-							rateValue: "4"
+							rateValue: "4",
+							slug:"kamera"
 						},
 						5:{
 							passive:false,
 							text:"Tasarım",
 							color:"",
-							rateValue: "-"
+							rateValue: "-",
+							slug:"tasarim"
 						}
 					},
 					owner:false
@@ -72,33 +78,39 @@ class Product extends React.Component {
         this.tagsInfo = {
             0:{
                 passive:true,
-                text:"Akıllı Telefon",
+				text:"Akıllı Telefon",
+				slug:"akilli-telefon"
             },
             1:{
                 passive:true,
-                text:"Apple"
+                text:"Apple",
+				slug:"apple"
             },
             2:{
                 passive:true,
-                text:"Ipone"
+                text:"IPhone",
+				slug:"iphone"
             },
             3:{
                 passive:false,
                 text:"Batarya",
                 color:"yellow",
-                rateValue: "5.5"
+                rateValue: "5.5",
+				slug:"batarya"
             },
             4:{
                 passive:false,
                 text:"Kamera",
                 color:"orange",
-                rateValue: "4.2"
+                rateValue: "4.2",
+				slug:"kamera"
             },
             5:{
                 passive:false,
                 text:"Ekran",
                 color:"green",
-                rateValue: "9.3"
+                rateValue: "9.3",
+				slug:"ekran"
             },
 		};
 		this.changeSortBy = this.changeSortBy.bind(this);
@@ -133,9 +145,9 @@ class Product extends React.Component {
 			document.title = this.state.productName;
             return(
                 <div>
-                    <ProductInfo tags={this.tagsInfo} productName={this.state.productName}/>
+                    <ProductInfo tags={this.tagsInfo} productName={this.state.productName} changeContent={this.props.changeContent}/>
                     <PageNavigation sortBy={this.state.sortBy} handleChangeSortBy={this.changeSortBy} pageCount="6" currentPage={this.state.pageNumber} handleChangePageNumber={this.changePageNumber} />
-                    <Comments comments={this.state.comments} form={this.state.commentsForm}/>
+                    <Comments comments={this.state.comments} form={this.state.commentsForm} changeContent={this.props.changeContent}/>
                     <PageNavigation sortBy={this.state.sortBy} handleChangeSortBy={this.changeSortBy} pageCount="6" currentPage={this.state.pageNumber} handleChangePageNumber={this.changePageNumber} />
                     <WriteComment tags={this.tagsInfo}/>
                 </div>
@@ -219,53 +231,10 @@ class ProductInfo extends React.Component {
                 </Row>
                 <Row size="one">
                     <Column>
-                        <Tags tags={this.props.tags} activeOnly={false}/>
+                        <Tags tags={this.props.tags} activeOnly={false} handleOnClick={this.props.changeContent}/>
                     </Column>
                 </Row>
             </div>
         )
-    }
-}
-
-
-class Comments extends React.Component {
-    render() {
-		if(this.props.form=="normal") {
-			this.comments = [];
-			for(let i=0;i<this.props.comments.length;i++) {
-				let com = this.props.comments[i];
-				this.comments.push(
-					<Comment
-						key={com.id}
-						text={com.text}
-						likeCount={com.likeCount}
-						liked={com.liked}
-						title={com.title}
-						date={com.date}
-						tags={com.tags}
-						owner={com.owner}
-					/>
-				)
-			}
-			return (
-				<div>
-					{this.comments}
-				</div>
-			)
-		} else if(this.props.form=="loading"){
-			return(
-				<RowLoadingSpin nonSegment={true} />
-			)
-		} else if(this.props.form=="noComment") {
-			return(
-				<Row size="one">
-					<Column>
-						<div class="ui massive green message">
-							Bu ürün henüz yorumlanmamış. İlk yorumu sen yap!
-						</div>
-					</Column>
-				</Row>
-			)
-		}
     }
 }

@@ -2,7 +2,7 @@ class Profile extends React.Component {
     render() {
         return(
             <div>
-                <Account />
+                <Account changeContent={this.props.changeContent}/>
             </div>
         )
     }
@@ -51,21 +51,24 @@ class Account extends React.Component {
                             passive:false,
                             text:"Batarya",
                             color:"yellow",
-                            rateValue: "5"
+                            rateValue: "5",
+                            slug:"batarya"
                         },
                         {
                             id:4,
                             passive:false,
                             text:"Kamera",
                             color:"orange",
-                            rateValue: "4"
+                            rateValue: "4",
+                            slug:"kamera"
                         },
                         {
                             id:5,
                             passive:false,
                             text:"Tasarım",
                             color:"",
-                            rateValue: "-"
+                            rateValue: "-",
+                            slug:"tasarim"
                         }
                     ],
                     owner:false
@@ -175,7 +178,7 @@ class Account extends React.Component {
                 this.form = <SettingArea closeSettingArea={this.closeSettingArea} />
             } else if(this.state.form=="followedProducts") {
 			    document.title = "Takip Edilen Ürünler";
-                this.form = <FollowedProducts closeFollowedProducts={this.closeFollowedProducts} followedProductsInfo={this.state.followedProductsInfo} isThereMoreProduct={this.state.isThereMoreProduct} addMoreFollowed={this.addMoreFollowed}/>
+                this.form = <FollowedProducts closeFollowedProducts={this.closeFollowedProducts} followedProductsInfo={this.state.followedProductsInfo} isThereMoreProduct={this.state.isThereMoreProduct} addMoreFollowed={this.addMoreFollowed} changeContent={this.props.changeContent}/>
             }
             return(
                 <div>
@@ -185,7 +188,7 @@ class Account extends React.Component {
                             {this.form}
                         </Column>
                     </Row>
-                    <Comments comments={this.state.comments}/>
+                    <Comments comments={this.state.comments} form={"normal"} changeContent={this.props.changeContent}/>
                 </div>
             )
         }
@@ -272,7 +275,7 @@ class FollowedProducts extends React.Component {
                 <tr key={keys[i]}>
                     <td>
                         <Center>
-                            <a href={"urun/" + info[keys[i]].url}>
+                            <a href={"urun/" + info[keys[i]].url} onClick={(e)=>{e.preventDefault();this.props.changeContent(e.target.href, e)}}>
                                 {info[keys[i]].productName}
                             </a>
                         </Center>
@@ -485,7 +488,7 @@ class ChangeItems extends React.Component {
     }
 }
 
-
+/*
 class Comments extends React.Component {
     constructor(props){
         super(props);
@@ -525,3 +528,4 @@ class Comments extends React.Component {
         )
     }
 }
+*/

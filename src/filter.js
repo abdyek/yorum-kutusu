@@ -11,7 +11,7 @@ class Filter extends React.Component {
                     </WideColumn>
                     <WideColumn size="twelve">
                         <H type="1" text="Filtrele" />
-                        <TagPicker />
+                        <TagPicker changeContent={this.props.changeContent} />
                     </WideColumn>
                 </Row>
             </div>
@@ -34,7 +34,7 @@ class ProductList extends React.Component {
         let count = productKeys.length;
         for(let i=0; i<count;i++) {
             this.items.push(
-                <ProductListItem key={productKeys[i]} productTitle={product[i].title} tags={product[i].tags}/>
+                <ProductListItem key={productKeys[i]} productTitle={product[i].title} tags={product[i].tags} changeContent={this.props.changeContent}/>
                 
             )
         }
@@ -85,7 +85,7 @@ class ProductListItem extends React.Component {
                             </Row>
                             <Row size="one">
                                 <Column>
-                                    <Tags tags={this.props.tags} activeOnly={false} handleOnClick={null}/>
+                                    <Tags tags={this.props.tags} activeOnly={false} handleOnClick={this.props.changeContent} />
                                 </Column>
                             </Row>
                         </RaisedSegment>

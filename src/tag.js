@@ -9,25 +9,29 @@ class TagPicker extends React.Component {
                     passive:false,
                     text:"Batarya",
                     color:"yellow",
-                    rateValue: "-"
+                    rateValue: "-",
+                    slug:"batarya"
                 },
                 4:{
                     passive:false,
                     text:"Kamera",
                     color:"orange",
-                    rateValue: "-"
+                    rateValue: "-",
+                    slug:"kamera"
                 },
                 5:{
                     passive:false,
                     text:"Tasarım",
                     color:"",
-                    rateValue: "-"
+                    rateValue: "-",
+                    slug:"tasarim"
                 },
                 99:{
                     passive:true,
                     text:"Pasif Etiket",
                     color:"",
-                    rateValue: "-"
+                    rateValue: "-",
+                    slug:"pasif-etiket"
                 }
             },
             selectedTags: {
@@ -43,32 +47,38 @@ class TagPicker extends React.Component {
                         0:{
                             passive:true,
                             text:"Akıllı Telefon",
+                            slug:"akilli-telefon"
                         },
                         1:{
                             passive:true,
-                            text:"Apple"
+                            text:"Apple",
+                            slug:"apple"
                         },
                         2:{
                             passive:true,
-                            text:"Ipone"
+                            text:"IPhone",
+                            slug:"iphone"
                         },
                         3:{
                             passive:false,
                             text:"Batarya",
                             color:"yellow",
-                            rateValue: "5.5"
+                            rateValue: "5.5",
+                            slug:"batarya"
                         },
                         4:{
                             passive:false,
                             text:"Kamera",
                             color:"orange",
-                            rateValue: "4.2"
+                            rateValue: "4.2",
+                            slug:"kamera"
                         },
                         5:{
                             passive:false,
                             text:"Ekran",
                             color:"green",
-                            rateValue: "9.3"
+                            rateValue: "9.3",
+                            slug:"ekran"
                         }
                     }
                 },
@@ -179,7 +189,7 @@ class TagPicker extends React.Component {
                 <Row size="one">
                     <Column>
                         <H type="4" text={headerText} />
-                        <Tags tags={this.state.selectedTags} activeOnly={false} handleOnClick={this.deleteTag}/>
+                        <Tags tags={this.state.selectedTags} activeOnly={false} handleOnClick={this.deleteTag} noParameter={true}/>
                         {infoSpan}
                         <div className="ui form">
                             <div className="field">
@@ -194,7 +204,7 @@ class TagPicker extends React.Component {
                         </div>
                     </Column>
                 </Row>
-                <ProductList product={this.state.product} />
+                <ProductList product={this.state.product} changeContent={this.props.changeContent}/>
             </div>
         )
     }
@@ -204,21 +214,24 @@ class TagPicker extends React.Component {
 class Tag extends React.Component {
     constructor(props){
         super(props);
+        this.handleOnClick = this.handleOnClick.bind(this);
     }
-    onClick() {
-        this.props.handleOnClick();
+    handleOnClick(e) {
+        e.preventDefault();
+        if(this.props.noParameter) {
+            this.props.handleOnClick(e);
+        } else {
+            this.props.handleOnClick(e.target.href,e);
+        }
     }
     render() {
-        /*
-        // böyle bir kontrolü neden yapmışım bilmiyorum
         if(this.props.passive) {
             return (
-                <a className="ui large label tag-abdyek">{this.props.text}</a>
+                <a href={this.props.slug} className="ui large label tag-abdyek" onClick={this.handleOnClick}>{this.props.text}</a>
             )
         }
-        */
         return (
-            <a name={this.props.id} className={"ui "+this.props.color+" large label tag-abdyek"} onClick={this.props.handleOnClick}>{this.props.text}
+            <a href={this.props.slug} name={this.props.id} className={"ui "+this.props.color+" large label tag-abdyek"} onClick={this.handleOnClick}>{this.props.text}
                 <div className="detail">{this.props.rateValue}</div> 
             </a>
         )
@@ -241,6 +254,8 @@ class Tags extends React.Component {
                     color={this.props.tags[keyArr[i]].color}
                     rateValue={this.props.tags[keyArr[i]].rateValue}
                     handleOnClick={this.props.handleOnClick}
+                    slug={"filtrele/"+this.props.tags[keyArr[i]].slug}
+                    noParameter={this.props.noParameter}
                 />
             )
         }

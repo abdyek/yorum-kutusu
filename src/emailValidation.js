@@ -11,6 +11,7 @@ class EmailValidation extends React.Component {
         this.verify = this.verify.bind(this);
         this.sendAgain = this.sendAgain.bind(this);
         this.showTopMessage = this.showTopMessage.bind(this);
+        this.goHome = this.goHome.bind(this);
     }
     changeCode(e) {
         this.setState({
@@ -31,6 +32,10 @@ class EmailValidation extends React.Component {
                 text: text
             }
         });
+    }
+    goHome(e) {
+        e.preventDefault();
+        this.props.changeContent(" ");
     }
     render() {
         if(this.state.form=="normal") {
@@ -91,7 +96,7 @@ class EmailValidation extends React.Component {
                                 <Row size="one">
                                     <Column>
                                         <Center>
-                                            <a href="index">
+                                            <a href="" onClick={this.goHome}>
                                                 Bu adımı şimdilik geç
                                             </a>
                                         </Center>

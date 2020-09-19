@@ -33,19 +33,22 @@ var Product = function (_React$Component) {
 						passive: false,
 						text: "Batarya",
 						color: "yellow",
-						rateValue: "5"
+						rateValue: "5",
+						slug: "batarya"
 					},
 					4: {
 						passive: false,
 						text: "Kamera",
 						color: "orange",
-						rateValue: "4"
+						rateValue: "4",
+						slug: "kamera"
 					},
 					5: {
 						passive: false,
 						text: "Tasarım",
 						color: "",
-						rateValue: "-"
+						rateValue: "-",
+						slug: "tasarim"
 					}
 				},
 				owner: true
@@ -61,19 +64,22 @@ var Product = function (_React$Component) {
 						passive: false,
 						text: "Batarya",
 						color: "yellow",
-						rateValue: "5"
+						rateValue: "5",
+						slug: "batarya"
 					},
 					4: {
 						passive: false,
 						text: "Kamera",
 						color: "orange",
-						rateValue: "4"
+						rateValue: "4",
+						slug: "kamera"
 					},
 					5: {
 						passive: false,
 						text: "Tasarım",
 						color: "",
-						rateValue: "-"
+						rateValue: "-",
+						slug: "tasarim"
 					}
 				},
 				owner: false
@@ -82,33 +88,39 @@ var Product = function (_React$Component) {
 		_this.tagsInfo = {
 			0: {
 				passive: true,
-				text: "Akıllı Telefon"
+				text: "Akıllı Telefon",
+				slug: "akilli-telefon"
 			},
 			1: {
 				passive: true,
-				text: "Apple"
+				text: "Apple",
+				slug: "apple"
 			},
 			2: {
 				passive: true,
-				text: "Ipone"
+				text: "IPhone",
+				slug: "iphone"
 			},
 			3: {
 				passive: false,
 				text: "Batarya",
 				color: "yellow",
-				rateValue: "5.5"
+				rateValue: "5.5",
+				slug: "batarya"
 			},
 			4: {
 				passive: false,
 				text: "Kamera",
 				color: "orange",
-				rateValue: "4.2"
+				rateValue: "4.2",
+				slug: "kamera"
 			},
 			5: {
 				passive: false,
 				text: "Ekran",
 				color: "green",
-				rateValue: "9.3"
+				rateValue: "9.3",
+				slug: "ekran"
 			}
 		};
 		_this.changeSortBy = _this.changeSortBy.bind(_this);
@@ -154,9 +166,9 @@ var Product = function (_React$Component) {
 				return React.createElement(
 					"div",
 					null,
-					React.createElement(ProductInfo, { tags: this.tagsInfo, productName: this.state.productName }),
+					React.createElement(ProductInfo, { tags: this.tagsInfo, productName: this.state.productName, changeContent: this.props.changeContent }),
 					React.createElement(PageNavigation, { sortBy: this.state.sortBy, handleChangeSortBy: this.changeSortBy, pageCount: "6", currentPage: this.state.pageNumber, handleChangePageNumber: this.changePageNumber }),
-					React.createElement(Comments, { comments: this.state.comments, form: this.state.commentsForm }),
+					React.createElement(Comments, { comments: this.state.comments, form: this.state.commentsForm, changeContent: this.props.changeContent }),
 					React.createElement(PageNavigation, { sortBy: this.state.sortBy, handleChangeSortBy: this.changeSortBy, pageCount: "6", currentPage: this.state.pageNumber, handleChangePageNumber: this.changePageNumber }),
 					React.createElement(WriteComment, { tags: this.tagsInfo })
 				);
@@ -274,7 +286,7 @@ var ProductInfo = function (_React$Component2) {
 					React.createElement(
 						Column,
 						null,
-						React.createElement(Tags, { tags: this.props.tags, activeOnly: false })
+						React.createElement(Tags, { tags: this.props.tags, activeOnly: false, handleOnClick: this.props.changeContent })
 					)
 				)
 			);
@@ -282,59 +294,4 @@ var ProductInfo = function (_React$Component2) {
 	}]);
 
 	return ProductInfo;
-}(React.Component);
-
-var Comments = function (_React$Component3) {
-	_inherits(Comments, _React$Component3);
-
-	function Comments() {
-		_classCallCheck(this, Comments);
-
-		return _possibleConstructorReturn(this, (Comments.__proto__ || Object.getPrototypeOf(Comments)).apply(this, arguments));
-	}
-
-	_createClass(Comments, [{
-		key: "render",
-		value: function render() {
-			if (this.props.form == "normal") {
-				this.comments = [];
-				for (var i = 0; i < this.props.comments.length; i++) {
-					var com = this.props.comments[i];
-					this.comments.push(React.createElement(Comment, {
-						key: com.id,
-						text: com.text,
-						likeCount: com.likeCount,
-						liked: com.liked,
-						title: com.title,
-						date: com.date,
-						tags: com.tags,
-						owner: com.owner
-					}));
-				}
-				return React.createElement(
-					"div",
-					null,
-					this.comments
-				);
-			} else if (this.props.form == "loading") {
-				return React.createElement(RowLoadingSpin, { nonSegment: true });
-			} else if (this.props.form == "noComment") {
-				return React.createElement(
-					Row,
-					{ size: "one" },
-					React.createElement(
-						Column,
-						null,
-						React.createElement(
-							"div",
-							{ "class": "ui massive green message" },
-							"Bu \xFCr\xFCn hen\xFCz yorumlanmam\u0131\u015F. \u0130lk yorumu sen yap!"
-						)
-					)
-				);
-			}
-		}
-	}]);
-
-	return Comments;
 }(React.Component);

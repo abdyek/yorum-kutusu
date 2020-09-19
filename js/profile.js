@@ -21,7 +21,7 @@ var Profile = function (_React$Component) {
             return React.createElement(
                 "div",
                 null,
-                React.createElement(Account, null)
+                React.createElement(Account, { changeContent: this.props.changeContent })
             );
         }
     }]);
@@ -75,19 +75,22 @@ var Account = function (_React$Component2) {
                     passive: false,
                     text: "Batarya",
                     color: "yellow",
-                    rateValue: "5"
+                    rateValue: "5",
+                    slug: "batarya"
                 }, {
                     id: 4,
                     passive: false,
                     text: "Kamera",
                     color: "orange",
-                    rateValue: "4"
+                    rateValue: "4",
+                    slug: "kamera"
                 }, {
                     id: 5,
                     passive: false,
                     text: "Tasarım",
                     color: "",
-                    rateValue: "-"
+                    rateValue: "-",
+                    slug: "tasarim"
                 }],
                 owner: false
             }, {
@@ -206,7 +209,7 @@ var Account = function (_React$Component2) {
                     this.form = React.createElement(SettingArea, { closeSettingArea: this.closeSettingArea });
                 } else if (this.state.form == "followedProducts") {
                     document.title = "Takip Edilen Ürünler";
-                    this.form = React.createElement(FollowedProducts, { closeFollowedProducts: this.closeFollowedProducts, followedProductsInfo: this.state.followedProductsInfo, isThereMoreProduct: this.state.isThereMoreProduct, addMoreFollowed: this.addMoreFollowed });
+                    this.form = React.createElement(FollowedProducts, { closeFollowedProducts: this.closeFollowedProducts, followedProductsInfo: this.state.followedProductsInfo, isThereMoreProduct: this.state.isThereMoreProduct, addMoreFollowed: this.addMoreFollowed, changeContent: this.props.changeContent });
                 }
                 return React.createElement(
                     "div",
@@ -221,7 +224,7 @@ var Account = function (_React$Component2) {
                             this.form
                         )
                     ),
-                    React.createElement(Comments, { comments: this.state.comments })
+                    React.createElement(Comments, { comments: this.state.comments, form: "normal", changeContent: this.props.changeContent })
                 );
             }
         }
@@ -362,6 +365,8 @@ var FollowedProducts = function (_React$Component5) {
     }, {
         key: "render",
         value: function render() {
+            var _this6 = this;
+
             this.trs = [];
             var info = this.props.followedProductsInfo;
             var keys = Object.keys(info);
@@ -377,7 +382,9 @@ var FollowedProducts = function (_React$Component5) {
                             null,
                             React.createElement(
                                 "a",
-                                { href: "urun/" + info[keys[i]].url },
+                                { href: "urun/" + info[keys[i]].url, onClick: function onClick(e) {
+                                        e.preventDefault();_this6.props.changeContent(e.target.href, e);
+                                    } },
                                 info[keys[i]].productName
                             )
                         )
@@ -488,9 +495,9 @@ var ChangeItems = function (_React$Component6) {
     function ChangeItems(props) {
         _classCallCheck(this, ChangeItems);
 
-        var _this6 = _possibleConstructorReturn(this, (ChangeItems.__proto__ || Object.getPrototypeOf(ChangeItems)).call(this, props));
+        var _this7 = _possibleConstructorReturn(this, (ChangeItems.__proto__ || Object.getPrototypeOf(ChangeItems)).call(this, props));
 
-        _this6.state = {
+        _this7.state = {
             form: "normal",
             topMessage: null,
             passwordSelected: true,
@@ -501,14 +508,14 @@ var ChangeItems = function (_React$Component6) {
             input2: "",
             input3: ""
         };
-        _this6.selectEmail = _this6.selectEmail.bind(_this6);
-        _this6.selectPassword = _this6.selectPassword.bind(_this6);
-        _this6.changeInput1 = _this6.changeInput1.bind(_this6);
-        _this6.changeInput2 = _this6.changeInput2.bind(_this6);
-        _this6.changeInput3 = _this6.changeInput3.bind(_this6);
-        _this6.send = _this6.send.bind(_this6);
-        _this6.showTopMessage = _this6.showTopMessage.bind(_this6);
-        return _this6;
+        _this7.selectEmail = _this7.selectEmail.bind(_this7);
+        _this7.selectPassword = _this7.selectPassword.bind(_this7);
+        _this7.changeInput1 = _this7.changeInput1.bind(_this7);
+        _this7.changeInput2 = _this7.changeInput2.bind(_this7);
+        _this7.changeInput3 = _this7.changeInput3.bind(_this7);
+        _this7.send = _this7.send.bind(_this7);
+        _this7.showTopMessage = _this7.showTopMessage.bind(_this7);
+        return _this7;
     }
 
     _createClass(ChangeItems, [{
@@ -696,58 +703,44 @@ var ChangeItems = function (_React$Component6) {
     return ChangeItems;
 }(React.Component);
 
-var Comments = function (_React$Component7) {
-    _inherits(Comments, _React$Component7);
-
-    function Comments(props) {
-        _classCallCheck(this, Comments);
-
-        var _this7 = _possibleConstructorReturn(this, (Comments.__proto__ || Object.getPrototypeOf(Comments)).call(this, props));
-
-        _this7.prepareComments = _this7.prepareComments.bind(_this7);
-        return _this7;
+/*
+class Comments extends React.Component {
+    constructor(props){
+        super(props);
+        this.prepareComments = this.prepareComments.bind(this);
     }
-
-    _createClass(Comments, [{
-        key: "prepareComments",
-        value: function prepareComments() {
-            var comments = [];
-            var com = void 0;
-            for (var i = 0; i < this.props.comments.length; i++) {
-                com = this.props.comments[i];
-                comments.push(React.createElement(Comment, {
-                    key: i,
-                    title: com.title,
-                    text: com.text,
-                    likeCount: com.likeCount,
-                    liked: com.liked,
-                    date: com.date,
-                    tags: com.tags,
-                    owner: com.owner
-                }));
-            }
-            return comments;
+    prepareComments() {
+        let comments = [];
+        let com;
+        for(let i=0;i<this.props.comments.length;i++) {
+            com = this.props.comments[i];
+            comments.push(
+                <Comment
+                    key={i}
+                    title={com.title}
+                    text={com.text}
+                    likeCount={com.likeCount}
+                    liked={com.liked}
+                    date={com.date}
+                    tags={com.tags}
+                    owner={com.owner}
+                />
+            )
         }
-    }, {
-        key: "render",
-        value: function render() {
-            this.comments = this.prepareComments();
-            return React.createElement(
-                "div",
-                null,
-                React.createElement(
-                    Row,
-                    { size: "one" },
-                    React.createElement(
-                        Column,
-                        null,
-                        React.createElement(H, { type: "2", text: "Yorumlar" })
-                    )
-                ),
-                this.comments
-            );
-        }
-    }]);
-
-    return Comments;
-}(React.Component);
+        return comments;
+    }
+    render() {
+        this.comments = this.prepareComments();
+        return(
+            <div>
+                <Row size="one">
+                    <Column>
+                        <H type="2" text="Yorumlar" />
+                    </Column>
+                </Row>
+                {this.comments}
+            </div>
+        )
+    }
+}
+*/

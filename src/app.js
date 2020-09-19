@@ -262,7 +262,7 @@ class Content extends React.Component {
                 break;
             case "emailValidationPage":
                 return (
-                    <EmailValidationPage  changeContent={this.changeContent} />
+                    <EmailValidationPage  changeContent={this.props.changeContent} />
                 )
                 break;
             default:

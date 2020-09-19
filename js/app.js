@@ -406,7 +406,7 @@ var Content = function (_React$Component6) {
                     return React.createElement(Filter, { changeContent: this.props.changeContent });
                     break;
                 case "emailValidationPage":
-                    return React.createElement(EmailValidationPage, { changeContent: this.changeContent });
+                    return React.createElement(EmailValidationPage, { changeContent: this.props.changeContent });
                     break;
                 default:
                     return React.createElement(

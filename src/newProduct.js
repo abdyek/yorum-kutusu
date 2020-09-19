@@ -198,7 +198,7 @@ class SelectedTags extends React.Component {
                             <H type="3" text="Etiketler" />
                         :""}
                     </div>
-                    <Tags tags={this.props.tags} activeOnly={false} handleOnClick={this.props.handleOnClick}/>
+                    <Tags tags={this.props.tags} activeOnly={false} handleOnClick={this.props.handleOnClick} noParameter={true}/>
                     {(this.props.form=="input")?
                         <span className="info-span">[seçimi iptal etmek için etikete dokunun]</span>
                     :""}

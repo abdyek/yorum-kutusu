@@ -76,7 +76,7 @@ class Comment extends React.Component {
                         <Column>
                             <RaisedSegment>
                                 <TopOfComment text={this.props.text} title={this.props.title} owner={this.props.owner} handleOpenEditArea={this.openEditArea} handleOpenDeleteArea={this.openDeleteArea} />
-                                <BottomOfComment likeCount={this.props.likeCount} liked={this.props.liked} date={this.props.date} handleOpenReportArea={this.openReportArea} handleCloseReportArea={this.closeReportArea} tags={this.props.tags} owner={this.props.owner} />
+                                <BottomOfComment likeCount={this.props.likeCount} liked={this.props.liked} date={this.props.date} handleOpenReportArea={this.openReportArea} handleCloseReportArea={this.closeReportArea} tags={this.props.tags} owner={this.props.owner} changeContent={this.props.changeContent} />
                             </RaisedSegment>
                         </Column>
                     </Row>
@@ -205,7 +205,7 @@ class BottomOfComment extends React.Component {
             <div>
                 <Row size="one">
                     <Column>
-                        <Tags tags={this.props.tags} activeOnly={true}/>
+                        <Tags tags={this.props.tags} activeOnly={true} handleOnClick={this.props.changeContent}/>
                     </Column>
                 </Row>
                 <Row size="one">
@@ -833,5 +833,51 @@ class DeleteArea extends React.Component {
                 </Column>
             </Row>
         )
+    }
+}
+
+class Comments extends React.Component {
+	constructor(props) {
+		super(props);
+	}
+    render() {
+		if(this.props.form=="normal") {
+			this.comments = [];
+			for(let i=0;i<this.props.comments.length;i++) {
+				let com = this.props.comments[i];
+				this.comments.push(
+					<Comment
+						changeContent={this.props.changeContent}
+						key={com.id}
+						text={com.text}
+						likeCount={com.likeCount}
+						liked={com.liked}
+						title={com.title}
+						date={com.date}
+						tags={com.tags}
+						owner={com.owner}
+					/>
+				)
+			}
+			return (
+				<div>
+					{this.comments}
+				</div>
+			)
+		} else if(this.props.form=="loading"){
+			return(
+				<RowLoadingSpin nonSegment={true} />
+			)
+		} else if(this.props.form=="noComment") {
+			return(
+				<Row size="one">
+					<Column>
+						<div class="ui massive green message">
+							Yorum Yok
+						</div>
+					</Column>
+				</Row>
+			)
+		}
     }
 }

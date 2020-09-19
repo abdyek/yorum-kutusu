@@ -11,11 +11,11 @@ $router->get('/', function() {
     Tool::generatePage('ana-sayfa');
 });
 
-$router->get('/urun/:any', function($productURL) {
+$router->get('/urun/:slug', function($productURL) {
     Tool::generatePage('urun');
 });
 
-$router->get('/profil/:any', function($profileID) {
+$router->get('/profil/:slug', function($profileID) {
     Tool::generatePage('profil');
 });
 
@@ -35,7 +35,7 @@ $router->get('/e-posta-dogrula', function() {
     Tool::generatePage('e-posta-dogrula');
 });
 
-$router->get('/filtrele', function() {
+$router->get('/filtrele/:slug?', function() {
     Tool::generatePage('filtrele');
 });
 

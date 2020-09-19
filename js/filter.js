@@ -30,7 +30,7 @@ var Filter = function (_React$Component) {
                         WideColumn,
                         { size: "twelve" },
                         React.createElement(H, { type: "1", text: "Filtrele" }),
-                        React.createElement(TagPicker, null)
+                        React.createElement(TagPicker, { changeContent: this.props.changeContent })
                     )
                 )
             );
@@ -63,7 +63,7 @@ var ProductList = function (_React$Component2) {
             var productKeys = Object.keys(product);
             var count = productKeys.length;
             for (var i = 0; i < count; i++) {
-                this.items.push(React.createElement(ProductListItem, { key: productKeys[i], productTitle: product[i].title, tags: product[i].tags }));
+                this.items.push(React.createElement(ProductListItem, { key: productKeys[i], productTitle: product[i].title, tags: product[i].tags, changeContent: this.props.changeContent }));
             }
         }
     }, {
@@ -143,7 +143,7 @@ var ProductListItem = function (_React$Component3) {
                                 React.createElement(
                                     Column,
                                     null,
-                                    React.createElement(Tags, { tags: this.props.tags, activeOnly: false, handleOnClick: null })
+                                    React.createElement(Tags, { tags: this.props.tags, activeOnly: false, handleOnClick: this.props.changeContent })
                                 )
                             )
                         )

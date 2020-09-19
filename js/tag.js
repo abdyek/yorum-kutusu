@@ -22,25 +22,29 @@ var TagPicker = function (_React$Component) {
                     passive: false,
                     text: "Batarya",
                     color: "yellow",
-                    rateValue: "-"
+                    rateValue: "-",
+                    slug: "batarya"
                 },
                 4: {
                     passive: false,
                     text: "Kamera",
                     color: "orange",
-                    rateValue: "-"
+                    rateValue: "-",
+                    slug: "kamera"
                 },
                 5: {
                     passive: false,
                     text: "Tasarım",
                     color: "",
-                    rateValue: "-"
+                    rateValue: "-",
+                    slug: "tasarim"
                 },
                 99: {
                     passive: true,
                     text: "Pasif Etiket",
                     color: "",
-                    rateValue: "-"
+                    rateValue: "-",
+                    slug: "pasif-etiket"
                 }
             },
             selectedTags: {},
@@ -54,33 +58,39 @@ var TagPicker = function (_React$Component) {
                     tags: {
                         0: {
                             passive: true,
-                            text: "Akıllı Telefon"
+                            text: "Akıllı Telefon",
+                            slug: "akilli-telefon"
                         },
                         1: {
                             passive: true,
-                            text: "Apple"
+                            text: "Apple",
+                            slug: "apple"
                         },
                         2: {
                             passive: true,
-                            text: "Ipone"
+                            text: "IPhone",
+                            slug: "iphone"
                         },
                         3: {
                             passive: false,
                             text: "Batarya",
                             color: "yellow",
-                            rateValue: "5.5"
+                            rateValue: "5.5",
+                            slug: "batarya"
                         },
                         4: {
                             passive: false,
                             text: "Kamera",
                             color: "orange",
-                            rateValue: "4.2"
+                            rateValue: "4.2",
+                            slug: "kamera"
                         },
                         5: {
                             passive: false,
                             text: "Ekran",
                             color: "green",
-                            rateValue: "9.3"
+                            rateValue: "9.3",
+                            slug: "ekran"
                         }
                     }
                 },
@@ -222,7 +232,7 @@ var TagPicker = function (_React$Component) {
                         Column,
                         null,
                         React.createElement(H, { type: "4", text: headerText }),
-                        React.createElement(Tags, { tags: this.state.selectedTags, activeOnly: false, handleOnClick: this.deleteTag }),
+                        React.createElement(Tags, { tags: this.state.selectedTags, activeOnly: false, handleOnClick: this.deleteTag, noParameter: true }),
                         infoSpan,
                         React.createElement(
                             "div",
@@ -249,7 +259,7 @@ var TagPicker = function (_React$Component) {
                         )
                     )
                 ),
-                React.createElement(ProductList, { product: this.state.product })
+                React.createElement(ProductList, { product: this.state.product, changeContent: this.props.changeContent })
             );
         }
     }]);
@@ -263,28 +273,35 @@ var Tag = function (_React$Component2) {
     function Tag(props) {
         _classCallCheck(this, Tag);
 
-        return _possibleConstructorReturn(this, (Tag.__proto__ || Object.getPrototypeOf(Tag)).call(this, props));
+        var _this2 = _possibleConstructorReturn(this, (Tag.__proto__ || Object.getPrototypeOf(Tag)).call(this, props));
+
+        _this2.handleOnClick = _this2.handleOnClick.bind(_this2);
+        return _this2;
     }
 
     _createClass(Tag, [{
-        key: "onClick",
-        value: function onClick() {
-            this.props.handleOnClick();
+        key: "handleOnClick",
+        value: function handleOnClick(e) {
+            e.preventDefault();
+            if (this.props.noParameter) {
+                this.props.handleOnClick(e);
+            } else {
+                this.props.handleOnClick(e.target.href, e);
+            }
         }
     }, {
         key: "render",
         value: function render() {
-            /*
-            // böyle bir kontrolü neden yapmışım bilmiyorum
-            if(this.props.passive) {
-                return (
-                    <a className="ui large label tag-abdyek">{this.props.text}</a>
-                )
+            if (this.props.passive) {
+                return React.createElement(
+                    "a",
+                    { href: this.props.slug, className: "ui large label tag-abdyek", onClick: this.handleOnClick },
+                    this.props.text
+                );
             }
-            */
             return React.createElement(
                 "a",
-                { name: this.props.id, className: "ui " + this.props.color + " large label tag-abdyek", onClick: this.props.handleOnClick },
+                { href: this.props.slug, name: this.props.id, className: "ui " + this.props.color + " large label tag-abdyek", onClick: this.handleOnClick },
                 this.props.text,
                 React.createElement(
                     "div",
@@ -319,7 +336,9 @@ var Tags = function (_React$Component3) {
                     text: this.props.tags[keyArr[i]].text,
                     color: this.props.tags[keyArr[i]].color,
                     rateValue: this.props.tags[keyArr[i]].rateValue,
-                    handleOnClick: this.props.handleOnClick
+                    handleOnClick: this.props.handleOnClick,
+                    slug: "filtrele/" + this.props.tags[keyArr[i]].slug,
+                    noParameter: this.props.noParameter
                 }));
             }
             return React.createElement(

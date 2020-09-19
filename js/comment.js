@@ -116,7 +116,7 @@ var Comment = function (_React$Component) {
                                 RaisedSegment,
                                 null,
                                 React.createElement(TopOfComment, { text: this.props.text, title: this.props.title, owner: this.props.owner, handleOpenEditArea: this.openEditArea, handleOpenDeleteArea: this.openDeleteArea }),
-                                React.createElement(BottomOfComment, { likeCount: this.props.likeCount, liked: this.props.liked, date: this.props.date, handleOpenReportArea: this.openReportArea, handleCloseReportArea: this.closeReportArea, tags: this.props.tags, owner: this.props.owner })
+                                React.createElement(BottomOfComment, { likeCount: this.props.likeCount, liked: this.props.liked, date: this.props.date, handleOpenReportArea: this.openReportArea, handleCloseReportArea: this.closeReportArea, tags: this.props.tags, owner: this.props.owner, changeContent: this.props.changeContent })
                             )
                         )
                     )
@@ -307,7 +307,7 @@ var BottomOfComment = function (_React$Component3) {
                     React.createElement(
                         Column,
                         null,
-                        React.createElement(Tags, { tags: this.props.tags, activeOnly: true })
+                        React.createElement(Tags, { tags: this.props.tags, activeOnly: true, handleOnClick: this.props.changeContent })
                     )
                 ),
                 React.createElement(
@@ -1278,4 +1278,60 @@ var DeleteArea = function (_React$Component13) {
     }]);
 
     return DeleteArea;
+}(React.Component);
+
+var Comments = function (_React$Component14) {
+    _inherits(Comments, _React$Component14);
+
+    function Comments(props) {
+        _classCallCheck(this, Comments);
+
+        return _possibleConstructorReturn(this, (Comments.__proto__ || Object.getPrototypeOf(Comments)).call(this, props));
+    }
+
+    _createClass(Comments, [{
+        key: "render",
+        value: function render() {
+            if (this.props.form == "normal") {
+                this.comments = [];
+                for (var i = 0; i < this.props.comments.length; i++) {
+                    var com = this.props.comments[i];
+                    this.comments.push(React.createElement(Comment, {
+                        changeContent: this.props.changeContent,
+                        key: com.id,
+                        text: com.text,
+                        likeCount: com.likeCount,
+                        liked: com.liked,
+                        title: com.title,
+                        date: com.date,
+                        tags: com.tags,
+                        owner: com.owner
+                    }));
+                }
+                return React.createElement(
+                    "div",
+                    null,
+                    this.comments
+                );
+            } else if (this.props.form == "loading") {
+                return React.createElement(RowLoadingSpin, { nonSegment: true });
+            } else if (this.props.form == "noComment") {
+                return React.createElement(
+                    Row,
+                    { size: "one" },
+                    React.createElement(
+                        Column,
+                        null,
+                        React.createElement(
+                            "div",
+                            { "class": "ui massive green message" },
+                            "Yorum Yok"
+                        )
+                    )
+                );
+            }
+        }
+    }]);
+
+    return Comments;
 }(React.Component);

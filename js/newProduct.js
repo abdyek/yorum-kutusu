@@ -266,7 +266,7 @@ var SelectedTags = function (_React$Component2) {
                         { id: "selected-tags" },
                         this.props.form == "input" ? React.createElement(H, { type: "3", text: "Etiketler" }) : ""
                     ),
-                    React.createElement(Tags, { tags: this.props.tags, activeOnly: false, handleOnClick: this.props.handleOnClick }),
+                    React.createElement(Tags, { tags: this.props.tags, activeOnly: false, handleOnClick: this.props.handleOnClick, noParameter: true }),
                     this.props.form == "input" ? React.createElement(
                         "span",
                         { className: "info-span" },

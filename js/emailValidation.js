@@ -24,6 +24,7 @@ var EmailValidation = function (_React$Component) {
         _this.verify = _this.verify.bind(_this);
         _this.sendAgain = _this.sendAgain.bind(_this);
         _this.showTopMessage = _this.showTopMessage.bind(_this);
+        _this.goHome = _this.goHome.bind(_this);
         return _this;
     }
 
@@ -54,6 +55,12 @@ var EmailValidation = function (_React$Component) {
                     text: text
                 }
             });
+        }
+    }, {
+        key: "goHome",
+        value: function goHome(e) {
+            e.preventDefault();
+            this.props.changeContent(" ");
         }
     }, {
         key: "render",
@@ -165,7 +172,7 @@ var EmailValidation = function (_React$Component) {
                                         null,
                                         React.createElement(
                                             "a",
-                                            { href: "index" },
+                                            { href: "", onClick: this.goHome },
                                             "Bu ad\u0131m\u0131 \u015Fimdilik ge\xE7"
                                         )
                                     )
