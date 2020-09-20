@@ -11,9 +11,18 @@ class Profile extends React.Component {
 class Account extends React.Component {
     constructor(props){
         super(props);
+        let form = "info";
+        /*
+        let firstSlug=getSlugs("profil")[0];
+        console.log(firstSlug);
+        if(firstSlug=="takipteki-urunler"){
+            form = "followedProducts";
+        }
+        // ^ bu kısım bazı durumlarda takipteki ürünlerin hemen açılması için, şimdilik aslıya aldım
+        */
         this.state = {
             // info, setting, followedProducts
-            form:"info",
+            form:form,
             loading:false,
             openedSetting: false,
             info: {

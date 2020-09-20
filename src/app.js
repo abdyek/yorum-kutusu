@@ -227,42 +227,42 @@ class Content extends React.Component {
         switch(this.props.content) {
             case "index":
                 return (
-                    <Index changeContent={this.props.changeContent}/>
+                    <Index changeContent={this.props.changeContent} changeLoading={this.props.changeLoading} />
                 )
                 break;
             case "profile":
                 return (
-                    <Profile changeContent={this.props.changeContent}/>
+                    <Profile changeContent={this.props.changeContent} changeLoading={this.props.changeLoading} />
                 )
                 break;
             case "product":
                 return (
-                    <Product  changeContent={this.props.changeContent}/>
+                    <Product  changeContent={this.props.changeContent} changeLoading={this.props.changeLoading} />
                 )
                 break;
             case "newProduct":
                 return (
-                    <NewProduct changeContent={this.props.changeContent}/>
+                    <NewProduct changeContent={this.props.changeContent} changeLoading={this.props.changeLoading} />
                 )
                 break;
             case "login":
                 return (
-                    <Login changeContent={this.props.changeContent} />
+                    <Login changeContent={this.props.changeContent} changeLoading={this.props.changeLoading}  />
                 )
                 break;
             case "signup":
                 return (
-                    <Signup changeContent={this.props.changeContent} />
+                    <Signup changeContent={this.props.changeContent}  changeLoading={this.props.changeLoading} />
                 )
                 break;
             case "filter":
                 return (
-                    <Filter  changeContent={this.props.changeContent} />
+                    <Filter  changeContent={this.props.changeContent}  changeLoading={this.props.changeLoading} />
                 )
                 break;
             case "emailValidationPage":
                 return (
-                    <EmailValidationPage  changeContent={this.props.changeContent} />
+                    <EmailValidationPage  changeContent={this.props.changeContent}  changeLoading={this.props.changeLoading} />
                 )
                 break;
             default:
@@ -277,7 +277,8 @@ class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            "content":this.props.content
+            content:this.props.content,
+            loading:true
         };
         this.contentFromSlug = {
             " ":"index",

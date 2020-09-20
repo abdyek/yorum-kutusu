@@ -66,6 +66,18 @@ var TagPicker = function (_React$Component) {
     }
 
     _createClass(TagPicker, [{
+        key: "componentDidMount",
+        value: function componentDidMount() {
+            if (firstLoading == false) {
+                this.slugs = getSlugs("filtrele");
+                console.log(this.slugs);
+                // eğer linkteki slug etiketleri varsa onları state içindeki selectedTags'a ekliyoruz burada. sonrasında da ürün yenileme isteği çekiyoruz
+                this.props.filterChangeLoading(true);
+                // bu kontrol esnasında kullanıcıya loading ekranını gösteriyoruz
+                this.refreshProduct();
+            }
+        }
+    }, {
         key: "refreshTags",
         value: function refreshTags() {
             console.log("etiket yenileme isteği buraya");

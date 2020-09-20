@@ -37,9 +37,18 @@ var Account = function (_React$Component2) {
 
         var _this2 = _possibleConstructorReturn(this, (Account.__proto__ || Object.getPrototypeOf(Account)).call(this, props));
 
+        var form = "info";
+        /*
+        let firstSlug=getSlugs("profil")[0];
+        console.log(firstSlug);
+        if(firstSlug=="takipteki-urunler"){
+            form = "followedProducts";
+        }
+        // ^ bu kısım bazı durumlarda takipteki ürünlerin hemen açılması için, şimdilik aslıya aldım
+        */
         _this2.state = {
             // info, setting, followedProducts
-            form: "info",
+            form: form,
             loading: false,
             openedSetting: false,
             info: {

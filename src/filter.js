@@ -6,16 +6,24 @@ class Filter extends React.Component {
             selectedTags:{},
             product:{}
         }
+        this.changeLoading = this.changeLoading.bind(this);
+    }
+    componentDidMount(){
         if(firstLoading) {
             this.load();
         }
+    }
+    changeLoading(trueOrFalse) {
+        this.setState({
+            loading:trueOrFalse
+        });
     }
     load() {
         $.ajax({
             method:'GET',
             url:'http://localhost/yorum-kutusu/api/endpoints/example.php',
             data: {
-                'engelKaldir': 3 // şimdilik yaptım
+                'veri': "veri" // şimdilik yaptım
             },
             success: (response)=>{
                 this.setState({
@@ -24,12 +32,12 @@ class Filter extends React.Component {
                 });
             }
         })
-
-        // burada slug'daki etiketlerin kontrolünü yapıyoruz, eğer bir tanesi bile sunucu tarafında yoksa boş filtrele sayfası açıyoruz
-        let currentUrl = window.location.href;
-        let slugs = currentUrl.split("filtrele/")[1].split(",");
-        console.log(slugs);
+        this.slugs = getSlugs("filtrele");
+        console.log(this.slugs);
         // yüklenecek olası ürün
+        // ^ buradaki slug'lardan ürün ve etiket bilgisi döndüren endpoint'e istek atacaksın, gelen değerlerle state'i güncelleyeceksin
+        /*
+        // genel yapısını görmek için bırakıyorum bu kısım sonradan silinecek
         this.product = {
             0:{
                 title:"Mahmut Efendi Kahveleri",
@@ -106,8 +114,6 @@ class Filter extends React.Component {
                 }
             },
         }
-        // yüklenecek olası seçili etiketler
-        /*
         this.selectedTags = {
             3:{
                 passive:false,
@@ -140,7 +146,7 @@ class Filter extends React.Component {
                         </WideColumn>
                         <WideColumn size="twelve">
                             <H type="1" text="Filtrele" />
-                            <TagPicker changeContent={this.props.changeContent} product={this.state.product} selectedTags={this.state.selectedTags}/>
+                            <TagPicker changeContent={this.props.changeContent} product={this.state.product} selectedTags={this.state.selectedTags} filterChangeLoading={this.changeLoading} />
                         </WideColumn>
                     </Row>
                 </div>
@@ -153,7 +159,7 @@ class ProductList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            form:"normal",  // normal, loading, notFound
+            form:(firstLoading)?"normal":"loading",  // normal, loading, notFound
         }
         this.prepareProductListItems = this.prepareProductListItems.bind(this);
     }
@@ -165,8 +171,12 @@ class ProductList extends React.Component {
         for(let i=0; i<count;i++) {
             this.items.push(
                 <ProductListItem key={productKeys[i]} productTitle={product[i].title} productSlug={product[i].slug} tags={product[i].tags} changeContent={this.props.changeContent}/>
-                
             )
+        }
+        if(this.items.length==0) {
+            this.setState({
+                form:"notFound"
+            });
         }
     }
     render() {

@@ -19,13 +19,25 @@ var Filter = function (_React$Component) {
             selectedTags: {},
             product: {}
         };
-        if (firstLoading) {
-            _this.load();
-        }
+        _this.changeLoading = _this.changeLoading.bind(_this);
         return _this;
     }
 
     _createClass(Filter, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            if (firstLoading) {
+                this.load();
+            }
+        }
+    }, {
+        key: 'changeLoading',
+        value: function changeLoading(trueOrFalse) {
+            this.setState({
+                loading: trueOrFalse
+            });
+        }
+    }, {
         key: 'load',
         value: function load() {
             var _this2 = this;
@@ -34,7 +46,7 @@ var Filter = function (_React$Component) {
                 method: 'GET',
                 url: 'http://localhost/yorum-kutusu/api/endpoints/example.php',
                 data: {
-                    'engelKaldir': 3 // şimdilik yaptım
+                    'veri': "veri" // şimdilik yaptım
                 },
                 success: function success(response) {
                     _this2.setState({
@@ -43,107 +55,105 @@ var Filter = function (_React$Component) {
                     });
                 }
             });
-
-            // burada slug'daki etiketlerin kontrolünü yapıyoruz, eğer bir tanesi bile sunucu tarafında yoksa boş filtrele sayfası açıyoruz
-            var currentUrl = window.location.href;
-            var slugs = currentUrl.split("filtrele/")[1].split(",");
-            console.log(slugs);
+            this.slugs = getSlugs("filtrele");
+            console.log(this.slugs);
             // yüklenecek olası ürün
+            // ^ buradaki slug'lardan ürün ve etiket bilgisi döndüren endpoint'e istek atacaksın, gelen değerlerle state'i güncelleyeceksin
+            /*
+            // genel yapısını görmek için bırakıyorum bu kısım sonradan silinecek
             this.product = {
-                0: {
-                    title: "Mahmut Efendi Kahveleri",
-                    slug: "mahmut-efendi-kahveleri",
+                0:{
+                    title:"Mahmut Efendi Kahveleri",
+                    slug:"mahmut-efendi-kahveleri",
                     tags: {
-                        0: {
-                            passive: true,
-                            text: "Akıllı Telefon",
-                            slug: "akilli-telefon"
+                        0:{
+                            passive:true,
+                            text:"Akıllı Telefon",
+                            slug:"akilli-telefon"
                         },
-                        1: {
-                            passive: true,
-                            text: "Apple",
-                            slug: "apple"
+                        1:{
+                            passive:true,
+                            text:"Apple",
+                            slug:"apple"
                         },
-                        2: {
-                            passive: true,
-                            text: "IPhone",
-                            slug: "iphone"
+                        2:{
+                            passive:true,
+                            text:"IPhone",
+                            slug:"iphone"
                         },
-                        3: {
-                            passive: false,
-                            text: "Batarya",
-                            color: "yellow",
+                        3:{
+                            passive:false,
+                            text:"Batarya",
+                            color:"yellow",
                             rateValue: "5.5",
-                            slug: "batarya"
+                            slug:"batarya"
                         },
-                        4: {
-                            passive: false,
-                            text: "Kamera",
-                            color: "orange",
+                        4:{
+                            passive:false,
+                            text:"Kamera",
+                            color:"orange",
                             rateValue: "4.2",
-                            slug: "kamera"
+                            slug:"kamera"
                         },
-                        5: {
-                            passive: false,
-                            text: "Ekran",
-                            color: "green",
+                        5:{
+                            passive:false,
+                            text:"Ekran",
+                            color:"green",
                             rateValue: "9.3",
-                            slug: "ekran"
+                            slug:"ekran"
                         }
                     }
                 },
-                1: {
-                    title: "IPhone 5s",
-                    slug: "iphone-5s",
+                1:{
+                    title:"IPhone 5s",
+                    slug:"iphone-5s",
                     tags: {
-                        0: {
-                            passive: true,
-                            text: "Akıllı Telefon",
-                            slug: "akilli-telefon"
+                        0:{
+                            passive:true,
+                            text:"Akıllı Telefon",
+                            slug:"akilli-telefon"
                         },
-                        3: {
-                            passive: false,
-                            text: "Batarya",
-                            color: "yellow",
+                        3:{
+                            passive:false,
+                            text:"Batarya",
+                            color:"yellow",
                             rateValue: "5.5",
-                            slug: "batarya"
+                            slug:"batarya"
                         },
-                        4: {
-                            passive: false,
-                            text: "Kamera",
-                            color: "orange",
+                        4:{
+                            passive:false,
+                            text:"Kamera",
+                            color:"orange",
                             rateValue: "4.2",
-                            slug: "kamera"
+                            slug:"kamera"
                         },
-                        5: {
-                            passive: false,
-                            text: "Ekran",
-                            color: "green",
+                        5:{
+                            passive:false,
+                            text:"Ekran",
+                            color:"green",
                             rateValue: "9.3",
-                            slug: "ekran"
+                            slug:"ekran"
                         }
                     }
-                }
-                // yüklenecek olası seçili etiketler
-                /*
-                this.selectedTags = {
-                    3:{
-                        passive:false,
-                        text:"Batarya",
-                        color:"yellow",
-                        rateValue: "-",
-                        slug:"batarya"
-                    },
-                    4:{
-                        passive:false,
-                        text:"Kamera",
-                        color:"orange",
-                        rateValue: "-",
-                        slug:"kamera"
-                    },
-                }
-                */
-            };
+                },
+            }
+            this.selectedTags = {
+                3:{
+                    passive:false,
+                    text:"Batarya",
+                    color:"yellow",
+                    rateValue: "-",
+                    slug:"batarya"
+                },
+                4:{
+                    passive:false,
+                    text:"Kamera",
+                    color:"orange",
+                    rateValue: "-",
+                    slug:"kamera"
+                },
+            }
+            */
         }
     }, {
         key: 'render',
@@ -163,7 +173,7 @@ var Filter = function (_React$Component) {
                             WideColumn,
                             { size: 'twelve' },
                             React.createElement(H, { type: '1', text: 'Filtrele' }),
-                            React.createElement(TagPicker, { changeContent: this.props.changeContent, product: this.state.product, selectedTags: this.state.selectedTags })
+                            React.createElement(TagPicker, { changeContent: this.props.changeContent, product: this.state.product, selectedTags: this.state.selectedTags, filterChangeLoading: this.changeLoading })
                         )
                     )
                 );
@@ -183,7 +193,7 @@ var ProductList = function (_React$Component2) {
         var _this3 = _possibleConstructorReturn(this, (ProductList.__proto__ || Object.getPrototypeOf(ProductList)).call(this, props));
 
         _this3.state = {
-            form: "normal" // normal, loading, notFound
+            form: firstLoading ? "normal" : "loading" // normal, loading, notFound
         };
         _this3.prepareProductListItems = _this3.prepareProductListItems.bind(_this3);
         return _this3;
@@ -198,6 +208,11 @@ var ProductList = function (_React$Component2) {
             var count = productKeys.length;
             for (var i = 0; i < count; i++) {
                 this.items.push(React.createElement(ProductListItem, { key: productKeys[i], productTitle: product[i].title, productSlug: product[i].slug, tags: product[i].tags, changeContent: this.props.changeContent }));
+            }
+            if (this.items.length == 0) {
+                this.setState({
+                    form: "notFound"
+                });
             }
         }
     }, {

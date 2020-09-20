@@ -385,28 +385,28 @@ var Content = function (_React$Component6) {
         value: function render() {
             switch (this.props.content) {
                 case "index":
-                    return React.createElement(Index, { changeContent: this.props.changeContent });
+                    return React.createElement(Index, { changeContent: this.props.changeContent, changeLoading: this.props.changeLoading });
                     break;
                 case "profile":
-                    return React.createElement(Profile, { changeContent: this.props.changeContent });
+                    return React.createElement(Profile, { changeContent: this.props.changeContent, changeLoading: this.props.changeLoading });
                     break;
                 case "product":
-                    return React.createElement(Product, { changeContent: this.props.changeContent });
+                    return React.createElement(Product, { changeContent: this.props.changeContent, changeLoading: this.props.changeLoading });
                     break;
                 case "newProduct":
-                    return React.createElement(NewProduct, { changeContent: this.props.changeContent });
+                    return React.createElement(NewProduct, { changeContent: this.props.changeContent, changeLoading: this.props.changeLoading });
                     break;
                 case "login":
-                    return React.createElement(Login, { changeContent: this.props.changeContent });
+                    return React.createElement(Login, { changeContent: this.props.changeContent, changeLoading: this.props.changeLoading });
                     break;
                 case "signup":
-                    return React.createElement(Signup, { changeContent: this.props.changeContent });
+                    return React.createElement(Signup, { changeContent: this.props.changeContent, changeLoading: this.props.changeLoading });
                     break;
                 case "filter":
-                    return React.createElement(Filter, { changeContent: this.props.changeContent });
+                    return React.createElement(Filter, { changeContent: this.props.changeContent, changeLoading: this.props.changeLoading });
                     break;
                 case "emailValidationPage":
-                    return React.createElement(EmailValidationPage, { changeContent: this.props.changeContent });
+                    return React.createElement(EmailValidationPage, { changeContent: this.props.changeContent, changeLoading: this.props.changeLoading });
                     break;
                 default:
                     return React.createElement(
@@ -431,7 +431,8 @@ var App = function (_React$Component7) {
         var _this7 = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
 
         _this7.state = {
-            "content": _this7.props.content
+            content: _this7.props.content,
+            loading: true
         };
         _this7.contentFromSlug = {
             " ": "index",

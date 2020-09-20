@@ -15,7 +15,7 @@ $router->get('/urun/:slug', function($productURL) {
     Tool::generatePage('urun');
 });
 
-$router->get('/profil/:slug', function($profileID) {
+$router->get('/profil/:slug/:slug?', function($profileID) {
     Tool::generatePage('profil');
 });
 
