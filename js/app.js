@@ -16,7 +16,7 @@ var Menu = function (_React$Component) {
 
         _this.state = {
             // user-empty-unread, user-has-unread, login
-            form: "user-empty-unread",
+            form: "user-has-unread",
             userName: "Yunus Emre",
             userURL: "yunus-emre",
             unreadComments: 115 /* okunmamış yorumlar */
@@ -46,7 +46,7 @@ var Menu = function (_React$Component) {
         key: "openUnreadComments",
         value: function openUnreadComments(e) {
             e.preventDefault();
-            this.props.changeContent("profil/" + this.state.userURL);
+            this.props.changeContent("profil/" + this.state.userURL + "/takipteki-urunler");
             // ek olarak okunmamış yorumları açacak bir mekanizma
         }
     }, {
@@ -74,7 +74,7 @@ var Menu = function (_React$Component) {
                         { href: this.state.href, onClick: this.openUnreadComments },
                         React.createElement(
                             "button",
-                            { className: "ui blue button", onClick: this.goUserProfile },
+                            { className: "ui blue button" },
                             React.createElement(
                                 "i",
                                 { className: "icon" },
@@ -431,8 +431,7 @@ var App = function (_React$Component7) {
         var _this7 = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
 
         _this7.state = {
-            content: _this7.props.content,
-            loading: true
+            content: _this7.props.content
         };
         _this7.contentFromSlug = {
             " ": "index",

@@ -11,19 +11,33 @@ class Profile extends React.Component {
 class Account extends React.Component {
     constructor(props){
         super(props);
-        let form = "info";
-        /*
-        let firstSlug=getSlugs("profil")[0];
-        console.log(firstSlug);
-        if(firstSlug=="takipteki-urunler"){
-            form = "followedProducts";
-        }
-        // ^ bu kısım bazı durumlarda takipteki ürünlerin hemen açılması için, şimdilik aslıya aldım
-        */
         this.state = {
+            loading:true,
+            form:"info"
+        }
+        //this.load();
+        this.openSettingArea = this.openSettingArea.bind(this);
+        this.closeSettingArea = this.closeSettingArea.bind(this);
+        this.openFollowedProducts = this.openFollowedProducts.bind(this);
+        this.closeFollowedProducts = this.closeFollowedProducts.bind(this);
+        this.changeForm = this.changeForm.bind(this);
+        this.changeLoading = this.changeLoading.bind(this);
+        this.addMoreFollowed = this.addMoreFollowed.bind(this);
+    }
+    componentDidMount() {
+        let form = "info";
+        let slugs = getSlugsExtra("profil");
+        let userSlug = slugs[0];
+        let extra = slugs[1];
+        if(extra=="takipteki-urunler") {
+            form="followedProducts";
+        } else if(extra=="ayarlar") {
+            form="setting";
+        }
+        console.log("yükleme komutları buraya " + userSlug);
+        this.setState({
             // info, setting, followedProducts
             form:form,
-            loading:false,
             openedSetting: false,
             info: {
                 userName:"Yunus Emre",
@@ -116,16 +130,8 @@ class Account extends React.Component {
                     owner:false
                 },
             ],
-        };
-        this.openSettingArea = this.openSettingArea.bind(this);
-        this.closeSettingArea = this.closeSettingArea.bind(this);
-        this.openFollowedProducts = this.openFollowedProducts.bind(this);
-        this.closeFollowedProducts = this.closeFollowedProducts.bind(this);
-        this.changeForm = this.changeForm.bind(this);
-        this.addMoreFollowed = this.addMoreFollowed.bind(this);
-    }
-    load() {
-        // yüklenme kodları buraya gelecek
+        });
+        this.changeLoading(false);
     }
     openSettingArea() {
         this.changeForm("setting");
@@ -142,6 +148,11 @@ class Account extends React.Component {
     changeForm(form) {
         this.setState({
             form:form
+        });
+    }
+    changeLoading(trueOrFalse) {
+        this.setState({
+            loading:trueOrFalse
         });
     }
     addMoreFollowed() {

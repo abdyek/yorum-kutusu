@@ -37,114 +37,119 @@ var Account = function (_React$Component2) {
 
         var _this2 = _possibleConstructorReturn(this, (Account.__proto__ || Object.getPrototypeOf(Account)).call(this, props));
 
-        var form = "info";
-        /*
-        let firstSlug=getSlugs("profil")[0];
-        console.log(firstSlug);
-        if(firstSlug=="takipteki-urunler"){
-            form = "followedProducts";
-        }
-        // ^ bu kısım bazı durumlarda takipteki ürünlerin hemen açılması için, şimdilik aslıya aldım
-        */
         _this2.state = {
-            // info, setting, followedProducts
-            form: form,
-            loading: false,
-            openedSetting: false,
-            info: {
-                userName: "Yunus Emre",
-                owner: true
-            },
-            followedProductsInfo: {
-                0: {
-                    url: "iphone-5s",
-                    productName: "Iphone 5s",
-                    newCommentCount: "5"
-                },
-                1: {
-                    url: "le-cola",
-                    productName: "Le-Cola",
-                    newCommentCount: "9312"
-                },
-                9: {
-                    url: "mahmut-efendi-kahveleri",
-                    productName: "Mahmut Efendi Kahveleri",
-                    newCommentCount: "0"
-                }
-            },
-            isThereMoreProduct: true,
-            comments: [{
-                title: "IPhone 5s",
-                slug: "iphone-5s",
-                text: "burası yorum text alanı",
-                likeCount: 15,
-                liked: false,
-                date: "14 Aralık 2019 - 18:49",
-                tags: [{
-                    id: 3,
-                    passive: false,
-                    text: "Batarya",
-                    color: "yellow",
-                    rateValue: "5",
-                    slug: "batarya"
-                }, {
-                    id: 4,
-                    passive: false,
-                    text: "Kamera",
-                    color: "orange",
-                    rateValue: "4",
-                    slug: "kamera"
-                }, {
-                    id: 5,
-                    passive: false,
-                    text: "Tasarım",
-                    color: "",
-                    rateValue: "-",
-                    slug: "tasarim"
-                }],
-                owner: false
-            }, {
-                title: "Le Cola Zero",
-                slug: "le-cola-zero",
-                text: "burası yorum text alanı",
-                likeCount: 15,
-                liked: true,
-                date: "14 Aralık 1999- 00:01",
-                tags: [{
-                    id: 3,
-                    passive: false,
-                    text: "Batarya",
-                    color: "yellow",
-                    rateValue: "5"
-                }, {
-                    id: 4,
-                    passive: false,
-                    text: "Kamera",
-                    color: "orange",
-                    rateValue: "4"
-                }, {
-                    id: 5,
-                    passive: false,
-                    text: "Tasarım",
-                    color: "",
-                    rateValue: "-"
-                }],
-                owner: false
-            }]
-        };
-        _this2.openSettingArea = _this2.openSettingArea.bind(_this2);
+            loading: true,
+            form: "info"
+            //this.load();
+        };_this2.openSettingArea = _this2.openSettingArea.bind(_this2);
         _this2.closeSettingArea = _this2.closeSettingArea.bind(_this2);
         _this2.openFollowedProducts = _this2.openFollowedProducts.bind(_this2);
         _this2.closeFollowedProducts = _this2.closeFollowedProducts.bind(_this2);
         _this2.changeForm = _this2.changeForm.bind(_this2);
+        _this2.changeLoading = _this2.changeLoading.bind(_this2);
         _this2.addMoreFollowed = _this2.addMoreFollowed.bind(_this2);
         return _this2;
     }
 
     _createClass(Account, [{
-        key: "load",
-        value: function load() {
-            // yüklenme kodları buraya gelecek
+        key: "componentDidMount",
+        value: function componentDidMount() {
+            var form = "info";
+            var slugs = getSlugsExtra("profil");
+            var userSlug = slugs[0];
+            var extra = slugs[1];
+            if (extra == "takipteki-urunler") {
+                form = "followedProducts";
+            } else if (extra == "ayarlar") {
+                form = "setting";
+            }
+            console.log("yükleme komutları buraya " + userSlug);
+            this.setState({
+                // info, setting, followedProducts
+                form: form,
+                openedSetting: false,
+                info: {
+                    userName: "Yunus Emre",
+                    owner: true
+                },
+                followedProductsInfo: {
+                    0: {
+                        url: "iphone-5s",
+                        productName: "Iphone 5s",
+                        newCommentCount: "5"
+                    },
+                    1: {
+                        url: "le-cola",
+                        productName: "Le-Cola",
+                        newCommentCount: "9312"
+                    },
+                    9: {
+                        url: "mahmut-efendi-kahveleri",
+                        productName: "Mahmut Efendi Kahveleri",
+                        newCommentCount: "0"
+                    }
+                },
+                isThereMoreProduct: true,
+                comments: [{
+                    title: "IPhone 5s",
+                    slug: "iphone-5s",
+                    text: "burası yorum text alanı",
+                    likeCount: 15,
+                    liked: false,
+                    date: "14 Aralık 2019 - 18:49",
+                    tags: [{
+                        id: 3,
+                        passive: false,
+                        text: "Batarya",
+                        color: "yellow",
+                        rateValue: "5",
+                        slug: "batarya"
+                    }, {
+                        id: 4,
+                        passive: false,
+                        text: "Kamera",
+                        color: "orange",
+                        rateValue: "4",
+                        slug: "kamera"
+                    }, {
+                        id: 5,
+                        passive: false,
+                        text: "Tasarım",
+                        color: "",
+                        rateValue: "-",
+                        slug: "tasarim"
+                    }],
+                    owner: false
+                }, {
+                    title: "Le Cola Zero",
+                    slug: "le-cola-zero",
+                    text: "burası yorum text alanı",
+                    likeCount: 15,
+                    liked: true,
+                    date: "14 Aralık 1999- 00:01",
+                    tags: [{
+                        id: 3,
+                        passive: false,
+                        text: "Batarya",
+                        color: "yellow",
+                        rateValue: "5"
+                    }, {
+                        id: 4,
+                        passive: false,
+                        text: "Kamera",
+                        color: "orange",
+                        rateValue: "4"
+                    }, {
+                        id: 5,
+                        passive: false,
+                        text: "Tasarım",
+                        color: "",
+                        rateValue: "-"
+                    }],
+                    owner: false
+                }]
+            });
+            this.changeLoading(false);
         }
     }, {
         key: "openSettingArea",
@@ -171,6 +176,13 @@ var Account = function (_React$Component2) {
         value: function changeForm(form) {
             this.setState({
                 form: form
+            });
+        }
+    }, {
+        key: "changeLoading",
+        value: function changeLoading(trueOrFalse) {
+            this.setState({
+                loading: trueOrFalse
             });
         }
     }, {

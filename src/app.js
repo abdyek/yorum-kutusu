@@ -3,7 +3,7 @@ class Menu extends React.Component {
         super(props);
         this.state = {
             // user-empty-unread, user-has-unread, login
-            form:"user-empty-unread",
+            form:"user-has-unread",
             userName:"Yunus Emre",
             userURL:"yunus-emre",
             unreadComments: 115 /* okunmamış yorumlar */
@@ -25,7 +25,7 @@ class Menu extends React.Component {
     }
     openUnreadComments(e) {
         e.preventDefault();
-        this.props.changeContent("profil/"+this.state.userURL);
+        this.props.changeContent("profil/"+this.state.userURL+"/takipteki-urunler");
         // ek olarak okunmamış yorumları açacak bir mekanizma
     }
     openProfile(e) {
@@ -42,7 +42,7 @@ class Menu extends React.Component {
             core = (
                 <FloatRight>
                     <a href={this.state.href} onClick={this.openUnreadComments}>
-                        <button className="ui blue button" onClick={this.goUserProfile}>
+                        <button className="ui blue button">
                             <i className="icon">
                                 <i id="unread-comments" className="fa fa-comments" aria-hidden="true"></i>
                             </i>
@@ -278,7 +278,6 @@ class App extends React.Component {
         super(props);
         this.state = {
             content:this.props.content,
-            loading:true
         };
         this.contentFromSlug = {
             " ":"index",
