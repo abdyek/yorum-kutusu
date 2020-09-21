@@ -15,125 +15,159 @@ var Product = function (_React$Component) {
 		var _this = _possibleConstructorReturn(this, (Product.__proto__ || Object.getPrototypeOf(Product)).call(this, props));
 
 		_this.state = {
-			// normal, loading, notFound
-			form: "normal",
-			// normal, loading, noComment
-			productName: "Iphone 5s",
-			commentsForm: "normal",
-			sortBy: "time",
-			pageNumber: 3,
-			comments: [{
-				id: 0,
-				text: "burası yorumun text'i",
-				likeCount: 13,
-				liked: true,
-				title: "ahmet",
-				type: "profile",
-				slug: "ahmet",
-				date: "19 Temmuz - 21:45",
-				tags: { 3: {
-						passive: false,
-						text: "Batarya",
-						color: "yellow",
-						rateValue: "5",
-						slug: "batarya"
-					},
-					4: {
-						passive: false,
-						text: "Kamera",
-						color: "orange",
-						rateValue: "4",
-						slug: "kamera"
-					},
-					5: {
-						passive: false,
-						text: "Tasarım",
-						color: "",
-						rateValue: "-",
-						slug: "tasarim"
-					}
-				},
-				owner: true
-			}, {
-				id: 99,
-				text: "Lorem Ipsum, dizgi ve baskı endüstrisinde kullanılan mıgır metinlerdir. Lorem Ipsum, adı bilinmeyen bir matbaacının bir hurufat numune kitabı oluşturmak üzere bir yazı galerisini alarak karıştırdığı 1500'lerden beri endüstri standardı sahte metinler olarak kullanılmıştır. Beşyüz yıl boyunca varlığını sürdürmekle kalmamış, aynı zamanda pek değişmeden elektronik dizgiye de sıçramıştır. 1960'larda Lorem Ipsum pasajları da içeren Letraset yapraklarının yayınlanması ile ve yakın zamanda Aldus PageMaker gibi Lorem Ipsum sürümleri içeren masaüstü yayıncılık yazılımları ile popüler olmuştur.Lorem Ipsum, dizgi ve baskı endüstrisinde kullanılan mıgır metinlerdir. Lorem Ipsum, adı bilinmeyen bir matbaacının bir hurufat numune kitabı oluşturmak üzere bir yazı galerisini alarak karıştırdığı 1500'lerden beri endüstri standardı sahte metinler olarak kullanılmıştır. Beşyüz yıl boyunca varlığını sürdürmekle kalmamış, aynı zamanda pek değişmeden elektronik dizgiye de sıçramıştır. 1960'larda Lorem Ipsum pasajları da içeren Letraset yapraklarının yayınlanması ile ve yakın zamanda Aldus PageMaker gibi Lorem Ipsum sürümleri içeren masaüstü yayıncılık yazılımları ile popüler olmuştuLorem Ipsum, dizgi ve baskı endüstrisinde kullanılan mıgır metinlerdir. Lorem Ipsum, adı bilinmeyen bir matbaacının bir hurufat numune kitabı oluşturmak üzere bir yazı galerisini alarak karıştırdığı 1500'lerden beri endüstri standardı sahte metinler olarak kullanılmıştır. Beşyüz yıl boyunca varlığını sürdürmekle kalmamış, aynı zamanda pek değişmeden elektronik dizgiye de sıçramıştır. 1960'larda Lorem Ipsum pasajları da içeren Letraset yapraklarının yayınlanması ile ve yakın zamanda Aldus PageMaker gibi Lorem Ipsum sürümleri içeren masaüstü yayıncılık yazılımları ile popüler olmuştur.Lorem Ipsum, dizgi ve baskı endüstrisinde kullanılan mıgır metinlerdir. Lorem Ipsum, adı bilinmeyen bir matbaacının bir hurufat numune kitabı oluşturmak üzere bir yazı galerisini alarak karıştırdığı 1500'lerden beri endüstri standardı sahte metinler olarak kullanılmıştır. Beşyüz yıl boyunca varlığını sürdürmekle kalmamış, aynı zamanda pek değişmeden elektronik dizgiye de sıçramıştır. 1960'larda Lorem Ipsum pasajları da içeren Letraset yapraklarının yayınlanması ile ve yakın zamanda Aldus PageMaker gibi Lorem Ipsum sürümleri içeren masaüstü yayıncılık yazılımları ile popüler olmuştur.Lorem Ipsum, dizgi ve baskı endüstrisinde kullanılan mıgır metinlerdir. Lorem Ipsum, adı bilinmeyen bir matbaacının bir hurufat numune kitabı oluşturmak üzere bir yazı galerisini alarak karıştırdığı 1500'lerden beri endüstri standardı sahte metinler olarak kullanılmıştır. Beşyüz yıl boyunca varlığını sürdürmekle kalmamış, aynı zamanda pek değişmeden elektronik dizgiye de sıçramıştır. 1960'larda Lorem Ipsum pasajları da içeren Letraset yapraklarının yayınlanması ile ve yakın zamanda Aldus PageMaker gibi Lorem Ipsum sürümleri içeren masaüstü yayıncılık yazılımları ile popüler olmuştur.r.",
-				likeCount: 13,
-				liked: true,
-				title: "Yunus Emre",
-				type: "profile",
-				slug: "yunus-emre",
-				date: "19 Temmuz - 21:45",
-				tags: {
-					3: {
-						passive: false,
-						text: "Batarya",
-						color: "yellow",
-						rateValue: "5",
-						slug: "batarya"
-					},
-					4: {
-						passive: false,
-						text: "Kamera",
-						color: "orange",
-						rateValue: "4",
-						slug: "kamera"
-					},
-					5: {
-						passive: false,
-						text: "Tasarım",
-						color: "",
-						rateValue: "-",
-						slug: "tasarim"
-					}
-				},
-				owner: false
-			}]
-		};
-		_this.tagsInfo = {
-			0: {
-				passive: true,
-				text: "Akıllı Telefon",
-				slug: "akilli-telefon"
-			},
-			1: {
-				passive: true,
-				text: "Apple",
-				slug: "apple"
-			},
-			2: {
-				passive: true,
-				text: "IPhone",
-				slug: "iphone"
-			},
-			3: {
-				passive: false,
-				text: "Batarya",
-				color: "yellow",
-				rateValue: "5.5",
-				slug: "batarya"
-			},
-			4: {
-				passive: false,
-				text: "Kamera",
-				color: "orange",
-				rateValue: "4.2",
-				slug: "kamera"
-			},
-			5: {
-				passive: false,
-				text: "Ekran",
-				color: "green",
-				rateValue: "9.3",
-				slug: "ekran"
-			}
+			form: "loading"
 		};
 		_this.changeSortBy = _this.changeSortBy.bind(_this);
 		_this.changePageNumber = _this.changePageNumber.bind(_this);
 		_this.refreshComments = _this.refreshComments.bind(_this);
+		_this.showAllComments = _this.showAllComments.bind(_this);
 		return _this;
 	}
 
 	_createClass(Product, [{
+		key: "componentDidMount",
+		value: function componentDidMount() {
+			var slugs = getSlugsExtra("urun");
+			var productSlugs = slugs[0];
+			var specialInfo = {};
+			var sortBy = "time";
+			var pageNumber = 1;
+			if (slugs[1] == "arasi") {
+				specialInfo = {
+					first: slugs[2].split("-")[0],
+					last: slugs[2].split("-")[1]
+				};
+			} else {
+				sortBy = slugs[1];
+				pageNumber = slugs[2];
+			}
+			var commentType = "all";
+			// not: buradaki değer atamalar ve değişkenlerin bir kısmı deneme amaçlı, setState içindeki hemen hemen hepsi api tarafından gelecek
+
+			// yüklenme komutları burada olacak
+			this.setState({
+				// normal, loading, notFound
+				form: "normal",
+				// normal, loading, noComment
+				productName: "Iphone 5s",
+				commentsForm: "normal",
+				commentType: commentType, // all, special
+				specialInfo: specialInfo,
+				/*
+    specialInfo:{
+    	first:"15",
+    	last:"30"
+    },
+    */
+				sortBy: "time",
+				pageNumber: 3,
+				comments: [{
+					id: 0,
+					text: "burası yorumun text'i",
+					likeCount: 13,
+					liked: true,
+					title: "ahmet",
+					type: "profile",
+					slug: "ahmet",
+					date: "19 Temmuz - 21:45",
+					tags: { 3: {
+							passive: false,
+							text: "Batarya",
+							color: "yellow",
+							rateValue: "5",
+							slug: "batarya"
+						},
+						4: {
+							passive: false,
+							text: "Kamera",
+							color: "orange",
+							rateValue: "4",
+							slug: "kamera"
+						},
+						5: {
+							passive: false,
+							text: "Tasarım",
+							color: "",
+							rateValue: "-",
+							slug: "tasarim"
+						}
+					},
+					owner: true
+				}, {
+					id: 99,
+					text: "Lorem Ipsum, dizgi ve baskı endüstrisinde kullanılan mıgır metinlerdir. Lorem Ipsum, adı bilinmeyen bir matbaacının bir hurufat numune kitabı oluşturmak üzere bir yazı galerisini alarak karıştırdığı 1500'lerden beri endüstri standardı sahte metinler olarak kullanılmıştır. Beşyüz yıl boyunca varlığını sürdürmekle kalmamış, aynı zamanda pek değişmeden elektronik dizgiye de sıçramıştır. 1960'larda Lorem Ipsum pasajları da içeren Letraset yapraklarının yayınlanması ile ve yakın zamanda Aldus PageMaker gibi Lorem Ipsum sürümleri içeren masaüstü yayıncılık yazılımları ile popüler olmuştur.Lorem Ipsum, dizgi ve baskı endüstrisinde kullanılan mıgır metinlerdir. Lorem Ipsum, adı bilinmeyen bir matbaacının bir hurufat numune kitabı oluşturmak üzere bir yazı galerisini alarak karıştırdığı 1500'lerden beri endüstri standardı sahte metinler olarak kullanılmıştır. Beşyüz yıl boyunca varlığını sürdürmekle kalmamış, aynı zamanda pek değişmeden elektronik dizgiye de sıçramıştır. 1960'larda Lorem Ipsum pasajları da içeren Letraset yapraklarının yayınlanması ile ve yakın zamanda Aldus PageMaker gibi Lorem Ipsum sürümleri içeren masaüstü yayıncılık yazılımları ile popüler olmuştuLorem Ipsum, dizgi ve baskı endüstrisinde kullanılan mıgır metinlerdir. Lorem Ipsum, adı bilinmeyen bir matbaacının bir hurufat numune kitabı oluşturmak üzere bir yazı galerisini alarak karıştırdığı 1500'lerden beri endüstri standardı sahte metinler olarak kullanılmıştır. Beşyüz yıl boyunca varlığını sürdürmekle kalmamış, aynı zamanda pek değişmeden elektronik dizgiye de sıçramıştır. 1960'larda Lorem Ipsum pasajları da içeren Letraset yapraklarının yayınlanması ile ve yakın zamanda Aldus PageMaker gibi Lorem Ipsum sürümleri içeren masaüstü yayıncılık yazılımları ile popüler olmuştur.Lorem Ipsum, dizgi ve baskı endüstrisinde kullanılan mıgır metinlerdir. Lorem Ipsum, adı bilinmeyen bir matbaacının bir hurufat numune kitabı oluşturmak üzere bir yazı galerisini alarak karıştırdığı 1500'lerden beri endüstri standardı sahte metinler olarak kullanılmıştır. Beşyüz yıl boyunca varlığını sürdürmekle kalmamış, aynı zamanda pek değişmeden elektronik dizgiye de sıçramıştır. 1960'larda Lorem Ipsum pasajları da içeren Letraset yapraklarının yayınlanması ile ve yakın zamanda Aldus PageMaker gibi Lorem Ipsum sürümleri içeren masaüstü yayıncılık yazılımları ile popüler olmuştur.Lorem Ipsum, dizgi ve baskı endüstrisinde kullanılan mıgır metinlerdir. Lorem Ipsum, adı bilinmeyen bir matbaacının bir hurufat numune kitabı oluşturmak üzere bir yazı galerisini alarak karıştırdığı 1500'lerden beri endüstri standardı sahte metinler olarak kullanılmıştır. Beşyüz yıl boyunca varlığını sürdürmekle kalmamış, aynı zamanda pek değişmeden elektronik dizgiye de sıçramıştır. 1960'larda Lorem Ipsum pasajları da içeren Letraset yapraklarının yayınlanması ile ve yakın zamanda Aldus PageMaker gibi Lorem Ipsum sürümleri içeren masaüstü yayıncılık yazılımları ile popüler olmuştur.r.",
+					likeCount: 13,
+					liked: true,
+					title: "Yunus Emre",
+					type: "profile",
+					slug: "yunus-emre",
+					date: "19 Temmuz - 21:45",
+					tags: {
+						3: {
+							passive: false,
+							text: "Batarya",
+							color: "yellow",
+							rateValue: "5",
+							slug: "batarya"
+						},
+						4: {
+							passive: false,
+							text: "Kamera",
+							color: "orange",
+							rateValue: "4",
+							slug: "kamera"
+						},
+						5: {
+							passive: false,
+							text: "Tasarım",
+							color: "",
+							rateValue: "-",
+							slug: "tasarim"
+						}
+					},
+					owner: false
+				}],
+				tagsInfo: {
+					0: {
+						passive: true,
+						text: "Akıllı Telefon",
+						slug: "akilli-telefon"
+					},
+					1: {
+						passive: true,
+						text: "Apple",
+						slug: "apple"
+					},
+					2: {
+						passive: true,
+						text: "IPhone",
+						slug: "iphone"
+					},
+					3: {
+						passive: false,
+						text: "Batarya",
+						color: "yellow",
+						rateValue: "5.5",
+						slug: "batarya"
+					},
+					4: {
+						passive: false,
+						text: "Kamera",
+						color: "orange",
+						rateValue: "4.2",
+						slug: "kamera"
+					},
+					5: {
+						passive: false,
+						text: "Ekran",
+						color: "green",
+						rateValue: "9.3",
+						slug: "ekran"
+					}
+				}
+			});
+		}
+	}, {
 		key: "changeSortBy",
 		value: function changeSortBy(value) {
 			if (value != this.state.sortBy && this.state.commentsForm != "loading") {
@@ -163,6 +197,16 @@ var Product = function (_React$Component) {
 			});
 		}
 	}, {
+		key: "showAllComments",
+		value: function showAllComments() {
+			this.setState({
+				commentType: "all",
+				sortBy: "time",
+				pageNumber: 1
+			});
+			this.refreshComments();
+		}
+	}, {
 		key: "render",
 		value: function render() {
 			if (this.state.form == "normal") {
@@ -170,11 +214,11 @@ var Product = function (_React$Component) {
 				return React.createElement(
 					"div",
 					null,
-					React.createElement(ProductInfo, { tags: this.tagsInfo, productName: this.state.productName, changeContent: this.props.changeContent }),
-					React.createElement(PageNavigation, { sortBy: this.state.sortBy, handleChangeSortBy: this.changeSortBy, pageCount: "6", currentPage: this.state.pageNumber, handleChangePageNumber: this.changePageNumber }),
+					React.createElement(ProductInfo, { tags: this.state.tagsInfo, productName: this.state.productName, changeContent: this.props.changeContent }),
+					this.state.commentType == "all" ? React.createElement(PageNavigation, { sortBy: this.state.sortBy, handleChangeSortBy: this.changeSortBy, pageCount: "6", currentPage: this.state.pageNumber, handleChangePageNumber: this.changePageNumber }) : React.createElement(SpecialCommentHeader, { specialInfo: this.state.specialInfo, showAllComments: this.showAllComments }),
 					React.createElement(Comments, { comments: this.state.comments, form: this.state.commentsForm, changeContent: this.props.changeContent }),
-					React.createElement(PageNavigation, { sortBy: this.state.sortBy, handleChangeSortBy: this.changeSortBy, pageCount: "6", currentPage: this.state.pageNumber, handleChangePageNumber: this.changePageNumber }),
-					React.createElement(WriteComment, { tags: this.tagsInfo })
+					this.state.commentType == "all" ? React.createElement(PageNavigation, { sortBy: this.state.sortBy, handleChangeSortBy: this.changeSortBy, pageCount: "6", currentPage: this.state.pageNumber, handleChangePageNumber: this.changePageNumber }) : "",
+					React.createElement(WriteComment, { tags: this.state.tagsInfo })
 				);
 			} else if (this.state.form == "loading") {
 				document.title = "Ürün";
@@ -298,4 +342,63 @@ var ProductInfo = function (_React$Component2) {
 	}]);
 
 	return ProductInfo;
+}(React.Component);
+
+var SpecialCommentHeader = function (_React$Component3) {
+	_inherits(SpecialCommentHeader, _React$Component3);
+
+	function SpecialCommentHeader() {
+		_classCallCheck(this, SpecialCommentHeader);
+
+		return _possibleConstructorReturn(this, (SpecialCommentHeader.__proto__ || Object.getPrototypeOf(SpecialCommentHeader)).apply(this, arguments));
+	}
+
+	_createClass(SpecialCommentHeader, [{
+		key: "render",
+		value: function render() {
+			var _this4 = this;
+
+			return React.createElement(
+				Row,
+				{ size: "one" },
+				React.createElement(
+					Column,
+					null,
+					React.createElement(
+						"div",
+						{ "class": "ui big message" },
+						React.createElement(
+							Row,
+							{ size: "two" },
+							React.createElement(
+								Column,
+								null,
+								this.props.specialInfo.first,
+								" - ",
+								this.props.specialInfo.last,
+								" aras\u0131 g\xF6steriliyor"
+							),
+							React.createElement(
+								Column,
+								null,
+								React.createElement(
+									FloatRight,
+									null,
+									React.createElement(
+										"a",
+										{ onClick: function onClick(e) {
+												e.preventDefault();_this4.props.showAllComments();
+											} },
+										"T\xFCm\xFCn\xFC G\xF6ster"
+									)
+								)
+							)
+						)
+					)
+				)
+			);
+		}
+	}]);
+
+	return SpecialCommentHeader;
 }(React.Component);

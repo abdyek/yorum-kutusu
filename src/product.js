@@ -1,12 +1,47 @@
 class Product extends React.Component {
     constructor(props) {
-        super(props);
-        this.state = {
+		super(props);
+		this.state = {
+			form:"loading"
+		}
+		this.changeSortBy = this.changeSortBy.bind(this);
+		this.changePageNumber = this.changePageNumber.bind(this);
+		this.refreshComments = this.refreshComments.bind(this);
+		this.showAllComments = this.showAllComments.bind(this);
+	}
+	componentDidMount() {
+		let slugs = getSlugsExtra("urun");
+		let productSlugs = slugs[0];
+		let specialInfo = {};
+		let sortBy = "time";
+		let pageNumber = 1;
+		if(slugs[1]=="arasi") {
+			specialInfo = {
+				first:slugs[2].split("-")[0],
+				last:slugs[2].split("-")[1]
+			}
+		} else {
+			sortBy = slugs[1];
+		 	pageNumber = slugs[2];
+		}
+		let commentType = "all";
+		// not: buradaki değer atamalar ve değişkenlerin bir kısmı deneme amaçlı, setState içindeki hemen hemen hepsi api tarafından gelecek
+		
+		// yüklenme komutları burada olacak
+        this.setState({
             // normal, loading, notFound
 			form:"normal",
 			// normal, loading, noComment
 			productName:"Iphone 5s",
 			commentsForm: "normal",
+			commentType: commentType,	// all, special
+			specialInfo: specialInfo,
+			/*
+			specialInfo:{
+				first:"15",
+				last:"30"
+			},
+			*/
 			sortBy: "time",
 			pageNumber: 3,
 			comments: [
@@ -77,50 +112,47 @@ class Product extends React.Component {
 					},
 					owner:false
 				},
-			]
-		};
-        this.tagsInfo = {
-            0:{
-                passive:true,
-				text:"Akıllı Telefon",
-				slug:"akilli-telefon"
-            },
-            1:{
-                passive:true,
-                text:"Apple",
-				slug:"apple"
-            },
-            2:{
-                passive:true,
-                text:"IPhone",
-				slug:"iphone"
-            },
-            3:{
-                passive:false,
-                text:"Batarya",
-                color:"yellow",
-                rateValue: "5.5",
-				slug:"batarya"
-            },
-            4:{
-                passive:false,
-                text:"Kamera",
-                color:"orange",
-                rateValue: "4.2",
-				slug:"kamera"
-            },
-            5:{
-                passive:false,
-                text:"Ekran",
-                color:"green",
-                rateValue: "9.3",
-				slug:"ekran"
-            },
-		};
-		this.changeSortBy = this.changeSortBy.bind(this);
-		this.changePageNumber = this.changePageNumber.bind(this);
-		this.refreshComments = this.refreshComments.bind(this);
-    }
+			],
+			tagsInfo : {
+				0:{
+					passive:true,
+					text:"Akıllı Telefon",
+					slug:"akilli-telefon"
+				},
+				1:{
+					passive:true,
+					text:"Apple",
+					slug:"apple"
+				},
+				2:{
+					passive:true,
+					text:"IPhone",
+					slug:"iphone"
+				},
+				3:{
+					passive:false,
+					text:"Batarya",
+					color:"yellow",
+					rateValue: "5.5",
+					slug:"batarya"
+				},
+				4:{
+					passive:false,
+					text:"Kamera",
+					color:"orange",
+					rateValue: "4.2",
+					slug:"kamera"
+				},
+				5:{
+					passive:false,
+					text:"Ekran",
+					color:"green",
+					rateValue: "9.3",
+					slug:"ekran"
+				},
+			}
+		});
+	}
 	changeSortBy(value) {
 		if(value!=this.state.sortBy && this.state.commentsForm!="loading") {
 			// ^ bu ve changePageNumber metodundaki kontrolü kullanıcının aynı anda birden fazla seçim yapmasını engellemek için koydum
@@ -144,16 +176,29 @@ class Product extends React.Component {
 			commentsForm:"loading"
 		});
 	}
+	showAllComments() {
+		this.setState({
+			commentType:"all",
+			sortBy:"time",
+			pageNumber:1
+		});
+		this.refreshComments();
+	}
     render() {
         if(this.state.form=="normal") {
 			document.title = this.state.productName;
             return(
                 <div>
-                    <ProductInfo tags={this.tagsInfo} productName={this.state.productName} changeContent={this.props.changeContent}/>
-                    <PageNavigation sortBy={this.state.sortBy} handleChangeSortBy={this.changeSortBy} pageCount="6" currentPage={this.state.pageNumber} handleChangePageNumber={this.changePageNumber} />
+                    <ProductInfo tags={this.state.tagsInfo} productName={this.state.productName} changeContent={this.props.changeContent}/>
+					{(this.state.commentType=="all")?
+                    	<PageNavigation sortBy={this.state.sortBy} handleChangeSortBy={this.changeSortBy} pageCount="6" currentPage={this.state.pageNumber} handleChangePageNumber={this.changePageNumber} />
+					:<SpecialCommentHeader specialInfo={this.state.specialInfo} showAllComments={this.showAllComments}/>}
                     <Comments comments={this.state.comments} form={this.state.commentsForm} changeContent={this.props.changeContent}/>
-                    <PageNavigation sortBy={this.state.sortBy} handleChangeSortBy={this.changeSortBy} pageCount="6" currentPage={this.state.pageNumber} handleChangePageNumber={this.changePageNumber} />
-                    <WriteComment tags={this.tagsInfo}/>
+					{(this.state.commentType=="all")?
+                    	<PageNavigation sortBy={this.state.sortBy} handleChangeSortBy={this.changeSortBy} pageCount="6" currentPage={this.state.pageNumber} handleChangePageNumber={this.changePageNumber} />
+					:""
+					}
+                    <WriteComment tags={this.state.tagsInfo}/>
                 </div>
             )
         } else if(this.state.form=="loading") {
@@ -241,4 +286,27 @@ class ProductInfo extends React.Component {
             </div>
         )
     }
+}
+
+class SpecialCommentHeader extends React.Component {
+	render() {
+		return(
+			<Row size="one">
+				<Column>
+					<div class="ui big message">
+						<Row size="two">
+							<Column>
+								{this.props.specialInfo.first} - {this.props.specialInfo.last} arası gösteriliyor
+							</Column>
+							<Column>
+								<FloatRight>
+									<a onClick={(e)=>{e.preventDefault();this.props.showAllComments()}}>Tümünü Göster</a>
+								</FloatRight>
+							</Column>
+						</Row>
+					</div>
+				</Column>
+			</Row>
+		)
+	}
 }

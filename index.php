@@ -11,7 +11,7 @@ $router->get('/', function() {
     Tool::generatePage('ana-sayfa');
 });
 
-$router->get('/urun/:slug', function($productURL) {
+$router->get('/urun/:slug/:slug?/:slug?', function($productURL) {
     Tool::generatePage('urun');
 });
 
