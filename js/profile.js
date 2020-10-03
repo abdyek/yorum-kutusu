@@ -58,7 +58,9 @@ var Account = function (_React$Component2) {
             var slugs = getSlugsExtra("profil");
             var userSlug = slugs[0];
             var extra = slugs[1];
-            if (extra == "takipteki-urunler") {
+            var owner = true;
+            if (extra == "takipteki-urunler" && owner) {
+                // owner'ı burada kontrol ediyorum bu şu anlama geliyor: bu if ve else bloğunu api'den veri çektinten sonraaya koymam gerekiyor.
                 form = "followedProducts";
             } else if (extra == "ayarlar") {
                 form = "setting";
@@ -70,7 +72,7 @@ var Account = function (_React$Component2) {
                 openedSetting: false,
                 info: {
                     userName: "Yunus Emre",
-                    owner: true
+                    owner: owner
                 },
                 followedProductsInfo: {
                     0: {
