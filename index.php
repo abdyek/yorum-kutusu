@@ -39,4 +39,13 @@ $router->get('/filtrele/:any?', function() {
     Tool::generatePage('filtrele');
 });
 
+// API REQUEST
+$router->any('/api/:string', function($endpoint) {
+    require 'api/require.php';
+    require './api/endpoints/'.$endpoint.'.php';
+    $class = ucfirst($endpoint);
+    new $class;
+});
+
+
 $router->run();

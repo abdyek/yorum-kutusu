@@ -1,27 +1,21 @@
 <?php
 
-$selectedTags = [
-    3=>[
-        'passive'=>false,
-        'text'=>"Batarya",
-        'color'=>"yellow",
-        'rateValue'=>"-",
-        'slug'=>"batarya"
-    ],
-    4=>[
-        'passive'=>false,
-        'text'=>"Kamera",
-        'color'=>"orange",
-        'rateValue'=>"-",
-        'slug'=>"kamera"
-    ],
-];
-
-$response = [
-    'selectedTags'=>$selectedTags
-];
-
-header('Content-Type: application/json');   
-echo json_encode($response);
+    class Example extends Request {
+        protected function get() {
+            $this->response($this->data);
+        }
+        protected function post() {
+            $this->response($this->data);
+        }
+        protected function put() {
+            $this->response($this->data);
+        }
+        protected function patch() {
+            $this->response($this->data);
+        }
+        protected function delete() {
+            $this->response($this->data);
+        }
+    }
 
 ?>
