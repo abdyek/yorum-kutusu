@@ -2,7 +2,7 @@
 
 
     class Config {
-        const DBNAME = 'yorum-kutusu-2';
+        const DBNAME = 'yorum-kutusu';
         const DBID = 'root';
         const DBPW = '';
         const SITEURL = "http://localhost/yorum-kutusu/";
@@ -56,7 +56,27 @@
                         'max'=>11
                     ]
                 ]
-            ]
+            ],
+            'login'=>[
+                'methods'=>['POST'],
+                'authorization'=>['guest'],
+                'keys'=>[
+                    'email'=>[
+                        'min'=>0,
+                        'max'=>1000
+                    ],
+                    'password'=>[
+                        'min'=>0,
+                        'max'=>1000
+                    ]
+                ]
+            ],
+            'logout'=>[
+                'methods'=>['POST'],
+                'authorization'=>['member', 'admin'],
+                'keys'=>[]
+            ],
+
         ];
     }
 

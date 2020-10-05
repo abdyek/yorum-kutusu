@@ -1,5 +1,8 @@
 {
+    "name":"abdyek/yorum-kutusu",
+    "description": "Ürün Yorumlama Üzerine Web Application",
     "require": {
-        "izniburak/router": "^1.5"
+        "izniburak/router": "^1.5",
+        "adhocore/jwt": "^1.0"
     }
 }

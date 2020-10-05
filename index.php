@@ -2,7 +2,6 @@
 
 require 'config.php';
 require 'tool.php';
-require 'session.php';
 require 'vendor/autoload.php';
 
 $router = new Buki\Router();
@@ -45,6 +44,11 @@ $router->any('/api/:string', function($endpoint) {
     require './api/endpoints/'.$endpoint.'.php';
     $class = ucfirst($endpoint);
     new $class;
+});
+
+// deneme
+$router->get('/deneme', function(){
+    require 'deneme.php';
 });
 
 
