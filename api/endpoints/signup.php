@@ -49,7 +49,7 @@ class Signup extends Request {
         return (Database::getRow('SELECT * FROM member WHERE member_username=? and member_deleted=0', [$usernameLower]))?false:true;
     }
     private function generateSlug() {
-        $string = $this->data['username'];
+        $string = Other::toLower($this->data['username']);
         $this->memberSlug = str_replace(array_merge(array_keys(Other::DICT_TO_ASCII), [' ']),array_merge(array_values(Other::DICT_TO_ASCII), ['-']), $string);
     }
     private function uniqueSlugCheck() {
