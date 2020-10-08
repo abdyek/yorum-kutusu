@@ -144,16 +144,16 @@ CREATE TABLE `tag_change_history` (
 
 CREATE TABLE `member` (
   `member_id` int(11) NOT NULL,
-  `member_user_name` varchar(60) NOT NULL,
+  `member_username` varchar(60) NOT NULL,
   `member_slug` varchar(60) NOT NULL,
   `member_first_email` varchar(60) NOT NULL,
   `member_email` varchar(60) NOT NULL,
   `member_password_hash` varchar(60) NOT NULL,
-  `member_create_date_time` datetime NOT NULL,
-  `member_password_change_count` int(11) NOT NULL,
-  `member_confirmed_email` tinyint(1) NOT NULL,
-  `member_deleted` tinyint(1) NOT NULL,
-  `request_pointer` int(11) NOT NULL
+  `member_create_date_time` datetime NOT NULL DEFAULT current_timestamp(),
+  `member_password_change_count` int(11) NOT NULL DEFAULT 0,
+  `member_confirmed_email` tinyint(1) NOT NULL DEFAULT 0,
+  `member_deleted` tinyint(1) DEFAULT 0,
+  `request_pointer` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `member_email_history` (
@@ -271,7 +271,7 @@ CREATE TABLE `product_follow_history` (
 
 CREATE TABLE `admin` (
   `admin_id` int(11) NOT NULL,
-  `admin_user_name` varchar(60) NOT NULL,
+  `admin_username` varchar(60) NOT NULL,
   `admin_email` varchar(60) NOT NULL,
   `admin_password_hash` varchar(60) NOT NULL,
   `admin_inactive` tinyint(1) NOT NULL,

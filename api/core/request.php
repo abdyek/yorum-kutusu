@@ -55,6 +55,11 @@ abstract class Request {
         }
     }
     private function checkKeys($keys,$data) {
+        if($data==null and $keys!=null) {
+            // datanın hiç gelmeme ihtimaline karşı
+            http_response_code(400);
+            exit();
+        }
         foreach($keys as $key=>$value) {
             if(!array_key_exists($key, $data)) {
                 // ^ bu kontrol key'in gelen data içerisinde hiç olmama ihtimaline karşı
@@ -75,5 +80,22 @@ abstract class Request {
         header("Access-Control-Allow-Origin: *");
         header("Content-Type: application/json; charset=UTF-8");
         echo json_encode($data);
+    }
+    protected function responseWithMessage($messageCode, $other=null) {
+        $response = [
+            'code'=>$messageCode,
+            'message'=>Config::MESSAGE[$messageCode]
+        ];
+        if($other) {
+            $response['other']=$other;
+        }
+        $this->response($response);
+    }
+    protected function setHttpStatus($code) {
+        http_response_code($code);
+    }
+    protected function success() {
+        http_response_code(200);
+        $this->responseWithMessage(6);
     }
 }

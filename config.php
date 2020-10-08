@@ -40,18 +40,40 @@
                 'content'=>'filter'
             ]
         ];
+        const MESSAGE = [
+            1=>'Bu e-posta ile daha önceden hesap alınmış',
+            2=>'Bu kullanıcı adı kullanılamıyor',
+            3=>'Geçersiz e-posta',
+            4=>'Geçersiz kullanıcı adı',
+            5=>'Beklenmedik veri tabanı hatası',
+            6=>'success',
+        ];
         const ENDPOINT = [
             'example'=>[
                 'methods'=>['POST', 'GET', 'PUT', 'PATCH', 'DELETE'],
                 'authorization'=>['admin', 'guest', 'member'],
                 'keys'=>[
-                    'member_id'=>[
-                        'falan'=>[
+                    'a'=>[
+                        'b'=>[
                             'min'=>3,
                             'max'=>4
-                        ]
+                        ],
+                        'c'=>[
+                            'c_1'=>[
+                                'min'=>0,
+                                'max'=>10
+                            ],
+                            'c_2'=>[
+                                'min'=>0,
+                                'max'=>10
+                            ],
+                        ],
+                        'd'=>[
+                            'min'=>3,
+                            'max'=>3
+                        ],
                     ],
-                    'product_id'=>[
+                    'g'=>[
                         'min'=>0,
                         'max'=>11
                     ]
@@ -76,7 +98,24 @@
                 'authorization'=>['member', 'admin'],
                 'keys'=>[]
             ],
-
+            'signup'=>[
+                'methods'=>['POST'],
+                'authorization'=>['guest'],
+                'keys'=>[
+                    'eMail'=>[
+                        'min'=>1,
+                        'max'=>60
+                    ],
+                    'username'=>[
+                        'min'=>1,
+                        'max'=>60
+                    ],
+                    'password'=>[
+                        'min'=>10,
+                        'max'=>40
+                    ]
+                ]
+            ],
         ];
     }
 
