@@ -6,7 +6,8 @@ abstract class Request {
         $this->checkAuthorization();
         $this->checkMethod();
         $this->setData();
-        $this->checkKeys($this->keys, $this->data);
+        $this->checkKeys();
+        //$this->checkKey($this->keys, $this->data);
         ($this->run)();
     }
     private function setData() {
@@ -54,7 +55,10 @@ abstract class Request {
             exit();
         }
     }
-    private function checkKeys($keys,$data) {
+    private function checkKeys() {
+        $this->checkKey($this->keys[$_SERVER['REQUEST_METHOD']], $this->data);
+    }
+    private function checkKey($keys,$data) {
         if($data==null and $keys!=null) {
             // datanın hiç gelmeme ihtimaline karşı
             http_response_code(400);
@@ -72,7 +76,7 @@ abstract class Request {
                     exit();
                 }
             } else {
-                $this->checkKeys($value, $data[$key]);
+                $this->checkKey($value, $data[$key]);
             }
         }
     }
@@ -94,8 +98,8 @@ abstract class Request {
     protected function setHttpStatus($code) {
         http_response_code($code);
     }
-    protected function success() {
+    protected function success($other=null) {
         http_response_code(200);
-        $this->responseWithMessage(6);
+        $this->responseWithMessage(6, $other);
     }
 }

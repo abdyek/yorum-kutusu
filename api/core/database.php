@@ -57,7 +57,13 @@
             return $row;
         }
         */
-        
+
+        // other useful database functions
+        public function existCheck($sql, $arr) {
+            $thing = Database::getRow($sql, $arr);
+            return ($thing)?$thing:false;
+        }
+
     }
 
     Database::connect();

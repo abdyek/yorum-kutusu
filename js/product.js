@@ -30,7 +30,7 @@ var Product = function (_React$Component) {
 			var slugs = getSlugsExtra("urun");
 			var productSlugs = slugs[0];
 			var specialInfo = {};
-			var sortBy = "time";
+			//let sortBy = "like";
 			var pageNumber = 1;
 			if (slugs[1] == "arasi") {
 				specialInfo = {

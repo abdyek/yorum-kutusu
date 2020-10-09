@@ -13,7 +13,7 @@ class Product extends React.Component {
 		let slugs = getSlugsExtra("urun");
 		let productSlugs = slugs[0];
 		let specialInfo = {};
-		let sortBy = "time";
+		//let sortBy = "like";
 		let pageNumber = 1;
 		if(slugs[1]=="arasi") {
 			specialInfo = {

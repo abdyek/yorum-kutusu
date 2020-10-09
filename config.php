@@ -53,66 +53,104 @@
                 'methods'=>['POST', 'GET', 'PUT', 'PATCH', 'DELETE'],
                 'authorization'=>['admin', 'guest', 'member'],
                 'keys'=>[
-                    'a'=>[
-                        'b'=>[
-                            'min'=>3,
-                            'max'=>4
-                        ],
-                        'c'=>[
-                            'c_1'=>[
-                                'min'=>0,
-                                'max'=>10
+                    'POST'=>[
+                        'a'=>[
+                            'b'=>[
+                                'min'=>3,
+                                'max'=>4
                             ],
-                            'c_2'=>[
-                                'min'=>0,
-                                'max'=>10
+                            'c'=>[
+                                'c_1'=>[
+                                    'min'=>0,
+                                    'max'=>10
+                                ],
+                                'c_2'=>[
+                                    'min'=>0,
+                                    'max'=>10
+                                ],
+                            ],
+                            'd'=>[
+                                'min'=>3,
+                                'max'=>3
                             ],
                         ],
-                        'd'=>[
-                            'min'=>3,
-                            'max'=>3
-                        ],
+                        'g'=>[
+                            'min'=>0,
+                            'max'=>11
+                        ]
                     ],
-                    'g'=>[
-                        'min'=>0,
-                        'max'=>11
-                    ]
-                ]
+                    'GET'=>[],
+                    'PUT'=>[],
+                    'PATCH'=>[],
+                    'DELETE'=>[]
+                ],
             ],
             'login'=>[
                 'methods'=>['POST'],
                 'authorization'=>['guest'],
                 'keys'=>[
-                    'email'=>[
-                        'min'=>0,
-                        'max'=>1000
-                    ],
-                    'password'=>[
-                        'min'=>0,
-                        'max'=>1000
+                    'POST'=>[
+                        'email'=>[
+                            'min'=>0,
+                            'max'=>1000
+                        ],
+                        'password'=>[
+                            'min'=>0,
+                            'max'=>1000
+                        ]
                     ]
                 ]
             ],
             'logout'=>[
                 'methods'=>['POST'],
                 'authorization'=>['member', 'admin'],
-                'keys'=>[]
+                'keys'=>[
+                    'POST'=>[]
+                ]
             ],
             'signup'=>[
                 'methods'=>['POST'],
                 'authorization'=>['guest'],
                 'keys'=>[
-                    'eMail'=>[
-                        'min'=>1,
-                        'max'=>60
-                    ],
-                    'username'=>[
-                        'min'=>1,
-                        'max'=>60
-                    ],
-                    'password'=>[
-                        'min'=>10,
-                        'max'=>40
+                    'POST'=>[
+                        'eMail'=>[
+                            'min'=>1,
+                            'max'=>60
+                        ],
+                        'username'=>[
+                            'min'=>1,
+                            'max'=>60
+                        ],
+                        'password'=>[
+                            'min'=>10,
+                            'max'=>40
+                        ]
+                    ]
+                ]
+            ],
+            'product'=>[
+                'methods'=>['GET'],
+                'authorization'=>['guest', 'member', 'admin'],
+                'keys'=>[
+                    'GET'=>[
+                        /* bunu zorunlu yapmıyorum çünkü kullanıcı üye olmayabilir de
+                        'memberID'=>[
+                            'min'=>1,
+                            'max'=>11
+                        ],
+                        */
+                        'productID'=>[
+                            'min'=>1,
+                            'max'=>11
+                        ],
+                        'sortBy'=>[
+                            'min'=>4,
+                            'max'=>4
+                        ],
+                        'pageNumber'=>[
+                            'min'=>1,
+                            'max'=>11
+                        ]
                     ]
                 ]
             ],
