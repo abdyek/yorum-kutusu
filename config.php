@@ -154,6 +154,30 @@
                     ]
                 ]
             ],
+            'tag'=>[
+                'methods'=>['GET'],
+                'authorization'=>['guest', 'member', 'admin'],
+                'keys'=>[
+                    'GET'=>[
+                        'searchText'=>[
+                            'min'=>0,
+                            'max'=>100
+                        ]
+                    ]
+                ]
+            ],
+            'member'=>[
+                'methods'=>['GET'],
+                'authorization'=>['member', 'admin'],
+                'keys'=>[
+                    'GET'=>[
+                        'memberID'=>[
+                            'min'=>0,
+                            'max'=>11
+                        ]
+                    ]
+                ]
+            ]
         ];
     }
 
