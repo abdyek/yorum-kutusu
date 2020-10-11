@@ -153,7 +153,8 @@ CREATE TABLE `member` (
   `member_password_change_count` int(11) NOT NULL DEFAULT 0,
   `member_confirmed_email` tinyint(1) NOT NULL DEFAULT 0,
   `member_deleted` tinyint(1) DEFAULT 0,
-  `request_pointer` int(11) NOT NULL DEFAULT 0
+  `request_pointer` int(11) NOT NULL DEFAULT 0,
+  `member_restricted` tinyint(1) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `member_email_history` (
@@ -178,12 +179,12 @@ CREATE TABLE `comment` (
   `product_id` int(11) NOT NULL,
   `admin_id` int(11) DEFAULT NULL,
   `comment_text` varchar(500) NOT NULL,
-  `comment_create_date_time` datetime NOT NULL,
-  `comment_edited` tinyint(1) NOT NULL,
-  `comment_deleted` tinyint(1) NOT NULL,
-  `comment_last_edit_date_time` datetime NOT NULL,
-  `comment_like_count` int(11) NOT NULL,
-  `history_pointer` int(11) NOT NULL
+  `comment_create_date_time` datetime NOT NULL DEFAULT current_timestamp(),
+  `comment_edited` tinyint(1) NOT NULL DEFAULT 0,
+  `comment_deleted` tinyint(1) NOT NULL DEFAULT 0,
+  `comment_last_edit_date_time` datetime DEFAULT NULL,
+  `comment_like_count` int(11) NOT NULL DEFAULT 0,
+  `history_pointer` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `comment_request` (
@@ -191,10 +192,10 @@ CREATE TABLE `comment_request` (
   `member_id` int(11) NOT NULL,
   `product_id` int(11) DEFAULT NULL,
   `comment_id` int(11) DEFAULT NULL,
-  `comment_text` varchar(500) NOT NULL,
-  `comment_request_date_time` datetime NOT NULL,
-  `comment_request_answered` tinyint(1) NOT NULL,
-  `admin_note` varchar(200) NOT NULL
+  `comment_text` varchar(10000) NOT NULL,
+  `comment_request_date_time` datetime NOT NULL DEFAULT current_timestamp(),
+  `comment_request_answered` tinyint(1) NOT NULL DEFAULT 0,
+  `admin_note` varchar(200) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `comment_request_response` (
@@ -320,6 +321,15 @@ CREATE TABLE `admin_inactive_history` (
   `admin_id` int(11) NOT NULL,
   `admin_inactive_date_time` datetime NOT NULL,
   `active_or_inactive` tinyint(1) NOT NULL,
+  `admin_note` varchar(200) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `member_restricted_history` (
+  `member_restricted_history_id` int(11) NOT NULL,
+  `admin_id` int(11) DEFAULT NULL,
+  `member_id` int(11) NOT NULL,
+  `member_restricted_history_date_time` datetime NOT NULL,
+  `restricted` tinyint(1) NOT NULL,
   `admin_note` varchar(200) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -551,6 +561,11 @@ ALTER TABLE `admin_inactive_history`
   ADD KEY `subject_admin_id` (`subject_admin_id`), 
   ADD KEY `admin_id` (`admin_id`);
 
+ALTER TABLE `member_restricted_history`
+  ADD PRIMARY KEY (`member_restricted_history_id`),
+  ADD KEY `admin_id` (`admin_id`), 
+  ADD KEY `member_id` (`member_id`);
+
 
 ALTER TABLE `product_page_load_history`
   ADD PRIMARY KEY (`product_page_load_history_id`),
@@ -686,6 +701,9 @@ ALTER TABLE `tag_visible_history`
 
 ALTER TABLE `admin_inactive_history`
   MODIFY `admin_inactive_history_id` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `member_restricted_history`
+  MODIFY `member_restricted_history_id` int(11) NOT NULL AUTO_INCREMENT;
 
 
 ALTER TABLE `product_page_load_history`
@@ -831,6 +849,10 @@ ALTER TABLE `tag_visible_history`
 ALTER TABLE `admin_inactive_history`
   ADD CONSTRAINT `admin_inactive_history_fk_1` FOREIGN KEY (`subject_admin_id`) REFERENCES `admin` (`admin_id`),
   ADD CONSTRAINT `admin_inactive_history_fk_2` FOREIGN KEY (`admin_id`) REFERENCES `admin` (`admin_id`);
+
+ALTER TABLE `member_restricted_history`
+  ADD CONSTRAINT `member_restricted_history_fk_1` FOREIGN KEY (`admin_id`) REFERENCES `admin` (`admin_id`),
+  ADD CONSTRAINT `member_restricted_history_fk_2` FOREIGN KEY (`member_id`) REFERENCES `member` (`member_id`);
 
 ALTER TABLE `product_page_load_history`
   ADD CONSTRAINT `product_page_load_history_fk_1` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_id`);

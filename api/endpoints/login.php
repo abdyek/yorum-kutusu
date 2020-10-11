@@ -29,7 +29,7 @@ class Login extends Request {
         }
     }
     private function sendToken($userid, $who) {
-        $jwt = new JWT('secret', 'HS512');
+        $jwt = new JWT('secret', 'HS512', Config::JWT_EXP);
         $token = $jwt->encode([
             'userid'    => $userid,
             'aud'    => 'http://www.yorumkutusu.com',

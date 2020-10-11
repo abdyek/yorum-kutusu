@@ -3,7 +3,14 @@
 use Ahc\Jwt\JWT;
 
 if(isset($_COOKIE['jwt'])) {
-    $payload = (new JWT('secret', 'HS512', 3600, 10))->decode($_COOKIE['jwt']);
+    try {
+        $payload = (new JWT('secret', 'HS512',Config::JWT_EXP))->decode($_COOKIE['jwt']);
+    } catch(Exception $e) {
+        if(isset($_COOKIE['jwt'])){
+            unset($_COOKIE['jwt']);
+            setcookie('jwt',null, -1);
+        }
+    }
     if(isset($payload['userid'])) {
         define('USERID', $payload['userid']);
     }

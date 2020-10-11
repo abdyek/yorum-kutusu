@@ -6,6 +6,7 @@
         const DBID = 'root';
         const DBPW = '';
         const SITEURL = "http://localhost/yorum-kutusu/";
+        const JWT_EXP = 31536000; // 1 yıllık token geçerliliği
         const PAGEURL = [
             'ana-sayfa'=>[
                 'title'=>'Ana Sayfa',
@@ -177,7 +178,23 @@
                         ]
                     ]
                 ]
-            ]
+            ],
+            'comment'=>[
+                'methods'=>['POST'],
+                'authorization'=>['member'],
+                'keys'=>[
+                    'POST'=>[
+                        'productID'=>[
+                            'min'=>0,
+                            'max'=>11
+                        ],
+                        'commentText'=>[
+                            'min'=>1,
+                            'max'=>10000
+                        ]
+                    ]
+                ]
+            ],
         ];
     }
 
