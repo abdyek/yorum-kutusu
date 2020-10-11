@@ -234,7 +234,7 @@ CREATE TABLE `comment_like_history` (
   `comment_like_history_id` int(11) NOT NULL,
   `comment_id` int(11) NOT NULL,
   `member_id` int(11) NOT NULL,
-  `comment_like_date_time` datetime NOT NULL,
+  `comment_like_date_time` datetime NOT NULL DEFAULT current_timestamp(),
   `liked_or_dislike` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 

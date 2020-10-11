@@ -210,7 +210,23 @@
                         ]
                     ]
                 ]
-            ]
+            ],
+            'likeComment'=>[
+                'methods'=>['POST'],
+                'authorization'=>['member'],
+                'keys'=>[
+                    'POST'=>[
+                        'commentID'=>[
+                            'min'=>0,
+                            'max'=>11
+                        ],
+                        'like'=>[
+                            'min'=>0,
+                            'max'=>1
+                        ]
+                    ]
+                ]
+            ],
         ];
     }
 
