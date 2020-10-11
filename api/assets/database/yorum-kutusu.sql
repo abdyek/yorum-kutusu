@@ -258,14 +258,14 @@ CREATE TABLE `product_follow` (
   `product_follow_id` int(11) NOT NULL,
   `member_id` int(11) NOT NULL,
   `product_id` int(11) NOT NULL,
-  `last_seen_date_time` datetime NOT NULL
+  `last_seen_date_time` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `product_follow_history` (
   `product_follow_history_id` int(11) NOT NULL,
   `member_id` int(11) NOT NULL,
   `product_id` int(11) NOT NULL,
-  `product_follow_date_time` datetime NOT NULL,
+  `product_follow_date_time` datetime NOT NULL DEFAULT current_timestamp(),
   `follow_or_unfollow` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 

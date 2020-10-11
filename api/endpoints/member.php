@@ -10,6 +10,7 @@ class Member extends Request {
         $this->ownerCheck();
         $this->prepareMemberInfo();
         $this->prepareCommentsWithRating();
+        $this->prepareFollowProduct();
         $this->mergeAllInfo();
     }
     private function ownerCheck() {
@@ -57,6 +58,9 @@ class Member extends Request {
                 ]
             ];
         }
+    }
+    private function prepareFollowProduct() {
+        // burayı sonra ekleyeceğim, önce takip etme işini çözmem gerekiyor
     }
     private function mergeAllInfo() {
         $this->success([

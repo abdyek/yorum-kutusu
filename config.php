@@ -195,6 +195,22 @@
                     ]
                 ]
             ],
+            'followProduct'=>[
+                'methods'=>['POST'],
+                'authorization'=>['member'],
+                'keys'=>[
+                    'POST'=>[
+                        'productID'=>[
+                            'min'=>0,
+                            'max'=>11
+                        ],
+                        'follow'=>[
+                            'min'=>0,
+                            'max'=>1
+                        ]
+                    ]
+                ]
+            ]
         ];
     }
 
