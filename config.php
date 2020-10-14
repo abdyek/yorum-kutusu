@@ -245,6 +245,18 @@
                     ]
                 ]
             ],
+            'search'=>[
+                'methods'=>['GET'],
+                'authorization'=>['guest', 'member'],
+                'keys'=>[
+                    'GET'=>[
+                        'text'=>[
+                            'min'=>1,
+                            'max'=>50
+                        ]
+                    ]
+                ]
+            ],
         ];
     }
 
