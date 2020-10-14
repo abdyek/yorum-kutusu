@@ -6,8 +6,10 @@ class Product extends Request {
             $this->setHttpStatus(404);
             exit();
         }
-        $this->getProductInfo();
-        $this->getTags();
+        if(!$this->data['onlyComment']) {
+            $this->getProductInfo();
+            $this->getTags();
+        }
         $this->getCommentsWithRating();
         $this->mergeAllInfo();
     }
@@ -45,7 +47,7 @@ class Product extends Request {
         $this->commentsInfo = [];
         foreach($comments as $com) {
             $rating = Database::getRows('SELECT t.tag_slug, t.tag_name, tr.tag_rating_value FROM tag_rating tr INNER JOIN tag_with_product twp ON twp.tag_with_product_id=tr.tag_with_product_id INNER JOIN tag t ON t.tag_id=twp.tag_id WHERE tr.member_id=? AND twp.product_id=?', [$com['member_id'], $this->data['productID']]);
-            $liked = (isset($this->data['memberID']) and Database::getRow('SELECT * FROM comment_like WHERE member_id=? and comment_id=?', [$this->data['memberID'], $com['comment_id']]))?true:false;
+            $liked = (USERID!=null and Database::getRow('SELECT * FROM comment_like WHERE member_id=? and comment_id=?', [USERID, $com['comment_id']]))?true:false;
             $ratingInfo = [];
             foreach($rating as $rate) {
                 $ratingInfo[] = [
@@ -64,6 +66,7 @@ class Product extends Request {
                 'commentLastEditDateTime'=>$com['comment_last_edit_date_time'],
                 'commentLikeCount'=>$com['comment_like_count'],
                 'liked'=>$liked,
+                'owner'=>(USERID!=null and USERID==$com['member_id'])?true:false,
                 'rating'=>[
                     $ratingInfo
                 ]
@@ -71,9 +74,14 @@ class Product extends Request {
         }
     }
     private function mergeAllInfo() {
-        $allInfo = array_merge(
-            $this->productInfo, ['tags'=>array_values($this->tagsInfo)], ['comments'=>$this->commentsInfo]
-        );
-        $this->success($allInfo);
+        if(!$this->data['onlyComment']) {
+            $this->success(array_merge(
+                $this->productInfo, ['tags'=>array_values($this->tagsInfo)], ['comments'=>$this->commentsInfo]
+            ));
+        } else {
+            $this->success(
+                ['comments'=>$this->commentsInfo]
+            );
+        }
     }
 }

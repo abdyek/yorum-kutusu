@@ -134,12 +134,6 @@
                 'authorization'=>['guest', 'member', 'admin'],
                 'keys'=>[
                     'GET'=>[
-                        /* bunu zorunlu yapmıyorum çünkü kullanıcı üye olmayabilir de
-                        'memberID'=>[
-                            'min'=>1,
-                            'max'=>11
-                        ],
-                        */
                         'productID'=>[
                             'min'=>1,
                             'max'=>11
@@ -151,6 +145,10 @@
                         'pageNumber'=>[
                             'min'=>1,
                             'max'=>11
+                        ],
+                        'onlyComment'=>[
+                            'min'=>0,
+                            'max'=>1
                         ]
                     ]
                 ]
