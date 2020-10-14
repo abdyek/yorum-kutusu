@@ -11,6 +11,7 @@ class Product extends Request {
             $this->getTags();
         }
         $this->getCommentsWithRating();
+        $this->updateLastSeen();
         $this->mergeAllInfo();
     }
     private function getProductInfo() {
@@ -40,7 +41,7 @@ class Product extends Request {
         if($this->data['sortBy']=='like') {
             $sql = 'SELECT * FROM comment c INNER JOIN member m ON m.member_id = c.member_id  WHERE c.product_id=? AND c.comment_deleted=0 ORDER BY c.comment_like_count DESC LIMIT '.$index.', 10';
         } elseif($this->data['sortBy']=='time') {
-            $sql = 'SELECT * FROM comment c INNER JOIN member m ON m.member_id = c.member_id  WHERE c.product_id=1 AND c.comment_deleted=0 ORDER BY c.comment_create_date_time LIMIT '.$index.', 10';
+            $sql = 'SELECT * FROM comment c INNER JOIN member m ON m.member_id = c.member_id  WHERE c.product_id=? AND c.comment_deleted=0 ORDER BY c.comment_create_date_time LIMIT '.$index.', 10';
         }
         $arr = [$this->data['productID']];
         $comments = Database::getRows($sql, $arr);
@@ -60,6 +61,7 @@ class Product extends Request {
                 'ownerID'=>$com['member_id'],
                 'ownerUsername'=>$com['member_username'],
                 'ownerSlug'=>$com['member_slug'],
+                'commentID'=>$com['comment_id'],
                 'commentText'=>$com['comment_text'],
                 'commentCreateDateTime'=>$com['comment_create_date_time'],
                 'commentEdited'=>$com['comment_edited'],
@@ -71,6 +73,15 @@ class Product extends Request {
                     $ratingInfo
                 ]
             ];
+        }
+    }
+    private function updateLastSeen() {
+        if(USERID){
+            $lashComment = end($this->commentsInfo);
+            $check = (Database::getRow('SELECT last_seen_date_time FROM product_follow WHERE product_id=? AND member_id=? AND ?>last_seen_date_time', [$this->data['productID'], USERID, $lashComment['commentCreateDateTime']]))?true:false;
+            if($check) {
+                $query = Database::execute('UPDATE product_follow SET last_seen_date_time=? WHERE member_id=? AND product_id=?', [$lashComment['commentCreateDateTime'],USERID, $this->data['productID']]);
+            }
         }
     }
     private function mergeAllInfo() {
