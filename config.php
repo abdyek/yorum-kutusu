@@ -194,7 +194,7 @@
                 ]
             ],
             'followProduct'=>[
-                'methods'=>['POST'],
+                'methods'=>['POST', 'GET'],
                 'authorization'=>['member'],
                 'keys'=>[
                     'POST'=>[
@@ -205,6 +205,12 @@
                         'follow'=>[
                             'min'=>0,
                             'max'=>1
+                        ]
+                    ],
+                    'GET'=>[
+                        'totalPage'=>[
+                            'min'=>0,
+                            'max'=>5
                         ]
                     ]
                 ]

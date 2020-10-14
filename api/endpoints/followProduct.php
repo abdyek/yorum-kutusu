@@ -43,4 +43,22 @@ class FollowProduct extends Request {
         }
         $this->success();
     }
+    protected function get() {
+        if(is_string($this->data['totalPage']) or $this->data['totalPage']<1){
+            $this->data['totalPage']=1;
+        }
+        $index = $this->data['totalPage']*10;
+        $followingProduct = Database::getRows('SELECT p.product_id, p.product_slug, p.product_name, pw.last_seen_date_time FROM product_follow pw INNER JOIN product p ON pw.product_id = p.product_id WHERE p.product_visible=1 AND pw.member_id=? LIMIT 0, '.$index, [USERID]);
+        $arr = [];
+        foreach($followingProduct as $fp) {
+            $newComment = Database::getRow('SELECT count(*) as newComment FROM comment WHERE product_id=? and member_id!=? and ?<comment_create_date_time', [$fp['product_id'], USERID, $fp['last_seen_date_time']])['newComment'];
+            $arr[] = [
+                'productID'=>$fp['product_id'],
+                'productSlug'=>$fp['product_slug'],
+                'productName'=>$fp['product_name'],
+                'newComment'=>$newComment
+            ];
+        }
+        $this->success($arr);
+    }
 }
