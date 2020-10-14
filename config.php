@@ -173,7 +173,7 @@
                 'keys'=>[
                     'GET'=>[
                         'memberID'=>[
-                            'min'=>0,
+                            'min'=>1,
                             'max'=>11
                         ]
                     ]
@@ -185,7 +185,7 @@
                 'keys'=>[
                     'POST'=>[
                         'productID'=>[
-                            'min'=>0,
+                            'min'=>1,
                             'max'=>11
                         ],
                         'commentText'=>[
@@ -201,7 +201,7 @@
                 'keys'=>[
                     'POST'=>[
                         'productID'=>[
-                            'min'=>0,
+                            'min'=>1,
                             'max'=>11
                         ],
                         'follow'=>[
@@ -217,12 +217,32 @@
                 'keys'=>[
                     'POST'=>[
                         'commentID'=>[
-                            'min'=>0,
+                            'min'=>1,
                             'max'=>11
                         ],
                         'like'=>[
                             'min'=>0,
                             'max'=>1
+                        ]
+                    ]
+                ]
+            ],
+            'report'=>[
+                'methods'=>['POST'],
+                'authorization'=>['member'],
+                'keys'=>[
+                    'POST'=>[
+                        'commentID'=>[
+                            'min'=>1,
+                            'max'=>11
+                        ],
+                        'reportOptionID'=>[
+                            'min'=>1,
+                            'max'=>11
+                        ],
+                        'reportText'=>[
+                            'min'=>0,
+                            'max'=>200
                         ]
                     ]
                 ]

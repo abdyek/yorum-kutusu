@@ -377,7 +377,7 @@ CREATE TABLE `comment_report_request` (
   `comment_id` int(11) NOT NULL,
   `report_option_id` int(11) NOT NULL,
   `report_text` varchar(200) DEFAULT NULL,
-  `report_date_time` datetime NOT NULL
+  `report_date_time` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `comment_report_response` (
