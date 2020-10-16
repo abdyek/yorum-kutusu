@@ -173,6 +173,18 @@
                         'memberID'=>[
                             'min'=>1,
                             'max'=>11
+                        ],
+                        'sortBy'=>[
+                            'min'=>4,
+                            'max'=>4
+                        ],
+                        'pageNumber'=>[
+                            'min'=>1,
+                            'max'=>11
+                        ],
+                        'onlyComment'=>[
+                            'min'=>0,
+                            'max'=>1
                         ]
                     ]
                 ]

@@ -24,7 +24,17 @@ class Member extends Request {
         ];
     }
     private function prepareCommentsWithRating() {
-        $comments = Database::getRows('SELECT * FROM comment WHERE member_id=? AND comment_deleted=0', [$this->data['memberID']]);
+        if(is_string($this->data['pageNumber']) or $this->data['pageNumber']<1) {
+            $this->data['pageNumber'] = 1;
+        }
+        $index = ($this->data['pageNumber']-1)*10;
+        if($this->data['sortBy']=='like') {
+            $sql = 'SELECT * FROM comment c INNER JOIN member m ON m.member_id = c.member_id  WHERE c.member_id=? AND c.comment_deleted=0 ORDER BY c.comment_like_count DESC LIMIT '.$index.', 10';
+        } elseif($this->data['sortBy']=='time') {
+            $sql = 'SELECT * FROM comment c INNER JOIN member m ON m.member_id = c.member_id  WHERE c.member_id=? AND c.comment_deleted=0 ORDER BY c.comment_create_date_time LIMIT '.$index.', 10';
+        }
+        //$comments = Database::getRows('SELECT * FROM comment WHERE member_id=? AND comment_deleted=0', [$this->data['memberID']]);
+        $comments = Database::getRows($sql, [$this->data['memberID']]);
         $this->commentsInfo = [];
         foreach($comments as $com) {
             $product = Database::getRow('SELECT product_id, product_name, product_slug FROM product WHERE product_id=? and product_visible=1', [$com['product_id']]);

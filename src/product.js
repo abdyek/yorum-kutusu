@@ -24,7 +24,7 @@ class Product extends React.Component {
 			sortBy = slugs[1];
 		 	pageNumber = slugs[2];
 		}
-		let commentType = "all";
+		let commentType = "all";  // all, spacial
 		// not: buradaki değer atamalar ve değişkenlerin bir kısmı deneme amaçlı, setState içindeki hemen hemen hepsi api tarafından gelecek
 		
 		// yüklenme komutları burada olacak

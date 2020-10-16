@@ -76,7 +76,8 @@ class Product extends Request {
         }
     }
     private function updateLastSeen() {
-        if(USERID){
+        if(USERID and $this->data['sortBy']=='time'){
+            // şuan için sadece kronolojik sırada okundu olarak işaretliyorum, diğer türlü yatlıyor
             $lashComment = end($this->commentsInfo);
             $check = (Database::getRow('SELECT last_seen_date_time FROM product_follow WHERE product_id=? AND member_id=? AND ?>last_seen_date_time', [$this->data['productID'], USERID, $lashComment['commentCreateDateTime']]))?true:false;
             if($check) {
