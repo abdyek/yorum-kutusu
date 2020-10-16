@@ -10,7 +10,7 @@ class Member extends Request {
         $this->ownerCheck();
         $this->prepareMemberInfo();
         $this->prepareCommentsWithRating();
-        $this->prepareFollowProduct();
+        //$this->prepareFollowProduct();  --> bu sonra kaldırılacak
         $this->mergeAllInfo();
     }
     private function ownerCheck() {
@@ -41,7 +41,7 @@ class Member extends Request {
             if(!$product) {
                 continue;
             }
-            $liked = (Database::getRow('SELECT * FROM comment_like WHERbE comment_id=? AND member_id=?', [$com['comment_id'], USERID]))?true:false;
+            $liked = (Database::getRow('SELECT * FROM comment_like WHERE comment_id=? AND member_id=?', [$com['comment_id'], USERID]))?true:false;
             $rating = Database::getRows('SELECT t.tag_slug, t.tag_name, tr.tag_rating_value FROM tag_rating tr INNER JOIN tag_with_product twp ON twp.tag_with_product_id=tr.tag_with_product_id INNER JOIN tag t ON t.tag_id=twp.tag_id WHERE tr.member_id=? AND twp.product_id=?', [$this->data['memberID'], $product['product_id']]);
             $this->ratingInfo = [];
             foreach($rating as $rate) {
@@ -70,7 +70,7 @@ class Member extends Request {
         }
     }
     private function prepareFollowProduct() {
-        // burayı sonra ekleyeceğim, önce takip etme işini çözmem gerekiyor
+        // bu işi followProduct'ın get'i ile çözdüm
     }
     private function mergeAllInfo() {
         $this->success([
