@@ -96,4 +96,7 @@ class Product extends Request {
             );
         }
     }
+    protected function post() {
+        $this->success();
+    }
 }

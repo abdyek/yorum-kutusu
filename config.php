@@ -53,34 +53,15 @@
         const ENDPOINT = [
             'example'=>[
                 'methods'=>['POST', 'GET', 'PUT', 'PATCH', 'DELETE'],
-                'authorization'=>['admin', 'guest', 'member'],
+                'authorization'=>[
+                    'POST'=>['admin', 'guest', 'member'],
+                    'GET'=>['guest'],
+                    'PUT'=>['admin', 'guest', 'member'],
+                    'PATCH'=>['guest', 'member'],
+                    'DELETE'=>['admin', 'guest'],
+                ],
                 'keys'=>[
-                    'POST'=>[
-                        'a'=>[
-                            'b'=>[
-                                'min'=>3,
-                                'max'=>4
-                            ],
-                            'c'=>[
-                                'c_1'=>[
-                                    'min'=>0,
-                                    'max'=>10
-                                ],
-                                'c_2'=>[
-                                    'min'=>0,
-                                    'max'=>10
-                                ],
-                            ],
-                            'd'=>[
-                                'min'=>3,
-                                'max'=>3
-                            ],
-                        ],
-                        'g'=>[
-                            'min'=>0,
-                            'max'=>11
-                        ]
-                    ],
+                    'POST'=>[],
                     'GET'=>[],
                     'PUT'=>[],
                     'PATCH'=>[],
@@ -89,7 +70,9 @@
             ],
             'login'=>[
                 'methods'=>['POST'],
-                'authorization'=>['guest'],
+                'authorization'=>[
+                    'POST'=>['guest']
+                ],
                 'keys'=>[
                     'POST'=>[
                         'email'=>[
@@ -105,14 +88,18 @@
             ],
             'logout'=>[
                 'methods'=>['POST'],
-                'authorization'=>['member', 'admin'],
+                'authorization'=>[
+                    'POST'=>['member', 'admin']
+                ],
                 'keys'=>[
                     'POST'=>[]
                 ]
             ],
             'signup'=>[
                 'methods'=>['POST'],
-                'authorization'=>['guest'],
+                'authorization'=>[
+                    'POST'=>['guest'],
+                ],
                 'keys'=>[
                     'POST'=>[
                         'eMail'=>[
@@ -131,8 +118,11 @@
                 ]
             ],
             'product'=>[
-                'methods'=>['GET'],
-                'authorization'=>['guest', 'member', 'admin'],
+                'methods'=>['GET', 'POST'],
+                'authorization'=>[
+                    'GET'=>['guest', 'member', 'admin'],
+                    'POST'=>['member']
+                ],
                 'keys'=>[
                     'GET'=>[
                         'productID'=>[
@@ -151,12 +141,20 @@
                             'min'=>0,
                             'max'=>1
                         ]
+                    ],
+                    'POST'=>[
+                        'falan'=>[
+                            'min'=>5,
+                            'max'=>5
+                        ]
                     ]
                 ]
             ],
             'tag'=>[
                 'methods'=>['GET'],
-                'authorization'=>['guest', 'member', 'admin'],
+                'authorization'=>[
+                    'GET'=>['guest', 'member', 'admin'],
+                ],
                 'keys'=>[
                     'GET'=>[
                         'searchText'=>[
@@ -168,7 +166,9 @@
             ],
             'member'=>[
                 'methods'=>['GET'],
-                'authorization'=>['member', 'admin'],
+                'authorization'=>[
+                    'GET'=>['member', 'admin'],
+                ],
                 'keys'=>[
                     'GET'=>[
                         'memberID'=>[
@@ -192,7 +192,9 @@
             ],
             'comment'=>[
                 'methods'=>['POST'],
-                'authorization'=>['member'],
+                'authorization'=>[
+                    'POST'=>['member'],
+                ],
                 'keys'=>[
                     'POST'=>[
                         'productID'=>[
@@ -208,7 +210,10 @@
             ],
             'followProduct'=>[
                 'methods'=>['POST', 'GET'],
-                'authorization'=>['member'],
+                'authorization'=>[
+                    'POST'=>['member'],
+                    'GET'=>['member'],
+                ],
                 'keys'=>[
                     'POST'=>[
                         'productID'=>[
@@ -226,7 +231,9 @@
             ],
             'likeComment'=>[
                 'methods'=>['POST'],
-                'authorization'=>['member'],
+                'authorization'=>[
+                    'POST'=>['member'],
+                ],
                 'keys'=>[
                     'POST'=>[
                         'commentID'=>[
@@ -242,7 +249,9 @@
             ],
             'report'=>[
                 'methods'=>['POST'],
-                'authorization'=>['member'],
+                'authorization'=>[
+                    'POST'=>['member'],
+                ],
                 'keys'=>[
                     'POST'=>[
                         'commentID'=>[
@@ -262,7 +271,9 @@
             ],
             'search'=>[
                 'methods'=>['GET'],
-                'authorization'=>['guest', 'member'],
+                'authorization'=>[
+                    'GET'=>['guest', 'member'],
+                ],
                 'keys'=>[
                     'GET'=>[
                         'text'=>[
@@ -274,7 +285,10 @@
             ],
             'validateEmail'=>[
                 'methods'=>['POST', 'GET'],
-                'authorization'=>['member'],
+                'authorization'=>[
+                    'POST'=>['member'],
+                    'GET'=>['member'],
+                ],
                 'keys'=>[
                     'POST'=>[
                         'code'=>[
@@ -288,7 +302,9 @@
             ],
             'changeEmail'=>[
                 'methods'=>['POST'],
-                'authorization'=>['member'],
+                'authorization'=>[
+                    'POST'=>['member'],
+                ],
                 'keys'=>[
                     'POST'=>[
                         'password'=>[
@@ -304,7 +320,9 @@
             ],
             'changePassword'=>[
                 'methods'=>['POST'],
-                'authorization'=>['member'],
+                'authorization'=>[
+                    'POST'=>['member'],
+                ],
                 'keys'=>[
                     'POST'=>[
                         'password'=>[

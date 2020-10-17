@@ -44,7 +44,7 @@ abstract class Request {
         $this->keys = Config::ENDPOINT[$this->className]['keys'];
     }
     private function checkAuthorization() {
-        if(!in_array(WHO, $this->authorization)) {
+        if(!in_array(WHO, $this->authorization[$_SERVER['REQUEST_METHOD']])) {
             http_response_code(403);
             exit();
         }
