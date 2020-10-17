@@ -37,4 +37,13 @@ class Other {
     public function getHash($str) {
         return password_hash($str, PASSWORD_DEFAULT);
     }
+    public function getCurrentDateTime() {
+        return date('Y-m-d H:i:s', time());
+    }
+    public function generateVerificationCode() {
+        return random_int(100000,999999);
+    }
+    public function sendMail(){
+        // mail gönderme fonksiyonu buraya yazılacak
+    }
 }

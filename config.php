@@ -1,6 +1,7 @@
 <?php
 
 
+    date_default_timezone_set('Europe/Istanbul');
     class Config {
         const DBNAME = 'yorum-kutusu';
         const DBID = 'root';

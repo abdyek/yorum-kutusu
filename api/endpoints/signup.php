@@ -38,6 +38,7 @@ class Signup extends Request {
             $this->responseWithMessage(5);
             exit();
         }
+        Other::sendMail();
         $this->success();
     }
     private function formatToUsername() {
@@ -72,8 +73,8 @@ class Signup extends Request {
     }
     private function addEmailHistory() {
         $memberID = Database::getRow('SELECT member_id FROM member WHERE member_username=?', [$this->data['username']])['member_id'];
-        $code = random_int(100000,999999);
-        $query = Database::executeWithError('INSERT INTO member_email_history (member_id, member_email, code, member_confirmed_email) VALUES(?,?,?,?)', [$memberID ,$this->data['eMail'], $code, 0]);
+        $this->code = Other::generateVerificationCode();
+        $query = Database::executeWithError('INSERT INTO member_email_history (member_id, member_email, code, member_confirmed_email) VALUES(?,?,?,?)', [$memberID ,$this->data['eMail'], $this->code, 0]);
         if(!$query[0]) {
             Database::execute('DELETE FROM member WHERE member_username=?', [$this->data['username']]);
         }
