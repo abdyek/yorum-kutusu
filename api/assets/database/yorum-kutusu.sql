@@ -161,8 +161,9 @@ CREATE TABLE `member_email_history` (
   `member_email_history_id` int(11) NOT NULL,
   `member_id` int(11) NOT NULL,
   `member_email` varchar(60) NOT NULL,
-  `change_date_time` datetime NOT NULL,
-  `confirmed_email_date_time` datetime NOT NULL,
+  `change_date_time` datetime NOT NULL DEFAULT current_timestamp(),
+  `confirmed_email_date_time` datetime DEFAULT NULL,
+  `code` int(6) NOT NULL,
   `member_confirmed_email` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 

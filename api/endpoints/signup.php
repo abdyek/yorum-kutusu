@@ -33,6 +33,11 @@ class Signup extends Request {
             $this->responseWithMessage(5);
             exit();
         }
+        if(!$this->addEmailHistory()) {
+            $this->setHttpStatus(500);
+            $this->responseWithMessage(5);
+            exit();
+        }
         $this->success();
     }
     private function formatToUsername() {
@@ -53,7 +58,7 @@ class Signup extends Request {
         $this->memberSlug = str_replace(array_merge(array_keys(Other::DICT_TO_ASCII), [' ']),array_merge(array_values(Other::DICT_TO_ASCII), ['-']), $string);
     }
     private function uniqueSlugCheck() {
-        return (Database::getRow('SELECT * FROM mbmer WHERE member_slug=?', [$this->memberSlug]))?false:true;
+        return (Database::getRow('SELECT * FROM member WHERE member_slug=?', [$this->memberSlug]))?false:true;
     }
     private function create() {
         $query = Database::executeWithError('INSERT INTO member (member_username, member_slug, member_first_email, member_email, member_password_hash) VALUES (?,?,?,?,?)', [
@@ -64,5 +69,14 @@ class Signup extends Request {
             Other::getHash($this->data['password'])
         ]);
         return $query;
+    }
+    private function addEmailHistory() {
+        $memberID = Database::getRow('SELECT member_id FROM member WHERE member_username=?', [$this->data['username']])['member_id'];
+        $code = random_int(100000,999999);
+        $query = Database::executeWithError('INSERT INTO member_email_history (member_id, member_email, code, member_confirmed_email) VALUES(?,?,?,?)', [$memberID ,$this->data['eMail'], $code, 0]);
+        if(!$query[0]) {
+            Database::execute('DELETE FROM member WHERE member_username=?', [$this->data['username']]);
+        }
+        return $query[0]?true:false;
     }
 }

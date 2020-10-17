@@ -42,7 +42,7 @@
             ]
         ];
         const MESSAGE = [
-            1=>'Bu e-posta ile daha önceden hesap alınmış',
+            1=>'Bu e-posta kullanımda',
             2=>'Bu kullanıcı adı kullanılamıyor',
             3=>'Geçersiz e-posta',
             4=>'Geçersiz kullanıcı adı',
@@ -269,6 +269,36 @@
                             'max'=>50
                         ]
                     ]
+                ]
+            ],
+            'validateEmail'=>[
+                'methods'=>['POST', 'GET'],
+                'authorization'=>['member'],
+                'keys'=>[
+                    'POST'=>[
+                        'code'=>[
+                            'min'=>6,
+                            'max'=>6
+                        ]
+                    ],
+                    'GET'=>[
+                    ]
+                ]
+            ],
+            'changeEmail'=>[
+                'methods'=>['POST'],
+                'authorization'=>['member'],
+                'keys'=>[
+                    'POST'=>[
+                        'password'=>[
+                            'min'=>10,
+                            'max'=>40
+                        ],
+                        'newEmail'=>[
+                            'min'=>1,
+                            'max'=>60
+                        ]
+                    ],
                 ]
             ],
         ];
