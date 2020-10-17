@@ -302,6 +302,22 @@
                     ],
                 ]
             ],
+            'changePassword'=>[
+                'methods'=>['POST'],
+                'authorization'=>['member'],
+                'keys'=>[
+                    'POST'=>[
+                        'password'=>[
+                            'min'=>10,
+                            'max'=>40
+                        ],
+                        'newPassword'=>[
+                            'min'=>10,
+                            'max'=>40
+                        ]
+                    ],
+                ]
+            ],
         ];
     }
 

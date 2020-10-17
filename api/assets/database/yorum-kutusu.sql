@@ -170,7 +170,7 @@ CREATE TABLE `member_email_history` (
 CREATE TABLE `member_password_change_history` (
   `member_password_change_history_id` int(11) NOT NULL,
   `member_id` int(11) NOT NULL,
-  `change_date_time` datetime NOT NULL
+  `change_date_time` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
