@@ -340,6 +340,20 @@
                     ],
                 ]
             ],
+            'checkProductSlug'=>[
+                'methods'=>['GET'],
+                'authorization'=>[
+                    'GET'=>['member'],
+                ],
+                'keys'=>[
+                    'GET'=>[
+                        'slug'=>[
+                            'min'=>1,
+                            'max'=>60
+                        ],
+                    ],
+                ]
+            ],
         ];
     }
 
