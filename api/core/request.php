@@ -71,7 +71,16 @@ abstract class Request {
                 exit();
             }
             if(isset($value['min']) and isset($value['max'])) {
-                if(strlen($data[$key]) < $value['min'] or strlen($data[$key]) > $value['max']){
+                if(is_array($data[$key])) {
+                    $len = function($p) {
+                        return count($p);
+                    };
+                } else {
+                    $len = function($p) {
+                        return strlen($p);
+                    };
+                }
+                if(($len)($data[$key]) < $value['min'] or ($len)($data[$key]) > $value['max']){
                     http_response_code(400);
                     exit();
                 }

@@ -112,7 +112,8 @@ CREATE TABLE `tag_with_product_history` (
 CREATE TABLE `tag_with_product_request` (
   `tag_with_product_request_id` int(11) NOT NULL,
   `member_id` int(11) NOT NULL,
-  `product_id` int(11) NOT NULL,
+  `product_request_id` int(11) DEFAULT NULL,
+  `product_id` int(11) DEFAULT NULL,
   `tag_id` int(11) DEFAULT NULL,
   `tag_name` varchar(25) NOT NULL,
   `tag_slug` varchar(25) NOT NULL,
@@ -191,6 +192,7 @@ CREATE TABLE `comment` (
 CREATE TABLE `comment_request` (
   `comment_request_id` int(11) NOT NULL,
   `member_id` int(11) NOT NULL,
+  `product_request_id` int(11) DEFAULT NULL,
   `product_id` int(11) DEFAULT NULL,
   `comment_id` int(11) DEFAULT NULL,
   `comment_text` varchar(10000) NOT NULL,
@@ -241,7 +243,8 @@ CREATE TABLE `comment_like_history` (
 
 CREATE TABLE `tag_rating` (
   `tag_rating_id` int(11) NOT NULL,
-  `tag_with_product_id` int(11) NOT NULL,
+  `tag_with_product_id` int(11) DEFAULT NULL,
+  `tag_with_product_request_id` int(11) DEFAULT NULL,
   `member_id` int(11) NOT NULL,
   `tag_rating_value` int(2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -449,6 +452,7 @@ ALTER TABLE `tag_with_product_request`
   ADD PRIMARY KEY (`tag_with_product_request_id`),
   ADD KEY `member_id` (`member_id`),
   ADD KEY `product_id` (`product_id`),
+  ADD KEY `product_request_id` (`product_request_id`),
   ADD KEY `tag_id` (`tag_id`);
 
 ALTER TABLE `tag_with_product_request_response`
@@ -483,6 +487,7 @@ ALTER TABLE `comment`
 ALTER TABLE `comment_request`
   ADD PRIMARY KEY (`comment_request_id`),
   ADD KEY `member_id` (`member_id`),
+  ADD KEY `product_request_id` (`product_request_id`),
   ADD KEY `product_id` (`product_id`),
   ADD KEY `comment_id` (`comment_id`);
 
@@ -513,6 +518,7 @@ ALTER TABLE `comment_like_history`
 
 ALTER TABLE `tag_rating`
   ADD PRIMARY KEY (`tag_rating_id`),
+  ADD KEY `tag_with_product_request_id` (`tag_with_product_request_id`), 
   ADD KEY `tag_with_product_id` (`tag_with_product_id`), 
   ADD KEY `member_id` (`member_id`);
 
@@ -768,7 +774,8 @@ ALTER TABLE `tag_with_product_history`
 ALTER TABLE `tag_with_product_request`
   ADD CONSTRAINT `tag_with_product_request_fk_1` FOREIGN KEY (`member_id`) REFERENCES `member` (`member_id`),
   ADD CONSTRAINT `tag_with_product_request_fk_2` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_id`),
-  ADD CONSTRAINT `tag_with_product_request_fk_3` FOREIGN KEY (`tag_id`) REFERENCES `tag` (`tag_id`);
+  ADD CONSTRAINT `tag_with_product_request_fk_3` FOREIGN KEY (`product_request_id`) REFERENCES `product_request` (`product_request_id`),
+  ADD CONSTRAINT `tag_with_product_request_fk_4` FOREIGN KEY (`tag_id`) REFERENCES `tag` (`tag_id`);
 
 ALTER TABLE `tag_with_product_request_response`
   ADD CONSTRAINT `tag_with_product_request_response_fk_1` FOREIGN KEY (`tag_with_product_request_id`) REFERENCES `tag_with_product_request` (`tag_with_product_request_id`),
@@ -791,8 +798,9 @@ ALTER TABLE `comment`
 
 ALTER TABLE `comment_request`
   ADD CONSTRAINT `comment_request_fk_1` FOREIGN KEY (`member_id`) REFERENCES `member` (`member_id`),
-  ADD CONSTRAINT `comment_request_fk_2` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_id`),
-  ADD CONSTRAINT `comment_request_fk_3` FOREIGN KEY (`comment_id`) REFERENCES `comment` (`comment_id`);
+  ADD CONSTRAINT `comment_request_fk_2` FOREIGN KEY (`product_request_id`) REFERENCES `product_request` (`product_request_id`),
+  ADD CONSTRAINT `comment_request_fk_3` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_id`),
+  ADD CONSTRAINT `comment_request_fk_4` FOREIGN KEY (`comment_id`) REFERENCES `comment` (`comment_id`);
 
 ALTER TABLE `comment_request_response`
   ADD CONSTRAINT `comment_request_response_fk_1` FOREIGN KEY (`comment_request_id`) REFERENCES `comment_request` (`comment_request_id`),
@@ -816,7 +824,8 @@ ALTER TABLE `comment_like_history`
 
 ALTER TABLE `tag_rating`
   ADD CONSTRAINT `tag_rating_fk_1` FOREIGN KEY (`tag_with_product_id`) REFERENCES `tag_with_product` (`tag_with_product_id`),
-  ADD CONSTRAINT `tag_rating_fk_2` FOREIGN KEY (`member_id`) REFERENCES `member` (`member_id`);
+  ADD CONSTRAINT `tag_rating_fk_2` FOREIGN KEY (`tag_with_product_request_id`) REFERENCES `tag_with_product_request` (`tag_with_product_request_id`),
+  ADD CONSTRAINT `tag_rating_fk_3` FOREIGN KEY (`member_id`) REFERENCES `member` (`member_id`);
 
 ALTER TABLE `tag_rating_history`
   ADD CONSTRAINT `tag_rating_history_fk_1` FOREIGN KEY (`tag_with_product_id`) REFERENCES `tag_with_product` (`tag_with_product_id`),

@@ -143,9 +143,13 @@
                         ]
                     ],
                     'POST'=>[
-                        'falan'=>[
-                            'min'=>5,
-                            'max'=>5
+                        'productName'=>[
+                            'min'=>1,
+                            'max'=>60
+                        ],
+                        'tags'=>[
+                            'min'=>0,
+                            'max'=>10
                         ]
                     ]
                 ]
