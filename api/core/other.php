@@ -46,4 +46,17 @@ class Other {
     public function sendMail(){
         // mail gönderme fonksiyonu buraya yazılacak
     }
+    public function generateSlug($string) {
+        $arr = explode(' ', $string);
+        $string = '';
+        foreach($arr as $str){
+            if(empty($str)) {
+                continue;
+            }
+            $string .= ' '.trim($str);
+        }
+        $string = trim($string);
+        $string = self::toLower($string);
+        return str_replace(array_merge(array_keys(Other::DICT_TO_ASCII), [' ']),array_merge(array_values(Other::DICT_TO_ASCII), ['-']), $string);
+    }
 }

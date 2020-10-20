@@ -58,9 +58,9 @@ CREATE TABLE `product_request` (
   `member_id` int(11) NOT NULL,
   `product_name` varchar(60) NOT NULL,
   `product_slug` varchar(60) NOT NULL,
-  `product_request_date_time` datetime NOT NULL,
-  `product_request_answered` tinyint(1) NOT NULL,
-  `admin_note` varchar(200) NOT NULL,
+  `product_request_date_time` datetime NOT NULL DEFAULT current_timestamp(),
+  `product_request_answered` tinyint(1) NOT NULL DEFAULT 0,
+  `admin_note` varchar(200) DEFAULT NULL,
   `request_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -115,11 +115,11 @@ CREATE TABLE `tag_with_product_request` (
   `product_request_id` int(11) DEFAULT NULL,
   `product_id` int(11) DEFAULT NULL,
   `tag_id` int(11) DEFAULT NULL,
-  `tag_name` varchar(25) NOT NULL,
-  `tag_slug` varchar(25) NOT NULL,
-  `tag_with_product_request_date_time` datetime NOT NULL,
-  `tag_with_product_request_answered` tinyint(1) NOT NULL,
-  `admin_note` varchar(200) NOT NULL,
+  `tag_name` varchar(25) DEFAULT NULL,
+  `tag_slug` varchar(25) DEFAULT NULL,
+  `tag_with_product_request_date_time` datetime NOT NULL DEFAULT current_timestamp(),
+  `tag_with_product_request_answered` tinyint(1) NOT NULL DEFAULT 0,
+  `admin_note` varchar(200) DEFAULT NULL,
   `request_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 

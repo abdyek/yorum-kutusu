@@ -143,7 +143,15 @@
                         ]
                     ],
                     'POST'=>[
+                        'productID'=>[
+                            'min'=>0,
+                            'max'=>11
+                        ],
                         'productName'=>[
+                            'min'=>1,
+                            'max'=>60
+                        ],
+                        'productSlug'=>[
                             'min'=>1,
                             'max'=>60
                         ],
