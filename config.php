@@ -362,6 +362,24 @@
                     ],
                 ]
             ],
+            'forgotMyPassword'=>[
+                'methods'=>['POST'],
+                'authorization'=>[
+                    'POST'=>['guest'],
+                ],
+                'keys'=>[
+                    'POST'=>[
+                        'eMail'=>[
+                            'min'=>1,
+                            'max'=>60
+                        ],
+                        'username'=>[
+                            'min'=>1,
+                            'max'=>60
+                        ],
+                    ],
+                ]
+            ],
         ];
     }
 
