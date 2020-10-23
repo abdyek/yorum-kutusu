@@ -3,15 +3,8 @@
 // bu isteğin adının comment olması yanıltmasın yorum çekme işlemlerini burada yapmıyorum
 class Comment extends Request {
     protected function post() {
-        $product = Database::existCheck('SELECT * FROM product WHERE product_id=? AND product_visible=1', [$this->data['productID']]);
-        if(!$product) {
-            $this->setHttpStatus(404);
-            exit();
-        }
-        if(!$this->tagCheck()) {
-            $this->setHttpStatus(422);
-            exit();
-        }
+        $this->productCheckWrapper();
+        $this->tagCheckWrapper();
         if(Database::existCheck('SELECT comment_id FROM comment WHERE comment_deleted=0 AND member_id=? AND product_id=?', [USERID, $this->data['productID']]) or
         Database::existCheck('SELECT comment_request_id FROM comment_request WHERE cancelled=0 AND member_id=? AND product_id=?', [USERID, $this->data['productID']])){
             // ^ her kullanıcı her ürün için sadece bir tane yorum yapabilir
@@ -19,7 +12,24 @@ class Comment extends Request {
             exit();
         }
         $this->writeToDB();
+        $this->commitRating();
     }
+    // post ve put'un ortak methodu
+    private function productCheckWrapper() {
+        $product = Database::existCheck('SELECT * FROM product WHERE product_id=? AND product_visible=1', [$this->data['productID']]);
+        if(!$product) {
+            $this->setHttpStatus(404);
+            exit();
+        }
+    }
+    // post ve put'un ortak methodu
+    private function tagCheckWrapper() {
+        if(!$this->tagCheck()) {
+            $this->setHttpStatus(422);
+            exit();
+        }
+    }
+
     private function tagCheck() {
         if(isset($this->data['rating'])) {
             if(!is_array($this->data['rating'])) {
@@ -55,6 +65,8 @@ class Comment extends Request {
         }
     }
     protected function put() {
+        $this->productCheckWrapper();
+        $this->tagCheckWrapper();
         $this->request = Database::existCheck('SELECT comment_request_id FROM comment_request WHERE cancelled=0 AND member_id=? AND product_id=?', [USERID, $this->data['productID']]);
         $this->comment = Database::existCheck('SELECT comment_id, admin_id, comment_text FROM comment WHERE comment_deleted=0 AND member_id=? AND product_id=?',[USERID, $this->data['productID']]);
         $this->restricted = Database::existCheck('SELECT member_restricted FROM member WHERE member_id=?', [USERID])['member_restricted'];
@@ -66,6 +78,7 @@ class Comment extends Request {
             $this->setHttpStatus(404);
             exit();
         }
+        $this->commitRating();
     }
     private function updateRequest() {
         $query = Database::execute('UPDATE comment_request SET cancelled=1 WHERE member_id=?', [USERID]);
@@ -92,4 +105,19 @@ class Comment extends Request {
     private function writeHistory() {
         $query = Database::execute('INSERT INTO comment_history (comment_id, admin_id, comment_old_text) VALUES(?,?,?)', [$this->comment['comment_id'], $this->comment['admin_id'], $this->comment['comment_text']]);
     }
+    // post ve put'un orta metodu
+    private function commitRating() {
+        $tags = $this->data['rating'];
+        foreach($tags as $key=>$val) {
+            $twpID = Database::getRow('SELECT tag_with_product_id FROM tag_with_product twp INNER JOIN tag t ON t.tag_id=twp.tag_id WHERE t.tag_name=? AND twp.product_id=?', [$key, $this->data['productID']])['tag_with_product_id'];
+            $check = Database::existCheck('SELECT tag_rating_value FROM tag_rating WHERE tag_with_product_id=? AND member_id=? AND tag_rating_value=?', [$twpID, USERID, $val]);
+            if($check) {
+                continue;
+            }
+            Database::execute('DELETE FROM tag_rating WHERE tag_with_product_id=? AND member_id=?', [$twpID, USERID]);
+            Database::execute('INSERT INTO tag_rating_history (tag_with_product_id, member_id, tag_rating_value) VAlUES(?,?,?)', [$twpID, USERID, $val]);
+            Database::execute('INSERT INTO tag_rating (tag_with_product_id, member_id, tag_rating_value) VAlUES(?,?,?)', [$twpID, USERID, $val]);
+        }
+    }
+
 }

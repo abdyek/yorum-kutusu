@@ -254,7 +254,7 @@ CREATE TABLE `tag_rating_history` (
   `tag_rating_history_id` int(11) NOT NULL,
   `tag_with_product_id` int(11) NOT NULL,
   `member_id` int(11) NOT NULL,
-  `tag_rating_date_time` datetime NOT NULL,
+  `tag_rating_date_time` datetime NOT NULL DEFAULT current_timestamp(),
   `tag_rating_value` int(2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
