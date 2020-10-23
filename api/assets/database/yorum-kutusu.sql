@@ -225,7 +225,7 @@ CREATE TABLE `comment_delete_history` (
   `comment_delete_history_id` int(11) NOT NULL,
   `comment_id` int(11) NOT NULL,
   `admin_id` int(11) DEFAULT NULL,
-  `comment_delete_date_time` datetime NOT NULL
+  `comment_delete_date_time` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `comment_like` (

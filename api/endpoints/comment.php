@@ -119,5 +119,51 @@ class Comment extends Request {
             Database::execute('INSERT INTO tag_rating (tag_with_product_id, member_id, tag_rating_value) VAlUES(?,?,?)', [$twpID, USERID, $val]);
         }
     }
+    protected function delete() {
+        if(WHO=='admin') {
+            $this->deleteByAdmin();
+        } elseif(WHO=='member') {
+            $this->deleteByMember();
+        }
+    }
+    private function deleteByAdmin() {
+        if(!Database::existCheck('SELECT comment_id FROM comment WHERE comment_deleted=0 AND comment_id=?', [$this->data['commentID']])) {
+            $this->setHttpStatus(404);
+            exit();
+        }
+        $query = Database::execute('UPDATE comment SET comment_deleted=1 WHERE comment_id=?', [$this->data['commentID']]);
+        if(!$query) {
+            $this->setHttpStatus(500);
+            $this->responseWithMessage(5);
+            exit();
+        }
+        $query = Database::execute('INSERT INTO comment_delete_history (comment_id, admin_id) VALUES(?,?)', [$this->data['commentID'], USERID]);
+        if(!$query) {
+            $this->setHttpStatus(500);
+            $this->responseWithMessage(5);
+            exit();
+        }
+        $this->success();
+    }
+    private function deleteByMember() {
+        if(!Database::existCheck('SELECT comment_id FROM comment WHERE comment_deleted=0 AND member_id=? AND comment_id=?', [USERID, $this->data['commentID']])) {
+            $this->setHttpStatus(404);
+            exit();
+        }
+        $query = Database::execute('UPDATE comment SET comment_deleted=1 WHERE comment_id=?', [$this->data['commentID']]);
+        if(!$query) {
+            $this->setHttpStatus(500);
+            $this->responseWithMessage(5);
+            exit();
+        }
+        // history
+        $query = Database::execute('INSERT INTO comment_delete_history (comment_id) VALUES(?)', [$this->data['commentID']]);
+        if(!$query) {
+            $this->setHttpStatus(500);
+            $this->responseWithMessage(5);
+            exit();
+        }
+        $this->success();
+    }
 
 }

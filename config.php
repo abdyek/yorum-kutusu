@@ -203,10 +203,11 @@
                 ]
             ],
             'comment'=>[
-                'methods'=>['POST', 'PUT'],
+                'methods'=>['POST', 'PUT', 'DELETE'],
                 'authorization'=>[
                     'POST'=>['member'],
-                    'PUT'=>['member']
+                    'PUT'=>['member'],
+                    'DELETE'=>['member', 'admin']
                 ],
                 'keys'=>[
                     'POST'=>[
@@ -227,6 +228,12 @@
                         'commentText'=>[
                             'min'=>1,
                             'max'=>10000
+                        ]
+                    ],
+                    'DELETE'=>[
+                        'commentID'=>[
+                            'min'=>1,
+                            'max'=>11
                         ]
                     ]
                 ]
