@@ -155,7 +155,8 @@ CREATE TABLE `member` (
   `member_confirmed_email` tinyint(1) NOT NULL DEFAULT 0,
   `member_deleted` tinyint(1) DEFAULT 0,
   `request_pointer` int(11) NOT NULL DEFAULT 0,
-  `member_restricted` tinyint(1) DEFAULT 1
+  `member_restricted` tinyint(1) DEFAULT 0,
+  `point` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `member_email_history` (
@@ -198,7 +199,8 @@ CREATE TABLE `comment_request` (
   `comment_text` varchar(10000) NOT NULL,
   `comment_request_date_time` datetime NOT NULL DEFAULT current_timestamp(),
   `comment_request_answered` tinyint(1) NOT NULL DEFAULT 0,
-  `admin_note` varchar(200) DEFAULT NULL
+  `admin_note` varchar(200) DEFAULT NULL,
+  `cancelled` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `comment_request_response` (

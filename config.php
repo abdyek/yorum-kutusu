@@ -203,12 +203,23 @@
                 ]
             ],
             'comment'=>[
-                'methods'=>['POST'],
+                'methods'=>['POST', 'PUT'],
                 'authorization'=>[
                     'POST'=>['member'],
+                    'PUT'=>['member']
                 ],
                 'keys'=>[
                     'POST'=>[
+                        'productID'=>[
+                            'min'=>1,
+                            'max'=>11
+                        ],
+                        'commentText'=>[
+                            'min'=>1,
+                            'max'=>10000
+                        ]
+                    ],
+                    'PUT'=>[
                         'productID'=>[
                             'min'=>1,
                             'max'=>11
