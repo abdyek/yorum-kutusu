@@ -217,9 +217,8 @@ CREATE TABLE `comment_history` (
   `comment_id` int(11) NOT NULL,
   `admin_id` int(11) DEFAULT NULL,
   `comment_old_text` varchar(500) NOT NULL,
-  `comment_change_date_time` datetime NOT NULL,
-  `comment_request_date_time` datetime NOT NULL,
-  `history_id` int(11) NOT NULL
+  `comment_change_date_time` datetime NOT NULL DEFAULT current_timestamp(),
+  `history_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `comment_delete_history` (

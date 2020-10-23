@@ -82,18 +82,14 @@ class Comment extends Request {
     }
     private function updateComment() {
         $this->writeHistory();
-        $restricted = Database::existCheck('SELECT member_restricted FROM member WHERE member_id=?', [USERID])['member_restricted'];
-        if($restricted){
-            $query = Database::execute('INSERT INTO comment_request (member_id, product_id, comment_text) VALUES(?,?,?)', [USERID, $this->data['productID'], $this->data['commentText']]);
-            if(!$query) {
-                $this->responseWithMessage(5);
-                exit();
-            }
-        } else {
-
+        $query = Database::execute('UPDATE comment SET comment_text=?, comment_edited=1, comment_last_edit_date_time=?', [$this->data['commentText'], Other::getCurrentDateTime()]);
+        if(!$query) {
+            $this->responseWithMessage(5);
+            exit();
         }
+        $this->success();
     }
     private function writeHistory() {
-        //$query = Database::execute('INSERT INTO comment_history (comment_id, admin_id, ')
+        $query = Database::execute('INSERT INTO comment_history (comment_id, admin_id, comment_old_text) VALUES(?,?,?)', [$this->comment['comment_id'], $this->comment['admin_id'], $this->comment['comment_text']]);
     }
 }
