@@ -175,6 +175,13 @@ CREATE TABLE `member_password_change_history` (
   `change_date_time` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE `reset_password` (
+  `reset_password_id` int(11) NOT NULL,
+  `member_id` int(11) NOT NULL,
+  `recovery_code` varchar(30) NOT NULL,
+  `reset_password_date_time` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 
 CREATE TABLE `comment` (
   `comment_id` int(11) NOT NULL,
@@ -478,6 +485,10 @@ ALTER TABLE `member_password_change_history`
   ADD PRIMARY KEY (`member_password_change_history_id`),
   ADD KEY `member_id` (`member_id`);
 
+ALTER TABLE `reset_password`
+  ADD PRIMARY KEY (`reset_password_id`),
+  ADD KEY `member_id` (`member_id`);
+
 
 ALTER TABLE `comment`
   ADD PRIMARY KEY (`comment_id`),
@@ -656,6 +667,9 @@ ALTER TABLE `member_email_history`
 ALTER TABLE `member_password_change_history`
   MODIFY `member_password_change_history_id` int(11) NOT NULL AUTO_INCREMENT;
 
+ALTER TABLE `reset_password`
+  MODIFY `reset_password_id` int(11) NOT NULL AUTO_INCREMENT;
+
 
 ALTER TABLE `comment`
   MODIFY `comment_id` int(11) NOT NULL AUTO_INCREMENT;
@@ -791,6 +805,9 @@ ALTER TABLE `member_email_history`
 
 ALTER TABLE `member_password_change_history`
   ADD CONSTRAINT `member_password_change_history_fk_1` FOREIGN KEY (`member_id`) REFERENCES `member` (`member_id`);
+
+ALTER TABLE `reset_password`
+  ADD CONSTRAINT `reset_password_fk_1` FOREIGN KEY (`member_id`) REFERENCES `member` (`member_id`);
 
 ALTER TABLE `comment`
   ADD CONSTRAINT `comment_fk_1` FOREIGN KEY (`member_id`) REFERENCES `member` (`member_id`),

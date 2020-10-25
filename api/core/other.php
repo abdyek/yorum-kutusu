@@ -43,6 +43,17 @@ class Other {
     public function generateVerificationCode() {
         return random_int(100000,999999);
     }
+    public function generateRandomString($size) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $randomString = '';
+      
+        for ($i = 0; $i < $size; $i++) {
+            $index = rand(0, strlen($characters) - 1);
+            $randomString .= $characters[$index];
+        }
+      
+        return $randomString;
+    }
     public function sendMail(){
         // mail gönderme fonksiyonu buraya yazılacak
     }

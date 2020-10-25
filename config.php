@@ -381,9 +381,10 @@
                 ]
             ],
             'forgotMyPassword'=>[
-                'methods'=>['POST'],
+                'methods'=>['POST', 'PUT'],
                 'authorization'=>[
                     'POST'=>['guest'],
+                    'PUT'=>['guest']
                 ],
                 'keys'=>[
                     'POST'=>[
@@ -396,6 +397,24 @@
                             'max'=>60
                         ],
                     ],
+                    'PUT'=>[
+                        'eMail'=>[
+                            'min'=>1,
+                            'max'=>60
+                        ],
+                        'username'=>[
+                            'min'=>1,
+                            'max'=>60
+                        ],
+                        'recoveryCode'=>[
+                            'min'=>30,
+                            'max'=>30
+                        ],
+                        'newPassword'=>[
+                            'min'=>10,
+                            'max'=>40
+                        ]
+                    ]
                 ]
             ],
         ];
