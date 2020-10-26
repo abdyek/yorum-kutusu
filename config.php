@@ -177,9 +177,10 @@
                 ]
             ],
             'member'=>[
-                'methods'=>['GET'],
+                'methods'=>['GET', 'DELETE'],
                 'authorization'=>[
                     'GET'=>['member', 'admin'],
+                    'DELETE'=>['member','admin']
                 ],
                 'keys'=>[
                     'GET'=>[
@@ -198,6 +199,16 @@
                         'onlyComment'=>[
                             'min'=>0,
                             'max'=>1
+                        ]
+                    ],
+                    'DELETE'=>[
+                        'memberID'=>[
+                            'min'=>0,
+                            'max'=>11
+                        ],
+                        'password'=>[
+                            'min'=>0,
+                            'max'=>40
                         ]
                     ]
                 ]

@@ -312,10 +312,9 @@ CREATE TABLE `product_visible_history` (
 
 CREATE TABLE `member_delete_history` (
   `member_delete_history_id` int(11) NOT NULL,
-  `admin_id` int(11) NOT NULL,
+  `admin_id` int(11) DEFAULT NULL,
   `member_id` int(11) NOT NULL,
-  `member_slug` varchar(60) NOT NULL,
-  `member_delete_date_time` datetime NOT NULL
+  `member_delete_date_time` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `tag_visible_history` (

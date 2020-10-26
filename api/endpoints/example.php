@@ -3,8 +3,7 @@
     class Example extends Request {
         protected function get() {
             //$this->response($this->data);
-            $code = random_int(100000,999999);
-            echo $code;
+            echo Other::getHash('merhaba');
         }
         protected function post() {
             $this->response($this->data);

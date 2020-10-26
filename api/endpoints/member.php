@@ -78,4 +78,51 @@ class Member extends Request {
             'comments'=>$this->commentsInfo
         ]);
     }
+    protected function delete() {
+        if(WHO=='member') {
+            $this->ownerCheck();
+            if(!$this->ownerBool or !$this->passwordCheck()) {
+                $this->setHttpStatus(403);
+                exit();
+            }
+            Database::execute('UPDATE member SET member_deleted=1 WHERE member_id=?', [USERID]);
+            Database::execute('INSERT INTO member_delete_history (member_id) VALUES(?)', [USERID]);
+            // log out
+            if(isset($_COOKIE['jwt'])){
+                unset($_COOKIE['jwt']);
+                setcookie('jwt',null, -1);
+            }
+        } else if(WHO=='admin') {
+            $this->adminCheck();
+            if(!$this->admin or !$this->passwordCheck(true)) {
+                $this->setHttpStatus(403);
+                exit();
+            }
+            $this->memberCheck();
+            if(!$this->member) {
+                $this->setHttpStatus(404);
+                exit();
+            }
+            Database::execute('UPDATE member SET member_deleted=1 WHERE member_id=?', [$this->data['memberID']]);
+            Database::execute('INSERT INTO member_delete_history (admin_id, member_id) VALUES(?,?)', [USERID, $this->member['member_id']]);
+        }
+        $this->success();
+    }
+    private function passwordCheck($admin=false) {
+        if($admin) {
+            $sql = 'SELECT * FROM admin WHERE admin_id=?';
+            $rowName = 'admin_password_hash';
+        } else {
+            $sql = 'SELECT * FROM member WHERE member_id=?';
+            $rowName = 'member_password_hash';
+        }
+        $hash = Database::existCheck($sql, [USERID])[$rowName];
+        return password_verify($this->data['password'], $hash);
+    }
+    private function adminCheck() {
+        $this->admin = Database::existCheck('SELECT * FROM admin WHERE admin_id=? AND admin_inactive=0', [USERID]);
+    }
+    private function memberCheck() {
+        $this->member = Database::existCheck('SELECT * FROM member WHERE member_id=? AND member_deleted=0', [$this->data['memberID']]);
+    }
 }
