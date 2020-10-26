@@ -287,8 +287,8 @@ CREATE TABLE `admin` (
   `admin_username` varchar(60) NOT NULL,
   `admin_email` varchar(60) NOT NULL,
   `admin_password_hash` varchar(60) NOT NULL,
-  `admin_inactive` tinyint(1) NOT NULL,
-  `admin_root` tinyint(1) NOT NULL
+  `admin_inactive` tinyint(1) NOT NULL DEFAULT 0,
+  `admin_root` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `admin_making_history` (
@@ -296,8 +296,7 @@ CREATE TABLE `admin_making_history` (
   `maker_admin_id` int(11) NOT NULL,
   `admin_id` int(11) NOT NULL,
   `member_id` int(11) DEFAULT NULL,
-  `admin_making_date` datetime NOT NULL,
-  `make_or_not_make` tinyint(1) NOT NULL,
+  `admin_making_date_time` datetime NOT NULL DEFAULT current_timestamp(),
   `admin_note` varchar(200) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 

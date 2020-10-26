@@ -70,4 +70,7 @@ class Other {
         $string = self::toLower($string);
         return str_replace(array_merge(array_keys(Other::DICT_TO_ASCII), [' ']),array_merge(array_values(Other::DICT_TO_ASCII), ['-']), $string);
     }
+    public function emailPatternCheck($eMail) {
+        return filter_var($eMail, FILTER_VALIDATE_EMAIL);
+    }
 }

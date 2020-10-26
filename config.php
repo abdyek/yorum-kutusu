@@ -428,6 +428,32 @@
                     ]
                 ]
             ],
+            'admin'=>[
+                'methods'=>['POST'],
+                'authorization'=>[
+                    'POST'=>['admin']
+                ],
+                'keys'=>[
+                    'POST'=>[
+                        'memberID'=>[
+                            'min'=>0,
+                            'max'=>11
+                        ],
+                        'adminUsername'=>[
+                            'min'=>0,
+                            'max'=>60
+                        ],
+                        'adminEMail'=>[
+                            'min'=>0,
+                            'max'=>60
+                        ],
+                        'adminNote'=>[
+                            'min'=>0,
+                            'max'=>200
+                        ]
+                    ]
+                ]
+            ]
         ];
     }
 
