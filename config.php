@@ -163,15 +163,49 @@
                 ]
             ],
             'tag'=>[
-                'methods'=>['GET'],
+                'methods'=>['GET', 'POST', 'PUT'],
                 'authorization'=>[
                     'GET'=>['guest', 'member', 'admin'],
+                    'POST'=>['admin'],
+                    'PUT'=>['admin']
                 ],
                 'keys'=>[
                     'GET'=>[
                         'searchText'=>[
                             'min'=>0,
                             'max'=>100
+                        ]
+                    ],
+                    'POST'=>[
+                        'tagName'=>[
+                            'min'=>1,
+                            'max'=>25,
+                        ],
+                        'tagSlug'=>[
+                            'min'=>1,
+                            'max'=>25
+                        ],
+                        'passive'=>[
+                            'min'=>0,
+                            'max'=>1
+                        ]
+                    ],
+                    'PUT'=>[
+                        'tagID'=>[
+                            'min'=>1,
+                            'max'=>11
+                        ],
+                        'tagName'=>[
+                            'min'=>1,
+                            'max'=>25
+                        ],
+                        'tagSlug'=>[
+                            'min'=>1,
+                            'max'=>25
+                        ],
+                        'passive'=>[
+                            'min'=>0,
+                            'max'=>1
                         ]
                     ]
                 ]

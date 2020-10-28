@@ -80,11 +80,11 @@ CREATE TABLE `tag` (
   `created_for` int(11) DEFAULT NULL,
   `tag_name` varchar(25) NOT NULL,
   `tag_slug` varchar(25) NOT NULL,
-  `tag_visible` tinyint(1) NOT NULL,
-  `tag_create_date_time` datetime NOT NULL,
+  `tag_visible` tinyint(1) NOT NULL DEFAULT 1,
+  `tag_create_date_time` datetime NOT NULL DEFAULT current_timestamp(),
   `tag_passive` tinyint(1) NOT NULL,
-  `tag_product_count` int(11) NOT NULL,
-  `history_pointer` int(11) NOT NULL
+  `tag_product_count` int(11) NOT NULL DEFAULT 0,
+  `history_pointer` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `tag_with_product` (
@@ -138,9 +138,9 @@ CREATE TABLE `tag_change_history` (
   `admin_id` int(11) NOT NULL,
   `tag_old_name` varchar(25) NOT NULL,
   `tag_old_slug` varchar(25) NOT NULL,
-  `tag_change_date_time` datetime NOT NULL,
+  `tag_change_date_time` datetime NOT NULL DEFAULT current_timestamp(),
   `tag_passive` tinyint(1) NOT NULL,
-  `history_id` int(11) NOT NULL
+  `history_id` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `member` (
@@ -304,7 +304,7 @@ CREATE TABLE `product_visible_history` (
   `product_visible_history_id` int(11) NOT NULL,
   `product_id` int(11) NOT NULL,
   `admin_id` int(11) NOT NULL,
-  `product_visible_history_date_time` datetime NOT NULL DEFUALT current_timestamp(),
+  `product_visible_history_date_time` datetime NOT NULL DEFAULT current_timestamp(),
   `visible_or_invisible` tinyint(1) NOT NULL,
   `admin_note` varchar(200) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
