@@ -396,7 +396,7 @@
             'changePassword'=>[
                 'methods'=>['POST'],
                 'authorization'=>[
-                    'POST'=>['member'],
+                    'POST'=>['member', 'admin'],
                 ],
                 'keys'=>[
                     'POST'=>[
