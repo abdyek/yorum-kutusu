@@ -510,6 +510,28 @@
                     ]
                 ]
             ],
+            'tagVisible'=>[
+                'methods'=>['POST'],
+                'authorization'=>[
+                    'POST'=>['admin']
+                ],
+                'keys'=>[
+                    'POST'=>[
+                        'tagID'=>[
+                            'min'=>1,
+                            'max'=>11
+                        ],
+                        'tagVisible'=>[
+                            'min'=>0,
+                            'max'=>1
+                        ],
+                        'adminNote'=>[
+                            'min'=>0,
+                            'max'=>200
+                        ]
+                    ]
+                ]
+            ],
         ];
     }
 

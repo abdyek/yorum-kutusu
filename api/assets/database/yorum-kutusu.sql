@@ -320,7 +320,7 @@ CREATE TABLE `tag_visible_history` (
   `tag_visible_history_id` int(11) NOT NULL,
   `tag_id` int(11) NOT NULL,
   `admin_id` int(11) NOT NULL,
-  `tag_visible_history_date_time` datetime NOT NULL,
+  `tag_visible_history_date_time` datetime NOT NULL DEFAULT current_timestamp(),
   `visible_or_invisible` tinyint(1) NOT NULL,
   `admin_note` varchar(200) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
