@@ -6,6 +6,7 @@ abstract class Request {
         $this->checkAuthorization();
         $this->checkMethod();
         $this->setData();
+        $this->checkAdminActive();
         $this->checkKeys();
         //$this->checkKey($this->keys, $this->data);
         ($this->run)();
@@ -52,6 +53,16 @@ abstract class Request {
     private function checkMethod() {
         if(!in_array($_SERVER['REQUEST_METHOD'], $this->methods)) {
             http_response_code(405);
+            exit();
+        }
+    }
+    private function checkAdminActive() {
+        if(WHO=='admin' and Database::getRow('SELECT admin_inactive FROM admin WHERE admin_id=?', [USERID])['admin_inactive']) {
+            $this->setHttpStatus(403);
+            if(isset($_COOKIE['jwt'])){
+                unset($_COOKIE['jwt']);
+                setcookie('jwt',null, -1);
+            }
             exit();
         }
     }

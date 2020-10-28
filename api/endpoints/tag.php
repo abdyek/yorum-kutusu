@@ -1,6 +1,6 @@
 <?php
 
-class Tag extends Request {
+class Tag extends RequestForAdmin {
     protected function get() {
         if(strlen($this->data['searchText'])) {
             $this->search();
