@@ -304,7 +304,7 @@ CREATE TABLE `product_visible_history` (
   `product_visible_history_id` int(11) NOT NULL,
   `product_id` int(11) NOT NULL,
   `admin_id` int(11) NOT NULL,
-  `product_visible_history_date_time` datetime NOT NULL,
+  `product_visible_history_date_time` datetime NOT NULL DEFUALT current_timestamp(),
   `visible_or_invisible` tinyint(1) NOT NULL,
   `admin_note` varchar(200) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

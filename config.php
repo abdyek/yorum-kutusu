@@ -453,7 +453,29 @@
                         ]
                     ]
                 ]
-            ]
+            ],
+            'productVisible'=>[
+                'methods'=>['POST'],
+                'authorization'=>[
+                    'POST'=>['admin']
+                ],
+                'keys'=>[
+                    'POST'=>[
+                        'productID'=>[
+                            'min'=>1,
+                            'max'=>11
+                        ],
+                        'visible'=>[
+                            'min'=>0,
+                            'max'=>1
+                        ],
+                        'adminNote'=>[
+                            'min'=>0,
+                            'max'=>200
+                        ]
+                    ]
+                ]
+            ],
         ];
     }
 
