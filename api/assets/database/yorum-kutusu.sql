@@ -338,7 +338,7 @@ CREATE TABLE `member_restricted_history` (
   `member_restricted_history_id` int(11) NOT NULL,
   `admin_id` int(11) DEFAULT NULL,
   `member_id` int(11) NOT NULL,
-  `member_restricted_history_date_time` datetime NOT NULL,
+  `member_restricted_history_date_time` datetime NOT NULL DEFAULT current_timestamp(),
   `restricted` tinyint(1) NOT NULL,
   `admin_note` varchar(200) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

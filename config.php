@@ -211,10 +211,11 @@
                 ]
             ],
             'member'=>[
-                'methods'=>['GET', 'DELETE'],
+                'methods'=>['GET', 'DELETE', 'PATCH'],
                 'authorization'=>[
                     'GET'=>['member', 'admin'],
-                    'DELETE'=>['member','admin']
+                    'DELETE'=>['member','admin'],
+                    'PATCH'=>['admin']
                 ],
                 'keys'=>[
                     'GET'=>[
@@ -243,6 +244,20 @@
                         'password'=>[
                             'min'=>0,
                             'max'=>40
+                        ]
+                    ],
+                    'PATCH'=>[
+                        'memberID'=>[
+                            'min'=>1,
+                            'max'=>11
+                        ],
+                        'restrict'=>[
+                            'min'=>0,
+                            'max'=>1
+                        ],
+                        'adminNote'=>[
+                            'min'=>0,
+                            'max'=>200
                         ]
                     ]
                 ]

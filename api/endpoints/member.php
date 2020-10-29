@@ -125,4 +125,19 @@ class Member extends Request {
     private function memberCheck() {
         $this->member = Database::existCheck('SELECT * FROM member WHERE member_id=? AND member_deleted=0', [$this->data['memberID']]);
     }
+    protected function patch() {
+        $this->memberCheck();
+        $restrict = ($this->data['restrict'])?1:0;
+        if(!$this->member) {
+            $this->setHttpStatus(404);
+            exit();
+        }
+        if($this->member['member_restricted']==$restrict) {
+            $this->success();
+            exit();
+        }
+        Database::execute('INSERT INTO member_restricted_history (admin_id, member_id, restricted, admin_note) VALUES (?,?,?,?)', [USERID, $this->data['memberID'], $restrict, $this->data['adminNote']]);
+        Database::execute('UPDATE member SET member_restricted=? WHERE member_id=?', [$restrict, $this->data['memberID']]);
+        $this->success();
+    }
 }
