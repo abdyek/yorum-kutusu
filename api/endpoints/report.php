@@ -25,4 +25,20 @@ class Report extends Request {
         }
         $this->success();
     }
+    protected function get() {
+        $request = Database::getRows('SELECT * FROM comment_report_request crr INNER JOIN comment c ON crr.comment_id=c.comment_id INNER JOIN report_option ro ON crr.report_option_id = ro.report_option_id WHERE report_answered=0');
+        $this->reports = [];
+        foreach($request as $req) {
+            $this->reports[] = [
+                'memberID'=>$req['member_id'],
+                'commentID'=>$req['comment_id'],
+                'commentText'=>$req['comment_text'],
+                'reportOptionID'=>$req['report_option_id'],
+                'reportOption'=>$req['report_option_name'],
+                'reportText'=>$req['report_text'],
+                'reportDateTime'=>$req['report_date_time']
+            ];
+        }
+        $this->success(['reports'=>$this->reports]);
+    }
 }

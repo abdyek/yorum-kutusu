@@ -12,6 +12,7 @@ class EvaluateReport extends Request {
             $this->setHttpStatus(422);
             exit();
         }
+        Database::execute('UPDATE comment_report_request SET report_answered=1 WHERE comment_report_request_id=?', [$this->data['reportID']]);
         Database::execute('INSERT INTO comment_report_response (admin_id, comment_report_request_id, admin_note) VALUES(?,?,?)', [USERID, $this->data['reportID'], $this->data['responseMessage']]);
         $this->success();
     }

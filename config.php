@@ -323,9 +323,10 @@
                 ]
             ],
             'report'=>[
-                'methods'=>['POST'],
+                'methods'=>['POST', 'GET'],
                 'authorization'=>[
                     'POST'=>['member'],
+                    'GET'=>['admin'],
                 ],
                 'keys'=>[
                     'POST'=>[
@@ -341,7 +342,8 @@
                             'min'=>0,
                             'max'=>200
                         ]
-                    ]
+                    ],
+                    'GET'=>[]
                 ]
             ],
             'search'=>[
