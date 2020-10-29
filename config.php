@@ -532,6 +532,24 @@
                     ]
                 ]
             ],
+            'evaluateReport'=>[
+                'methods'=>['POST'],
+                'authorization'=>[
+                    'POST'=>['admin']
+                ],
+                'keys'=>[
+                    'POST'=>[
+                        'reportID'=>[
+                            'min'=>1,
+                            'max'=>11
+                        ],
+                        'responseMessage'=>[
+                            'min'=>0,
+                            'max'=>200
+                        ]
+                    ]
+                ]
+            ],
         ];
     }
 

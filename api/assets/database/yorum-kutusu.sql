@@ -394,9 +394,9 @@ CREATE TABLE `comment_report_response` (
   `comment_report_response_id` int(11) NOT NULL,
   `admin_id` int(11) NOT NULL,
   `comment_report_request_id` int(11) NOT NULL,
-  `reponse_date_time` datetime NOT NULL,
-  `report_marked_as_read` tinyint(1) NOT NULL,
-  `report_marked_as_read_date_time` datetime NOT NULL,
+  `reponse_date_time` datetime NOT NULL DEFAULT current_timestamp(),
+  `report_marked_as_read` tinyint(1) NOT NULL DEFAULT 0,
+  `report_marked_as_read_date_time` datetime DEFAULT NULL,
   `admin_note` varchar(200) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
