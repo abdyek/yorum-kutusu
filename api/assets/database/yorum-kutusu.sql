@@ -215,7 +215,7 @@ CREATE TABLE `comment_request_response` (
   `comment_request_id` int(11) NOT NULL,
   `admin_id` int(11) DEFAULT NULL,
   `allowed_or_denied` tinyint(1) NOT NULL,
-  `response_date_time` datetime NOT NULL,
+  `response_date_time` datetime NOT NULL DEFAULT current_timestamp(),
   `admin_note` varchar(200) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 

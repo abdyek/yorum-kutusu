@@ -550,6 +550,31 @@
                     ]
                 ]
             ],
+            'commentRequest'=>[
+                'methods'=>['GET', 'POST'],
+                'authorization'=>[
+                    'GET'=>['admin'],
+                    'POST'=>['admin']
+                ],
+                'keys'=>[
+                    'GET'=>[
+                    ],
+                    'POST'=>[
+                        'commentRequestID'=>[
+                            'min'=>1,
+                            'max'=>11
+                        ],
+                        'allow'=>[
+                            'min'=>0,
+                            'max'=>1
+                        ],
+                        'adminNote'=>[
+                            'min'=>0,
+                            'max'=>200
+                        ]
+                    ]
+                ]
+            ],
         ];
     }
 
