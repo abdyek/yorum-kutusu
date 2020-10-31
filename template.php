@@ -55,3 +55,4 @@
 
 </body>
 </html>
+<?php // sayfa yükleme sayıları buradan artırılacak ancak api içerisindekine erişimi buradan erişim biraz sıkıntı çıkaracağı için bu kısmı şimdilik bırakıyorum ?>

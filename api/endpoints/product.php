@@ -13,6 +13,7 @@ class Product extends Request {
         $this->getCommentsWithRating();
         $this->updateLastSeen();
         $this->mergeAllInfo();
+        $this->increaseProductFetchCount();
     }
     private function getProductInfo() {
         $product = Database::getRow('SELECT * FROM product WHERE product_id=? AND product_visible=1', [$this->data['productID']]);
@@ -94,6 +95,24 @@ class Product extends Request {
             $this->success(
                 ['comments'=>$this->commentsInfo]
             );
+        }
+    }
+    private function increaseProductFetchCount() {
+        // artırım buradan gerçekleştirilecek
+        if(WHO=='member') {
+            $temp = Database::existCheck('SELECT product_fetch_temp_id FROM product_fetch_temp WHERE product_id=? AND member_id=?', [$this->data['productID'], USERID]);
+            if($temp) {
+                Database::execute('UPDATE product_fetch_temp SET fetch_count=fetch_count+1 WHERE product_fetch_temp_id=?', [$temp['product_fetch_temp_id']]);
+            } else {
+                Database::execute('INSERT INTO product_fetch_temp (product_id, member_id, fetch_count) VALUES (?,?,1)',[$this->data['productID'], USERID]);
+            }
+        } else if(WHO=='guest') {
+            $temp = Database::existCheck('SELECT product_fetch_temp_id FROM product_fetch_temp WHERE product_id=? AND ip_address=?', [$this->data['productID'], $_SERVER['REMOTE_ADDR']]);
+            if($temp) {
+                Database::execute('UPDATE product_fetch_temp SET fetch_count=fetch_count+1 WHERE product_fetch_temp_id=?', [$temp['product_fetch_temp_id']]);
+            } else {
+                Database::execute('INSERT INTO product_fetch_temp (product_id, ip_address, fetch_count) VALUES (?,?,1)',[$this->data['productID'], $_SERVER['REMOTE_ADDR']]);
+            }
         }
     }
     // POST  ürünü hem düzenleme hem de yeni ürün gönderme isteği

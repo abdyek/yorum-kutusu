@@ -377,7 +377,7 @@ CREATE TABLE `product_fetch_temp` (
   `product_id` int(11) NOT NULL,
   `member_id` int(11) DEFAULT NULL,
   `fetch_count` int(11) NOT NULL,
-  `ip_address` varchar(15) NOT NULL
+  `ip_address` varchar(15) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
