@@ -48,7 +48,7 @@ class Product extends Request {
         $this->commentsInfo = [];
         foreach($comments as $com) {
             $rating = Database::getRows('SELECT t.tag_slug, t.tag_name, tr.tag_rating_value FROM tag_rating tr INNER JOIN tag_with_product twp ON twp.tag_with_product_id=tr.tag_with_product_id INNER JOIN tag t ON t.tag_id=twp.tag_id WHERE tr.member_id=? AND twp.product_id=?', [$com['member_id'], $this->data['productID']]);
-            $liked = (USERID!=null and Database::getRow('SELECT * FROM comment_like WHERE member_id=? and comment_id=?', [USERID, $com['comment_id']]))?true:false;
+            $liked = (defined('USERID') and Database::getRow('SELECT * FROM comment_like WHERE member_id=? and comment_id=?', [USERID, $com['comment_id']]))?true:false;
             $ratingInfo = [];
             foreach($rating as $rate) {
                 $ratingInfo[] = [
@@ -68,7 +68,7 @@ class Product extends Request {
                 'commentLastEditDateTime'=>$com['comment_last_edit_date_time'],
                 'commentLikeCount'=>$com['comment_like_count'],
                 'liked'=>$liked,
-                'owner'=>(USERID!=null and USERID==$com['member_id'])?true:false,
+                'owner'=>(defined('USERID') and USERID==$com['member_id'])?true:false,
                 'rating'=>[
                     $ratingInfo
                 ]
@@ -76,7 +76,7 @@ class Product extends Request {
         }
     }
     private function updateLastSeen() {
-        if(USERID and $this->data['sortBy']=='time'){
+        if(defined('USERID') and $this->data['sortBy']=='time'){
             // şuan için sadece kronolojik sırada okundu olarak işaretliyorum, diğer türlü yatlıyor
             $lashComment = end($this->commentsInfo);
             $check = (Database::getRow('SELECT last_seen_date_time FROM product_follow WHERE product_id=? AND member_id=? AND ?>last_seen_date_time', [$this->data['productID'], USERID, $lashComment['commentCreateDateTime']]))?true:false;

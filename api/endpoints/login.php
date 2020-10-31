@@ -4,7 +4,7 @@ use Ahc\Jwt\JWT;
 
 class Login extends Request {
     protected function post() {
-        $this->checkAdmin();
+        //$this->checkAdmin();
         $this->checkMember();
         http_response_code(401);
     }

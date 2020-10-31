@@ -8,7 +8,6 @@ abstract class Request {
         $this->setData();
         $this->checkAdminActive();
         $this->checkKeys();
-        //$this->checkKey($this->keys, $this->data);
         ($this->run)();
     }
     private function setData() {

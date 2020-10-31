@@ -86,6 +86,16 @@
                     ]
                 ]
             ],
+            'loginAsAdmin'=>[
+                'methods'=>['POST'],
+                'authorization'=>[
+                    'POST'=>['guest']
+                ],
+                'keys'=>[
+                    'POST'=>[
+                    ]
+                ]
+            ],
             'logout'=>[
                 'methods'=>['POST'],
                 'authorization'=>[
