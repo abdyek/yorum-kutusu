@@ -480,9 +480,10 @@
                 ]
             ],
             'admin'=>[
-                'methods'=>['POST'],
+                'methods'=>['POST', 'PATCH'],
                 'authorization'=>[
-                    'POST'=>['admin']
+                    'POST'=>['admin'],
+                    'PATCH'=>['admin']
                 ],
                 'keys'=>[
                     'POST'=>[
@@ -497,6 +498,20 @@
                         'adminEMail'=>[
                             'min'=>0,
                             'max'=>60
+                        ],
+                        'adminNote'=>[
+                            'min'=>0,
+                            'max'=>200
+                        ]
+                    ],
+                    'PATCH'=>[
+                        'adminID'=>[
+                            'min'=>1,
+                            'max'=>11
+                        ],
+                        'active'=>[
+                            'min'=>0,
+                            'max'=>1
                         ],
                         'adminNote'=>[
                             'min'=>0,

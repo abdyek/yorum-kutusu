@@ -329,8 +329,8 @@ CREATE TABLE `admin_inactive_history` (
   `admin_inactive_history_id` int(11) NOT NULL,
   `subject_admin_id` int(11) NOT NULL,
   `admin_id` int(11) NOT NULL,
-  `admin_inactive_date_time` datetime NOT NULL,
-  `active_or_inactive` tinyint(1) NOT NULL,
+  `admin_inactive_date_time` datetime NOT NULL DEFAULT current_timestamp(),
+  `active` tinyint(1) NOT NULL,
   `admin_note` varchar(200) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 

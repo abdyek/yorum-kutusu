@@ -62,4 +62,24 @@ class Admin extends Request {
         $arr['historyArg'][] = Database::getRow('SELECT admin_id FROM admin WHERE admin_username=?',[$arr['adminUsername']])['admin_id'];
         Database::execute($arr['historySql'], $arr['historyArg']);
     }
+    protected function patch() {
+        if(!$this->checkRoot()) {
+            $this->setHttpStatus(403);
+            exit();
+        }
+        $admin = Database::existCheck('SELECT admin_id, admin_inactive FROM admin WHERE admin_id=? AND admin_root=0', [$this->data['adminID']]);
+        if(!$admin) {
+            $this->setHttpStatus(404);
+            exit();
+        }
+        $inactive = ($this->data['active'])?0:1;
+        $active = ($inactive)?0:1;
+        if($admin['admin_inactive']==$inactive) {
+            $this->success();
+            exit();
+        }
+        Database::execute('UPDATE admin SET admin_inactive=? WHERE admin_id=?', [$inactive, $this->data['adminID']]);
+        Database::execute('INSERT INTO admin_inactive_history (subject_admin_id, admin_id, active, admin_note) VALUES(?,?,?,?)', [USERID, $this->data['adminID'], $active, $this->data['adminNote']]);
+        $this->success();
+    }
 }
