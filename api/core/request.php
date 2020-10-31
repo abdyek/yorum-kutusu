@@ -3,8 +3,8 @@
 abstract class Request {
     public function __construct() {
         $this->setConfig();
-        $this->checkAuthorization();
         $this->checkMethod();
+        $this->checkAuthorization();
         $this->setData();
         $this->checkAdminActive();
         $this->checkKeys();
