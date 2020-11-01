@@ -49,6 +49,7 @@
             4=>'Geçersiz kullanıcı adı',
             5=>'Beklenmedik veri tabanı hatası',
             6=>'success',
+            7=>'Bu isim ya da slug\'a sabip bir ürün zaten var! Bu istek onaylansaydı çakışma olurdu.'
         ];
         const ENDPOINT = [
             'example'=>[
@@ -615,6 +616,28 @@
                             'max'=>11
                         ],
                         'allow'=>[
+                            'min'=>0,
+                            'max'=>1
+                        ],
+                        'adminNote'=>[
+                            'min'=>0,
+                            'max'=>200
+                        ]
+                    ]
+                ]
+            ],
+            'productApproval'=>[
+                'methods'=>['POST'],
+                'authorization'=>[
+                    'POST'=>['admin']
+                ],
+                'keys'=>[
+                    'POST'=>[
+                        'productRequestID'=>[
+                            'min'=>1,
+                            'max'=>11
+                        ],
+                        'accept'=>[
                             'min'=>0,
                             'max'=>1
                         ],

@@ -33,11 +33,11 @@ CREATE TABLE `product` (
   `member_id` int(11) DEFAULT NULL,
   `product_name` varchar(60) NOT NULL,
   `product_slug` varchar(60) NOT NULL,
-  `product_visible` tinyint(1) NOT NULL,
+  `product_visible` tinyint(1) NOT NULL DEFAULT 1,
   `product_created_by_member` tinyint(1) NOT NULL,
-  `product_create_date_time` datetime NOT NULL,
-  `product_follow_count` int(11) NOT NULL,
-  `history_pointer` int(11) NOT NULL
+  `product_create_date_time` datetime NOT NULL DEFAULT current_timestamp(),
+  `product_follow_count` int(11) NOT NULL DEFAULT 0,
+  `history_pointer` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `product_history` (
@@ -47,7 +47,7 @@ CREATE TABLE `product_history` (
   `member_id` int(11) DEFAULT NULL,
   `product_old_name` varchar(60) NOT NULL,
   `product_old_slug` varchar(60) NOT NULL,
-  `product_change_date_time` datetime NOT NULL,
+  `product_change_date_time` datetime NOT NULL DEFAULT current_timestamp(),
   `product_request_date_time` datetime NOT NULL,
   `history_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -68,8 +68,8 @@ CREATE TABLE `product_request_response` (
   `product_request_response_id` int(11) NOT NULL,
   `product_request_id` int(11) DEFAULT NULL,
   `admin_id` int(11) NOT NULL,
-  `allowed_or_denied` tinyint(1) NOT NULL,
-  `response_date_time` datetime NOT NULL,
+  `accepted` tinyint(1) NOT NULL,
+  `response_date_time` datetime NOT NULL DEFAULT current_timestamp(),
   `admin_note` varchar(200) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
