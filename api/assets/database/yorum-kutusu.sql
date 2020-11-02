@@ -83,8 +83,7 @@ CREATE TABLE `tag` (
   `tag_visible` tinyint(1) NOT NULL DEFAULT 1,
   `tag_create_date_time` datetime NOT NULL DEFAULT current_timestamp(),
   `tag_passive` tinyint(1) NOT NULL,
-  `tag_product_count` int(11) NOT NULL DEFAULT 0,
-  `history_pointer` int(11) NOT NULL DEFAULT 0
+  `tag_product_count` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `tag_with_product` (
@@ -93,10 +92,9 @@ CREATE TABLE `tag_with_product` (
   `product_id` int(11) NOT NULL,
   `admin_id` int(11) NOT NULL,
   `member_id` int(11) DEFAULT NULL,
-  `tag_with_product_visible` tinyint(1) NOT NULL,
-  `tag_with_product_create_date_time` datetime NOT NULL,
-  `tag_avarage_rating` int(2) DEFAULT NULL,
-  `tag_history_pointer` int(11) NOT NULL
+  `tag_with_product_visible` tinyint(1) NOT NULL DEFAULT 1,
+  `tag_with_product_create_date_time` datetime NOT NULL DEFAULT current_timestamp(),
+  `tag_avarage_rating` int(2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `tag_with_product_history` (

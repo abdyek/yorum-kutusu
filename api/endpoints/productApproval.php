@@ -16,6 +16,8 @@ class ProductApproval extends Request {
         }
         $this->insertProductRequestResponse();
         $this->markAsAnswered();
+        // tag_with_product işlemleri
+        $this->manageTagWithProduct();
         $this->success();
     }
     private function update() {
@@ -49,11 +51,31 @@ class ProductApproval extends Request {
             $this->productRequest['product_name'],
             $this->productRequest['product_slug']
         ]);
+        $this->newProductID = Database::getRow('SELECT product_id FROM product WHERE product_slug=?', [$this->productRequest['product_slug']])['product_id'];
+    }
+    private function insertProductRequestResponse() {
+        Database::execute('INSERT INTO product_request_response (product_request_id, admin_id, accepted, admin_note) VALUES(?,?,?,?)', [ $this->productRequest['product_request_id'], USERID, ($this->data['accept'])?1:0, $this->data['adminNote']]);
     }
     private function markAsAnswered() {
         Database::execute('UPDATE product_request SET product_request_answered=1, admin_note=? WHERE product_request_id=?', [$this->data['adminNote'], $this->productRequest['product_request_id']]);
     }
-    private function insertProductRequestResponse() {
-        Database::execute('INSERT INTO product_request_response (product_request_id, admin_id, accepted, admin_note) VALUES(?,?,?,?)', [ $this->productRequest['product_request_id'], USERID, ($this->data['accept'])?1:0, $this->data['adminNote']]);
+    private function manageTagWithProduct() {
+        $raw = Database::getRows('SELECT tag_with_product_request_id, tag_id, product_id, member_id FROM tag_with_product_request WHERE product_request_id=?', [$this->productRequest['product_request_id']]);
+        $this->twpRequestIDs = [];
+        foreach($raw as $row) {
+            if($row['tag_id'] and Database::existCheck('SELECT tag_id FROM tag WHERE tag_id=? and tag_visible=1', [$row['tag_id']])) {
+                Database::execute('INSERT INTO tag_with_product (tag_id, product_id, admin_id, member_id) VALUES(?,?,?,?)', [
+                    $row['tag_id'],
+                    ($this->newProductID)?$this->newProductID:$row['product_id'],
+                    USERID,
+                    $row['member_id']
+                ]);
+            } else {
+                //
+            }
+            $this->twpRequestIDs[] = $row['tag_with_product_request_id'];
+        };
+        print_r($this->twpRequestIDs);
+        exit();
     }
 }
