@@ -1,6 +1,5 @@
 <?php
 
-
     date_default_timezone_set('Europe/Istanbul');
     class Config {
         const DBNAME = 'yorum-kutusu';
@@ -628,9 +627,10 @@
                 ]
             ],
             'productApproval'=>[
-                'methods'=>['POST'],
+                'methods'=>['POST', 'GET'],
                 'authorization'=>[
-                    'POST'=>['admin']
+                    'POST'=>['admin'],
+                    'GET'=>['admin']
                 ],
                 'keys'=>[
                     'POST'=>[
@@ -646,6 +646,8 @@
                             'min'=>0,
                             'max'=>200
                         ]
+                    ],
+                    'GET'=>[
                     ]
                 ]
             ],

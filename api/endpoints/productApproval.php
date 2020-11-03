@@ -1,5 +1,4 @@
 <?php
-
 class ProductApproval extends Request {
     protected function post() {
         $this->productRequest = Database::existCheck('SELECT * FROM product_request WHERE product_request_id=? AND product_request_answered=0', [$this->data['productRequestID']]);
@@ -77,5 +76,67 @@ class ProductApproval extends Request {
         };
         print_r($this->twpRequestIDs);
         exit();
+    }
+    protected function get() {
+        $this->prepareRequest();
+        $this->success(['productRequest'=> $this->reqArr]);
+    }
+    private function prepareRequest() {
+        $this->request = Database::getRows('SELECT * FROM product_request pr INNER JOIN member m ON m.member_id=pr.member_id WHERE pr.product_request_answered=0');
+        $this->reqArr = [];
+        foreach($this->request as $req) {
+            $twp = $this->prepareTWPRequest($req['product_request_id']);
+            $this->reqArr[] = [
+                'product'=>$this->prepareProduct($req['product_id']),
+                'memberID'=>$req['member_id'],
+                'memberUsername'=>$req['member_username'],
+                'memberSlug'=>$req['member_slug'],
+                'productRequestID'=>$req['product_request_id'],
+                'productRequestDateTime'=>$req['product_request_date_time'],
+                'productName'=>$req['product_name'],
+                'productSlug'=>$req['product_slug'],
+                'tagWithProduct'=>$twp
+            ];
+        }
+    }
+    private function prepareTWPRequest($productRequestID) {
+        $twpR = Database::getRows('SELECT * FROM tag_with_product_request WHERE tag_with_product_request_answered=0 AND product_request_id=?', [$productRequestID]);
+        $twpArr = [];
+        foreach($twpR as $r) {
+            $tag = $this->prepareTag($r['tag_id']);
+            $twpArr[] = [
+                'twpRequestID'=>$r['tag_with_product_request_id'],
+                'tag'=>$this->prepareTag($r['tag_id']),
+                'tagName'=>$r['tag_name'],
+                'tagSlug'=>$r['tag_slug']
+            ];
+        }
+        return $twpArr;
+    }
+    private function prepareProduct($productID) {
+        $p = Database::existCheck('SELECT * FROM product WHERE product_id=?', [$productID]);
+        if(!$p) {
+            return null;
+        }
+        return [
+            'productID'=>$p['product_id'],
+            'productName'=>$p['product_name'],
+            'productSlug'=>$p['product_slug'],
+            'productVisible'=>$p['product_visible']
+        ];
+    }
+    private function prepareTag($tagID) {
+        $tag = Database::existCheck('SELECT * FROM tag WHERE tag_id=?', [$tagID]);
+        if(!$tag) {
+            return null;
+        }
+        return [
+            'tagID'=>$tag['tag_id'],
+            'tagName'=>$tag['tag_name'],
+            'tagSlug'=>$tag['tag_slug'],
+            'tagVisible'=>$tag['tag_visible'],
+            'tagPassive'=>$tag['tag_passive'],
+            'tagProductCount'=>$tag['tag_product_count']
+        ];
     }
 }
