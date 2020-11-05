@@ -651,6 +651,28 @@
                     ]
                 ]
             ],
+            'productCRUD'=>[
+                'methods'=>['POST'],
+                'authorization'=>[
+                    'POST'=>['admin']
+                ],
+                'keys'=>[
+                    'POST'=>[
+                        'productName'=>[
+                            'min'=>0,
+                            'max'=>60
+                        ],
+                        'productSlug'=>[
+                            'min'=>0,
+                            'max'=>60
+                        ],
+                        'tagIDs'=>[
+                            'min'=>0,
+                            'max'=>10
+                        ]
+                    ]
+                ]
+            ]
         ];
     }
 

@@ -34,7 +34,7 @@ CREATE TABLE `product` (
   `product_name` varchar(60) NOT NULL,
   `product_slug` varchar(60) NOT NULL,
   `product_visible` tinyint(1) NOT NULL DEFAULT 1,
-  `product_created_by_member` tinyint(1) NOT NULL,
+  `product_created_by_member` tinyint(1) NOT NULL DEFAULT 0,
   `product_create_date_time` datetime NOT NULL DEFAULT current_timestamp(),
   `product_follow_count` int(11) NOT NULL DEFAULT 0,
   `history_pointer` int(11) NOT NULL DEFAULT 1
