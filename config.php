@@ -652,12 +652,31 @@
                 ]
             ],
             'productCRUD'=>[
-                'methods'=>['POST'],
+                'methods'=>['POST', 'PUT'],
                 'authorization'=>[
-                    'POST'=>['admin']
+                    'POST'=>['admin'],
+                    'PUT'=>['admin']
                 ],
                 'keys'=>[
                     'POST'=>[
+                        'productName'=>[
+                            'min'=>0,
+                            'max'=>60
+                        ],
+                        'productSlug'=>[
+                            'min'=>0,
+                            'max'=>60
+                        ],
+                        'tagIDs'=>[
+                            'min'=>0,
+                            'max'=>10
+                        ]
+                    ],
+                    'PUT'=>[
+                        'productID'=>[
+                            'min'=>0,
+                            'max'=>11
+                        ],
                         'productName'=>[
                             'min'=>0,
                             'max'=>60

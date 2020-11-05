@@ -48,7 +48,7 @@ CREATE TABLE `product_history` (
   `product_old_name` varchar(60) NOT NULL,
   `product_old_slug` varchar(60) NOT NULL,
   `product_change_date_time` datetime NOT NULL DEFAULT current_timestamp(),
-  `product_request_date_time` datetime NOT NULL,
+  `product_request_date_time` datetime DEFAULT NULL,
   `history_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -103,7 +103,7 @@ CREATE TABLE `tag_with_product_history` (
   `product_id` int(11) NOT NULL,
   `admin_id` int(11) NOT NULL,
   `member_id` int(11) DEFAULT NULL,
-  `tag_with_product_change_date_time` datetime NOT NULL,
+  `tag_with_product_change_date_time` datetime NOT NULL DEFAULT current_timestamp(),
   `history_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
