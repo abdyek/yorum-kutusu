@@ -2,7 +2,7 @@
 
 class Product extends Request {
     protected function get() {
-        if(!Database::existCheck('SELECT * FROM product WHERE product_id=? AND product_visible=1', [$this->data['productID']])) {
+        if(!Database::existCheck('SELECT * FROM product WHERE product_id=? AND product_deleted=0', [$this->data['productID']])) {
             $this->setHttpStatus(404);
             exit();
         }
@@ -16,7 +16,7 @@ class Product extends Request {
         $this->increaseProductFetchCount();
     }
     private function getProductInfo() {
-        $product = Database::getRow('SELECT * FROM product WHERE product_id=? AND product_visible=1', [$this->data['productID']]);
+        $product = Database::getRow('SELECT * FROM product WHERE product_id=? AND product_deleted=0', [$this->data['productID']]);
         $this->productInfo = [
             'id'=>$product['product_id'],
             'title'=>$product['product_name'],
@@ -112,64 +112,6 @@ class Product extends Request {
                 Database::execute('UPDATE product_fetch_temp SET fetch_count=fetch_count+1 WHERE product_fetch_temp_id=?', [$temp['product_fetch_temp_id']]);
             } else {
                 Database::execute('INSERT INTO product_fetch_temp (product_id, ip_address, fetch_count) VALUES (?,?,1)',[$this->data['productID'], $_SERVER['REMOTE_ADDR']]);
-            }
-        }
-    }
-    // POST  ürünü hem düzenleme hem de yeni ürün gönderme isteği
-    protected function post() {
-        if(!$this->tagsPatternCheck()) {
-            $this->setHttpStatus(400);
-            exit();
-        }
-        //$this->productSlug = Other::generateSlug($this->data['productName']);
-        $this->requestPointer = Database::getRow('SELECT request_pointer FROM member WHERE member_id=?; UPDATE member SET request_pointer=request_pointer+1 WHERE member_id=?', [USERID, USERID])['request_pointer'];
-        $this->updateOrCreate();
-    }
-    private function tagsPatternCheck() {
-        foreach($this->data['tags'] as $tag) {
-            if(isset($tag['name']) and isset($tag['slug']) and is_string($tag['name']) and is_string($tag['slug'])){
-                continue;
-            }
-            return false;
-        }
-        return true;
-    }
-    private function updateOrCreate() {
-        if(Database::existCheck('SELECT product_id FROM product WHERE product_id=? AND product_visible=1', [$this->data['productID']])){
-            $this->updateProduct();
-            $this->manageTagsForUpdate();
-            $this->success();
-        } else {
-            $this->createNewProduct();
-            $this->manageTagsForCreate();
-            $this->success();
-        }
-    }
-    private function updateProduct() {
-        Database::execute('INSERT INTO product_request (product_id, member_id, product_name, product_slug, request_id) VALUES (?,?,?,?,?)', [$this->data['productID'],USERID, $this->data['productName'], $this->data['productSlug'], $this->requestPointer]);
-        $this->productRequestID = Database::getRow('SELECT product_request_id FROM product_request WHERE member_id=? AND request_id=?', [USERID, $this->requestPointer])['product_request_id'];
-    }
-    private function createNewProduct() {
-        Database::execute('INSERT INTO product_request (member_id, product_name, product_slug, request_id) VALUES (?,?,?,?)', [USERID, $this->data['productName'], $this->data['productSlug'], $this->requestPointer]);
-        $this->productRequestID = Database::getRow('SELECT product_request_id FROM product_request WHERE member_id=? AND request_id=?', [USERID, $this->requestPointer])['product_request_id'];
-    }
-    private function manageTagsForCreate() {
-        foreach($this->data['tags'] as $tag) {
-            $availableTag = Database::existCheck('SELECT tag_id FROM tag WHERE tag_name=? AND tag_slug=? AND tag_visible=1', [$tag['name'], $tag['slug']]);
-            if($availableTag) {
-                Database::execute('INSERT INTO tag_with_product_request (member_id, product_request_id, tag_id, request_id) VALUES(?,?,?,?)', [USERID, $this->productRequestID, $availableTag['tag_id'], $this->requestPointer]);
-            } else {
-                Database::execute('INSERT INTO tag_with_product_request (member_id, product_request_id, tag_name, tag_slug, request_id) VALUES(?,?,?,?,?)', [USERID, $this->productRequestID, $tag['name'], $tag['slug'], $this->requestPointer]);
-            }
-        }
-    }
-    private function manageTagsForUpdate() {
-        foreach($this->data['tags'] as $tag) {
-            $availableTag = Database::existCheck('SELECT tag_id FROM tag WHERE tag_name=? AND tag_slug=? AND tag_visible=1', [$tag['name'], $tag['slug']]);
-            if($availableTag) {
-                Database::execute('INSERT INTO tag_with_product_request (member_id, product_request_id, product_id, tag_id, request_id) VALUES(?,?,?,?,?)', [USERID, $this->productRequestID, $this->data['productID'], $availableTag['tag_id'], $this->requestPointer]);
-            } else {
-                Database::execute('INSERT INTO tag_with_product_request (member_id, product_request_id, product_id, tag_name, tag_slug, request_id) VALUES(?,?,?,?,?,?)', [USERID, $this->productRequestID, $this->data['productID'], $tag['name'], $tag['slug'], $this->requestPointer]);
             }
         }
     }

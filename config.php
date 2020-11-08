@@ -138,10 +138,9 @@
                 ]
             ],
             'product'=>[
-                'methods'=>['GET', 'POST'],
+                'methods'=>['GET'],
                 'authorization'=>[
-                    'GET'=>['guest', 'member', 'admin'],
-                    'POST'=>['member']
+                    'GET'=>['guest', 'member', 'admin']
                 ],
                 'keys'=>[
                     'GET'=>[
@@ -160,24 +159,6 @@
                         'onlyComment'=>[
                             'min'=>0,
                             'max'=>1
-                        ]
-                    ],
-                    'POST'=>[
-                        'productID'=>[
-                            'min'=>0,
-                            'max'=>11
-                        ],
-                        'productName'=>[
-                            'min'=>1,
-                            'max'=>60
-                        ],
-                        'productSlug'=>[
-                            'min'=>1,
-                            'max'=>60
-                        ],
-                        'tags'=>[
-                            'min'=>0,
-                            'max'=>10
                         ]
                     ]
                 ]
