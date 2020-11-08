@@ -6,22 +6,83 @@ class ProductApproval extends Request {
             $this->setHttpStatus(404);
             exit();
         }
+        $this->twpRequest = Database::getRows('SELECT * FROM tag_with_product_request WHERE product_request_id=?', [$this->productRequest['product_request_id']]);
+        $this->warning = [];
+        $this->prepareTags();
+        $this->manageProduct();
         if($this->data['accept']) {
-            if($this->productRequest['product_id']) {
+            if($this->productID) {
                 $this->update();
             } else {
                 $this->newProduct();
             }
+        } else {
+            // onaylamama işlemleri
+            $this->success();
+            exit();
         }
         $this->insertProductRequestResponse();
         $this->markAsAnswered();
-        // tag_with_product işlemleri
         $this->manageTagWithProduct();
+        $this->markAsAnsweredTWP();
+        $this->insertTWPRequestResponse();
         $this->success();
     }
+    private function prepareTags() {
+        $this->tags = [];
+        foreach($this->twpRequest as $t) {
+            if($t['tag_id']) {
+                $tag = Database::existCheck('SELECT * FROM tag WHERE tag_id=?', [$t['tag_id']]);
+                if(!$tag) {
+                    $this->setHttpStatus(404);
+                    $this->addWarning('not found', 'böyle bir etiket yok');
+                } elseif($tag['tag_visible']==0) {
+                    $this->addWarning('hidden tag', 'bu etiket gizli');
+                } else {
+                    $this->tags[] = [
+                        'tagID'=>$tag['tag_id'],
+                    ];
+                }
+            }
+            if($t['tag_name'] or $t['tag_slug']) {
+                $tag = Database::existCheck('SELECT * FROM tag WHERE tag_name=? or tag_slug=?', [$t['tag_name'], $t['tag_slug']]);
+                if(!$tag) {
+                    $this->tags[] = [
+                        'newTag'=>[
+                            'tagName'=>$t['tag_name'],
+                            'tagSlug'=>$t['tag_slug']
+                        ]
+                    ];
+                } elseif($tag['tag_name']!=$t['tag_name'] or $tag['tag_slug']!=$t['tag_slug']) {
+                    $this->addWarning('incompatible', 'istekteki etiket isim-slug veri tabanındaki isim-slug ile uyumsuz ya da çakışma var');
+                }
+            }
+        }
+        if(count($this->warning)) {
+            $this->setHttpStatus(422);
+            $this->responseWithMessage(9, ['warning'=>$this->warning]);
+            exit();
+        }
+    }
+    private function addWarning($title, $message, $other=null) {
+        $this->warning[] = [
+            'title'=>$title,
+            'message'=>$message,
+            'other'=>$other
+        ];
+    }
+    private function manageProduct() {
+        if($this->productRequest['product_id']) {
+            $this->productID = $this->productRequest['product_id'];
+        } else {
+            $availableProduct = Database::existCheck('SELECT * FROM product WHERE product_name=? AND product_slug=?', [$this->productRequest['product_name'], $this->productRequest['product_slug']]);
+            $this->productID = ($availableProduct)?$availableProduct['product_id']:null;
+        }
+    }
     private function update() {
-        $product = Database::getRow('SELECT product_id, admin_id, member_id, product_name, product_slug, history_pointer FROM product WHERE product_id=?', [$this->productRequest['product_id']]);
-        Database::execute('INSERT INTO product_history (product_id, admin_id, member_id, product_old_name, product_old_slug, product_request_date_time, history_id) VALUES (?,?,?,?,?,?,?)',[
+        $product = Database::getRow('SELECT product_id, admin_id, member_id, product_name, product_slug, history_pointer FROM product WHERE product_id=?', [$this->productID]);
+        $this->historyPointer = $product['history_pointer'];
+        $this->q = Database::executeWithError('INSERT INTO product_history (product_id, admin_id, member_id, product_old_name, product_old_slug, product_request_date_time, history_id) VALUES (?,?,?,?,?,?,?)',[
             $product['product_id'],
             $product['admin_id'],
             $product['member_id'],
@@ -30,52 +91,103 @@ class ProductApproval extends Request {
             $this->productRequest['product_request_date_time'],
             $product['history_pointer']
         ]);
-        Database::execute('UPDATE product SET admin_id=?, member_id=?, product_name=?, product_slug=?, history_pointer=history_pointer+1 WHERE product_id=?', [
+        $this->showDBErr();
+        $this->q = Database::executeWithError('UPDATE product SET admin_id=?, member_id=?, product_name=?, product_slug=?, history_pointer=history_pointer+1 WHERE product_id=?', [
             USERID,
             $this->productRequest['member_id'],
             $this->productRequest['product_name'],
             $this->productRequest['product_slug'],
-            $this->productRequest['product_id']
+            $this->productID
         ]);
+        $this->showDBErr();
     }
     private function newProduct() {
-        $available = Database::existCheck('SELECT * FROM product WHERE product_name=? or product_slug=?', [$this->productRequest['product_name'], $this->productRequest['product_slug']]);
-        if($available) {
-            $this->responseWithMessage(7, ['product'=>$available, 'request'=>$this->productRequest]);
-            exit();
-        }
-        Database::execute('INSERT INTO product (admin_id, member_id, product_name, product_slug, product_created_by_member) VALUES(?,?,?,?,1)', [
+        $this->q = Database::executeWithError('INSERT INTO product (admin_id, member_id, product_name, product_slug, product_created_by_member) VALUES(?,?,?,?,1)', [
             USERID,
             $this->productRequest['member_id'],
             $this->productRequest['product_name'],
             $this->productRequest['product_slug']
         ]);
-        $this->newProductID = Database::getRow('SELECT product_id FROM product WHERE product_slug=?', [$this->productRequest['product_slug']])['product_id'];
+        $this->showDBErr();
+        $this->productID = Database::getRow('SELECT product_id FROM product WHERE product_slug=?', [$this->productRequest['product_slug']])['product_id'];
+        $this->historyPointer = 1;
     }
     private function insertProductRequestResponse() {
-        Database::execute('INSERT INTO product_request_response (product_request_id, admin_id, accepted, admin_note) VALUES(?,?,?,?)', [ $this->productRequest['product_request_id'], USERID, ($this->data['accept'])?1:0, $this->data['adminNote']]);
+        $this->q = Database::executeWithError('INSERT INTO product_request_response (product_request_id, admin_id, accepted, admin_note) VALUES(?,?,?,?)', [ $this->productRequest['product_request_id'], USERID, ($this->data['accept'])?1:0, $this->data['adminNote']]);
+        $this->showDBErr();
     }
     private function markAsAnswered() {
-        Database::execute('UPDATE product_request SET product_request_answered=1, admin_note=? WHERE product_request_id=?', [$this->data['adminNote'], $this->productRequest['product_request_id']]);
+        $this->q = Database::executeWithError('UPDATE product_request SET product_request_answered=1, admin_note=? WHERE product_request_id=?', [$this->data['adminNote'], $this->productRequest['product_request_id']]);
+        $this->showDBErr();
     }
     private function manageTagWithProduct() {
-        $raw = Database::getRows('SELECT tag_with_product_request_id, tag_id, product_id, member_id FROM tag_with_product_request WHERE product_request_id=?', [$this->productRequest['product_request_id']]);
-        $this->twpRequestIDs = [];
-        foreach($raw as $row) {
-            if($row['tag_id'] and Database::existCheck('SELECT tag_id FROM tag WHERE tag_id=? and tag_visible=1', [$row['tag_id']])) {
-                Database::execute('INSERT INTO tag_with_product (tag_id, product_id, admin_id, member_id) VALUES(?,?,?,?)', [
-                    $row['tag_id'],
-                    ($this->newProductID)?$this->newProductID:$row['product_id'],
+        $this->addHistory();
+        $tagsIDs = [];
+        $this->tagsTemp = $this->tags;
+        foreach($this->tagsTemp as $t) {
+            if(isset($t['newTag'])) {
+                $this->q = Database::executeWithError('INSERT INTO tag (creater_member_id, admin_id, created_for, tag_name, tag_slug, tag_passive) VALUES(?,?,?,?,?,?)',[
+                    $this->productRequest['member_id'],
                     USERID,
-                    $row['member_id']
+                    $this->productID,
+                    $t['newTag']['tagName'],
+                    $t['newTag']['tagSlug'],
+                    0
                 ]);
-            } else {
-                //
+                $this->showDBErr();
+                $this->tags[] = ['tagID'=>Database::getRow('SELECT tag_id FROM tag WHERE tag_name=? and tag_slug=?', [$t['newTag']['tagName'], $t['newTag']['tagSlug']])['tag_id']];
             }
-            $this->twpRequestIDs[] = $row['tag_with_product_request_id'];
-        };
-        print_r($this->twpRequestIDs);
-        exit();
+        }
+        foreach($this->tags as $t) {
+            if(isset($t['tagID'])) {
+                $this->attachTagIDWithProduct($t['tagID']);
+            }
+        }
+    }
+    private function addHistory() {
+        // history
+        $old = Database::getRows('SELECT * FROM tag_with_product WHERE product_id=?', [$this->productID]);
+        foreach($old as $h) {
+            $this->q = Database::executeWithError('INSERT INTO tag_with_product_history (tag_id, product_id, admin_id, member_id, history_id) VALUES(?,?,?,?,?)', [
+                $h['tag_id'],
+                $this->productID,
+                $h['admin_id'],
+                $h['member_id'],
+                $this->historyPointer
+            ]);
+            $this->showDBErr();
+        }
+        $this->q = Database::executeWithError('DELETE FROM tag_with_product WHERE product_id=?', [$this->productID]);
+        $this->showDBErr();
+    }
+    private function attachTagIDWithProduct($tagID) {
+        $this->q = Database::executeWithError('INSERT INTO tag_with_product (tag_id, product_id, admin_id, member_id) VALUES(?,?,?,?)', [
+            $tagID,
+            $this->productID,
+            USERID,
+            $this->productRequest['member_id']
+        ]);
+        $this->showDBErr();
+    }
+    private function markAsAnsweredTWP() {
+        foreach($this->twpRequest as $req) {
+            $this->q = Database::executeWithError('UPDATE tag_with_product_request SET tag_with_product_request_answered=1, admin_note=? WHERE tag_with_product_request_id=?', [
+                $this->data['adminNote'],
+                $req['tag_with_product_request_id']
+            ]);
+            $this->showDBErr();
+        }
+    }
+    private function insertTWPRequestResponse() {
+        foreach($this->twpRequest as $req) {
+            $this->q = Database::executeWithError('INSERT INTO tag_with_product_request_response (tag_with_product_request_id, admin_id, allowed_or_denied, admin_note) VALUES(?,?,?,?)',[
+                $req['tag_with_product_request_id'],
+                USERID,
+                $this->data['accept'],
+                $this->data['adminNote']
+            ]);
+            $this->showDBErr();
+        }
     }
     protected function get() {
         $this->prepareRequest();
@@ -138,5 +250,12 @@ class ProductApproval extends Request {
             'tagPassive'=>$tag['tag_passive'],
             'tagProductCount'=>$tag['tag_product_count']
         ];
+    }
+    private function showDBErr() {
+        if(!$this->q[0]) {
+            $this->responseWithMessage(5, [
+                'err'=>$q[1]
+            ]);
+        }
     }
 }

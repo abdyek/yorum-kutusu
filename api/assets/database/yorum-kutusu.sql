@@ -126,7 +126,7 @@ CREATE TABLE `tag_with_product_request_response` (
   `tag_with_product_request_id` int(11) NOT NULL,
   `admin_id` int(11) NOT NULL,
   `allowed_or_denied` tinyint(1) NOT NULL,
-  `response_date_time` datetime NOT NULL,
+  `response_date_time` datetime NOT NULL DEFAULT current_timestamp(),
   `admin_note` varchar(200) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 

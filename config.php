@@ -49,7 +49,8 @@
             5=>'Beklenmedik veri tabanı hatası',
             6=>'success',
             7=>'Bu isim ya da slug\'a sahip bir ürün zaten var! Bu istek onaylansaydı çakışma olurdu.',
-            8=>'BU isim ya da slug\'a sahip bir etiket zaten var! Bu istek onaylansaydı çakışma olurdu.'
+            8=>'BU isim ya da slug\'a sahip bir etiket zaten var! Bu istek onaylansaydı çakışma olurdu.',
+            9=>'Bir sorun var'
         ];
         const ENDPOINT = [
             'example'=>[
