@@ -33,7 +33,7 @@ CREATE TABLE `product` (
   `member_id` int(11) DEFAULT NULL,
   `product_name` varchar(60) NOT NULL,
   `product_slug` varchar(60) NOT NULL,
-  `product_visible` tinyint(1) NOT NULL DEFAULT 1,
+  `product_deleted` tinyint(1) NOT NULL DEFAULT 0,
   `product_created_by_member` tinyint(1) NOT NULL DEFAULT 0,
   `product_create_date_time` datetime NOT NULL DEFAULT current_timestamp(),
   `product_follow_count` int(11) NOT NULL DEFAULT 0,
@@ -61,7 +61,8 @@ CREATE TABLE `product_request` (
   `product_request_date_time` datetime NOT NULL DEFAULT current_timestamp(),
   `product_request_answered` tinyint(1) NOT NULL DEFAULT 0,
   `admin_note` varchar(200) DEFAULT NULL,
-  `request_id` int(11) NOT NULL
+  `request_id` int(11) NOT NULL,
+  `cancelled` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `product_request_response` (
@@ -80,7 +81,7 @@ CREATE TABLE `tag` (
   `created_for` int(11) DEFAULT NULL,
   `tag_name` varchar(25) NOT NULL,
   `tag_slug` varchar(25) NOT NULL,
-  `tag_visible` tinyint(1) NOT NULL DEFAULT 1,
+  `tag_deleted` tinyint(1) NOT NULL DEFAULT 0,
   `tag_create_date_time` datetime NOT NULL DEFAULT current_timestamp(),
   `tag_passive` tinyint(1) NOT NULL,
   `tag_product_count` int(11) NOT NULL DEFAULT 0
@@ -118,7 +119,8 @@ CREATE TABLE `tag_with_product_request` (
   `tag_with_product_request_date_time` datetime NOT NULL DEFAULT current_timestamp(),
   `tag_with_product_request_answered` tinyint(1) NOT NULL DEFAULT 0,
   `admin_note` varchar(200) DEFAULT NULL,
-  `request_id` int(11) NOT NULL
+  `request_id` int(11) NOT NULL,
+  `cancelled` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `tag_with_product_request_response` (
@@ -152,7 +154,7 @@ CREATE TABLE `member` (
   `member_password_change_count` int(11) NOT NULL DEFAULT 0,
   `member_confirmed_email` tinyint(1) NOT NULL DEFAULT 0,
   `member_deleted` tinyint(1) DEFAULT 0,
-  `request_pointer` int(11) NOT NULL DEFAULT 0,
+  `request_pointer` int(11) NOT NULL DEFAULT 1,
   `member_restricted` tinyint(1) DEFAULT 0,
   `point` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -298,12 +300,11 @@ CREATE TABLE `admin_making_history` (
   `admin_note` varchar(200) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE `product_visible_history` (
-  `product_visible_history_id` int(11) NOT NULL,
+CREATE TABLE `product_delete_history` (
+  `product_delete_history_id` int(11) NOT NULL,
   `product_id` int(11) NOT NULL,
   `admin_id` int(11) NOT NULL,
-  `product_visible_history_date_time` datetime NOT NULL DEFAULT current_timestamp(),
-  `visible_or_invisible` tinyint(1) NOT NULL,
+  `product_delete_history_date_time` datetime NOT NULL DEFAULT current_timestamp(),
   `admin_note` varchar(200) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -314,12 +315,11 @@ CREATE TABLE `member_delete_history` (
   `member_delete_date_time` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE `tag_visible_history` (
-  `tag_visible_history_id` int(11) NOT NULL,
+CREATE TABLE `tag_delete_history` (
+  `tag_delete_history_id` int(11) NOT NULL,
   `tag_id` int(11) NOT NULL,
   `admin_id` int(11) NOT NULL,
-  `tag_visible_history_date_time` datetime NOT NULL DEFAULT current_timestamp(),
-  `visible_or_invisible` tinyint(1) NOT NULL,
+  `tag_delete_history_date_time` datetime NOT NULL DEFAULT current_timestamp(),
   `admin_note` varchar(200) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -557,8 +557,8 @@ ALTER TABLE `admin_making_history`
   ADD KEY `admin_id` (`admin_id`), 
   ADD KEY `member_id` (`member_id`);
 
-ALTER TABLE `product_visible_history`
-  ADD PRIMARY KEY (`product_visible_history_id`),
+ALTER TABLE `product_delete_history`
+  ADD PRIMARY KEY (`product_delete_history_id`),
   ADD KEY `product_id` (`product_id`), 
   ADD KEY `admin_id` (`admin_id`);
 
@@ -567,8 +567,8 @@ ALTER TABLE `member_delete_history`
   ADD KEY `admin_id` (`admin_id`), 
   ADD KEY `member_id` (`member_id`);
 
-ALTER TABLE `tag_visible_history`
-  ADD PRIMARY KEY (`tag_visible_history_id`),
+ALTER TABLE `tag_delete_history`
+  ADD PRIMARY KEY (`tag_delete_history_id`),
   ADD KEY `tag_id` (`tag_id`), 
   ADD KEY `admin_id` (`admin_id`);
 
@@ -709,14 +709,14 @@ ALTER TABLE `admin`
 ALTER TABLE `admin_making_history`
   MODIFY `admin_making_history_id` int(11) NOT NULL AUTO_INCREMENT;
 
-ALTER TABLE `product_visible_history`
-  MODIFY `product_visible_history_id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `product_delete_history`
+  MODIFY `product_delete_history_id` int(11) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `member_delete_history`
   MODIFY `member_delete_history_id` int(11) NOT NULL AUTO_INCREMENT;
 
-ALTER TABLE `tag_visible_history`
-  MODIFY `tag_visible_history_id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `tag_delete_history`
+  MODIFY `tag_delete_history_id` int(11) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `admin_inactive_history`
   MODIFY `admin_inactive_history_id` int(11) NOT NULL AUTO_INCREMENT;
@@ -859,17 +859,17 @@ ALTER TABLE `admin_making_history`
   ADD CONSTRAINT `admin_making_history_fk_2` FOREIGN KEY (`admin_id`) REFERENCES `admin` (`admin_id`),
   ADD CONSTRAINT `admin_making_history_fk_3` FOREIGN KEY (`member_id`) REFERENCES `member` (`member_id`);
 
-ALTER TABLE `product_visible_history`
-  ADD CONSTRAINT `product_visible_history_fk_1` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_id`),
-  ADD CONSTRAINT `product_visible_history_fk_2` FOREIGN KEY (`admin_id`) REFERENCES `admin` (`admin_id`);
+ALTER TABLE `product_delete_history`
+  ADD CONSTRAINT `product_delete_history_fk_1` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_id`),
+  ADD CONSTRAINT `product_delete_history_fk_2` FOREIGN KEY (`admin_id`) REFERENCES `admin` (`admin_id`);
 
 ALTER TABLE `member_delete_history`
   ADD CONSTRAINT `member_delete_history_fk_1` FOREIGN KEY (`admin_id`) REFERENCES `admin` (`admin_id`),
   ADD CONSTRAINT `member_delete_history_fk_2` FOREIGN KEY (`member_id`) REFERENCES `member` (`member_id`);
 
-ALTER TABLE `tag_visible_history`
-  ADD CONSTRAINT `tag_visible_history_fk_1` FOREIGN KEY (`tag_id`) REFERENCES `tag` (`tag_id`),
-  ADD CONSTRAINT `tag_visible_history_fk_2` FOREIGN KEY (`admin_id`) REFERENCES `admin` (`admin_id`);
+ALTER TABLE `tag_delete_history`
+  ADD CONSTRAINT `tag_delete_history_fk_1` FOREIGN KEY (`tag_id`) REFERENCES `tag` (`tag_id`),
+  ADD CONSTRAINT `tag_delete_history_fk_2` FOREIGN KEY (`admin_id`) REFERENCES `admin` (`admin_id`);
 
 ALTER TABLE `admin_inactive_history`
   ADD CONSTRAINT `admin_inactive_history_fk_1` FOREIGN KEY (`subject_admin_id`) REFERENCES `admin` (`admin_id`),

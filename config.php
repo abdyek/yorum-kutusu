@@ -48,7 +48,7 @@
             4=>'Geçersiz kullanıcı adı',
             5=>'Beklenmedik veri tabanı hatası',
             6=>'success',
-            7=>'Bu isim ya da slug\'a sahip bir ürün zaten var! Bu istek onaylansaydı çakışma olurdu.',
+            7=>'Bu isim ya da slug\'a sahip bir ürün zaten var!',
             8=>'BU isim ya da slug\'a sahip bir etiket zaten var! Bu istek onaylansaydı çakışma olurdu.',
             9=>'Bir sorun var'
         ];
@@ -692,7 +692,29 @@
                         ]
                     ]
                 ]
-            ]
+            ],
+            'newProduct'=>[
+                'methods'=>['POST'],
+                'authorization'=>[
+                    'POST'=>['member']
+                ],
+                'keys'=>[
+                    'POST'=>[
+                        'productName'=>[
+                            'min'=>1,
+                            'max'=>60
+                        ],
+                        'productSlug'=>[
+                            'min'=>1,
+                            'max'=>60
+                        ],
+                        'tags'=>[
+                            'min'=>0,
+                            'max'=>10
+                        ]
+                    ]
+                ]
+            ],
         ];
     }
 
