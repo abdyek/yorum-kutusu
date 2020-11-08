@@ -715,6 +715,32 @@
                     ]
                 ]
             ],
+            'updateProduct'=>[
+                'methods'=>['POST'],
+                'authorization'=>[
+                    'POST'=>['member']
+                ],
+                'keys'=>[
+                    'POST'=>[
+                        'productID'=>[
+                            'min'=>1,
+                            'max'=>11
+                        ],
+                        'productNewName'=>[
+                            'min'=>1,
+                            'max'=>60
+                        ],
+                        'productNewSlug'=>[
+                            'min'=>1,
+                            'max'=>60
+                        ],
+                        'tags'=>[
+                            'min'=>0,
+                            'max'=>10
+                        ]
+                    ]
+                ]
+            ],
         ];
     }
 
