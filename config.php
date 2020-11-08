@@ -52,6 +52,9 @@
             8=>'BU isim ya da slug\'a sahip bir etiket zaten var! Bu istek onaylansaydı çakışma olurdu.',
             9=>'Bir sorun var'
         ];
+        const ADMIN_NOTES = [
+            'newProductRequestDeleteNote'=>'Yeni ürün ekleme istediğiniz kabul edilmedi'
+        ];
         const ENDPOINT = [
             'example'=>[
                 'methods'=>['POST', 'GET', 'PUT', 'PATCH', 'DELETE'],
@@ -565,26 +568,11 @@
                 ]
             ],
             'productApproval'=>[
-                'methods'=>['POST', 'GET'],
+                'methods'=>['GET'],
                 'authorization'=>[
-                    'POST'=>['admin'],
                     'GET'=>['admin']
                 ],
                 'keys'=>[
-                    'POST'=>[
-                        'productRequestID'=>[
-                            'min'=>1,
-                            'max'=>11
-                        ],
-                        'accept'=>[
-                            'min'=>0,
-                            'max'=>1
-                        ],
-                        'adminNote'=>[
-                            'min'=>0,
-                            'max'=>200
-                        ]
-                    ],
                     'GET'=>[
                     ]
                 ]
@@ -689,6 +677,27 @@
                         'tags'=>[
                             'min'=>0,
                             'max'=>10
+                        ]
+                    ]
+                ]
+            ],
+            'newProductApproval'=>[
+                'methods'=>['POST', 'DELETE'],
+                'authorization'=>[
+                    'POST'=>['admin'],
+                    'DELETE'=>['admin']
+                ],
+                'keys'=>[
+                    'POST'=>[
+                        'productRequestID'=>[
+                            'min'=>1,
+                            'max'=>11
+                        ]
+                    ],
+                    'DELETE'=>[
+                        'productRequestID'=>[
+                            'min'=>1,
+                            'max'=>11
                         ]
                     ]
                 ]

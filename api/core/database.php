@@ -41,7 +41,7 @@
             $query->fetch(PDO::FETCH_ASSOC);
             $state = $query->execute($parameters);
             if(!$state) {
-                json_encode([
+                echo json_encode([
                     'err'=>$query->errorInfo()
                 ]);
                 exit();
