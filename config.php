@@ -521,50 +521,6 @@
                     ]
                 ]
             ],
-            'productVisible'=>[
-                'methods'=>['POST'],
-                'authorization'=>[
-                    'POST'=>['admin']
-                ],
-                'keys'=>[
-                    'POST'=>[
-                        'productID'=>[
-                            'min'=>1,
-                            'max'=>11
-                        ],
-                        'visible'=>[
-                            'min'=>0,
-                            'max'=>1
-                        ],
-                        'adminNote'=>[
-                            'min'=>0,
-                            'max'=>200
-                        ]
-                    ]
-                ]
-            ],
-            'tagVisible'=>[
-                'methods'=>['POST'],
-                'authorization'=>[
-                    'POST'=>['admin']
-                ],
-                'keys'=>[
-                    'POST'=>[
-                        'tagID'=>[
-                            'min'=>1,
-                            'max'=>11
-                        ],
-                        'tagVisible'=>[
-                            'min'=>0,
-                            'max'=>1
-                        ],
-                        'adminNote'=>[
-                            'min'=>0,
-                            'max'=>200
-                        ]
-                    ]
-                ]
-            ],
             'evaluateReport'=>[
                 'methods'=>['POST'],
                 'authorization'=>[
@@ -634,10 +590,11 @@
                 ]
             ],
             'productCRUD'=>[
-                'methods'=>['POST', 'PUT'],
+                'methods'=>['POST', 'PUT', 'DELETE'],
                 'authorization'=>[
                     'POST'=>['admin'],
-                    'PUT'=>['admin']
+                    'PUT'=>['admin'],
+                    'DELETE'=>['admin']
                 ],
                 'keys'=>[
                     'POST'=>[
@@ -670,6 +627,20 @@
                         'tagIDs'=>[
                             'min'=>0,
                             'max'=>10
+                        ]
+                    ],
+                    'DELETE'=>[
+                        'productID'=>[
+                            'min'=>0,
+                            'max'=>11
+                        ],
+                        'password'=>[
+                            'min'=>6,
+                            'max'=>40
+                        ],
+                        'adminNote'=>[
+                            'min'=>0,
+                            'max'=>200
                         ]
                     ]
                 ]

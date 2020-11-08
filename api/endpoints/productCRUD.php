@@ -81,4 +81,40 @@ class ProductCRUD extends Request {
         Database::execute('DELETE FROM tag_with_product WHERE product_id=?', [$this->data['productID']]);
         $this->createTwp();
     }
+
+    protected function delete() {
+        $this->admin = Database::getRow('SELECT * FROM admin WHERE admin_id=?', [USERID]);
+        $this->productExistCheck();
+        $this->passwordCheck();
+        $this->deleteProduct();
+
+    }
+
+    private function productExistCheck(){
+        $this->product = Database::existCheck('SELECT * FROM product WHERE product_deleted=0 AND product_id=?', [$this->data['productID']]);
+        if(!$this->product) {
+            $this->setHttpStatus(404);
+            exit();
+        }
+    }
+
+    private function passwordCheck() {
+        if(!password_verify($this->data['password'], $this->admin['admin_password_hash'])) {
+            $this->setHttpStatus(403);
+            exit();
+        }
+    }
+
+    private function deleteProduct() {
+        // TWP
+        Database::executeWithErr('UPDATE tag_with_product SET tag_with_product_deleted=1 WHERE product_id=?', [$this->data['productID']]);
+        // product
+        Database::executeWithErr('UPDATE product SET product_deleted=1 WHERE product_id=?', [$this->data['productID']]);
+        // product history
+        Database::executeWithErr('INSERT INTO product_delete_history (product_id, admin_id, admin_note) VALUES(?,?,?)', [
+            $this->data['productID'],
+            USERID,
+            $this->data['adminNote']
+        ]);
+    }
 }

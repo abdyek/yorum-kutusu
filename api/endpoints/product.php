@@ -24,7 +24,7 @@ class Product extends Request {
         ];
     }
     private function getTags() {
-        $tags = Database::getRows('SELECT * FROM tag_with_product twp INNER JOIN tag t ON t.tag_id=twp.tag_id WHERE twp.product_id=? and twp.tag_with_product_visible=1', [$this->data['productID']]);
+        $tags = Database::getRows('SELECT * FROM tag_with_product twp INNER JOIN tag t ON t.tag_id=twp.tag_id WHERE twp.product_id=?', [$this->data['productID']]);
         $this->tagsInfo = [];
         foreach($tags as $tag) {
             $this->tagsInfo[] = [

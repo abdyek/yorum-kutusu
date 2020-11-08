@@ -36,6 +36,17 @@
             $state = $query->execute($parameters);
             return ($state)? [true]: [false,$query->errorInfo()];
         }
+        public static function executeWithErr($sql, $parameters=NULL) {
+            $query = self::$db->prepare($sql);
+            $query->fetch(PDO::FETCH_ASSOC);
+            $state = $query->execute($parameters);
+            if(!$state) {
+                json_encode([
+                    'err'=>$query->errorInfo()
+                ]);
+                exit();
+            }
+        }
         // diğer hata ile dönenler
         /* lazım olursa uyarlarım
         public static function getRows($sql, $parameters=NULL) {
