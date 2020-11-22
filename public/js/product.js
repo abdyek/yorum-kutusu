@@ -6,6 +6,43 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+var DATA = {
+	product: {
+		id: "1",
+		title: "Başlık",
+		slug: "slug'ı"
+	},
+	tags: [{
+		slug: "apple",
+		tagName: "Apple",
+		tagAvarageRating: null
+	}, {
+		slug: "ekran",
+		tagName: "Ekran",
+		tagAvarageRating: null
+	}],
+	comments: [{
+		id: "1",
+		text: "bu bir yorumdur",
+		dateTime: "2020-11-22 13:23:08",
+		edited: "0",
+		lastEditDateTime: null,
+		likeCount: "0",
+		liked: false,
+		isOwner: true,
+		owner: {
+			id: "1",
+			username: "MahmuT",
+			slug: "mahmut"
+		},
+		rating: [{
+			slug: "ekran",
+			tagName: "Ekran",
+			ratingValue: "5"
+		}]
+	}]
+};
+
 var Product = function (_React$Component) {
 	_inherits(Product, _React$Component);
 

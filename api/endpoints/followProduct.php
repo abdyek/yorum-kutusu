@@ -13,7 +13,7 @@ class FollowProduct extends Request {
         }
     }
     private function productCheck() {
-        return Database::existCheck('SELECT * FROM product WHERE product_id=? AND product_visible=1', [$this->data['productID']]);
+        return Database::existCheck('SELECT * FROM product WHERE product_id=? AND product_deleted=0', [$this->data['productID']]);
     }
     private function productFollow() {
         $check = Database::existCheck('SELECT * FROM product_follow WHERE product_id=? AND member_id=?', [$this->data['productID'], USERID]);
@@ -44,7 +44,7 @@ class FollowProduct extends Request {
         $this->success();
     }
     protected function get() {
-        $followingProduct = Database::getRows('SELECT p.product_id, p.product_slug, p.product_name, pw.last_seen_date_time FROM product_follow pw INNER JOIN product p ON pw.product_id = p.product_id WHERE p.product_visible=1 AND pw.member_id=?', [USERID]);
+        $followingProduct = Database::getRows('SELECT p.product_id, p.product_slug, p.product_name, pw.last_seen_date_time FROM product_follow pw INNER JOIN product p ON pw.product_id = p.product_id WHERE p.product_deleted=0 AND pw.member_id=?', [USERID]);
         $arr = [];
         $this->allNewCom = 0;
         foreach($followingProduct as $fp) {

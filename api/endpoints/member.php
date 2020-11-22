@@ -37,7 +37,7 @@ class Member extends Request {
         $comments = Database::getRows($sql, [$this->data['memberID']]);
         $this->commentsInfo = [];
         foreach($comments as $com) {
-            $product = Database::getRow('SELECT product_id, product_name, product_slug FROM product WHERE product_id=? and product_visible=1', [$com['product_id']]);
+            $product = Database::getRow('SELECT product_id, product_name, product_slug FROM product WHERE product_id=? and product_deleted=0', [$com['product_id']]);
             if(!$product) {
                 continue;
             }

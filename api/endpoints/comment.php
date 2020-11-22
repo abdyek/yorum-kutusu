@@ -16,7 +16,7 @@ class Comment extends Request {
     }
     // post ve put'un ortak methodu
     private function productCheckWrapper() {
-        $product = Database::existCheck('SELECT * FROM product WHERE product_id=? AND product_visible=1', [$this->data['productID']]);
+        $product = Database::existCheck('SELECT * FROM product WHERE product_id=? AND product_deleted=0', [$this->data['productID']]);
         if(!$product) {
             $this->setHttpStatus(404);
             exit();
@@ -37,7 +37,7 @@ class Comment extends Request {
             }
             $tags = array_keys($this->data['rating']);
             foreach($tags as $tag) {
-                if(!Database::existCheck('SELECT * FROM tag t INNER JOIN tag_with_product twp ON twp.tag_id=t.tag_id WHERE t.tag_slug=? AND t.tag_visible=1 AND twp.product_id=? AND twp.tag_with_product_visible=1 AND t.tag_passive=0', [$tag, $this->data['productID']])) {
+                if(!Database::existCheck('SELECT * FROM tag t INNER JOIN tag_with_product twp ON twp.tag_id=t.tag_id WHERE t.tag_slug=? AND t.tag_deleted=0 AND twp.product_id=? AND twp.tag_with_product_deleted=0 AND t.tag_passive=0', [$tag, $this->data['productID']])) {
                     return false;
                 }
             }

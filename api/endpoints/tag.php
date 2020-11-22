@@ -9,7 +9,7 @@ class Tag extends Request {
         }
     }
     private function search() {
-        $tags = Database::getRows('SELECT tag_id, tag_slug, tag_name FROM tag WHERE tag_name LIKE "%"?"%" AND tag_visible=1', [$this->data['searchText']]);
+        $tags = Database::getRows('SELECT tag_id, tag_slug, tag_name FROM tag WHERE tag_name LIKE "%"?"%" AND tag_deleted=0', [$this->data['searchText']]);
         $tagsInfo = [];
         foreach($tags as $tag) {
             $tagsInfo[] = [

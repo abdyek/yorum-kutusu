@@ -1,8 +1,51 @@
+const DATA = {
+    product: {
+        id: "1",
+        title: "Başlık",
+        slug: "slug'ı"
+    },
+    tags: [
+        {
+            slug:"apple",
+            tagName:"Apple",
+            tagAvarageRating: null
+        },
+        {
+            slug:"ekran",
+            tagName:"Ekran",
+            tagAvarageRating: null
+        }
+    ],
+    comments: [
+        {
+            id: "1",
+            text: "bu bir yorumdur",
+            dateTime: "2020-11-22 13:23:08",
+            edited: "0",
+            lastEditDateTime: null,
+            likeCount: "0",
+            liked: false,
+            isOwner: true,
+            owner: {
+                id: "1",
+                username:"MahmuT",
+                slug: "mahmut",
+            },
+            rating: [
+                {
+                    slug: "ekran",
+                    tagName: "Ekran",
+                    ratingValue: "5"
+                }
+            ]
+        }
+    ]
+}
 class Product extends React.Component {
     constructor(props) {
 		super(props);
 		this.state = {
-			form:"loading"
+		    form:"loading"
 		}
 		this.changeSortBy = this.changeSortBy.bind(this);
 		this.changePageNumber = this.changePageNumber.bind(this);
@@ -16,13 +59,13 @@ class Product extends React.Component {
 		//let sortBy = "like";
 		let pageNumber = 1;
 		if(slugs[1]=="arasi") {
-			specialInfo = {
-				first:slugs[2].split("-")[0],
-				last:slugs[2].split("-")[1]
-			}
+		    specialInfo = {
+		            first:slugs[2].split("-")[0],
+		            last:slugs[2].split("-")[1]
+		    }
 		} else {
-			sortBy = slugs[1];
-		 	pageNumber = slugs[2];
+		    sortBy = slugs[1];
+		    pageNumber = slugs[2];
 		}
 		let commentType = "all";  // all, spacial
 		// not: buradaki değer atamalar ve değişkenlerin bir kısmı deneme amaçlı, setState içindeki hemen hemen hepsi api tarafından gelecek
