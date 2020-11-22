@@ -1,6 +1,5 @@
 header {
     margin-bottom:1rem;
-    background-color: #01BAEF;
     box-shadow: 0 0.3rem 2.5rem #00000080;
 }
 
@@ -232,15 +231,6 @@ footer{
 #logo h1 {
     line-height:60px;
     font-family: 'Dancing Script', cursive;
-    color:#eee;
     padding-left:25px;
     cursor:pointer;
-}
-
-/* H componenti */
-.h-title a {
-    color:#333;
-}
-.h-title a:hover {
-    color:#333;
 }

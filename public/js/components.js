@@ -155,9 +155,10 @@ var RaisedSegment = function (_React$Component5) {
     _createClass(RaisedSegment, [{
         key: "render",
         value: function render() {
+            this.otherClass = this.props.otherClass ? this.props.otherClass : "";
             return React.createElement(
                 "div",
-                { className: "ui raised segment" },
+                { className: "ui raised segment " + this.otherClass },
                 this.props.children
             );
         }

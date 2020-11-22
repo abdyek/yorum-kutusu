@@ -1,0 +1,28 @@
+body {
+    background-color:#3b555d !important;
+}
+
+.comment {
+    background-color:#233237 !important;
+    color:#eee;
+}
+
+#logo h1 a {
+    color:#955f31 !important;
+}
+
+.comment-header>a {
+    color:#955f31;
+}
+
+.comment-header>a:hover {
+    color:#eee;
+}
+
+header {
+    background-color: #233237;
+}
+
+.footer {
+    background-color: #233237 !important;
+}

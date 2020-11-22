@@ -18,7 +18,7 @@ class ProductCRUD extends Request {
     }
     private function checkTags() {
         foreach($this->data['tagIDs'] as $id) {
-            if(!Database::existCheck('SELECT tag_id FROM tag WHERE tag_visible=1 AND tag_id=?', [$id])) {
+            if(!Database::existCheck('SELECT tag_id FROM tag WHERE tag_deleted=0 AND tag_id=?', [$id])) {
                 return false;
             }
         }

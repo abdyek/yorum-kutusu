@@ -1,3 +1,3 @@
 
-npx babel --watch src --out-dir ./js/ --presets react-app/prod
+npx babel --watch src --out-dir ./public/js/ --presets react-app/prod
 ^ bu komut ile çalıştırıyoruz

@@ -74,7 +74,7 @@ class Comment extends React.Component {
                     :""}
                     <Row size="one">
                         <Column>
-                            <RaisedSegment>
+                            <RaisedSegment otherClass="comment">
                                 <TopOfComment text={this.props.text} slug={this.props.slug} title={this.props.title} owner={this.props.owner} handleOpenEditArea={this.openEditArea} handleOpenDeleteArea={this.openDeleteArea} changeContent={this.props.changeContent} type={this.props.type}/>
                                 <BottomOfComment likeCount={this.props.likeCount} liked={this.props.liked} date={this.props.date} handleOpenReportArea={this.openReportArea} handleCloseReportArea={this.closeReportArea} tags={this.props.tags} owner={this.props.owner} changeContent={this.props.changeContent} />
                             </RaisedSegment>

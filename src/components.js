@@ -75,8 +75,9 @@ class Segment extends React.Component {
 /* bu bütün sayfalarda kullanılabilecek bir bileşendir */
 class RaisedSegment extends React.Component {
     render() {
+        this.otherClass = (this.props.otherClass)?this.props.otherClass:"";
         return(
-            <div className="ui raised segment">
+            <div className={"ui raised segment " + this.otherClass}>
                 {this.props.children}
             </div>
         )
