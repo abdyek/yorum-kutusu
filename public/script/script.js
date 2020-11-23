@@ -1,6 +1,17 @@
 window.history.pushState({content: firstContent}, "", "");
 let firstLoading = true;
 
+function getUrlPar(data) {
+    let keys = Object.keys(data);
+    for(let i=0;i<keys.length;i++) {
+        if(data[keys[i]]===false) {
+            data[keys[i]]=0;
+        } else if(data[keys[i]]===true) {
+            data[keys[i]]=1;
+        }
+    }
+    return Object.entries(data).map(e => e.join('=')).join('&');
+}
 
 function getSlugs(pageName) {
     let slugs = window.location.href.split(pageName)[1].split(",");

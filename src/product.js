@@ -47,46 +47,35 @@ class Product extends React.Component {
 		this.state = {
 		    form:"loading"
 		}
+                this.manageOtherSlug = this.manageOtherSlug.bind(this);
+                this.load = this.load.bind(this);
+                this.normalizer= this.normalizer.bind(this);
 		this.changeSortBy = this.changeSortBy.bind(this);
 		this.changePageNumber = this.changePageNumber.bind(this);
 		this.refreshComments = this.refreshComments.bind(this);
 		this.showAllComments = this.showAllComments.bind(this);
 	}
 	componentDidMount() {
-		let slugs = getSlugsExtra("urun");
-		let productSlugs = slugs[0];
-		let specialInfo = {};
-		//let sortBy = "like";
-		let pageNumber = 1;
-		if(slugs[1]=="arasi") {
-		    specialInfo = {
-		            first:slugs[2].split("-")[0],
-		            last:slugs[2].split("-")[1]
-		    }
-		} else {
-		    sortBy = slugs[1];
-		    pageNumber = slugs[2];
-		}
-		let commentType = "all";  // all, spacial
-		// not: buradaki değer atamalar ve değişkenlerin bir kısmı deneme amaçlı, setState içindeki hemen hemen hepsi api tarafından gelecek
+            this.manageOtherSlug();
 		
+                this.load();
 		// yüklenme komutları burada olacak
         this.setState({
             // normal, loading, notFound
-			form:"normal",
+			form:"loading",
 			// normal, loading, noComment
 			productName:"Iphone 5s",
 			commentsForm: "normal",
-			commentType: commentType,	// all, special
-			specialInfo: specialInfo,
+			commentType: "all",	// all, special
+			specialInfo: {},
 			/*
-			specialInfo:{
+		        specialInfo:{
 				first:"15",
 				last:"30"
 			},
 			*/
 			sortBy: "time",
-			pageNumber: 3,
+			pageNumber: this.pageNumber,
 			comments: [
 				{
 					id:0,
@@ -196,6 +185,102 @@ class Product extends React.Component {
 			}
 		});
 	}
+    manageOtherSlug() {
+        let slugs = getSlugsExtra("urun");
+        this.productSlug = slugs[0];
+        let specialInfo = {};
+        if(slugs[1]=="arasi") {
+            specialInfo = {
+                first:slugs[2].split("-")[0],
+                last:slugs[2].split("-")[1]
+            }
+        } else {
+            this.sortBy = slugs[1];
+            this.pageNumber = (slugs[2])?slugs[2]:1;
+        }
+        let commentType = "all";  // all, spacial
+        // not: buradaki değer atamalar ve değişkenlerin bir kısmı deneme amaçlı, setState içindeki hemen hemen hepsi api tarafından gelecek
+    }
+    load() {
+        //fetch('http://localhost/yorum-kutusu/api/example', {method: 'GET', body: JSON.stringify({'ali': 'veli'})}).then(response => response.json()).then(json => console.log(json));
+        fetch('http://localhost/yorum-kutusu/api/product' + '?' + getUrlPar({
+            "productSlug":this.productSlug,
+            "sortBy":"like",
+            "pageNumber":this.pageNumber,
+            "onlyComment":false
+        }), {method: 'GET'}).then(response => response.json()).then(
+                (json)=> {console.log(json);
+                    if(!json['other']['comments'].length && this.pageNumber!=1) {
+                        console.log("ilk sayfaya yönlendirmeli");
+                    }
+                    this.setState({
+                        form:"normal",
+                        productName:json['other']['product']['title'],
+                        comments: this.normalizer('comments', json['other']['comments'])
+                    });
+                }
+        ).catch((error) => {console.log("err: " + error); this.setState({form:"notFound"})});
+    }
+        normalizer(key, data) {
+            if(key=='comments') {
+                let comments = [];
+                for(let i=0;i<data.length;i++) {
+                    let com = data[i];
+                    comments.push({
+                        id:com.commentID,
+                        text:com.commentText,
+                        //commentEdited,
+                        //commentLastEditDateTime,
+                        likeCount:com.commentLikeCount,
+                        liked:com.liked,
+                        title:com.owner.username,
+                        type:"profile",
+                        slug:com.owner.slug,
+                        date:com.commentCreateDateTime,
+                        tags:this.normalizer('tags', com.rating),
+                        /*
+                        tags:{3:{
+                                        passive:false,
+                                        text:"Batarya",
+                                        color:"yellow",
+                                        rateValue: "5",
+                                        slug:"batarya"
+                                },
+                                4:{
+                                        passive:false,
+                                        text:"Kamera",
+                                        color:"orange",
+                                        rateValue: "4",
+                                        slug:"kamera"
+                                },
+                                5:{
+                                        passive:false,
+                                        text:"Tasarım",
+                                        color:"",
+                                        rateValue: "-",
+                                        slug:"tasarim"
+                                }
+                        },
+                        */
+                        owner:com.isOwner
+                    })
+                }
+                return comments;
+            } else if(key=="tags") {
+                let tags = {};
+                let keys = Object.keys(data);
+                for(let i=0; i<keys.length; i++) {
+                    tags[keys[i]] = {
+                        passive: false,
+                        text:data[i].tagName,
+                        color:'yellow', // bu kısım düzeltilecek
+                        rateValue: data[i].ratingValue,
+                        slug: data[i].slug
+                    }
+                }
+                return tags;
+            }
+        }
 	changeSortBy(value) {
 		if(value!=this.state.sortBy && this.state.commentsForm!="loading") {
 			// ^ bu ve changePageNumber metodundaki kontrolü kullanıcının aynı anda birden fazla seçim yapmasını engellemek için koydum

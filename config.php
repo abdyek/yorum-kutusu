@@ -147,9 +147,9 @@
                 ],
                 'keys'=>[
                     'GET'=>[
-                        'productID'=>[
-                            'min'=>1,
-                            'max'=>11
+                        'productSlug'=>[
+                            'min'=>0,
+                            'max'=>60
                         ],
                         'sortBy'=>[
                             'min'=>4,

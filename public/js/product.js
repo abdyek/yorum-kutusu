@@ -54,6 +54,9 @@ var Product = function (_React$Component) {
 		_this.state = {
 			form: "loading"
 		};
+		_this.manageOtherSlug = _this.manageOtherSlug.bind(_this);
+		_this.load = _this.load.bind(_this);
+		_this.normalizer = _this.normalizer.bind(_this);
 		_this.changeSortBy = _this.changeSortBy.bind(_this);
 		_this.changePageNumber = _this.changePageNumber.bind(_this);
 		_this.refreshComments = _this.refreshComments.bind(_this);
@@ -64,40 +67,26 @@ var Product = function (_React$Component) {
 	_createClass(Product, [{
 		key: "componentDidMount",
 		value: function componentDidMount() {
-			var slugs = getSlugsExtra("urun");
-			var productSlugs = slugs[0];
-			var specialInfo = {};
-			//let sortBy = "like";
-			var pageNumber = 1;
-			if (slugs[1] == "arasi") {
-				specialInfo = {
-					first: slugs[2].split("-")[0],
-					last: slugs[2].split("-")[1]
-				};
-			} else {
-				sortBy = slugs[1];
-				pageNumber = slugs[2];
-			}
-			var commentType = "all"; // all, spacial
-			// not: buradaki değer atamalar ve değişkenlerin bir kısmı deneme amaçlı, setState içindeki hemen hemen hepsi api tarafından gelecek
+			this.manageOtherSlug();
 
+			this.load();
 			// yüklenme komutları burada olacak
 			this.setState({
 				// normal, loading, notFound
-				form: "normal",
+				form: "loading",
 				// normal, loading, noComment
 				productName: "Iphone 5s",
 				commentsForm: "normal",
-				commentType: commentType, // all, special
-				specialInfo: specialInfo,
+				commentType: "all", // all, special
+				specialInfo: {},
 				/*
-    specialInfo:{
+           specialInfo:{
     	first:"15",
     	last:"30"
     },
     */
 				sortBy: "time",
-				pageNumber: 3,
+				pageNumber: this.pageNumber,
 				comments: [{
 					id: 0,
 					text: "burası yorumun text'i",
@@ -205,6 +194,113 @@ var Product = function (_React$Component) {
 			});
 		}
 	}, {
+		key: "manageOtherSlug",
+		value: function manageOtherSlug() {
+			var slugs = getSlugsExtra("urun");
+			this.productSlug = slugs[0];
+			var specialInfo = {};
+			if (slugs[1] == "arasi") {
+				specialInfo = {
+					first: slugs[2].split("-")[0],
+					last: slugs[2].split("-")[1]
+				};
+			} else {
+				this.sortBy = slugs[1];
+				this.pageNumber = slugs[2] ? slugs[2] : 1;
+			}
+			var commentType = "all"; // all, spacial
+			// not: buradaki değer atamalar ve değişkenlerin bir kısmı deneme amaçlı, setState içindeki hemen hemen hepsi api tarafından gelecek
+		}
+	}, {
+		key: "load",
+		value: function load() {
+			var _this2 = this;
+
+			//fetch('http://localhost/yorum-kutusu/api/example', {method: 'GET', body: JSON.stringify({'ali': 'veli'})}).then(response => response.json()).then(json => console.log(json));
+			fetch('http://localhost/yorum-kutusu/api/product' + '?' + getUrlPar({
+				"productSlug": this.productSlug,
+				"sortBy": "like",
+				"pageNumber": this.pageNumber,
+				"onlyComment": false
+			}), { method: 'GET' }).then(function (response) {
+				return response.json();
+			}).then(function (json) {
+				console.log(json);
+				if (!json['other']['comments'].length && _this2.pageNumber != 1) {
+					console.log("ilk sayfaya yönlendirmeli");
+				}
+				_this2.setState({
+					form: "normal",
+					productName: json['other']['product']['title'],
+					comments: _this2.normalizer('comments', json['other']['comments'])
+				});
+			}).catch(function (error) {
+				console.log("err: " + error);_this2.setState({ form: "notFound" });
+			});
+		}
+	}, {
+		key: "normalizer",
+		value: function normalizer(key, data) {
+			if (key == 'comments') {
+				var comments = [];
+				for (var i = 0; i < data.length; i++) {
+					var com = data[i];
+					comments.push({
+						id: com.commentID,
+						text: com.commentText,
+						//commentEdited,
+						//commentLastEditDateTime,
+						likeCount: com.commentLikeCount,
+						liked: com.liked,
+						title: com.owner.username,
+						type: "profile",
+						slug: com.owner.slug,
+						date: com.commentCreateDateTime,
+						tags: this.normalizer('tags', com.rating),
+						/*
+      tags:{3:{
+                      passive:false,
+                      text:"Batarya",
+                      color:"yellow",
+                      rateValue: "5",
+                      slug:"batarya"
+              },
+              4:{
+                      passive:false,
+                      text:"Kamera",
+                      color:"orange",
+                      rateValue: "4",
+                      slug:"kamera"
+              },
+              5:{
+                      passive:false,
+                      text:"Tasarım",
+                      color:"",
+                      rateValue: "-",
+                      slug:"tasarim"
+              }
+      },
+      */
+						owner: com.isOwner
+					});
+				}
+				return comments;
+			} else if (key == "tags") {
+				var tags = {};
+				var keys = Object.keys(data);
+				for (var _i = 0; _i < keys.length; _i++) {
+					tags[keys[_i]] = {
+						passive: false,
+						text: data[_i].tagName,
+						color: 'yellow', // bu kısım düzeltilecek
+						rateValue: data[_i].ratingValue,
+						slug: data[_i].slug
+					};
+				}
+				return tags;
+			}
+		}
+	}, {
 		key: "changeSortBy",
 		value: function changeSortBy(value) {
 			if (value != this.state.sortBy && this.state.commentsForm != "loading") {
@@ -293,9 +389,9 @@ var ProductInfo = function (_React$Component2) {
 	function ProductInfo(props) {
 		_classCallCheck(this, ProductInfo);
 
-		var _this2 = _possibleConstructorReturn(this, (ProductInfo.__proto__ || Object.getPrototypeOf(ProductInfo)).call(this, props));
+		var _this3 = _possibleConstructorReturn(this, (ProductInfo.__proto__ || Object.getPrototypeOf(ProductInfo)).call(this, props));
 
-		_this2.followButtonAtt = {
+		_this3.followButtonAtt = {
 			follow: {
 				followed: false,
 				buttonName: "Takip Et",
@@ -309,12 +405,12 @@ var ProductInfo = function (_React$Component2) {
 				icon: React.createElement("i", { "class": "fa fa-times", "aria-hidden": "true" })
 			}
 		};
-		_this2.state = {
+		_this3.state = {
 			followed: false,
-			followButtonAtt: _this2.followButtonAtt.follow
+			followButtonAtt: _this3.followButtonAtt.follow
 		};
-		_this2.followButton = _this2.followButton.bind(_this2);
-		return _this2;
+		_this3.followButton = _this3.followButton.bind(_this3);
+		return _this3;
 	}
 
 	_createClass(ProductInfo, [{
@@ -393,7 +489,7 @@ var SpecialCommentHeader = function (_React$Component3) {
 	_createClass(SpecialCommentHeader, [{
 		key: "render",
 		value: function render() {
-			var _this4 = this;
+			var _this5 = this;
 
 			return React.createElement(
 				Row,
@@ -424,7 +520,7 @@ var SpecialCommentHeader = function (_React$Component3) {
 									React.createElement(
 										"a",
 										{ onClick: function onClick(e) {
-												e.preventDefault();_this4.props.showAllComments();
+												e.preventDefault();_this5.props.showAllComments();
 											} },
 										"T\xFCm\xFCn\xFC G\xF6ster"
 									)

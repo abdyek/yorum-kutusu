@@ -29,9 +29,9 @@
     <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
 
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="public/script/semantic.min.js"></script>
     <script src="public/script/script.js"></script>
+    <script src="public/script/fetch.js"></script>
 
     <!-- React bileşenimizi yükleyin. -->
     <script src="public/js/components.js"></script>
