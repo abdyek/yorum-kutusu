@@ -834,7 +834,7 @@ class DeleteArea extends React.Component {
 
 class Comments extends React.Component {
 	constructor(props) {
-		super(props);
+	    super(props);
 	}
     render() {
 		if(this.props.form=="normal") {
@@ -870,8 +870,8 @@ class Comments extends React.Component {
 			return(
 				<Row size="one">
 					<Column>
-						<div class="ui massive green message">
-							Yorum Yok
+						<div class="ui big yellow message">
+                                                    Yorum yok, ilk yorum senden olsun!
 						</div>
 					</Column>
 				</Row>

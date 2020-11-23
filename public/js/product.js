@@ -55,6 +55,8 @@ var Product = function (_React$Component) {
 			form: "loading"
 		};
 		_this.manageOtherSlug = _this.manageOtherSlug.bind(_this);
+		_this.fetchProduct = _this.fetchProduct.bind(_this);
+		_this.refreshUrl = _this.refreshUrl.bind(_this);
 		_this.load = _this.load.bind(_this);
 		_this.normalizer = _this.normalizer.bind(_this);
 		_this.changeSortBy = _this.changeSortBy.bind(_this);
@@ -196,46 +198,65 @@ var Product = function (_React$Component) {
 	}, {
 		key: "manageOtherSlug",
 		value: function manageOtherSlug() {
-			var slugs = getSlugsExtra("urun");
-			this.productSlug = slugs[0];
+			this.slugs = getSlugsExtra("urun");
+			this.productSlug = this.slugs[0];
+			this.commentType = this.slugs[1];
 			var specialInfo = {};
-			if (slugs[1] == "arasi") {
+			if (this.commentType == "arasi") {
 				specialInfo = {
 					first: slugs[2].split("-")[0],
 					last: slugs[2].split("-")[1]
 				};
 			} else {
-				this.sortBy = slugs[1];
-				this.pageNumber = slugs[2] ? slugs[2] : 1;
+				this.sortBy = this.commentType;
+				this.pageNumber = this.slugs[2] ? this.slugs[2] : 1;
 			}
 			var commentType = "all"; // all, spacial
 			// not: buradaki değer atamalar ve değişkenlerin bir kısmı deneme amaçlı, setState içindeki hemen hemen hepsi api tarafından gelecek
 		}
 	}, {
-		key: "load",
-		value: function load() {
+		key: "fetchProduct",
+		value: function fetchProduct(data) {
 			var _this2 = this;
 
-			//fetch('http://localhost/yorum-kutusu/api/example', {method: 'GET', body: JSON.stringify({'ali': 'veli'})}).then(response => response.json()).then(json => console.log(json));
-			fetch('http://localhost/yorum-kutusu/api/product' + '?' + getUrlPar({
-				"productSlug": this.productSlug,
-				"sortBy": "like",
-				"pageNumber": this.pageNumber,
-				"onlyComment": false
-			}), { method: 'GET' }).then(function (response) {
+			fetch('http://localhost/yorum-kutusu/api/product' + '?' + getUrlPar(data), { method: 'GET' }).then(function (response) {
 				return response.json();
 			}).then(function (json) {
 				console.log(json);
 				if (!json['other']['comments'].length && _this2.pageNumber != 1) {
 					console.log("ilk sayfaya yönlendirmeli");
+					data['pageNumber'] = _this2.pageNumber = 1;
+					_this2.fetchProduct(data);
+					_this2.refreshUrl();
+				} else {
+					_this2.setState({
+						form: "normal",
+						productName: json['other']['product']['title'],
+						comments: _this2.normalizer('comments', json['other']['comments']),
+						commentsForm: json['other']['comments'].length ? 'normal' : 'noComment',
+						pageNumber: _this2.pageNumber,
+						pageCount: json['other']['pageCount']
+					});
 				}
-				_this2.setState({
-					form: "normal",
-					productName: json['other']['product']['title'],
-					comments: _this2.normalizer('comments', json['other']['comments'])
-				});
 			}).catch(function (error) {
 				console.log("err: " + error);_this2.setState({ form: "notFound" });
+			});
+		}
+	}, {
+		key: "refreshUrl",
+		value: function refreshUrl() {
+			var newUrl = SITEURL + 'urun/' + this.productSlug + '/' + this.commentType + '/' + this.pageNumber;
+			history.pushState({ content: this.state }, 'Title', newUrl);
+			// burası ne kadar sağlıklı oldu emin değilim
+		}
+	}, {
+		key: "load",
+		value: function load() {
+			this.fetchProduct({
+				"productSlug": this.productSlug,
+				"sortBy": "like",
+				"pageNumber": this.pageNumber,
+				"onlyComment": false
 			});
 		}
 	}, {
@@ -348,9 +369,9 @@ var Product = function (_React$Component) {
 					"div",
 					null,
 					React.createElement(ProductInfo, { tags: this.state.tagsInfo, productName: this.state.productName, changeContent: this.props.changeContent }),
-					this.state.commentType == "all" ? React.createElement(PageNavigation, { sortBy: this.state.sortBy, handleChangeSortBy: this.changeSortBy, pageCount: "6", currentPage: this.state.pageNumber, handleChangePageNumber: this.changePageNumber }) : React.createElement(SpecialCommentHeader, { specialInfo: this.state.specialInfo, showAllComments: this.showAllComments }),
+					this.state.commentType == "all" ? React.createElement(PageNavigation, { sortBy: this.state.sortBy, form: this.state.commentsForm, handleChangeSortBy: this.changeSortBy, pageCount: this.state.pageCount, currentPage: this.state.pageNumber, handleChangePageNumber: this.changePageNumber }) : React.createElement(SpecialCommentHeader, { specialInfo: this.state.specialInfo, showAllComments: this.showAllComments }),
 					React.createElement(Comments, { comments: this.state.comments, form: this.state.commentsForm, changeContent: this.props.changeContent }),
-					this.state.commentType == "all" ? React.createElement(PageNavigation, { sortBy: this.state.sortBy, handleChangeSortBy: this.changeSortBy, pageCount: "6", currentPage: this.state.pageNumber, handleChangePageNumber: this.changePageNumber }) : "",
+					this.state.commentType == "all" ? React.createElement(PageNavigation, { sortBy: this.state.sortBy, form: this.state.commentsForm, handleChangeSortBy: this.changeSortBy, pageCount: this.state.pageCount, currentPage: this.state.pageNumber, handleChangePageNumber: this.changePageNumber }) : "",
 					React.createElement(WriteComment, { tags: this.state.tagsInfo })
 				);
 			} else if (this.state.form == "loading") {

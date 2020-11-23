@@ -2,10 +2,7 @@
 
     class Example extends Request {
         protected function get() {
-            $this->response([
-                'type'=>'get',
-                'data'=>$this->data
-            ]);
+            echo intval(95/10);
         }
         protected function post() {
             $this->response([

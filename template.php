@@ -31,7 +31,6 @@
 
     <script src="public/script/semantic.min.js"></script>
     <script src="public/script/script.js"></script>
-    <script src="public/script/fetch.js"></script>
 
     <!-- React bileşenimizi yükleyin. -->
     <script src="public/js/components.js"></script>

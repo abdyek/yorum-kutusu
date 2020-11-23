@@ -37,42 +37,48 @@ class PageNavigation extends React.Component {
                 <option key={i} value={i}>{i}</option>
             )
         }
-        return(
-            <div>
-                <Row size="one">
-                    <Column>
-                        <button className={(this.props.sortBy=="like")?"ui blue icon button":"ui icon button"} onClick={this.sortByLike}>
-                            <i className="icon">
-								<i className="fa fa-thumbs-up" aria-hidden="true"></i>
-                            </i>
-                        </button>
-                        <button className={(this.props.sortBy=="time")?"ui blue icon button":"ui icon button"} onClick={this.sortByTime}>
-                            <i className="icon">
-                               <i className="fa fa-clock-o" aria-hidden="true"></i>
-                            </i>
-                        </button>
-                        <FloatRight>
-                            <button className="ui icon button" onClick={this.prevPage}>
+        if(this.props.form=="noComment") {
+            return(
+                <div></div>
+            )
+        } else {
+            return(
+                <div>
+                    <Row size="one">
+                        <Column>
+                            <button className={(this.props.sortBy=="like")?"ui blue icon button":"ui icon button"} onClick={this.sortByLike}>
                                 <i className="icon">
-                                    <i className="fa fa-angle-left" aria-hidden="true"></i>
+                                                                    <i className="fa fa-thumbs-up" aria-hidden="true"></i>
                                 </i>
                             </button>
-                            <div className="ui form">
-                                <div className="field">
-                                    <select onChange={this.selectOption} value={this.props.currentPage}>
-                                        {this.options}
-                                    </select>
+                            <button className={(this.props.sortBy=="time")?"ui blue icon button":"ui icon button"} onClick={this.sortByTime}>
+                                <i className="icon">
+                                   <i className="fa fa-clock-o" aria-hidden="true"></i>
+                                </i>
+                            </button>
+                            <FloatRight>
+                                <button className="ui icon button" onClick={this.prevPage}>
+                                    <i className="icon">
+                                        <i className="fa fa-angle-left" aria-hidden="true"></i>
+                                    </i>
+                                </button>
+                                <div className="ui form">
+                                    <div className="field">
+                                        <select onChange={this.selectOption} value={this.props.currentPage}>
+                                            {this.options}
+                                        </select>
+                                    </div>
                                 </div>
-                            </div>
-                            <button className="ui icon button" style={{"marginLeft": "0.25em"}} onClick={this.nextPage} >
-                                <i className="icon">
-                                    <i className="fa fa-angle-right" aria-hidden="true"></i>
-                                </i>
-                            </button>
-                        </FloatRight>
-                    </Column>
-                </Row>
-            </div>
-        )
+                                <button className="ui icon button" style={{"marginLeft": "0.25em"}} onClick={this.nextPage} >
+                                    <i className="icon">
+                                        <i className="fa fa-angle-right" aria-hidden="true"></i>
+                                    </i>
+                                </button>
+                            </FloatRight>
+                        </Column>
+                    </Row>
+                </div>
+            )
+        }
     }
 }

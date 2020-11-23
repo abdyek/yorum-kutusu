@@ -43,21 +43,23 @@ const DATA = {
 }
 class Product extends React.Component {
     constructor(props) {
-		super(props);
-		this.state = {
-		    form:"loading"
-		}
-                this.manageOtherSlug = this.manageOtherSlug.bind(this);
-                this.load = this.load.bind(this);
-                this.normalizer= this.normalizer.bind(this);
-		this.changeSortBy = this.changeSortBy.bind(this);
-		this.changePageNumber = this.changePageNumber.bind(this);
-		this.refreshComments = this.refreshComments.bind(this);
-		this.showAllComments = this.showAllComments.bind(this);
+            super(props);
+            this.state = {
+                form:"loading"
+            }
+            this.manageOtherSlug = this.manageOtherSlug.bind(this);
+            this.fetchProduct = this.fetchProduct.bind(this);
+            this.refreshUrl = this.refreshUrl.bind(this);
+            this.load = this.load.bind(this);
+            this.normalizer= this.normalizer.bind(this);
+            this.changeSortBy = this.changeSortBy.bind(this);
+            this.changePageNumber = this.changePageNumber.bind(this);
+            this.refreshComments = this.refreshComments.bind(this);
+            this.showAllComments = this.showAllComments.bind(this);
 	}
 	componentDidMount() {
             this.manageOtherSlug();
-		
+
                 this.load();
 		// yüklenme komutları burada olacak
         this.setState({
@@ -186,40 +188,54 @@ class Product extends React.Component {
 		});
 	}
     manageOtherSlug() {
-        let slugs = getSlugsExtra("urun");
-        this.productSlug = slugs[0];
+        this.slugs = getSlugsExtra("urun");
+        this.productSlug = this.slugs[0];
+        this.commentType = this.slugs[1];
         let specialInfo = {};
-        if(slugs[1]=="arasi") {
+        if(this.commentType =="arasi") {
             specialInfo = {
                 first:slugs[2].split("-")[0],
                 last:slugs[2].split("-")[1]
             }
         } else {
-            this.sortBy = slugs[1];
-            this.pageNumber = (slugs[2])?slugs[2]:1;
+            this.sortBy = this.commentType;
+            this.pageNumber = (this.slugs[2])?this.slugs[2]:1;
         }
         let commentType = "all";  // all, spacial
         // not: buradaki değer atamalar ve değişkenlerin bir kısmı deneme amaçlı, setState içindeki hemen hemen hepsi api tarafından gelecek
     }
+    fetchProduct(data){
+        fetch('http://localhost/yorum-kutusu/api/product' + '?' + getUrlPar(data), {method: 'GET'}).then(response =>response.json()).then(
+                    if(!json['other']['comments'].length && this.pageNumber!=1) {
+                        console.log("ilk sayfaya yönlendirmeli");
+                        data['pageNumber'] = this.pageNumber = 1;
+                        this.fetchProduct(data);
+                        this.refreshUrl();
+                    } else {
+                        this.setState({
+                            form:"normal",
+                            productName:json['other']['product']['title'],
+                            comments: this.normalizer('comments', json['other']['comments']),
+                            commentsForm: (json['other']['comments'].length)?'normal':'noComment',
+                            pageNumber: this.pageNumber,
+                            pageCount:json['other']['pageCount']
+                        });
+                    }
+                }
+        ).catch((error) => {console.log("err: " + error); this.setState({form:"notFound"})});
+    }
+    refreshUrl() {
+        let newUrl = SITEURL + 'urun/' + this.productSlug + '/' + this.commentType + '/' + this.pageNumber;
+        history.pushState({content: this.state}, 'Title', newUrl);
+        // burası ne kadar sağlıklı oldu emin değilim
+    }
     load() {
-        //fetch('http://localhost/yorum-kutusu/api/example', {method: 'GET', body: JSON.stringify({'ali': 'veli'})}).then(response => response.json()).then(json => console.log(json));
-        fetch('http://localhost/yorum-kutusu/api/product' + '?' + getUrlPar({
+        this.fetchProduct({
             "productSlug":this.productSlug,
             "sortBy":"like",
             "pageNumber":this.pageNumber,
             "onlyComment":false
-        }), {method: 'GET'}).then(response => response.json()).then(
-                (json)=> {console.log(json);
-                    if(!json['other']['comments'].length && this.pageNumber!=1) {
-                        console.log("ilk sayfaya yönlendirmeli");
-                    }
-                    this.setState({
-                        form:"normal",
-                        productName:json['other']['product']['title'],
-                        comments: this.normalizer('comments', json['other']['comments'])
-                    });
-                }
-        ).catch((error) => {console.log("err: " + error); this.setState({form:"notFound"})});
+        });
     }
         normalizer(key, data) {
             if(key=='comments') {
@@ -319,11 +335,11 @@ class Product extends React.Component {
                 <div>
                     <ProductInfo tags={this.state.tagsInfo} productName={this.state.productName} changeContent={this.props.changeContent}/>
 					{(this.state.commentType=="all")?
-                    	<PageNavigation sortBy={this.state.sortBy} handleChangeSortBy={this.changeSortBy} pageCount="6" currentPage={this.state.pageNumber} handleChangePageNumber={this.changePageNumber} />
+                    	<PageNavigation sortBy={this.state.sortBy} form={this.state.commentsForm} handleChangeSortBy={this.changeSortBy} pageCount={this.state.pageCount} currentPage={this.state.pageNumber} handleChangePageNumber={this.changePageNumber} />
 					:<SpecialCommentHeader specialInfo={this.state.specialInfo} showAllComments={this.showAllComments}/>}
                     <Comments comments={this.state.comments} form={this.state.commentsForm} changeContent={this.props.changeContent}/>
 					{(this.state.commentType=="all")?
-                    	<PageNavigation sortBy={this.state.sortBy} handleChangeSortBy={this.changeSortBy} pageCount="6" currentPage={this.state.pageNumber} handleChangePageNumber={this.changePageNumber} />
+                    	<PageNavigation sortBy={this.state.sortBy} form={this.state.commentsForm} handleChangeSortBy={this.changeSortBy} pageCount={this.state.pageCount} currentPage={this.state.pageNumber} handleChangePageNumber={this.changePageNumber} />
 					:""
 					}
                     <WriteComment tags={this.state.tagsInfo}/>

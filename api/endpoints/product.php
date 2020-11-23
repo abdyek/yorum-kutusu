@@ -12,6 +12,7 @@ class Product extends Request {
             $this->getTags();
         }
         $this->getCommentsWithRating();
+        $this->getPageCount();
         $this->updateLastSeen();
         $this->mergeAllInfo();
         $this->increaseProductFetchCount();
@@ -77,6 +78,9 @@ class Product extends Request {
             ];
         }
     }
+    private function getPageCount() {
+        $this->pageCount = intval(Database::getRow('SELECT count(*) as commentCount FROM comment c INNER JOIN product p ON p.product_id = c.product_id WHERE p.product_slug=?', [$this->data['productSlug']])['commentCount'] / 10)+1;
+    }
     private function updateLastSeen() {
         if(defined('USERID') and $this->data['sortBy']=='time'){
             // şuan için sadece kronolojik sırada okundu olarak işaretliyorum, diğer türlü yatlıyor
@@ -90,7 +94,7 @@ class Product extends Request {
     private function mergeAllInfo() {
         if(!$this->data['onlyComment']) {
             $this->success(array_merge(
-                ['product'=>$this->productInfo], ['tags'=>array_values($this->tagsInfo)], ['comments'=>$this->commentsInfo]
+                ['product'=>$this->productInfo], ['tags'=>array_values($this->tagsInfo)], ['comments'=>$this->commentsInfo], ['pageCount'=> $this->pageCount]
             ));
         } else {
             $this->success(

@@ -68,71 +68,75 @@ var PageNavigation = function (_React$Component) {
                     i
                 ));
             }
-            return React.createElement(
-                "div",
-                null,
-                React.createElement(
-                    Row,
-                    { size: "one" },
+            if (this.props.form == "noComment") {
+                return React.createElement("div", null);
+            } else {
+                return React.createElement(
+                    "div",
+                    null,
                     React.createElement(
-                        Column,
-                        null,
+                        Row,
+                        { size: "one" },
                         React.createElement(
-                            "button",
-                            { className: this.props.sortBy == "like" ? "ui blue icon button" : "ui icon button", onClick: this.sortByLike },
-                            React.createElement(
-                                "i",
-                                { className: "icon" },
-                                React.createElement("i", { className: "fa fa-thumbs-up", "aria-hidden": "true" })
-                            )
-                        ),
-                        React.createElement(
-                            "button",
-                            { className: this.props.sortBy == "time" ? "ui blue icon button" : "ui icon button", onClick: this.sortByTime },
-                            React.createElement(
-                                "i",
-                                { className: "icon" },
-                                React.createElement("i", { className: "fa fa-clock-o", "aria-hidden": "true" })
-                            )
-                        ),
-                        React.createElement(
-                            FloatRight,
+                            Column,
                             null,
                             React.createElement(
                                 "button",
-                                { className: "ui icon button", onClick: this.prevPage },
+                                { className: this.props.sortBy == "like" ? "ui blue icon button" : "ui icon button", onClick: this.sortByLike },
                                 React.createElement(
                                     "i",
                                     { className: "icon" },
-                                    React.createElement("i", { className: "fa fa-angle-left", "aria-hidden": "true" })
-                                )
-                            ),
-                            React.createElement(
-                                "div",
-                                { className: "ui form" },
-                                React.createElement(
-                                    "div",
-                                    { className: "field" },
-                                    React.createElement(
-                                        "select",
-                                        { onChange: this.selectOption, value: this.props.currentPage },
-                                        this.options
-                                    )
+                                    React.createElement("i", { className: "fa fa-thumbs-up", "aria-hidden": "true" })
                                 )
                             ),
                             React.createElement(
                                 "button",
-                                { className: "ui icon button", style: { "marginLeft": "0.25em" }, onClick: this.nextPage },
+                                { className: this.props.sortBy == "time" ? "ui blue icon button" : "ui icon button", onClick: this.sortByTime },
                                 React.createElement(
                                     "i",
                                     { className: "icon" },
-                                    React.createElement("i", { className: "fa fa-angle-right", "aria-hidden": "true" })
+                                    React.createElement("i", { className: "fa fa-clock-o", "aria-hidden": "true" })
+                                )
+                            ),
+                            React.createElement(
+                                FloatRight,
+                                null,
+                                React.createElement(
+                                    "button",
+                                    { className: "ui icon button", onClick: this.prevPage },
+                                    React.createElement(
+                                        "i",
+                                        { className: "icon" },
+                                        React.createElement("i", { className: "fa fa-angle-left", "aria-hidden": "true" })
+                                    )
+                                ),
+                                React.createElement(
+                                    "div",
+                                    { className: "ui form" },
+                                    React.createElement(
+                                        "div",
+                                        { className: "field" },
+                                        React.createElement(
+                                            "select",
+                                            { onChange: this.selectOption, value: this.props.currentPage },
+                                            this.options
+                                        )
+                                    )
+                                ),
+                                React.createElement(
+                                    "button",
+                                    { className: "ui icon button", style: { "marginLeft": "0.25em" }, onClick: this.nextPage },
+                                    React.createElement(
+                                        "i",
+                                        { className: "icon" },
+                                        React.createElement("i", { className: "fa fa-angle-right", "aria-hidden": "true" })
+                                    )
                                 )
                             )
                         )
                     )
-                )
-            );
+                );
+            }
         }
     }]);
 

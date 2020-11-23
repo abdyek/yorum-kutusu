@@ -1320,8 +1320,8 @@ var Comments = function (_React$Component14) {
                         null,
                         React.createElement(
                             "div",
-                            { "class": "ui massive green message" },
-                            "Yorum Yok"
+                            { "class": "ui big yellow message" },
+                            "Yorum yok, ilk yorum senden olsun!"
                         )
                     )
                 );
