@@ -49,6 +49,7 @@ class Product extends React.Component {
             }
             this.manageOtherSlug = this.manageOtherSlug.bind(this);
             this.fetchProduct = this.fetchProduct.bind(this);
+            this.fetchComment = this.fetchComment.bind(this);
             this.refreshUrl = this.refreshUrl.bind(this);
             this.load = this.load.bind(this);
             this.normalizer= this.normalizer.bind(this);
@@ -204,25 +205,53 @@ class Product extends React.Component {
         let commentType = "all";  // all, spacial
         // not: buradaki değer atamalar ve değişkenlerin bir kısmı deneme amaçlı, setState içindeki hemen hemen hepsi api tarafından gelecek
     }
-    fetchProduct(data){
-        fetch('http://localhost/yorum-kutusu/api/product' + '?' + getUrlPar(data), {method: 'GET'}).then(response =>response.json()).then(
-                    if(!json['other']['comments'].length && this.pageNumber!=1) {
-                        console.log("ilk sayfaya yönlendirmeli");
-                        data['pageNumber'] = this.pageNumber = 1;
-                        this.fetchProduct(data);
-                        this.refreshUrl();
-                    } else {
-                        this.setState({
-                            form:"normal",
-                            productName:json['other']['product']['title'],
-                            comments: this.normalizer('comments', json['other']['comments']),
-                            commentsForm: (json['other']['comments'].length)?'normal':'noComment',
-                            pageNumber: this.pageNumber,
-                            pageCount:json['other']['pageCount']
-                        });
-                    }
-                }
-        ).catch((error) => {console.log("err: " + error); this.setState({form:"notFound"})});
+    fetchProduct(data) {
+        fetch(SITEURL + 'api/product?' + getUrlPar(data), {method: 'GET'}).then((response)=>{
+            if(!response.ok) throw new Error(response.status);
+            else return response.json();
+        }).then((json)=>{
+            if(!json['other']['comments'].length && this.pageNumber!=1) {
+                console.log("ilk sayfaya yönlendirmeli");
+                data['pageNumber'] = this.pageNumber = 1;
+                this.fetchProduct(data);
+                this.refreshUrl();
+            } else {
+                this.setState({
+                    form:"normal",
+                    productName:json['other']['product']['title'],
+                    comments: this.normalizer('comments', json['other']['comments']),
+                    commentsForm: (json['other']['comments'].length)?'normal':'noComment',
+                    pageNumber: this.pageNumber,
+                    pageCount:json['other']['pageCount']
+                });
+            }
+        }).catch((error) => {
+            console.log(error);
+            if(error.message==404) {
+                this.setState({form:"notFound"});
+            } else {
+                console.log("bilinmeyen bir hata");
+            }
+        });
+    }
+    fetchComment() {
+        fetch(SITEURL + 'api/product?' + getUrlPar({
+            productSlug:this.productSlug,
+            sortBy: "time",
+            pageNumber:this.pageNumber,
+            onlyComment:true
+        }), {method: 'GET'}).then((response)=>{
+            if(!response.ok) throw new Error(response.status);
+            else return response.json();
+        }).then((json)=> {
+            this.setState({
+                commentsForm:"normal",
+                comments: this.normalizer('comments', json['other']['comments'])
+            });
+            this.refreshUrl();
+        }).catch((error) => {
+            console.log(error);
+        });
     }
     refreshUrl() {
         let newUrl = SITEURL + 'urun/' + this.productSlug + '/' + this.commentType + '/' + this.pageNumber;
@@ -232,7 +261,7 @@ class Product extends React.Component {
     load() {
         this.fetchProduct({
             "productSlug":this.productSlug,
-            "sortBy":"like",
+            "sortBy":"time",
             "pageNumber":this.pageNumber,
             "onlyComment":false
         });
@@ -308,17 +337,19 @@ class Product extends React.Component {
 	}
 	changePageNumber(value){
 		if(value!=this.state.pageNumber && this.state.commentsForm!="loading") {
-			this.setState({
-				pageNumber: value
-			});
-			this.refreshComments();
+                    this.setState({
+                        pageNumber: value
+                    });
+                    this.pageNumber = value;
+                    this.refreshComments();
 		}
 	}
 	refreshComments() {
-		// yorum getirme işlemi burada olacak ve yorum geleseğe kadar loading'e dönecek
-		this.setState({
-			commentsForm:"loading"
-		});
+            // yorum getirme işlemi burada olacak ve yorum geleseğe kadar loading'e dönecek
+            this.setState({
+                commentsForm:"loading"
+            });
+            this.fetchComment();
 	}
 	showAllComments() {
 		this.setState({

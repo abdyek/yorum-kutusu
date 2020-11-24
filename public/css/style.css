@@ -24,8 +24,10 @@ header > div {
 .commentHeader {
     padding:0.5rem 0.9rem;
 }
-.commentText {
-    padding:1rem;
+
+.comment-text {
+    padding:0.5rem;
+    white-space: pre-line;
 }
 
 .commentText p { 

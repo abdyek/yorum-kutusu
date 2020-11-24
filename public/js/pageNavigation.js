@@ -21,6 +21,9 @@ var PageNavigation = function (_React$Component) {
         _this.selectOption = _this.selectOption.bind(_this);
         _this.nextPage = _this.nextPage.bind(_this);
         _this.prevPage = _this.prevPage.bind(_this);
+        _this.state = {
+            currentPage: _this.props.currentPage
+        };
         return _this;
     }
 

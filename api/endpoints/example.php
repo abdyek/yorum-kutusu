@@ -3,6 +3,7 @@
     class Example extends Request {
         protected function get() {
             echo intval(95/10);
+            http_response_code(500);
         }
         protected function post() {
             $this->response([

@@ -1,17 +1,20 @@
 class PageNavigation extends React.Component {
-	constructor(props) {
+    constructor(props) {
         super(props);
-		this.sortByLike = this.sortByLike.bind(this);
+        this.sortByLike = this.sortByLike.bind(this);
         this.sortByTime = this.sortByTime.bind(this);
         this.selectOption = this.selectOption.bind(this);
         this.nextPage = this.nextPage.bind(this);
         this.prevPage = this.prevPage.bind(this);
-	}
-	sortByLike() {
-		this.props.handleChangeSortBy("like");
-	}
-	sortByTime() {
-		this.props.handleChangeSortBy("time");
+        this.state = {
+            currentPage:this.props.currentPage
+        };
+    }
+    sortByLike() {
+            this.props.handleChangeSortBy("like");
+    }
+    sortByTime() {
+            this.props.handleChangeSortBy("time");
     }
     selectOption(e) {
         let value = (typeof e=="object")? e.target.value: e;
