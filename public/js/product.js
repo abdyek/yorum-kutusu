@@ -71,9 +71,7 @@ var Product = function (_React$Component) {
         key: "componentDidMount",
         value: function componentDidMount() {
             this.manageOtherSlug();
-
             this.load();
-            // yüklenme komutları burada olacak
             this.setState({
                 // normal, loading, notFound
                 form: "loading",
@@ -88,7 +86,7 @@ var Product = function (_React$Component) {
                 	last:"30"
                 },
                 */
-                sortBy: "time",
+                sortBy: this.sortBy,
                 pageNumber: this.pageNumber,
                 comments: [{
                     id: 0,
@@ -202,15 +200,19 @@ var Product = function (_React$Component) {
             this.slugs = getSlugsExtra("urun");
             this.productSlug = this.slugs[0];
             this.commentType = this.slugs[1];
-            var specialInfo = {};
             if (this.commentType == "arasi") {
+                var specialInfo = {};
                 specialInfo = {
                     first: slugs[2].split("-")[0],
                     last: slugs[2].split("-")[1]
                 };
-            } else {
+            } else if (this.commentType == "time" || this.commentType == "like") {
                 this.sortBy = this.commentType;
                 this.pageNumber = this.slugs[2] ? this.slugs[2] : 1;
+            } else {
+                this.sortBy = "time";
+                this.pageNumber = 1;
+                this.refreshUrl();
             }
             var commentType = "all"; // all, spacial
             // not: buradaki değer atamalar ve değişkenlerin bir kısmı deneme amaçlı, setState içindeki hemen hemen hepsi api tarafından gelecek
@@ -254,7 +256,7 @@ var Product = function (_React$Component) {
 
             fetch(SITEURL + 'api/product?' + getUrlPar({
                 productSlug: this.productSlug,
-                sortBy: "time",
+                sortBy: this.sortBy,
                 pageNumber: this.pageNumber,
                 onlyComment: true
             }), { method: 'GET' }).then(function (response) {
@@ -272,7 +274,7 @@ var Product = function (_React$Component) {
     }, {
         key: "refreshUrl",
         value: function refreshUrl() {
-            var newUrl = SITEURL + 'urun/' + this.productSlug + '/' + this.commentType + '/' + this.pageNumber;
+            var newUrl = SITEURL + 'urun/' + this.productSlug + '/' + this.sortBy + '/' + this.pageNumber;
             history.pushState({ content: this.state }, 'Title', newUrl);
             // burası ne kadar sağlıklı oldu emin değilim
         }
@@ -281,7 +283,7 @@ var Product = function (_React$Component) {
         value: function load() {
             this.fetchProduct({
                 "productSlug": this.productSlug,
-                "sortBy": "time",
+                "sortBy": this.sortBy,
                 "pageNumber": this.pageNumber,
                 "onlyComment": false
             });
@@ -356,6 +358,7 @@ var Product = function (_React$Component) {
                 this.setState({
                     sortBy: value
                 });
+                this.sortBy = value;
                 this.refreshComments();
             }
         }
@@ -384,7 +387,7 @@ var Product = function (_React$Component) {
         value: function showAllComments() {
             this.setState({
                 commentType: "all",
-                sortBy: "time",
+                sortBy: this.sortBy,
                 pageNumber: 1
             });
             this.refreshComments();

@@ -45,7 +45,7 @@ class Product extends React.Component {
     constructor(props) {
             super(props);
             this.state = {
-                form:"loading"
+                form:"loading",
             }
             this.manageOtherSlug = this.manageOtherSlug.bind(this);
             this.fetchProduct = this.fetchProduct.bind(this);
@@ -60,9 +60,7 @@ class Product extends React.Component {
 	}
 	componentDidMount() {
             this.manageOtherSlug();
-
-                this.load();
-		// yüklenme komutları burada olacak
+            this.load();
         this.setState({
             // normal, loading, notFound
 			form:"loading",
@@ -77,7 +75,7 @@ class Product extends React.Component {
 				last:"30"
 			},
 			*/
-			sortBy: "time",
+			sortBy: this.sortBy,
 			pageNumber: this.pageNumber,
 			comments: [
 				{
@@ -192,15 +190,19 @@ class Product extends React.Component {
         this.slugs = getSlugsExtra("urun");
         this.productSlug = this.slugs[0];
         this.commentType = this.slugs[1];
-        let specialInfo = {};
-        if(this.commentType =="arasi") {
+        if(this.commentType=="arasi") {
+            let specialInfo = {};
             specialInfo = {
                 first:slugs[2].split("-")[0],
                 last:slugs[2].split("-")[1]
             }
-        } else {
+        } else if(this.commentType=="time" || this.commentType=="like"){
             this.sortBy = this.commentType;
             this.pageNumber = (this.slugs[2])?this.slugs[2]:1;
+        } else {
+            this.sortBy = "time";
+            this.pageNumber = 1;
+            this.refreshUrl();
         }
         let commentType = "all";  // all, spacial
         // not: buradaki değer atamalar ve değişkenlerin bir kısmı deneme amaçlı, setState içindeki hemen hemen hepsi api tarafından gelecek
@@ -237,7 +239,7 @@ class Product extends React.Component {
     fetchComment() {
         fetch(SITEURL + 'api/product?' + getUrlPar({
             productSlug:this.productSlug,
-            sortBy: "time",
+            sortBy: this.sortBy,
             pageNumber:this.pageNumber,
             onlyComment:true
         }), {method: 'GET'}).then((response)=>{
@@ -254,14 +256,14 @@ class Product extends React.Component {
         });
     }
     refreshUrl() {
-        let newUrl = SITEURL + 'urun/' + this.productSlug + '/' + this.commentType + '/' + this.pageNumber;
+        let newUrl = SITEURL + 'urun/' + this.productSlug + '/' + this.sortBy + '/' + this.pageNumber;
         history.pushState({content: this.state}, 'Title', newUrl);
         // burası ne kadar sağlıklı oldu emin değilim
     }
     load() {
         this.fetchProduct({
             "productSlug":this.productSlug,
-            "sortBy":"time",
+            "sortBy":this.sortBy,
             "pageNumber":this.pageNumber,
             "onlyComment":false
         });
@@ -327,13 +329,14 @@ class Product extends React.Component {
             }
         }
 	changeSortBy(value) {
-		if(value!=this.state.sortBy && this.state.commentsForm!="loading") {
-			// ^ bu ve changePageNumber metodundaki kontrolü kullanıcının aynı anda birden fazla seçim yapmasını engellemek için koydum
-			this.setState({
-				sortBy:value
-			});
-			this.refreshComments();
-		}
+            if(value!=this.state.sortBy && this.state.commentsForm!="loading") {
+                // ^ bu ve changePageNumber metodundaki kontrolü kullanıcının aynı anda birden fazla seçim yapmasını engellemek için koydum
+                this.setState({
+                    sortBy:value
+                });
+                this.sortBy=value;
+                this.refreshComments();
+            }
 	}
 	changePageNumber(value){
 		if(value!=this.state.pageNumber && this.state.commentsForm!="loading") {
@@ -354,7 +357,7 @@ class Product extends React.Component {
 	showAllComments() {
 		this.setState({
 			commentType:"all",
-			sortBy:"time",
+			sortBy:this.sortBy,
 			pageNumber:1
 		});
 		this.refreshComments();
