@@ -25,13 +25,14 @@ class Product extends Request {
         ];
     }
     private function getTags() {
-        $tags = Database::getRows('SELECT * FROM tag_with_product twp INNER JOIN tag t ON t.tag_id=twp.tag_id WHERE twp.product_slug=?', [$this->data['productSlug']]);
+        $tags = Database::getRows('SELECT * FROM tag_with_product twp INNER JOIN tag t ON t.tag_id=twp.tag_id WHERE twp.product_id=?', [$this->productInfo['id']]);
         $this->tagsInfo = [];
         foreach($tags as $tag) {
             $this->tagsInfo[] = [
                 'slug'=>$tag['tag_slug'],
                 'tagName'=>$tag['tag_name'],
-                'tagAvarageRating'=>$tag['tag_avarage_rating']
+                'tagAvarageRating'=>$tag['tag_avarage_rating'],
+                'tagPassive'=>$tag['tag_passive']
             ];
         }
     }

@@ -224,7 +224,8 @@ class Product extends React.Component {
                     comments: this.normalizer('comments', json['other']['comments']),
                     commentsForm: (json['other']['comments'].length)?'normal':'noComment',
                     pageNumber: this.pageNumber,
-                    pageCount:json['other']['pageCount']
+                    pageCount:json['other']['pageCount'],
+                    tagsInfo: this.normalizer('tags', json['other']['tags'])
                 });
             }
         }).catch((error) => {
@@ -284,7 +285,7 @@ class Product extends React.Component {
                         type:"profile",
                         slug:com.owner.slug,
                         date:com.commentCreateDateTime,
-                        tags:this.normalizer('tags', com.rating),
+                        tags:this.normalizer('comment-rating', com.rating),
                         /*
                         tags:{3:{
                                         passive:false,
@@ -313,7 +314,7 @@ class Product extends React.Component {
                     })
                 }
                 return comments;
-            } else if(key=="tags") {
+            } else if(key=="comment-rating") {
                 let tags = {};
                 let keys = Object.keys(data);
                 for(let i=0; i<keys.length; i++) {
@@ -326,7 +327,21 @@ class Product extends React.Component {
                     }
                 }
                 return tags;
+            } else if(key=="tags") {
+                let tags = {};
+                for(let i=0; i<data.length;i++) {
+                    tags[i] = {
+                        passive: (data[i].tagPassive=="1")?true:false,
+                        text: data[i].tagName,
+                        color: getRatingColor(data[i].tagAvarageRating),
+                        slug: data[i].slug,
+                        rateValue: data[i].tagAvarageRating
+                    }
+                }
+                console.log(tags);
+                return tags;
             }
+
         }
 	changeSortBy(value) {
             if(value!=this.state.sortBy && this.state.commentsForm!="loading") {
@@ -415,7 +430,7 @@ class ProductInfo extends React.Component {
 			unfollow: {
 				followed: true,
 				buttonName: "Takibi Bırak",
-				buttonClassName: "ui gray button",
+				buttonClassName: "ui olive button",
 				icon: <i class="fa fa-times" aria-hidden="true"></i>
 			}
 		}

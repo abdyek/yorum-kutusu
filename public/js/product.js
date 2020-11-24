@@ -237,7 +237,8 @@ var Product = function (_React$Component) {
                         comments: _this2.normalizer('comments', json['other']['comments']),
                         commentsForm: json['other']['comments'].length ? 'normal' : 'noComment',
                         pageNumber: _this2.pageNumber,
-                        pageCount: json['other']['pageCount']
+                        pageCount: json['other']['pageCount'],
+                        tagsInfo: _this2.normalizer('tags', json['other']['tags'])
                     });
                 }
             }).catch(function (error) {
@@ -306,7 +307,7 @@ var Product = function (_React$Component) {
                         type: "profile",
                         slug: com.owner.slug,
                         date: com.commentCreateDateTime,
-                        tags: this.normalizer('tags', com.rating),
+                        tags: this.normalizer('comment-rating', com.rating),
                         /*
                         tags:{3:{
                                         passive:false,
@@ -335,7 +336,7 @@ var Product = function (_React$Component) {
                     });
                 }
                 return comments;
-            } else if (key == "tags") {
+            } else if (key == "comment-rating") {
                 var tags = {};
                 var keys = Object.keys(data);
                 for (var _i = 0; _i < keys.length; _i++) {
@@ -348,6 +349,19 @@ var Product = function (_React$Component) {
                     };
                 }
                 return tags;
+            } else if (key == "tags") {
+                var _tags = {};
+                for (var _i2 = 0; _i2 < data.length; _i2++) {
+                    _tags[_i2] = {
+                        passive: data[_i2].tagPassive == "1" ? true : false,
+                        text: data[_i2].tagName,
+                        color: getRatingColor(data[_i2].tagAvarageRating),
+                        slug: data[_i2].slug,
+                        rateValue: data[_i2].tagAvarageRating
+                    };
+                }
+                console.log(_tags);
+                return _tags;
             }
         }
     }, {
@@ -454,7 +468,7 @@ var ProductInfo = function (_React$Component2) {
             unfollow: {
                 followed: true,
                 buttonName: "Takibi Bırak",
-                buttonClassName: "ui gray button",
+                buttonClassName: "ui olive button",
                 icon: React.createElement("i", { "class": "fa fa-times", "aria-hidden": "true" })
             }
         };

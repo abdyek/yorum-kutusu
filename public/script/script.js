@@ -1,6 +1,20 @@
 window.history.pushState({content: firstContent}, "", "");
 let firstLoading = true;
 
+function getRatingColor(value) {
+    if(value>=0 && value<3) {
+        return "red";
+    } else if(value>=3 && value<5) {
+        return "orange";
+    } else if(value>=5 && value<7) {
+        return "yellow";
+    } else if(value>=7 && value<9) {
+        return "teal";
+    } else if(value>=9 && value<=10) {
+        return "blue";
+    }
+}
+
 function getUrlPar(data) {
     let keys = Object.keys(data);
     for(let i=0;i<keys.length;i++) {
