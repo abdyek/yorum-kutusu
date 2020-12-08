@@ -3,6 +3,8 @@ class LogIn extends React.Component {
     constructor(props) {
         super(props);
         // bind
+        this.changeContent = this.changeContent.bind(this);
+        this.login = this.login.bind(this);
         this.logInClick = this.logInClick.bind(this);
         this.idChange = this.idChange.bind(this);
         this.passwordChange = this.passwordChange.bind(this);
@@ -10,43 +12,69 @@ class LogIn extends React.Component {
         this.state = {
             id:"",
             password:"",
+            success:false,
             loading:false,
-            message: ""
+            message: "",
+            messageColor:""
         }
+    }
+    componentDidMount() {
+        if(getCookie('user') && getCookie('user')!='null') {
+            this.props.changeContent(' ');
+        }
+    }
+    changeContent(e) {
+        e.preventDefault();
+        this.props.changeContent(e.target.href);
+    }
+    login() {
+        fetch(SITEURL + 'api/login', {
+            method: 'POST',
+            header: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: this.state.id,
+                password:this.state.password
+            })
+        }).then((response)=>{
+            if(!response.ok) throw new Error(response.status);
+            else return response.json();
+        }).then((json)=>{
+            this.setState({
+                loading:false,
+                success:true
+            });
+            let hash = btoa({
+                'userID':json.userID,
+                'unreadComments':0
+            });
+            setCookie('user', hash);
+            this.props.changeHeader("user-empty-unread");
+            setTimeout(()=>{
+                this.props.changeContent(' ');
+            }, 2000);
+        }).catch((error)=>{
+            if(error.message==401) {
+                this.setState({
+                    loading:false,
+                    message: "E-posta ile parola uyumsuz",
+                    messageColor:"red"
+                });
+            } else if(error.message==403) {
+                this.setState({
+                    loading:false,
+                    message: "Zaten giriş yapılmış!",
+                    messageColor:"red"
+                });
+            }
+        });
     }
     logInClick(event) {
         this.setState({
             loading:true
         })
-        $.ajax({
-            type:'POST',
-            url:'ajax-login',
-            data:{
-                "user": {
-                    "email_or_username": this.state.id,
-                    "password": this.state.password
-                }
-            },
-            success: function(response) {
-                // başarılı olması durumunda çalışacak fonki
-                // setCookie("jwt",response.jwt,365);
-                console.log(response);
-                this.setState({
-                    loading:false
-                })
-                if(response.jwt) {
-                    console.log(response);
-                    // setCookie("userName", response.username, 365); -> buna ihtiyaç kalmadı artık kullanıcı ismini back-endden çekiyorum
-                    window.location.href = 'index';
-                }
-                if(response.message!="") {
-                    this.setState({
-                        message: <ErrorMessageBox text={response.message}/>
-                    });
-                }
-            }.bind(this),
-            dataType:'json'
-        })
+        this.login();
         event.preventDefault();
     }
     idChange(event) {
@@ -61,31 +89,64 @@ class LogIn extends React.Component {
     }
     render() {
         document.title = "Giriş Yap";
+        if(this.state.success) {
+            return (
+                <div>
+                    <Row size="sixteen">
+                        <WideColumn size="four" />
+                        <WideColumn size="eight">
+                            <div class="ui blue message">
+                                <div class="header">
+                                    Başarılı bir şekilde giriş yaptınız
+                                </div>
+                                Bir kaç saniye içerisinde ana sayfaya yönlendirileceksiniz
+                            </div>
+                        </WideColumn>
+                    </Row>
+                </div>
+            )
+        }
         if(this.state.loading){
             return(
-                <RowLoading />
+                <RowLoadingSpin nonSegment={true} />
             )
         } else {
             return(
+                <div>
                 <Row size="sixteen">
                     <WideColumn size="four" />
                     <WideColumn size="eight">
-                        {this.state.message}
+                        {(this.state.message)?
+                            <div class={"ui "+this.state.messageColor+" message"}>{this.state.message}</div>
+                        :""}
                         <form className="ui form">
-                            <div className="field">
+                            <div className="field loginInput">
                                 <label>E-posta</label>
-                                <input type="text" name="id" value={this.state.id} onChange={this.idChange} placeholder="veya Kullanıcı Adı" />
+                                <input type="text" name="id" value={this.state.id} onChange={this.idChange} placeholder="E-posta" />
                             </div>
-                            <div className="field">
+                            <div className="field loginInput">
                                 <label>Parola</label>
                                 <input type="password" name="password" value={this.state.password} onChange={this.passwordChange} placeholder="Parola" />
                             </div>
                             <FloatRight>
-                                <button className="ui primary button" type="submit" onClick={this.logInClick}>Giriş Yap</button>
+                                <button className="ui teal button" type="submit" onClick={this.logInClick}>Giriş Yap</button>
                             </FloatRight>
                         </form>
                     </WideColumn>
                 </Row>
+                <Row size="one">
+                    <Column>
+                        <Center>
+                            <div className="haveAccount">
+                                Hesabın mı yok?<br />
+                                <a href="uye-ol" onClick={this.changeContent}>
+                                    Şimdi Üye ol
+                                </a>
+                            </div>
+                        </Center>
+                    </Column>
+                </Row>
+                </div>
             )
         }
     }
@@ -106,10 +167,12 @@ class SignUp extends React.Component {
                 <Row size="one">
                     <Column>
                         <Center>
-                            Hesabın mı yok?<br />
-                            <a href="uye-ol" onClick={this.changeContent}>
-                                Şimdi Üye ol
-                            </a>
+                            <div className="haveAccount">
+                                Hesabın mı yok?<br />
+                                <a href="uye-ol" onClick={this.changeContent}>
+                                    Şimdi Üye ol
+                                </a>
+                            </div>
                         </Center>
                     </Column>
                 </Row>
@@ -144,7 +207,7 @@ class Head extends React.Component {
                 <Row size="sixteen">
                     <WideColumn size="four" />
                     <WideColumn size="eight">
-                        <H type="1" textAlign="center" text="Giriş Yap"/>
+                        <h1 className="girisYapHeader textAlignCenter">Giriş Yap</h1>
                     </WideColumn>
                 </Row>
             </div>
@@ -160,8 +223,7 @@ class Login extends React.Component {
         return(
             <div>
                 <Head />
-                <LogIn />
-                <SignUp changeContent={this.props.changeContent} />
+                <LogIn changeContent={this.props.changeContent} changeHeader={this.props.changeHeader}/>
             </div>
         )
     }

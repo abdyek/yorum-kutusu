@@ -16,6 +16,8 @@ var LogIn = function (_React$Component) {
         // bind
         var _this = _possibleConstructorReturn(this, (LogIn.__proto__ || Object.getPrototypeOf(LogIn)).call(this, props));
 
+        _this.changeContent = _this.changeContent.bind(_this);
+        _this.login = _this.login.bind(_this);
         _this.logInClick = _this.logInClick.bind(_this);
         _this.idChange = _this.idChange.bind(_this);
         _this.passwordChange = _this.passwordChange.bind(_this);
@@ -23,47 +25,80 @@ var LogIn = function (_React$Component) {
         _this.state = {
             id: "",
             password: "",
+            success: false,
             loading: false,
-            message: ""
+            message: "",
+            messageColor: ""
         };
         return _this;
     }
 
     _createClass(LogIn, [{
+        key: "componentDidMount",
+        value: function componentDidMount() {
+            if (getCookie('user') && getCookie('user') != 'null') {
+                this.props.changeContent(' ');
+            }
+        }
+    }, {
+        key: "changeContent",
+        value: function changeContent(e) {
+            e.preventDefault();
+            this.props.changeContent(e.target.href);
+        }
+    }, {
+        key: "login",
+        value: function login() {
+            var _this2 = this;
+
+            fetch(SITEURL + 'api/login', {
+                method: 'POST',
+                header: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: this.state.id,
+                    password: this.state.password
+                })
+            }).then(function (response) {
+                if (!response.ok) throw new Error(response.status);else return response.json();
+            }).then(function (json) {
+                _this2.setState({
+                    loading: false,
+                    success: true
+                });
+                var hash = btoa({
+                    'userID': json.userID,
+                    'unreadComments': 0
+                });
+                setCookie('user', hash);
+                _this2.props.changeHeader("user-empty-unread");
+                setTimeout(function () {
+                    _this2.props.changeContent(' ');
+                }, 2000);
+            }).catch(function (error) {
+                if (error.message == 401) {
+                    _this2.setState({
+                        loading: false,
+                        message: "E-posta ile parola uyumsuz",
+                        messageColor: "red"
+                    });
+                } else if (error.message == 403) {
+                    _this2.setState({
+                        loading: false,
+                        message: "Zaten giriş yapılmış!",
+                        messageColor: "red"
+                    });
+                }
+            });
+        }
+    }, {
         key: "logInClick",
         value: function logInClick(event) {
             this.setState({
                 loading: true
             });
-            $.ajax({
-                type: 'POST',
-                url: 'ajax-login',
-                data: {
-                    "user": {
-                        "email_or_username": this.state.id,
-                        "password": this.state.password
-                    }
-                },
-                success: function (response) {
-                    // başarılı olması durumunda çalışacak fonki
-                    // setCookie("jwt",response.jwt,365);
-                    console.log(response);
-                    this.setState({
-                        loading: false
-                    });
-                    if (response.jwt) {
-                        console.log(response);
-                        // setCookie("userName", response.username, 365); -> buna ihtiyaç kalmadı artık kullanıcı ismini back-endden çekiyorum
-                        window.location.href = 'index';
-                    }
-                    if (response.message != "") {
-                        this.setState({
-                            message: React.createElement(ErrorMessageBox, { text: response.message })
-                        });
-                    }
-                }.bind(this),
-                dataType: 'json'
-            });
+            this.login();
             event.preventDefault();
         }
     }, {
@@ -84,47 +119,103 @@ var LogIn = function (_React$Component) {
         key: "render",
         value: function render() {
             document.title = "Giriş Yap";
+            if (this.state.success) {
+                return React.createElement(
+                    "div",
+                    null,
+                    React.createElement(
+                        Row,
+                        { size: "sixteen" },
+                        React.createElement(WideColumn, { size: "four" }),
+                        React.createElement(
+                            WideColumn,
+                            { size: "eight" },
+                            React.createElement(
+                                "div",
+                                { "class": "ui blue message" },
+                                React.createElement(
+                                    "div",
+                                    { "class": "header" },
+                                    "Ba\u015Far\u0131l\u0131 bir \u015Fekilde giri\u015F yapt\u0131n\u0131z"
+                                ),
+                                "Bir ka\xE7 saniye i\xE7erisinde ana sayfaya y\xF6nlendirileceksiniz"
+                            )
+                        )
+                    )
+                );
+            }
             if (this.state.loading) {
-                return React.createElement(RowLoading, null);
+                return React.createElement(RowLoadingSpin, { nonSegment: true });
             } else {
                 return React.createElement(
-                    Row,
-                    { size: "sixteen" },
-                    React.createElement(WideColumn, { size: "four" }),
+                    "div",
+                    null,
                     React.createElement(
-                        WideColumn,
-                        { size: "eight" },
-                        this.state.message,
+                        Row,
+                        { size: "sixteen" },
+                        React.createElement(WideColumn, { size: "four" }),
                         React.createElement(
-                            "form",
-                            { className: "ui form" },
-                            React.createElement(
+                            WideColumn,
+                            { size: "eight" },
+                            this.state.message ? React.createElement(
                                 "div",
-                                { className: "field" },
-                                React.createElement(
-                                    "label",
-                                    null,
-                                    "E-posta"
-                                ),
-                                React.createElement("input", { type: "text", name: "id", value: this.state.id, onChange: this.idChange, placeholder: "veya Kullan\u0131c\u0131 Ad\u0131" })
-                            ),
+                                { "class": "ui " + this.state.messageColor + " message" },
+                                this.state.message
+                            ) : "",
                             React.createElement(
-                                "div",
-                                { className: "field" },
+                                "form",
+                                { className: "ui form" },
                                 React.createElement(
-                                    "label",
-                                    null,
-                                    "Parola"
+                                    "div",
+                                    { className: "field loginInput" },
+                                    React.createElement(
+                                        "label",
+                                        null,
+                                        "E-posta"
+                                    ),
+                                    React.createElement("input", { type: "text", name: "id", value: this.state.id, onChange: this.idChange, placeholder: "E-posta" })
                                 ),
-                                React.createElement("input", { type: "password", name: "password", value: this.state.password, onChange: this.passwordChange, placeholder: "Parola" })
-                            ),
+                                React.createElement(
+                                    "div",
+                                    { className: "field loginInput" },
+                                    React.createElement(
+                                        "label",
+                                        null,
+                                        "Parola"
+                                    ),
+                                    React.createElement("input", { type: "password", name: "password", value: this.state.password, onChange: this.passwordChange, placeholder: "Parola" })
+                                ),
+                                React.createElement(
+                                    FloatRight,
+                                    null,
+                                    React.createElement(
+                                        "button",
+                                        { className: "ui teal button", type: "submit", onClick: this.logInClick },
+                                        "Giri\u015F Yap"
+                                    )
+                                )
+                            )
+                        )
+                    ),
+                    React.createElement(
+                        Row,
+                        { size: "one" },
+                        React.createElement(
+                            Column,
+                            null,
                             React.createElement(
-                                FloatRight,
+                                Center,
                                 null,
                                 React.createElement(
-                                    "button",
-                                    { className: "ui primary button", type: "submit", onClick: this.logInClick },
-                                    "Giri\u015F Yap"
+                                    "div",
+                                    { className: "haveAccount" },
+                                    "Hesab\u0131n m\u0131 yok?",
+                                    React.createElement("br", null),
+                                    React.createElement(
+                                        "a",
+                                        { href: "uye-ol", onClick: this.changeContent },
+                                        "\u015Eimdi \xDCye ol"
+                                    )
                                 )
                             )
                         )
@@ -143,10 +234,10 @@ var SignUp = function (_React$Component2) {
     function SignUp(props) {
         _classCallCheck(this, SignUp);
 
-        var _this2 = _possibleConstructorReturn(this, (SignUp.__proto__ || Object.getPrototypeOf(SignUp)).call(this, props));
+        var _this3 = _possibleConstructorReturn(this, (SignUp.__proto__ || Object.getPrototypeOf(SignUp)).call(this, props));
 
-        _this2.changeContent = _this2.changeContent.bind(_this2);
-        return _this2;
+        _this3.changeContent = _this3.changeContent.bind(_this3);
+        return _this3;
     }
 
     _createClass(SignUp, [{
@@ -170,12 +261,16 @@ var SignUp = function (_React$Component2) {
                         React.createElement(
                             Center,
                             null,
-                            "Hesab\u0131n m\u0131 yok?",
-                            React.createElement("br", null),
                             React.createElement(
-                                "a",
-                                { href: "uye-ol", onClick: this.changeContent },
-                                "\u015Eimdi \xDCye ol"
+                                "div",
+                                { className: "haveAccount" },
+                                "Hesab\u0131n m\u0131 yok?",
+                                React.createElement("br", null),
+                                React.createElement(
+                                    "a",
+                                    { href: "uye-ol", onClick: this.changeContent },
+                                    "\u015Eimdi \xDCye ol"
+                                )
                             )
                         )
                     )
@@ -258,7 +353,11 @@ var Head = function (_React$Component5) {
                     React.createElement(
                         WideColumn,
                         { size: "eight" },
-                        React.createElement(H, { type: "1", textAlign: "center", text: "Giri\u015F Yap" })
+                        React.createElement(
+                            "h1",
+                            { className: "girisYapHeader textAlignCenter" },
+                            "Giri\u015F Yap"
+                        )
                     )
                 )
             );
@@ -284,8 +383,7 @@ var Login = function (_React$Component6) {
                 "div",
                 null,
                 React.createElement(Head, null),
-                React.createElement(LogIn, null),
-                React.createElement(SignUp, { changeContent: this.props.changeContent })
+                React.createElement(LogIn, { changeContent: this.props.changeContent, changeHeader: this.props.changeHeader })
             );
         }
     }]);

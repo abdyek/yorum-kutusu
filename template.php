@@ -1,5 +1,5 @@
 <script>
-    let firstContent = "<?php echo $content ?>";
+    const firstContent = "<?php echo $content ?>";
     const SITEURL = "<?php echo Config::SITEURL ?>";
 </script>
 <!DOCTYPE html>

@@ -236,3 +236,21 @@ footer{
     padding-left:25px;
     cursor:pointer;
 }
+
+/* login */
+
+.girisYapHeader {
+    color:#eee;
+}
+
+.loginInput label {
+    color:#eee !important;
+}
+
+.haveAccount {
+    color:#eee !important;
+}
+/* OTHER */
+.textAlignCenter {
+    text-align:center;
+}

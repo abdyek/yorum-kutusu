@@ -9,6 +9,6 @@ class Logout extends Request {
             unset($_COOKIE['jwt']);
             setcookie('jwt',null, -1);
         }
-        echo 'logouted successfully';
+        $this->success();
     }
 }

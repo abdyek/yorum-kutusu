@@ -1,13 +1,6 @@
 class Menu extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            // user-empty-unread, user-has-unread, login
-            form:"user-has-unread",
-            userName:"Yunus Emre",
-            userURL:"yunus-emre",
-            unreadComments: 115 /* okunmamış yorumlar */
-        };
         this.refreshUnreadComments = this.refreshUnreadComments.bind(this);
         this.logout = this.logout.bind(this);
         this.openUnreadComments = this.openUnreadComments.bind(this);
@@ -19,18 +12,16 @@ class Menu extends React.Component {
     }
     logout(e) {
         e.preventDefault();
-        this.setState({
-            form:"login"
-        });
+        this.props.logout();
     }
     openUnreadComments(e) {
         e.preventDefault();
-        this.props.changeContent("profil/"+this.state.userURL+"/takipteki-urunler");
+        this.props.changeContent("profil/"+this.props.userSlug+"/takipteki-urunler");
         // ek olarak okunmamış yorumları açacak bir mekanizma
     }
     openProfile(e) {
         e.preventDefault();
-        this.props.changeContent("profil/"+this.state.userURL);
+        this.props.changeContent("profil/"+this.props.userSlug);
     }
     openLogin(e) {
         e.preventDefault();
@@ -38,15 +29,15 @@ class Menu extends React.Component {
     }
     render() {
         let core;
-        if(this.state.form=="user-has-unread") {
+        if(this.props.form=="user-has-unread") {
             core = (
                 <FloatRight>
-                    <a href={this.state.href} onClick={this.openUnreadComments}>
+                    <a onClick={this.openUnreadComments}>
                         <button className="ui blue button">
                             <i className="icon">
                                 <i id="unread-comments" className="fa fa-comments" aria-hidden="true"></i>
                             </i>
-                            {this.state.unreadComments}
+                            {this.props.unreadCommentsCount}
                         </button> 
                     </a>
                     <a onClick={this.logout}>
@@ -58,7 +49,7 @@ class Menu extends React.Component {
                     </a>
                 </FloatRight>
             )
-        } else if(this.state.form=="user-empty-unread") {
+        } else if(this.props.form=="user-empty-unread") {
             core = (
                 <FloatRight>
                     <a onClick={this.openProfile}>
@@ -79,7 +70,7 @@ class Menu extends React.Component {
                 </FloatRight>
             )
 
-        } else if(this.state.form=="login") {
+        } else if(this.props.form=="login") {
             core = (
                 <FloatRight>
                     <a onClick={this.openLogin}>
@@ -193,7 +184,7 @@ class Header extends React.Component {
                                 <SearchBar />
                             </WideColumn>
                             <WideColumn size="four">
-                                <Menu changeContent={this.props.changeContent} />
+                                <Menu changeContent={this.props.changeContent} form={this.props.form} unreadCommentsCount={this.props.unreadCommentsCount} userSlug={this.props.userSlug} logout={this.props.logout}/>
                             </WideColumn>
                         </Row>
                     </Column>
@@ -247,7 +238,7 @@ class Content extends React.Component {
                 break;
             case "login":
                 return (
-                    <Login changeContent={this.props.changeContent} changeLoading={this.props.changeLoading}  />
+                    <Login changeContent={this.props.changeContent} changeLoading={this.props.changeLoading} changeHeader={this.props.changeHeader} />
                 )
                 break;
             case "signup":
@@ -278,6 +269,9 @@ class App extends React.Component {
         super(props);
         this.state = {
             content:this.props.content,
+            form:"login", // user-empty-unread, user-has-unread, login
+            userSlug:"yunus-emre",
+            unreadCommentsCount: 115
         };
         this.contentFromSlug = {
             " ":"index",
@@ -298,13 +292,32 @@ class App extends React.Component {
                         content:window.history.state.content
                     });
                 }
-            }
-            else{
+            } else{
                 // Continue user action through link or button
             }
         }.bind(this);
 
         this.changeContent = this.changeContent.bind(this);
+        this.logout = this.logout.bind(this);
+        this.changeHeader = this.changeHeader.bind(this);
+    }
+    componentDidMount() {
+        let form = "login";
+        let unread = 0;
+        if(getCookie('user') && getCookie('user')!="null") {
+            const json = atob(getCookie('user'));
+            if(json['unreadComments']>0) {
+                form = "user-has-unread";
+                unread = json['unreadComments'];
+            } else {
+                form = "user-empty-unread";
+                unread = 0;
+            }
+        }
+        this.setState({
+            "form": form,
+            "unreadCommentsCount":unread
+        });
     }
     changeContent(href) {
         firstLoading=false;
@@ -318,11 +331,34 @@ class App extends React.Component {
             "content":content
         });
     }
+    logout() {
+        fetch(SITEURL + 'api/logout', {
+            method: 'POST',
+            heeader: {
+                'Content-Type': 'application/json'
+            }
+        }).then((response)=> {
+            if(!response.ok) throw new Error(response.status);
+            else return response.json();
+        }).then((json)=>{
+            this.setState({
+                form:"login"
+            });
+            setCookie('user', null);
+        }).catch((error)=>{
+            
+        });
+    }
+    changeHeader(value) {
+        this.setState({
+            form:value
+        });
+    }
     render() {
         return (
             <div id="app">
-                <Header changeContent={this.changeContent} />
-                <Content content={this.state.content} changeContent={this.changeContent} />
+                <Header changeContent={this.changeContent} form={this.state.form} userSlug={this.state.userSlug} unreadCommentsCount={this.state.unreadCommentsCount} logout={this.logout}/>
+                <Content content={this.state.content} changeContent={this.changeContent} changeHeader={this.changeHeader}/>
                 <Footer />
             </div>
         )

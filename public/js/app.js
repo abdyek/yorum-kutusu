@@ -14,13 +14,6 @@ var Menu = function (_React$Component) {
 
         var _this = _possibleConstructorReturn(this, (Menu.__proto__ || Object.getPrototypeOf(Menu)).call(this, props));
 
-        _this.state = {
-            // user-empty-unread, user-has-unread, login
-            form: "user-has-unread",
-            userName: "Yunus Emre",
-            userURL: "yunus-emre",
-            unreadComments: 115 /* okunmamış yorumlar */
-        };
         _this.refreshUnreadComments = _this.refreshUnreadComments.bind(_this);
         _this.logout = _this.logout.bind(_this);
         _this.openUnreadComments = _this.openUnreadComments.bind(_this);
@@ -38,22 +31,20 @@ var Menu = function (_React$Component) {
         key: "logout",
         value: function logout(e) {
             e.preventDefault();
-            this.setState({
-                form: "login"
-            });
+            this.props.logout();
         }
     }, {
         key: "openUnreadComments",
         value: function openUnreadComments(e) {
             e.preventDefault();
-            this.props.changeContent("profil/" + this.state.userURL + "/takipteki-urunler");
+            this.props.changeContent("profil/" + this.props.userSlug + "/takipteki-urunler");
             // ek olarak okunmamış yorumları açacak bir mekanizma
         }
     }, {
         key: "openProfile",
         value: function openProfile(e) {
             e.preventDefault();
-            this.props.changeContent("profil/" + this.state.userURL);
+            this.props.changeContent("profil/" + this.props.userSlug);
         }
     }, {
         key: "openLogin",
@@ -65,13 +56,13 @@ var Menu = function (_React$Component) {
         key: "render",
         value: function render() {
             var core = void 0;
-            if (this.state.form == "user-has-unread") {
+            if (this.props.form == "user-has-unread") {
                 core = React.createElement(
                     FloatRight,
                     null,
                     React.createElement(
                         "a",
-                        { href: this.state.href, onClick: this.openUnreadComments },
+                        { onClick: this.openUnreadComments },
                         React.createElement(
                             "button",
                             { className: "ui blue button" },
@@ -80,7 +71,7 @@ var Menu = function (_React$Component) {
                                 { className: "icon" },
                                 React.createElement("i", { id: "unread-comments", className: "fa fa-comments", "aria-hidden": "true" })
                             ),
-                            this.state.unreadComments
+                            this.props.unreadCommentsCount
                         )
                     ),
                     React.createElement(
@@ -97,7 +88,7 @@ var Menu = function (_React$Component) {
                         )
                     )
                 );
-            } else if (this.state.form == "user-empty-unread") {
+            } else if (this.props.form == "user-empty-unread") {
                 core = React.createElement(
                     FloatRight,
                     null,
@@ -133,7 +124,7 @@ var Menu = function (_React$Component) {
                         )
                     )
                 );
-            } else if (this.state.form == "login") {
+            } else if (this.props.form == "login") {
                 core = React.createElement(
                     FloatRight,
                     null,
@@ -319,7 +310,7 @@ var Header = function (_React$Component4) {
                             React.createElement(
                                 WideColumn,
                                 { size: "four" },
-                                React.createElement(Menu, { changeContent: this.props.changeContent })
+                                React.createElement(Menu, { changeContent: this.props.changeContent, form: this.props.form, unreadCommentsCount: this.props.unreadCommentsCount, userSlug: this.props.userSlug, logout: this.props.logout })
                             )
                         )
                     )
@@ -397,7 +388,7 @@ var Content = function (_React$Component6) {
                     return React.createElement(NewProduct, { changeContent: this.props.changeContent, changeLoading: this.props.changeLoading });
                     break;
                 case "login":
-                    return React.createElement(Login, { changeContent: this.props.changeContent, changeLoading: this.props.changeLoading });
+                    return React.createElement(Login, { changeContent: this.props.changeContent, changeLoading: this.props.changeLoading, changeHeader: this.props.changeHeader });
                     break;
                 case "signup":
                     return React.createElement(Signup, { changeContent: this.props.changeContent, changeLoading: this.props.changeLoading });
@@ -431,7 +422,10 @@ var App = function (_React$Component7) {
         var _this7 = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
 
         _this7.state = {
-            content: _this7.props.content
+            content: _this7.props.content,
+            form: "login", // user-empty-unread, user-has-unread, login
+            userSlug: "yunus-emre",
+            unreadCommentsCount: 115
         };
         _this7.contentFromSlug = {
             " ": "index",
@@ -458,10 +452,32 @@ var App = function (_React$Component7) {
         }.bind(_this7);
 
         _this7.changeContent = _this7.changeContent.bind(_this7);
+        _this7.logout = _this7.logout.bind(_this7);
+        _this7.changeHeader = _this7.changeHeader.bind(_this7);
         return _this7;
     }
 
     _createClass(App, [{
+        key: "componentDidMount",
+        value: function componentDidMount() {
+            var form = "login";
+            var unread = 0;
+            if (getCookie('user') && getCookie('user') != "null") {
+                var json = atob(getCookie('user'));
+                if (json['unreadComments'] > 0) {
+                    form = "user-has-unread";
+                    unread = json['unreadComments'];
+                } else {
+                    form = "user-empty-unread";
+                    unread = 0;
+                }
+            }
+            this.setState({
+                "form": form,
+                "unreadCommentsCount": unread
+            });
+        }
+    }, {
         key: "changeContent",
         value: function changeContent(href) {
             firstLoading = false;
@@ -476,13 +492,39 @@ var App = function (_React$Component7) {
             });
         }
     }, {
+        key: "logout",
+        value: function logout() {
+            var _this8 = this;
+
+            fetch(SITEURL + 'api/logout', {
+                method: 'POST',
+                heeader: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(function (response) {
+                if (!response.ok) throw new Error(response.status);else return response.json();
+            }).then(function (json) {
+                _this8.setState({
+                    form: "login"
+                });
+                setCookie('user', null);
+            }).catch(function (error) {});
+        }
+    }, {
+        key: "changeHeader",
+        value: function changeHeader(value) {
+            this.setState({
+                form: value
+            });
+        }
+    }, {
         key: "render",
         value: function render() {
             return React.createElement(
                 "div",
                 { id: "app" },
-                React.createElement(Header, { changeContent: this.changeContent }),
-                React.createElement(Content, { content: this.state.content, changeContent: this.changeContent }),
+                React.createElement(Header, { changeContent: this.changeContent, form: this.state.form, userSlug: this.state.userSlug, unreadCommentsCount: this.state.unreadCommentsCount, logout: this.logout }),
+                React.createElement(Content, { content: this.state.content, changeContent: this.changeContent, changeHeader: this.changeHeader }),
                 React.createElement(Footer, null)
             );
         }

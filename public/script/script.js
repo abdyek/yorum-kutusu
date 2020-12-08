@@ -47,3 +47,10 @@ function getSlugsExtra(pageName) {
     }
     return valuableSlugs;
 }
+
+function setCookie(key, value) {
+    document.cookie = key + "=" + value;
+}
+function getCookie(key) {
+    return document.cookie.split('; ').find(row=>row.startWith(key)).split('=')[1];
+}
