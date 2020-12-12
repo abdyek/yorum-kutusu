@@ -116,7 +116,7 @@ var Comment = function (_React$Component) {
                                 RaisedSegment,
                                 { otherClass: "comment" },
                                 React.createElement(TopOfComment, { text: this.props.text, slug: this.props.slug, title: this.props.title, owner: this.props.owner, handleOpenEditArea: this.openEditArea, handleOpenDeleteArea: this.openDeleteArea, changeContent: this.props.changeContent, type: this.props.type }),
-                                React.createElement(BottomOfComment, { likeCount: this.props.likeCount, liked: this.props.liked, date: this.props.date, handleOpenReportArea: this.openReportArea, handleCloseReportArea: this.closeReportArea, tags: this.props.tags, owner: this.props.owner, changeContent: this.props.changeContent })
+                                React.createElement(BottomOfComment, { likeCount: this.props.likeCount, liked: this.props.liked, date: this.props.date, handleOpenReportArea: this.openReportArea, handleCloseReportArea: this.closeReportArea, tags: this.props.tags, owner: this.props.owner, changeContent: this.props.changeContent, id: this.props.id })
                             )
                         )
                     )
@@ -334,7 +334,7 @@ var BottomOfComment = function (_React$Component3) {
                         React.createElement(
                             FloatRight,
                             null,
-                            React.createElement(LikeButton, { likeCount: this.props.likeCount, liked: this.props.liked }),
+                            React.createElement(LikeButton, { likeCount: this.props.likeCount, liked: this.props.liked, id: this.props.id }),
                             React.createElement(ReportButton, { handleOpenReportArea: this.props.handleOpenReportArea, disabled: this.props.owner })
                         )
                     )
@@ -356,37 +356,65 @@ var LikeButton = function (_React$Component4) {
 
         _this5.state = {
             liked: _this5.props.liked,
-            likeCount: _this5.props.likeCount
+            likeCount: _this5.props.likeCount,
+            disabled: false
         };
-        _this5.like = _this5.like.bind(_this5);
+        _this5.likeToggle = _this5.likeToggle.bind(_this5);
         return _this5;
     }
 
     _createClass(LikeButton, [{
-        key: "like",
-        value: function like() {
-            var likeCount = this.state.likeCount;
-            if (this.state.liked) {
+        key: "likeToggle",
+        value: function likeToggle() {
+            var _this6 = this;
+
+            this.make = this.state.liked ? false : true;
+            this.setState({
+                disabled: true
+            });
+            fetch(SITEURL + 'api/likeComment', {
+                method: 'POST',
+                header: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    commentID: this.props.id,
+                    like: this.make
+                })
+            }).then(function (response) {
+                if (!response.ok) throw new Error(response.status);else return response.json();
+            }).then(function (json) {
+                _this6.setState({
+                    disabled: false,
+                    liked: _this6.make,
+                    likeCount: json['other']['count']
+                });
+            }).catch(function (error) {});
+            /*
+            let likeCount = this.state.likeCount;
+            if(this.state.liked) {
                 likeCount--;
                 this.setState({
-                    liked: false,
+                    liked:false,
                     likeCount: likeCount
                 });
             } else {
                 likeCount++;
                 this.setState({
-                    liked: true,
+                    liked:true,
                     likeCount: likeCount
                 });
             }
+            */
         }
     }, {
         key: "render",
         value: function render() {
+            this.disabled = this.state.disabled ? " disabled" : "";
             this.buttonClass = this.state.liked ? "ui blue button" : "ui button";
             return React.createElement(
                 "button",
-                { className: this.buttonClass, onClick: this.like },
+                { className: this.buttonClass + this.disabled, onClick: this.likeToggle },
                 React.createElement(
                     "i",
                     { className: "icon" },
@@ -406,11 +434,11 @@ var ReportButton = function (_React$Component5) {
     function ReportButton(props) {
         _classCallCheck(this, ReportButton);
 
-        var _this6 = _possibleConstructorReturn(this, (ReportButton.__proto__ || Object.getPrototypeOf(ReportButton)).call(this, props));
+        var _this7 = _possibleConstructorReturn(this, (ReportButton.__proto__ || Object.getPrototypeOf(ReportButton)).call(this, props));
 
-        _this6.openReportArea = _this6.openReportArea.bind(_this6);
-        _this6.buttonClass = _this6.props.disabled ? "ui icon disabled button" : "ui icon button";
-        return _this6;
+        _this7.openReportArea = _this7.openReportArea.bind(_this7);
+        _this7.buttonClass = _this7.props.disabled ? "ui icon disabled button" : "ui icon button";
+        return _this7;
     }
 
     _createClass(ReportButton, [{
@@ -442,10 +470,10 @@ var ReportArea = function (_React$Component6) {
     function ReportArea(props) {
         _classCallCheck(this, ReportArea);
 
-        var _this7 = _possibleConstructorReturn(this, (ReportArea.__proto__ || Object.getPrototypeOf(ReportArea)).call(this, props));
+        var _this8 = _possibleConstructorReturn(this, (ReportArea.__proto__ || Object.getPrototypeOf(ReportArea)).call(this, props));
 
-        _this7.limitOfReportText = 200;
-        _this7.state = {
+        _this8.limitOfReportText = 200;
+        _this8.state = {
             // normal, loading, reported
             form: "normal",
             messageType: "success", // success, warning, danger
@@ -456,11 +484,11 @@ var ReportArea = function (_React$Component6) {
             reportTextSize: 0,
             reportTextLimitWarning: false
         };
-        _this7.closeReportArea = _this7.closeReportArea.bind(_this7);
-        _this7.sendReport = _this7.sendReport.bind(_this7);
-        _this7.changeReason = _this7.changeReason.bind(_this7);
-        _this7.changeTextarea = _this7.changeTextarea.bind(_this7);
-        return _this7;
+        _this8.closeReportArea = _this8.closeReportArea.bind(_this8);
+        _this8.sendReport = _this8.sendReport.bind(_this8);
+        _this8.changeReason = _this8.changeReason.bind(_this8);
+        _this8.changeTextarea = _this8.changeTextarea.bind(_this8);
+        return _this8;
     }
 
     _createClass(ReportArea, [{
@@ -664,10 +692,10 @@ var ReportReason = function (_React$Component7) {
     function ReportReason(props) {
         _classCallCheck(this, ReportReason);
 
-        var _this8 = _possibleConstructorReturn(this, (ReportReason.__proto__ || Object.getPrototypeOf(ReportReason)).call(this, props));
+        var _this9 = _possibleConstructorReturn(this, (ReportReason.__proto__ || Object.getPrototypeOf(ReportReason)).call(this, props));
 
-        _this8.changeReason = _this8.changeReason.bind(_this8);
-        return _this8;
+        _this9.changeReason = _this9.changeReason.bind(_this9);
+        return _this9;
     }
 
     _createClass(ReportReason, [{
@@ -763,22 +791,22 @@ var WriteComment = function (_React$Component9) {
     function WriteComment(props) {
         _classCallCheck(this, WriteComment);
 
-        var _this10 = _possibleConstructorReturn(this, (WriteComment.__proto__ || Object.getPrototypeOf(WriteComment)).call(this, props));
+        var _this11 = _possibleConstructorReturn(this, (WriteComment.__proto__ || Object.getPrototypeOf(WriteComment)).call(this, props));
 
-        if (_this10.props.forEdit) {
-            _this10.var = {
+        if (_this11.props.forEdit) {
+            _this11.var = {
                 title: "Yorum Düzenle",
                 buttonName: "Düzenle",
                 buttonClassName: "ui green button"
             };
         } else {
-            _this10.var = {
+            _this11.var = {
                 title: "Yorum Yaz",
                 buttonName: "Gönder",
                 buttonClassName: "ui green disabled button"
             };
         }
-        _this10.state = {
+        _this11.state = {
             // normal, loading, sent
             form: "normal",
             messageType: "success", // success, warning, danger
@@ -787,17 +815,17 @@ var WriteComment = function (_React$Component9) {
                 type: "success",
                 text: "başarılı bir message"
             },
-            commentText: _this10.props.commentText,
-            sendButtonClassName: _this10.var.buttonClassName,
+            commentText: _this11.props.commentText,
+            sendButtonClassName: _this11.var.buttonClassName,
             topMessage: {
                 type: null,
                 text: null
             }
         };
-        _this10.sendComment = _this10.sendComment.bind(_this10);
-        _this10.changeComment = _this10.changeComment.bind(_this10);
-        _this10.showTopMessage = _this10.showTopMessage.bind(_this10);
-        return _this10;
+        _this11.sendComment = _this11.sendComment.bind(_this11);
+        _this11.changeComment = _this11.changeComment.bind(_this11);
+        _this11.showTopMessage = _this11.showTopMessage.bind(_this11);
+        return _this11;
     }
 
     _createClass(WriteComment, [{
@@ -1035,10 +1063,10 @@ var RatingLine = function (_React$Component11) {
     function RatingLine(props) {
         _classCallCheck(this, RatingLine);
 
-        var _this12 = _possibleConstructorReturn(this, (RatingLine.__proto__ || Object.getPrototypeOf(RatingLine)).call(this, props));
+        var _this13 = _possibleConstructorReturn(this, (RatingLine.__proto__ || Object.getPrototypeOf(RatingLine)).call(this, props));
 
-        _this12.rateValue = _this12.props.forEdit ? _this12.props.rateValue : "-";
-        _this12.colors = {
+        _this13.rateValue = _this13.props.forEdit ? _this13.props.rateValue : "-";
+        _this13.colors = {
             "-": "",
             1: "red",
             2: "red",
@@ -1051,12 +1079,12 @@ var RatingLine = function (_React$Component11) {
             9: "blue",
             10: "blue"
         };
-        _this12.state = {
-            rateValue: _this12.rateValue,
-            color: _this12.colors[_this12.rateValue]
+        _this13.state = {
+            rateValue: _this13.rateValue,
+            color: _this13.colors[_this13.rateValue]
         };
-        _this12.selectOption = _this12.selectOption.bind(_this12);
-        return _this12;
+        _this13.selectOption = _this13.selectOption.bind(_this13);
+        return _this13;
     }
 
     _createClass(RatingLine, [{
@@ -1201,11 +1229,11 @@ var DeleteArea = function (_React$Component13) {
     function DeleteArea(props) {
         _classCallCheck(this, DeleteArea);
 
-        var _this14 = _possibleConstructorReturn(this, (DeleteArea.__proto__ || Object.getPrototypeOf(DeleteArea)).call(this, props));
+        var _this15 = _possibleConstructorReturn(this, (DeleteArea.__proto__ || Object.getPrototypeOf(DeleteArea)).call(this, props));
 
-        _this14.cancelFunc = _this14.cancelFunc.bind(_this14);
-        _this14.confirmFunc = _this14.confirmFunc.bind(_this14);
-        return _this14;
+        _this15.cancelFunc = _this15.cancelFunc.bind(_this15);
+        _this15.confirmFunc = _this15.confirmFunc.bind(_this15);
+        return _this15;
     }
 
     _createClass(DeleteArea, [{
@@ -1293,6 +1321,7 @@ var Comments = function (_React$Component14) {
                     this.comments.push(React.createElement(Comment, {
                         changeContent: this.props.changeContent,
                         key: com.id,
+                        id: com.id,
                         text: com.text,
                         type: com.type,
                         slug: com.slug,

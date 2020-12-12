@@ -76,7 +76,7 @@ class Comment extends React.Component {
                         <Column>
                             <RaisedSegment otherClass="comment">
                                 <TopOfComment text={this.props.text} slug={this.props.slug} title={this.props.title} owner={this.props.owner} handleOpenEditArea={this.openEditArea} handleOpenDeleteArea={this.openDeleteArea} changeContent={this.props.changeContent} type={this.props.type}/>
-                                <BottomOfComment likeCount={this.props.likeCount} liked={this.props.liked} date={this.props.date} handleOpenReportArea={this.openReportArea} handleCloseReportArea={this.closeReportArea} tags={this.props.tags} owner={this.props.owner} changeContent={this.props.changeContent} />
+                                <BottomOfComment likeCount={this.props.likeCount} liked={this.props.liked} date={this.props.date} handleOpenReportArea={this.openReportArea} handleCloseReportArea={this.closeReportArea} tags={this.props.tags} owner={this.props.owner} changeContent={this.props.changeContent} id={this.props.id}/>
                             </RaisedSegment>
                         </Column>
                     </Row>
@@ -218,7 +218,7 @@ class BottomOfComment extends React.Component {
                     </Column>
                     <Column>
                         <FloatRight>
-                            <LikeButton likeCount={this.props.likeCount} liked={this.props.liked}/>
+                            <LikeButton likeCount={this.props.likeCount} liked={this.props.liked} id={this.props.id}/>
                             <ReportButton handleOpenReportArea={this.props.handleOpenReportArea} disabled={this.props.owner}/>
                         </FloatRight>
                     </Column>
@@ -233,11 +233,37 @@ class LikeButton extends React.Component {
         super(props);
         this.state = {
             liked:this.props.liked,
-            likeCount: this.props.likeCount
+            likeCount: this.props.likeCount,
+            disabled:false
         };
-        this.like = this.like.bind(this);
+        this.likeToggle = this.likeToggle.bind(this);
     }
-    like() {
+    likeToggle() {
+        this.make = (this.state.liked)?false:true;
+        this.setState({
+            disabled:true
+        });
+        fetch(SITEURL + 'api/likeComment', {
+            method: 'POST',
+            header: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                commentID: this.props.id,
+                like: this.make
+            })
+        }).then((response)=>{
+            if(!response.ok) throw new Error(response.status);
+            else return response.json();
+        }).then((json)=>{
+            this.setState({
+                disabled:false,
+                liked:this.make,
+                likeCount: json['other']['count']
+            });
+        }).catch((error)=>{
+        });
+        /*
         let likeCount = this.state.likeCount;
         if(this.state.liked) {
             likeCount--;
@@ -252,11 +278,13 @@ class LikeButton extends React.Component {
                 likeCount: likeCount
             });
         }
+        */
     }
     render() {
+        this.disabled = (this.state.disabled)?" disabled":"";
         this.buttonClass = (this.state.liked)? "ui blue button": "ui button";
         return(
-            <button className={this.buttonClass} onClick={this.like}>
+            <button className={this.buttonClass + this.disabled} onClick={this.likeToggle}>
                 <i className="icon">
                     <i className="fa fa-thumbs-up" aria-hidden="true"></i>
                 </i>
@@ -842,19 +870,20 @@ class Comments extends React.Component {
 			for(let i=0;i<this.props.comments.length;i++) {
 				let com = this.props.comments[i];
 				this.comments.push(
-					<Comment
-						changeContent={this.props.changeContent}
-						key={com.id}
-                        text={com.text}
-                        type={com.type}
-                        slug={com.slug}
-						likeCount={com.likeCount}
-						liked={com.liked}
-						title={com.title}
-						date={com.date}
-						tags={com.tags}
-						owner={com.owner}
-					/>
+                                    <Comment
+                                            changeContent={this.props.changeContent}
+                                            key={com.id}
+                                            id={com.id}
+                                            text={com.text}
+                                            type={com.type}
+                                            slug={com.slug}
+                                            likeCount={com.likeCount}
+                                            liked={com.liked}
+                                            title={com.title}
+                                            date={com.date}
+                                            tags={com.tags}
+                                            owner={com.owner}
+                                    />
 				)
 			}
 			return (
