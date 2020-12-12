@@ -1,159 +1,38 @@
 class Product extends React.Component {
     constructor(props) {
-            super(props);
-            this.state = {
-                form:"loading",
-            }
-            this.manageOtherSlug = this.manageOtherSlug.bind(this);
-            this.fetchProduct = this.fetchProduct.bind(this);
-            this.fetchComment = this.fetchComment.bind(this);
-            this.refreshUrl = this.refreshUrl.bind(this);
-            this.load = this.load.bind(this);
-            this.normalizer= this.normalizer.bind(this);
-            this.changeSortBy = this.changeSortBy.bind(this);
-            this.changePageNumber = this.changePageNumber.bind(this);
-            this.refreshComments = this.refreshComments.bind(this);
-            this.showAllComments = this.showAllComments.bind(this);
-	}
-	componentDidMount() {
-            this.manageOtherSlug();
-            this.load();
-        this.setState({
-            // normal, loading, notFound
-			form:"loading",
-			// normal, loading, noComment
-			productName:"Iphone 5s",
-			commentsForm: "normal",
-			commentType: "all",	// all, special
-			specialInfo: {},
-			/*
-		        specialInfo:{
-				first:"15",
-				last:"30"
-			},
-			*/
-			sortBy: this.sortBy,
-			pageNumber: this.pageNumber,
-			comments: [
-				{
-					id:0,
-					text:"burası yorumun text'i",
-					likeCount:13,
-					liked:true,
-					title:"ahmet",
-					type:"profile",
-					slug:"ahmet",
-					date:"19 Temmuz - 21:45",
-					tags:{3:{
-							passive:false,
-							text:"Batarya",
-							color:"yellow",
-							rateValue: "5",
-							slug:"batarya"
-						},
-						4:{
-							passive:false,
-							text:"Kamera",
-							color:"orange",
-							rateValue: "4",
-							slug:"kamera"
-						},
-						5:{
-							passive:false,
-							text:"Tasarım",
-							color:"",
-							rateValue: "-",
-							slug:"tasarim"
-						}
-					},
-					owner:true
-				},
-				{
-					id:99,
-					text:"Lorem Ipsum, dizgi ve baskı endüstrisinde kullanılan mıgır metinlerdir. Lorem Ipsum, adı bilinmeyen bir matbaacının bir hurufat numune kitabı oluşturmak üzere bir yazı galerisini alarak karıştırdığı 1500'lerden beri endüstri standardı sahte metinler olarak kullanılmıştır. Beşyüz yıl boyunca varlığını sürdürmekle kalmamış, aynı zamanda pek değişmeden elektronik dizgiye de sıçramıştır. 1960'larda Lorem Ipsum pasajları da içeren Letraset yapraklarının yayınlanması ile ve yakın zamanda Aldus PageMaker gibi Lorem Ipsum sürümleri içeren masaüstü yayıncılık yazılımları ile popüler olmuştur.Lorem Ipsum, dizgi ve baskı endüstrisinde kullanılan mıgır metinlerdir. Lorem Ipsum, adı bilinmeyen bir matbaacının bir hurufat numune kitabı oluşturmak üzere bir yazı galerisini alarak karıştırdığı 1500'lerden beri endüstri standardı sahte metinler olarak kullanılmıştır. Beşyüz yıl boyunca varlığını sürdürmekle kalmamış, aynı zamanda pek değişmeden elektronik dizgiye de sıçramıştır. 1960'larda Lorem Ipsum pasajları da içeren Letraset yapraklarının yayınlanması ile ve yakın zamanda Aldus PageMaker gibi Lorem Ipsum sürümleri içeren masaüstü yayıncılık yazılımları ile popüler olmuştuLorem Ipsum, dizgi ve baskı endüstrisinde kullanılan mıgır metinlerdir. Lorem Ipsum, adı bilinmeyen bir matbaacının bir hurufat numune kitabı oluşturmak üzere bir yazı galerisini alarak karıştırdığı 1500'lerden beri endüstri standardı sahte metinler olarak kullanılmıştır. Beşyüz yıl boyunca varlığını sürdürmekle kalmamış, aynı zamanda pek değişmeden elektronik dizgiye de sıçramıştır. 1960'larda Lorem Ipsum pasajları da içeren Letraset yapraklarının yayınlanması ile ve yakın zamanda Aldus PageMaker gibi Lorem Ipsum sürümleri içeren masaüstü yayıncılık yazılımları ile popüler olmuştur.Lorem Ipsum, dizgi ve baskı endüstrisinde kullanılan mıgır metinlerdir. Lorem Ipsum, adı bilinmeyen bir matbaacının bir hurufat numune kitabı oluşturmak üzere bir yazı galerisini alarak karıştırdığı 1500'lerden beri endüstri standardı sahte metinler olarak kullanılmıştır. Beşyüz yıl boyunca varlığını sürdürmekle kalmamış, aynı zamanda pek değişmeden elektronik dizgiye de sıçramıştır. 1960'larda Lorem Ipsum pasajları da içeren Letraset yapraklarının yayınlanması ile ve yakın zamanda Aldus PageMaker gibi Lorem Ipsum sürümleri içeren masaüstü yayıncılık yazılımları ile popüler olmuştur.Lorem Ipsum, dizgi ve baskı endüstrisinde kullanılan mıgır metinlerdir. Lorem Ipsum, adı bilinmeyen bir matbaacının bir hurufat numune kitabı oluşturmak üzere bir yazı galerisini alarak karıştırdığı 1500'lerden beri endüstri standardı sahte metinler olarak kullanılmıştır. Beşyüz yıl boyunca varlığını sürdürmekle kalmamış, aynı zamanda pek değişmeden elektronik dizgiye de sıçramıştır. 1960'larda Lorem Ipsum pasajları da içeren Letraset yapraklarının yayınlanması ile ve yakın zamanda Aldus PageMaker gibi Lorem Ipsum sürümleri içeren masaüstü yayıncılık yazılımları ile popüler olmuştur.r.",
-					likeCount:13,
-					liked:true,
-					title:"Yunus Emre",
-					type:"profile",
-					slug:"yunus-emre",
-					date:"19 Temmuz - 21:45",
-					tags:{
-						3:{
-							passive:false,
-							text:"Batarya",
-							color:"yellow",
-							rateValue: "5",
-							slug:"batarya"
-						},
-						4:{
-							passive:false,
-							text:"Kamera",
-							color:"orange",
-							rateValue: "4",
-							slug:"kamera"
-						},
-						5:{
-							passive:false,
-							text:"Tasarım",
-							color:"",
-							rateValue: "-",
-							slug:"tasarim"
-						}
-					},
-					owner:false
-				},
-			],
-			tagsInfo : {
-				0:{
-					passive:true,
-					text:"Akıllı Telefon",
-					slug:"akilli-telefon"
-				},
-				1:{
-					passive:true,
-					text:"Apple",
-					slug:"apple"
-				},
-				2:{
-					passive:true,
-					text:"IPhone",
-					slug:"iphone"
-				},
-				3:{
-					passive:false,
-					text:"Batarya",
-					color:"yellow",
-					rateValue: "5.5",
-					slug:"batarya"
-				},
-				4:{
-					passive:false,
-					text:"Kamera",
-					color:"orange",
-					rateValue: "4.2",
-					slug:"kamera"
-				},
-				5:{
-					passive:false,
-					text:"Ekran",
-					color:"green",
-					rateValue: "9.3",
-					slug:"ekran"
-				},
-			}
-		});
-	}
+        super(props);
+        this.state = {
+            form:"loading",
+            specialInfo:{},
+            commentType:"all",
+            sortBy:"time"
+        }
+        this.manageOtherSlug = this.manageOtherSlug.bind(this);
+        this.fetchProduct = this.fetchProduct.bind(this);
+        this.fetchComment = this.fetchComment.bind(this);
+        this.refreshUrl = this.refreshUrl.bind(this);
+        this.load = this.load.bind(this);
+        this.normalizer= this.normalizer.bind(this);
+        this.changeSortBy = this.changeSortBy.bind(this);
+        this.changePageNumber = this.changePageNumber.bind(this);
+        this.refreshComments = this.refreshComments.bind(this);
+        this.showAllComments = this.showAllComments.bind(this);
+    }
+    componentDidMount() {
+        this.manageOtherSlug();
+        this.load();
+    }
     manageOtherSlug() {
         const pathNames = getPathNames();
         this.productSlug = pathNames[2];
         this.sortBy = (pathNames[3])?pathNames[3]:"time";
         this.pageNumber = (pathNames[4])?pathNames[4]:1;
-        if(this.sortBy!="time" || this.sortBy!="like") {
+        if(this.sortBy!="time" && this.sortBy!="like") {
             this.sortBy = "time";
         }
-        if(!isNaN(this.pageNumber)){
-            this.pageNumber = 1;
-        }
+        this.setState({
+            sortBy:this.sortBy
+        });
         this.refreshUrl();
         let commentType = "all";  // all, spacial
         // not: buradaki değer atamalar ve değişkenlerin bir kısmı deneme amaçlı, setState içindeki hemen hemen hepsi api tarafından gelecek
@@ -163,28 +42,25 @@ class Product extends React.Component {
             if(!response.ok) throw new Error(response.status);
             else return response.json();
         }).then((json)=>{
-            if(!json['other']['comments'].length && this.pageNumber!=1) {
-                console.log("ilk sayfaya yönlendirmeli");
-                data['pageNumber'] = this.pageNumber = 1;
-                this.fetchProduct(data);
+            this.setState({
+                form:"normal",
+                productName:json['other']['product']['title'],
+                comments: this.normalizer('comments', json['other']['comments']),
+                commentsForm: (json['other']['comments'].length)?'normal':'noComment',
+                pageNumber: json['other']['pageNumber'],
+                pageCount:json['other']['pageCount'],
+                tagsInfo: this.normalizer('tags', json['other']['tags'])
+            });
+            if(json['other']['pageNumber']!=this.pageNumber) {
+                this.pageNumber = json['other']['pageNumber'];
                 this.refreshUrl();
-            } else {
-                this.setState({
-                    form:"normal",
-                    productName:json['other']['product']['title'],
-                    comments: this.normalizer('comments', json['other']['comments']),
-                    commentsForm: (json['other']['comments'].length)?'normal':'noComment',
-                    pageNumber: this.pageNumber,
-                    pageCount:json['other']['pageCount'],
-                    tagsInfo: this.normalizer('tags', json['other']['tags'])
-                });
             }
         }).catch((error) => {
             console.log(error);
             if(error.message==404) {
                 this.setState({form:"notFound"});
             } else {
-                console.log("bilinmeyen bir hata");
+                // ma
             }
         });
     }

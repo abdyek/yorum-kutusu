@@ -11,8 +11,8 @@ class Product extends Request {
         if(!$this->data['onlyComment']) {
             $this->getTags();
         }
-        $this->getCommentsWithRating();
         $this->getPageCount();
+        $this->getCommentsWithRating();
         $this->updateLastSeen();
         $this->mergeAllInfo();
         $this->increaseProductFetchCount();
@@ -39,6 +39,8 @@ class Product extends Request {
     private function getCommentsWithRating() {
         if($this->data['pageNumber']<1) {
             $this->data['pageNumber'] = 1;
+        } elseif($this->data['pageNumber']>$this->pageCount) {
+            $this->data['pageNumber'] = $this->pageCount;
         }
         $index = ($this->data['pageNumber']-1)*10;
         if($this->data['sortBy']=='like') {
@@ -94,13 +96,19 @@ class Product extends Request {
     }
     private function mergeAllInfo() {
         if(!$this->data['onlyComment']) {
-            $this->success(array_merge(
-                ['product'=>$this->productInfo], ['tags'=>array_values($this->tagsInfo)], ['comments'=>$this->commentsInfo], ['pageCount'=> $this->pageCount]
-            ));
+            $this->success([
+                'product'=>$this->productInfo,
+                'tags'=>array_values($this->tagsInfo),
+                'comments'=>$this->commentsInfo,
+                'pageNumber'=>$this->data['pageNumber'],
+                'pageCount'=> $this->pageCount
+            ]);
         } else {
-            $this->success(
-                ['comments'=>$this->commentsInfo]
-            );
+            $this->success([
+                'comments'=>$this->commentsInfo,
+                'pageNumber'=>$this->data['pageNumber'],
+                'pageCount'=> $this->pageCount
+            ]);
         }
     }
     private function increaseProductFetchCount() {

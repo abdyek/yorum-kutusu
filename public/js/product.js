@@ -15,7 +15,10 @@ var Product = function (_React$Component) {
         var _this = _possibleConstructorReturn(this, (Product.__proto__ || Object.getPrototypeOf(Product)).call(this, props));
 
         _this.state = {
-            form: "loading"
+            form: "loading",
+            specialInfo: {},
+            commentType: "all",
+            sortBy: "time"
         };
         _this.manageOtherSlug = _this.manageOtherSlug.bind(_this);
         _this.fetchProduct = _this.fetchProduct.bind(_this);
@@ -35,127 +38,6 @@ var Product = function (_React$Component) {
         value: function componentDidMount() {
             this.manageOtherSlug();
             this.load();
-            this.setState({
-                // normal, loading, notFound
-                form: "loading",
-                // normal, loading, noComment
-                productName: "Iphone 5s",
-                commentsForm: "normal",
-                commentType: "all", // all, special
-                specialInfo: {},
-                /*
-                       specialInfo:{
-                	first:"15",
-                	last:"30"
-                },
-                */
-                sortBy: this.sortBy,
-                pageNumber: this.pageNumber,
-                comments: [{
-                    id: 0,
-                    text: "burası yorumun text'i",
-                    likeCount: 13,
-                    liked: true,
-                    title: "ahmet",
-                    type: "profile",
-                    slug: "ahmet",
-                    date: "19 Temmuz - 21:45",
-                    tags: { 3: {
-                            passive: false,
-                            text: "Batarya",
-                            color: "yellow",
-                            rateValue: "5",
-                            slug: "batarya"
-                        },
-                        4: {
-                            passive: false,
-                            text: "Kamera",
-                            color: "orange",
-                            rateValue: "4",
-                            slug: "kamera"
-                        },
-                        5: {
-                            passive: false,
-                            text: "Tasarım",
-                            color: "",
-                            rateValue: "-",
-                            slug: "tasarim"
-                        }
-                    },
-                    owner: true
-                }, {
-                    id: 99,
-                    text: "Lorem Ipsum, dizgi ve baskı endüstrisinde kullanılan mıgır metinlerdir. Lorem Ipsum, adı bilinmeyen bir matbaacının bir hurufat numune kitabı oluşturmak üzere bir yazı galerisini alarak karıştırdığı 1500'lerden beri endüstri standardı sahte metinler olarak kullanılmıştır. Beşyüz yıl boyunca varlığını sürdürmekle kalmamış, aynı zamanda pek değişmeden elektronik dizgiye de sıçramıştır. 1960'larda Lorem Ipsum pasajları da içeren Letraset yapraklarının yayınlanması ile ve yakın zamanda Aldus PageMaker gibi Lorem Ipsum sürümleri içeren masaüstü yayıncılık yazılımları ile popüler olmuştur.Lorem Ipsum, dizgi ve baskı endüstrisinde kullanılan mıgır metinlerdir. Lorem Ipsum, adı bilinmeyen bir matbaacının bir hurufat numune kitabı oluşturmak üzere bir yazı galerisini alarak karıştırdığı 1500'lerden beri endüstri standardı sahte metinler olarak kullanılmıştır. Beşyüz yıl boyunca varlığını sürdürmekle kalmamış, aynı zamanda pek değişmeden elektronik dizgiye de sıçramıştır. 1960'larda Lorem Ipsum pasajları da içeren Letraset yapraklarının yayınlanması ile ve yakın zamanda Aldus PageMaker gibi Lorem Ipsum sürümleri içeren masaüstü yayıncılık yazılımları ile popüler olmuştuLorem Ipsum, dizgi ve baskı endüstrisinde kullanılan mıgır metinlerdir. Lorem Ipsum, adı bilinmeyen bir matbaacının bir hurufat numune kitabı oluşturmak üzere bir yazı galerisini alarak karıştırdığı 1500'lerden beri endüstri standardı sahte metinler olarak kullanılmıştır. Beşyüz yıl boyunca varlığını sürdürmekle kalmamış, aynı zamanda pek değişmeden elektronik dizgiye de sıçramıştır. 1960'larda Lorem Ipsum pasajları da içeren Letraset yapraklarının yayınlanması ile ve yakın zamanda Aldus PageMaker gibi Lorem Ipsum sürümleri içeren masaüstü yayıncılık yazılımları ile popüler olmuştur.Lorem Ipsum, dizgi ve baskı endüstrisinde kullanılan mıgır metinlerdir. Lorem Ipsum, adı bilinmeyen bir matbaacının bir hurufat numune kitabı oluşturmak üzere bir yazı galerisini alarak karıştırdığı 1500'lerden beri endüstri standardı sahte metinler olarak kullanılmıştır. Beşyüz yıl boyunca varlığını sürdürmekle kalmamış, aynı zamanda pek değişmeden elektronik dizgiye de sıçramıştır. 1960'larda Lorem Ipsum pasajları da içeren Letraset yapraklarının yayınlanması ile ve yakın zamanda Aldus PageMaker gibi Lorem Ipsum sürümleri içeren masaüstü yayıncılık yazılımları ile popüler olmuştur.Lorem Ipsum, dizgi ve baskı endüstrisinde kullanılan mıgır metinlerdir. Lorem Ipsum, adı bilinmeyen bir matbaacının bir hurufat numune kitabı oluşturmak üzere bir yazı galerisini alarak karıştırdığı 1500'lerden beri endüstri standardı sahte metinler olarak kullanılmıştır. Beşyüz yıl boyunca varlığını sürdürmekle kalmamış, aynı zamanda pek değişmeden elektronik dizgiye de sıçramıştır. 1960'larda Lorem Ipsum pasajları da içeren Letraset yapraklarının yayınlanması ile ve yakın zamanda Aldus PageMaker gibi Lorem Ipsum sürümleri içeren masaüstü yayıncılık yazılımları ile popüler olmuştur.r.",
-                    likeCount: 13,
-                    liked: true,
-                    title: "Yunus Emre",
-                    type: "profile",
-                    slug: "yunus-emre",
-                    date: "19 Temmuz - 21:45",
-                    tags: {
-                        3: {
-                            passive: false,
-                            text: "Batarya",
-                            color: "yellow",
-                            rateValue: "5",
-                            slug: "batarya"
-                        },
-                        4: {
-                            passive: false,
-                            text: "Kamera",
-                            color: "orange",
-                            rateValue: "4",
-                            slug: "kamera"
-                        },
-                        5: {
-                            passive: false,
-                            text: "Tasarım",
-                            color: "",
-                            rateValue: "-",
-                            slug: "tasarim"
-                        }
-                    },
-                    owner: false
-                }],
-                tagsInfo: {
-                    0: {
-                        passive: true,
-                        text: "Akıllı Telefon",
-                        slug: "akilli-telefon"
-                    },
-                    1: {
-                        passive: true,
-                        text: "Apple",
-                        slug: "apple"
-                    },
-                    2: {
-                        passive: true,
-                        text: "IPhone",
-                        slug: "iphone"
-                    },
-                    3: {
-                        passive: false,
-                        text: "Batarya",
-                        color: "yellow",
-                        rateValue: "5.5",
-                        slug: "batarya"
-                    },
-                    4: {
-                        passive: false,
-                        text: "Kamera",
-                        color: "orange",
-                        rateValue: "4.2",
-                        slug: "kamera"
-                    },
-                    5: {
-                        passive: false,
-                        text: "Ekran",
-                        color: "green",
-                        rateValue: "9.3",
-                        slug: "ekran"
-                    }
-                }
-            });
         }
     }, {
         key: "manageOtherSlug",
@@ -164,12 +46,12 @@ var Product = function (_React$Component) {
             this.productSlug = pathNames[2];
             this.sortBy = pathNames[3] ? pathNames[3] : "time";
             this.pageNumber = pathNames[4] ? pathNames[4] : 1;
-            if (this.sortBy != "time" || this.sortBy != "like") {
+            if (this.sortBy != "time" && this.sortBy != "like") {
                 this.sortBy = "time";
             }
-            if (!isNaN(this.pageNumber)) {
-                this.pageNumber = 1;
-            }
+            this.setState({
+                sortBy: this.sortBy
+            });
             this.refreshUrl();
             var commentType = "all"; // all, spacial
             // not: buradaki değer atamalar ve değişkenlerin bir kısmı deneme amaçlı, setState içindeki hemen hemen hepsi api tarafından gelecek
@@ -182,28 +64,25 @@ var Product = function (_React$Component) {
             fetch(SITEURL + 'api/product?' + getUrlPar(data), { method: 'GET' }).then(function (response) {
                 if (!response.ok) throw new Error(response.status);else return response.json();
             }).then(function (json) {
-                if (!json['other']['comments'].length && _this2.pageNumber != 1) {
-                    console.log("ilk sayfaya yönlendirmeli");
-                    data['pageNumber'] = _this2.pageNumber = 1;
-                    _this2.fetchProduct(data);
+                _this2.setState({
+                    form: "normal",
+                    productName: json['other']['product']['title'],
+                    comments: _this2.normalizer('comments', json['other']['comments']),
+                    commentsForm: json['other']['comments'].length ? 'normal' : 'noComment',
+                    pageNumber: json['other']['pageNumber'],
+                    pageCount: json['other']['pageCount'],
+                    tagsInfo: _this2.normalizer('tags', json['other']['tags'])
+                });
+                if (json['other']['pageNumber'] != _this2.pageNumber) {
+                    _this2.pageNumber = json['other']['pageNumber'];
                     _this2.refreshUrl();
-                } else {
-                    _this2.setState({
-                        form: "normal",
-                        productName: json['other']['product']['title'],
-                        comments: _this2.normalizer('comments', json['other']['comments']),
-                        commentsForm: json['other']['comments'].length ? 'normal' : 'noComment',
-                        pageNumber: _this2.pageNumber,
-                        pageCount: json['other']['pageCount'],
-                        tagsInfo: _this2.normalizer('tags', json['other']['tags'])
-                    });
                 }
             }).catch(function (error) {
                 console.log(error);
                 if (error.message == 404) {
                     _this2.setState({ form: "notFound" });
                 } else {
-                    console.log("bilinmeyen bir hata");
+                    // ma
                 }
             });
         }
