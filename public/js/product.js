@@ -18,7 +18,8 @@ var Product = function (_React$Component) {
             form: "loading",
             specialInfo: {},
             commentType: "all",
-            sortBy: "time"
+            sortBy: "time",
+            followButtonDisabled: false
         };
         _this.manageOtherSlug = _this.manageOtherSlug.bind(_this);
         _this.fetchProduct = _this.fetchProduct.bind(_this);
@@ -30,6 +31,7 @@ var Product = function (_React$Component) {
         _this.changePageNumber = _this.changePageNumber.bind(_this);
         _this.refreshComments = _this.refreshComments.bind(_this);
         _this.showAllComments = _this.showAllComments.bind(_this);
+        _this.followToggle = _this.followToggle.bind(_this);
         return _this;
     }
 
@@ -71,7 +73,8 @@ var Product = function (_React$Component) {
                     commentsForm: json['other']['comments'].length ? 'normal' : 'noComment',
                     pageNumber: json['other']['pageNumber'],
                     pageCount: json['other']['pageCount'],
-                    tagsInfo: _this2.normalizer('tags', json['other']['tags'])
+                    tagsInfo: _this2.normalizer('tags', json['other']['tags']),
+                    followed: json['other']['followed']
                 });
                 if (json['other']['pageNumber'] != _this2.pageNumber) {
                     _this2.pageNumber = json['other']['pageNumber'];
@@ -243,6 +246,33 @@ var Product = function (_React$Component) {
             this.refreshComments();
         }
     }, {
+        key: "followToggle",
+        value: function followToggle() {
+            var _this4 = this;
+
+            var make = this.state.followed ? false : true;
+            this.setState({
+                followButtonDisabled: true
+            });
+            fetch(SITEURL + 'api/followProduct', {
+                method: 'POST',
+                header: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    productID: 1,
+                    follow: make
+                })
+            }).then(function (response) {
+                if (!response.ok) throw new Error(response.status);else return response.json();
+            }).then(function (json) {
+                _this4.setState({
+                    followButtonDisabled: false,
+                    followed: make
+                });
+            }).catch(function (error) {});
+        }
+    }, {
         key: "render",
         value: function render() {
             if (this.state.form == "normal") {
@@ -250,7 +280,7 @@ var Product = function (_React$Component) {
                 return React.createElement(
                     "div",
                     null,
-                    React.createElement(ProductInfo, { tags: this.state.tagsInfo, productName: this.state.productName, changeContent: this.props.changeContent }),
+                    React.createElement(ProductInfo, { tags: this.state.tagsInfo, productName: this.state.productName, changeContent: this.props.changeContent, followToggle: this.followToggle, followed: this.state.followed, followButtonDisabled: this.state.followButtonDisabled }),
                     this.state.commentType == "all" ? React.createElement(PageNavigation, { sortBy: this.state.sortBy, form: this.state.commentsForm, handleChangeSortBy: this.changeSortBy, pageCount: this.state.pageCount, currentPage: this.state.pageNumber, handleChangePageNumber: this.changePageNumber }) : React.createElement(SpecialCommentHeader, { specialInfo: this.state.specialInfo, showAllComments: this.showAllComments }),
                     React.createElement(Comments, { comments: this.state.comments, form: this.state.commentsForm, changeContent: this.props.changeContent }),
                     this.state.commentType == "all" ? React.createElement(PageNavigation, { sortBy: this.state.sortBy, form: this.state.commentsForm, handleChangeSortBy: this.changeSortBy, pageCount: this.state.pageCount, currentPage: this.state.pageNumber, handleChangePageNumber: this.changePageNumber }) : "",
@@ -292,48 +322,21 @@ var ProductInfo = function (_React$Component2) {
     function ProductInfo(props) {
         _classCallCheck(this, ProductInfo);
 
-        var _this4 = _possibleConstructorReturn(this, (ProductInfo.__proto__ || Object.getPrototypeOf(ProductInfo)).call(this, props));
+        var _this5 = _possibleConstructorReturn(this, (ProductInfo.__proto__ || Object.getPrototypeOf(ProductInfo)).call(this, props));
 
-        _this4.followButtonAtt = {
-            follow: {
-                followed: false,
-                buttonName: "Takip Et",
-                buttonClassName: "ui teal button",
-                icon: React.createElement("i", { "class": "fa fa-plus", "aria-hidden": "true" })
-            },
-            unfollow: {
-                followed: true,
-                buttonName: "Takibi Bırak",
-                buttonClassName: "ui olive button",
-                icon: React.createElement("i", { "class": "fa fa-times", "aria-hidden": "true" })
-            }
-        };
-        _this4.state = {
-            followed: false,
-            followButtonAtt: _this4.followButtonAtt.follow
-        };
-        _this4.followButton = _this4.followButton.bind(_this4);
-        return _this4;
+        _this5.followButton = _this5.followButton.bind(_this5);
+        return _this5;
     }
 
     _createClass(ProductInfo, [{
         key: "followButton",
         value: function followButton() {
-            if (this.state.followed) {
-                this.setState({
-                    followed: false,
-                    followButtonAtt: this.followButtonAtt.follow
-                });
-            } else {
-                this.setState({
-                    followed: true,
-                    followButtonAtt: this.followButtonAtt.unfollow
-                });
-            }
+            this.props.followToggle();
         }
     }, {
         key: "render",
         value: function render() {
+            this.disabled = this.props.followButtonDisabled ? "disabled" : "";
             return React.createElement(
                 "div",
                 null,
@@ -351,15 +354,24 @@ var ProductInfo = function (_React$Component2) {
                         React.createElement(
                             FloatRight,
                             null,
-                            React.createElement(
+                            !this.props.followed ? React.createElement(
                                 "button",
-                                { "class": this.state.followButtonAtt.buttonClassName, onClick: this.followButton },
+                                { "class": "ui teal button " + this.disabled, onClick: this.followButton },
                                 React.createElement(
                                     "i",
                                     { "class": "icon" },
-                                    this.state.followButtonAtt.icon
+                                    React.createElement("i", { "class": "fa fa-plus", "aria-hidden": "true" })
                                 ),
-                                this.state.followButtonAtt.buttonName
+                                "Takip Et"
+                            ) : React.createElement(
+                                "button",
+                                { "class": "ui olive button " + this.disabled, onClick: this.followButton },
+                                React.createElement(
+                                    "i",
+                                    { "class": "icon" },
+                                    React.createElement("i", { "class": "fa fa-times", "aria-hidden": "true" })
+                                ),
+                                "Takibi B\u0131rak"
                             )
                         )
                     )
@@ -392,7 +404,7 @@ var SpecialCommentHeader = function (_React$Component3) {
     _createClass(SpecialCommentHeader, [{
         key: "render",
         value: function render() {
-            var _this6 = this;
+            var _this7 = this;
 
             return React.createElement(
                 Row,
@@ -423,7 +435,7 @@ var SpecialCommentHeader = function (_React$Component3) {
                                     React.createElement(
                                         "a",
                                         { onClick: function onClick(e) {
-                                                e.preventDefault();_this6.props.showAllComments();
+                                                e.preventDefault();_this7.props.showAllComments();
                                             } },
                                         "T\xFCm\xFCn\xFC G\xF6ster"
                                     )

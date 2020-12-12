@@ -5,7 +5,8 @@ class Product extends React.Component {
             form:"loading",
             specialInfo:{},
             commentType:"all",
-            sortBy:"time"
+            sortBy:"time",
+            followButtonDisabled:false,
         }
         this.manageOtherSlug = this.manageOtherSlug.bind(this);
         this.fetchProduct = this.fetchProduct.bind(this);
@@ -17,6 +18,7 @@ class Product extends React.Component {
         this.changePageNumber = this.changePageNumber.bind(this);
         this.refreshComments = this.refreshComments.bind(this);
         this.showAllComments = this.showAllComments.bind(this);
+        this.followToggle = this.followToggle.bind(this);
     }
     componentDidMount() {
         this.manageOtherSlug();
@@ -49,7 +51,8 @@ class Product extends React.Component {
                 commentsForm: (json['other']['comments'].length)?'normal':'noComment',
                 pageNumber: json['other']['pageNumber'],
                 pageCount:json['other']['pageCount'],
-                tagsInfo: this.normalizer('tags', json['other']['tags'])
+                tagsInfo: this.normalizer('tags', json['other']['tags']),
+                followed: json['other']['followed']
             });
             if(json['other']['pageNumber']!=this.pageNumber) {
                 this.pageNumber = json['other']['pageNumber'];
@@ -204,12 +207,37 @@ class Product extends React.Component {
 		});
 		this.refreshComments();
 	}
+    followToggle() {
+        let make = (this.state.followed)?false:true;
+        this.setState({
+            followButtonDisabled:true
+        });
+        fetch(SITEURL + 'api/followProduct', {
+            method: 'POST',
+            header: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                productID: 1,
+                follow:make
+            })
+        }).then((response)=>{
+            if(!response.ok) throw new Error(response.status);
+            else return response.json();
+        }).then((json)=>{
+            this.setState({
+                followButtonDisabled:false,
+                followed:make
+            });
+        }).catch((error)=>{
+        });
+    }
     render() {
         if(this.state.form=="normal") {
-			document.title = this.state.productName;
+	        document.title = this.state.productName;
             return(
                 <div>
-                    <ProductInfo tags={this.state.tagsInfo} productName={this.state.productName} changeContent={this.props.changeContent}/>
+                    <ProductInfo tags={this.state.tagsInfo} productName={this.state.productName} changeContent={this.props.changeContent} followToggle={this.followToggle} followed={this.state.followed} followButtonDisabled={this.state.followButtonDisabled}/>
 					{(this.state.commentType=="all")?
                     	<PageNavigation sortBy={this.state.sortBy} form={this.state.commentsForm} handleChangeSortBy={this.changeSortBy} pageCount={this.state.pageCount} currentPage={this.state.pageNumber} handleChangePageNumber={this.changePageNumber} />
 					:<SpecialCommentHeader specialInfo={this.state.specialInfo} showAllComments={this.showAllComments}/>}
@@ -246,55 +274,37 @@ class Product extends React.Component {
 
 class ProductInfo extends React.Component {
 	constructor(props) {
-		super(props);
-		this.followButtonAtt = {
-			follow: {
-				followed: false,
-				buttonName: "Takip Et",
-				buttonClassName: "ui teal button",
-				icon: <i class="fa fa-plus" aria-hidden="true"></i>
-			},
-			unfollow: {
-				followed: true,
-				buttonName: "Takibi Bırak",
-				buttonClassName: "ui olive button",
-				icon: <i class="fa fa-times" aria-hidden="true"></i>
-			}
-		}
-		this.state = {
-			followed: false,
-			followButtonAtt: this.followButtonAtt.follow,
-		};
-		this.followButton = this.followButton.bind(this);
+            super(props);
+	    this.followButton = this.followButton.bind(this);
 	}
 	followButton() {
-		if(this.state.followed) {
-			this.setState({
-				followed: false,
-				followButtonAtt: this.followButtonAtt.follow
-			});
-		} else {
-			this.setState({
-				followed: true,
-				followButtonAtt: this.followButtonAtt.unfollow
-			});
-		}
+            this.props.followToggle();
 	}
     render() {
+        this.disabled = (this.props.followButtonDisabled)?"disabled":"";
         return (
             <div>
                 <Row size="two" nonStackable={true}>
                     <Column>
                         <H type="1" text={this.props.productName} />
                     </Column>
-					<Column>
-						<FloatRight>
-							<button class={this.state.followButtonAtt.buttonClassName} onClick={this.followButton}>
-								<i class="icon">
-									{this.state.followButtonAtt.icon}
-								</i>
-									{this.state.followButtonAtt.buttonName}
-							</button>
+		<Column>
+            <FloatRight>
+            {
+                (!this.props.followed)?
+                    <button class={"ui teal button " + this.disabled} onClick={this.followButton}>
+                            <i class="icon">
+                                <i class="fa fa-plus" aria-hidden="true"></i> 
+                            </i>
+                            Takip Et
+                    </button>:
+                    <button class={"ui olive button " + this.disabled} onClick={this.followButton}>
+                            <i class="icon">
+                                <i class="fa fa-times" aria-hidden="true"></i>
+                            </i>
+                            Takibi Bırak
+                    </button>
+            }
 						</FloatRight>
 					</Column>
                 </Row>

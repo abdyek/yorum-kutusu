@@ -11,11 +11,19 @@ class Product extends Request {
         if(!$this->data['onlyComment']) {
             $this->getTags();
         }
+        $this->getFollowInfo();
         $this->getPageCount();
         $this->getCommentsWithRating();
         $this->updateLastSeen();
         $this->mergeAllInfo();
         $this->increaseProductFetchCount();
+    }
+    private function getFollowInfo() {
+        $this->followed = false;
+        if(WHO!="guest") {
+            $query = Database::getRow('SELECT product_follow_id FROM product_follow WHERE product_id=? AND member_id=?', [$this->productInfo['id'], USERID]);
+            $this->followed = ($query)?true:false;
+        }
     }
     private function getProductInfo() {
         $this->productInfo = [
@@ -98,6 +106,7 @@ class Product extends Request {
         if(!$this->data['onlyComment']) {
             $this->success([
                 'product'=>$this->productInfo,
+                'followed'=>$this->followed,
                 'tags'=>array_values($this->tagsInfo),
                 'comments'=>$this->commentsInfo,
                 'pageNumber'=>$this->data['pageNumber'],
