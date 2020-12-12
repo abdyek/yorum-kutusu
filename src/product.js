@@ -1,46 +1,3 @@
-const DATA = {
-    product: {
-        id: "1",
-        title: "Başlık",
-        slug: "slug'ı"
-    },
-    tags: [
-        {
-            slug:"apple",
-            tagName:"Apple",
-            tagAvarageRating: null
-        },
-        {
-            slug:"ekran",
-            tagName:"Ekran",
-            tagAvarageRating: null
-        }
-    ],
-    comments: [
-        {
-            id: "1",
-            text: "bu bir yorumdur",
-            dateTime: "2020-11-22 13:23:08",
-            edited: "0",
-            lastEditDateTime: null,
-            likeCount: "0",
-            liked: false,
-            isOwner: true,
-            owner: {
-                id: "1",
-                username:"MahmuT",
-                slug: "mahmut",
-            },
-            rating: [
-                {
-                    slug: "ekran",
-                    tagName: "Ekran",
-                    ratingValue: "5"
-                }
-            ]
-        }
-    ]
-}
 class Product extends React.Component {
     constructor(props) {
             super(props);
@@ -187,23 +144,17 @@ class Product extends React.Component {
 		});
 	}
     manageOtherSlug() {
-        this.slugs = getSlugsExtra("urun");
-        this.productSlug = this.slugs[0];
-        this.commentType = this.slugs[1];
-        if(this.commentType=="arasi") {
-            let specialInfo = {};
-            specialInfo = {
-                first:slugs[2].split("-")[0],
-                last:slugs[2].split("-")[1]
-            }
-        } else if(this.commentType=="time" || this.commentType=="like"){
-            this.sortBy = this.commentType;
-            this.pageNumber = (this.slugs[2])?this.slugs[2]:1;
-        } else {
+        const pathNames = getPathNames();
+        this.productSlug = pathNames[2];
+        this.sortBy = (pathNames[3])?pathNames[3]:"time";
+        this.pageNumber = (pathNames[4])?pathNames[4]:1;
+        if(this.sortBy!="time" || this.sortBy!="like") {
             this.sortBy = "time";
-            this.pageNumber = 1;
-            this.refreshUrl();
         }
+        if(!isNaN(this.pageNumber)){
+            this.pageNumber = 1;
+        }
+        this.refreshUrl();
         let commentType = "all";  // all, spacial
         // not: buradaki değer atamalar ve değişkenlerin bir kısmı deneme amaçlı, setState içindeki hemen hemen hepsi api tarafından gelecek
     }

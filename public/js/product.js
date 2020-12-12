@@ -6,43 +6,6 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var DATA = {
-    product: {
-        id: "1",
-        title: "Başlık",
-        slug: "slug'ı"
-    },
-    tags: [{
-        slug: "apple",
-        tagName: "Apple",
-        tagAvarageRating: null
-    }, {
-        slug: "ekran",
-        tagName: "Ekran",
-        tagAvarageRating: null
-    }],
-    comments: [{
-        id: "1",
-        text: "bu bir yorumdur",
-        dateTime: "2020-11-22 13:23:08",
-        edited: "0",
-        lastEditDateTime: null,
-        likeCount: "0",
-        liked: false,
-        isOwner: true,
-        owner: {
-            id: "1",
-            username: "MahmuT",
-            slug: "mahmut"
-        },
-        rating: [{
-            slug: "ekran",
-            tagName: "Ekran",
-            ratingValue: "5"
-        }]
-    }]
-};
-
 var Product = function (_React$Component) {
     _inherits(Product, _React$Component);
 
@@ -197,23 +160,17 @@ var Product = function (_React$Component) {
     }, {
         key: "manageOtherSlug",
         value: function manageOtherSlug() {
-            this.slugs = getSlugsExtra("urun");
-            this.productSlug = this.slugs[0];
-            this.commentType = this.slugs[1];
-            if (this.commentType == "arasi") {
-                var specialInfo = {};
-                specialInfo = {
-                    first: slugs[2].split("-")[0],
-                    last: slugs[2].split("-")[1]
-                };
-            } else if (this.commentType == "time" || this.commentType == "like") {
-                this.sortBy = this.commentType;
-                this.pageNumber = this.slugs[2] ? this.slugs[2] : 1;
-            } else {
+            var pathNames = getPathNames();
+            this.productSlug = pathNames[2];
+            this.sortBy = pathNames[3] ? pathNames[3] : "time";
+            this.pageNumber = pathNames[4] ? pathNames[4] : 1;
+            if (this.sortBy != "time" || this.sortBy != "like") {
                 this.sortBy = "time";
-                this.pageNumber = 1;
-                this.refreshUrl();
             }
+            if (!isNaN(this.pageNumber)) {
+                this.pageNumber = 1;
+            }
+            this.refreshUrl();
             var commentType = "all"; // all, spacial
             // not: buradaki değer atamalar ve değişkenlerin bir kısmı deneme amaçlı, setState içindeki hemen hemen hepsi api tarafından gelecek
         }

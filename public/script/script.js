@@ -48,6 +48,19 @@ function getSlugsExtra(pageName) {
     return valuableSlugs;
 }
 
+function getPathNames() {
+    const url = new URL(window.location.href);
+    const pathname = url.pathname;
+    const pathNames = pathname.split("/");
+    const ret = [];
+    for(let i=0;i<pathNames.length;i++) {
+        if(pathNames[i]) {
+            ret.push(pathNames[i]);
+        }
+    }
+    return ret;
+}
+
 function setCookie(key, value) {
     document.cookie = key + "=" + value;
 }
