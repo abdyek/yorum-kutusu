@@ -19,7 +19,8 @@ var Product = function (_React$Component) {
             specialInfo: {},
             commentType: "all",
             sortBy: "time",
-            followButtonDisabled: false
+            followButtonDisabled: false,
+            followed: false
         };
         _this.manageOtherSlug = _this.manageOtherSlug.bind(_this);
         _this.fetchProduct = _this.fetchProduct.bind(_this);
@@ -69,6 +70,7 @@ var Product = function (_React$Component) {
                 _this2.setState({
                     form: "normal",
                     productName: json['other']['product']['title'],
+                    productID: json['other']['product']['id'],
                     comments: _this2.normalizer('comments', json['other']['comments']),
                     commentsForm: json['other']['comments'].length ? 'normal' : 'noComment',
                     pageNumber: json['other']['pageNumber'],
@@ -260,7 +262,7 @@ var Product = function (_React$Component) {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    productID: 1,
+                    productID: this.state.productID,
                     follow: make
                 })
             }).then(function (response) {
@@ -356,20 +358,20 @@ var ProductInfo = function (_React$Component2) {
                             null,
                             !this.props.followed ? React.createElement(
                                 "button",
-                                { "class": "ui teal button " + this.disabled, onClick: this.followButton },
+                                { className: "ui teal button " + this.disabled, onClick: this.followButton },
                                 React.createElement(
                                     "i",
-                                    { "class": "icon" },
-                                    React.createElement("i", { "class": "fa fa-plus", "aria-hidden": "true" })
+                                    { className: "icon" },
+                                    React.createElement("i", { className: "fa fa-plus", "aria-hidden": "true" })
                                 ),
                                 "Takip Et"
                             ) : React.createElement(
                                 "button",
-                                { "class": "ui olive button " + this.disabled, onClick: this.followButton },
+                                { className: "ui olive button " + this.disabled, onClick: this.followButton },
                                 React.createElement(
                                     "i",
-                                    { "class": "icon" },
-                                    React.createElement("i", { "class": "fa fa-times", "aria-hidden": "true" })
+                                    { className: "icon" },
+                                    React.createElement("i", { className: "fa fa-times", "aria-hidden": "true" })
                                 ),
                                 "Takibi B\u0131rak"
                             )
@@ -414,7 +416,7 @@ var SpecialCommentHeader = function (_React$Component3) {
                     null,
                     React.createElement(
                         "div",
-                        { "class": "ui big message" },
+                        { className: "ui big message" },
                         React.createElement(
                             Row,
                             { size: "two" },

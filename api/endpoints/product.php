@@ -93,12 +93,12 @@ class Product extends Request {
         $this->pageCount = intval(Database::getRow('SELECT count(*) as commentCount FROM comment c INNER JOIN product p ON p.product_id = c.product_id WHERE p.product_slug=?', [$this->data['productSlug']])['commentCount'] / 10)+1;
     }
     private function updateLastSeen() {
-        if(defined('USERID') and $this->data['sortBy']=='time'){
+        if(defined('USERID') and $this->data['sortBy']=='time' and count($this->commentsInfo)){
             // şuan için sadece kronolojik sırada okundu olarak işaretliyorum, diğer türlü yatlıyor
-            $lashComment = end($this->commentsInfo);
-            $check = (Database::getRow('SELECT last_seen_date_time FROM product_follow WHERE product_slug=? AND member_id=? AND ?>last_seen_date_time', [$this->data['productSlug'], USERID, $lashComment['commentCreateDateTime']]))?true:false;
+            $lastComment = end($this->commentsInfo);
+            $check = (Database::getRow('SELECT last_seen_date_time FROM product_follow WHERE product_slug=? AND member_id=? AND ?>last_seen_date_time', [$this->data['productSlug'], USERID, $lastComment['commentCreateDateTime']]))?true:false;
             if($check) {
-                $query = Database::execute('UPDATE product_follow SET last_seen_date_time=? WHERE member_id=? AND product_slug=?', [$lashComment['commentCreateDateTime'],USERID, $this->data['productSlug']]);
+                $query = Database::execute('UPDATE product_follow SET last_seen_date_time=? WHERE member_id=? AND product_slug=?', [$lastComment['commentCreateDateTime'],USERID, $this->data['productSlug']]);
             }
         }
     }

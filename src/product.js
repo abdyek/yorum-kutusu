@@ -7,6 +7,7 @@ class Product extends React.Component {
             commentType:"all",
             sortBy:"time",
             followButtonDisabled:false,
+            followed:false
         }
         this.manageOtherSlug = this.manageOtherSlug.bind(this);
         this.fetchProduct = this.fetchProduct.bind(this);
@@ -47,6 +48,7 @@ class Product extends React.Component {
             this.setState({
                 form:"normal",
                 productName:json['other']['product']['title'],
+                productID:json['other']['product']['id'],
                 comments: this.normalizer('comments', json['other']['comments']),
                 commentsForm: (json['other']['comments'].length)?'normal':'noComment',
                 pageNumber: json['other']['pageNumber'],
@@ -218,7 +220,7 @@ class Product extends React.Component {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                productID: 1,
+                productID: this.state.productID,
                 follow:make
             })
         }).then((response)=>{
@@ -292,15 +294,15 @@ class ProductInfo extends React.Component {
             <FloatRight>
             {
                 (!this.props.followed)?
-                    <button class={"ui teal button " + this.disabled} onClick={this.followButton}>
-                            <i class="icon">
-                                <i class="fa fa-plus" aria-hidden="true"></i> 
+                    <button className={"ui teal button " + this.disabled} onClick={this.followButton}>
+                            <i className="icon">
+                                <i className="fa fa-plus" aria-hidden="true"></i> 
                             </i>
                             Takip Et
                     </button>:
-                    <button class={"ui olive button " + this.disabled} onClick={this.followButton}>
-                            <i class="icon">
-                                <i class="fa fa-times" aria-hidden="true"></i>
+                    <button className={"ui olive button " + this.disabled} onClick={this.followButton}>
+                            <i className="icon">
+                                <i className="fa fa-times" aria-hidden="true"></i>
                             </i>
                             Takibi Bırak
                     </button>
@@ -323,7 +325,7 @@ class SpecialCommentHeader extends React.Component {
 		return(
 			<Row size="one">
 				<Column>
-					<div class="ui big message">
+					<div className="ui big message">
 						<Row size="two">
 							<Column>
 								{this.props.specialInfo.first} - {this.props.specialInfo.last} arası gösteriliyor
