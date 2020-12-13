@@ -249,7 +249,7 @@ var TopOfComment = function (_React$Component2) {
                         React.createElement(
                             'div',
                             { className: 'comment-header-wrapper' },
-                            React.createElement(H, { type: '3', text: this.props.title, optional: 'comment-header', href: this.slugPrefix + "/" + this.props.slug, handleOnClick: function handleOnClick(e) {
+                            React.createElement(H, { type: '3', text: this.props.title, optional: 'comment-header', href: SITEURL + this.slugPrefix + "/" + this.props.slug, handleOnClick: function handleOnClick(e) {
                                     e.preventDefault();_this4.props.changeContent(e.target.href);
                                 } })
                         )

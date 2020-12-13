@@ -55,6 +55,8 @@ var Menu = function (_React$Component) {
     }, {
         key: "render",
         value: function render() {
+            var _this2 = this;
+
             var core = void 0;
             if (this.props.form == "user-has-unread") {
                 core = React.createElement(
@@ -130,7 +132,9 @@ var Menu = function (_React$Component) {
                     null,
                     React.createElement(
                         "a",
-                        { onClick: this.openLogin },
+                        { href: "giris-yap", onClick: function onClick(e) {
+                                e.preventDefault();_this2.props.changeContent("giris-yap", true);
+                            } },
                         React.createElement(
                             "button",
                             { "class": "ui blue button" },
@@ -165,10 +169,10 @@ var Logo = function (_React$Component2) {
     function Logo(props) {
         _classCallCheck(this, Logo);
 
-        var _this2 = _possibleConstructorReturn(this, (Logo.__proto__ || Object.getPrototypeOf(Logo)).call(this, props));
+        var _this3 = _possibleConstructorReturn(this, (Logo.__proto__ || Object.getPrototypeOf(Logo)).call(this, props));
 
-        _this2.goHome = _this2.goHome.bind(_this2);
-        return _this2;
+        _this3.goHome = _this3.goHome.bind(_this3);
+        return _this3;
     }
 
     _createClass(Logo, [{
@@ -196,17 +200,17 @@ var SearchBar = function (_React$Component3) {
     function SearchBar(props) {
         _classCallCheck(this, SearchBar);
 
-        var _this3 = _possibleConstructorReturn(this, (SearchBar.__proto__ || Object.getPrototypeOf(SearchBar)).call(this, props));
+        var _this4 = _possibleConstructorReturn(this, (SearchBar.__proto__ || Object.getPrototypeOf(SearchBar)).call(this, props));
 
-        _this3.state = {
+        _this4.state = {
             inputValue: "",
             results: {}
         };
-        _this3.refreshResults = _this3.refreshResults.bind(_this3);
-        _this3.prepareATags = _this3.prepareATags.bind(_this3);
-        _this3.changeInput = _this3.changeInput.bind(_this3);
-        _this3.deleteResults = _this3.deleteResults.bind(_this3);
-        return _this3;
+        _this4.refreshResults = _this4.refreshResults.bind(_this4);
+        _this4.prepareATags = _this4.prepareATags.bind(_this4);
+        _this4.changeInput = _this4.changeInput.bind(_this4);
+        _this4.deleteResults = _this4.deleteResults.bind(_this4);
+        return _this4;
     }
 
     _createClass(SearchBar, [{
@@ -419,15 +423,15 @@ var App = function (_React$Component7) {
     function App(props) {
         _classCallCheck(this, App);
 
-        var _this7 = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
+        var _this8 = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
 
-        _this7.state = {
-            content: _this7.props.content,
+        _this8.state = {
+            content: _this8.props.content,
             form: "login", // user-empty-unread, user-has-unread, login
             userSlug: "yunus-emre",
             unreadCommentsCount: 115
         };
-        _this7.contentFromSlug = {
+        _this8.contentFromSlug = {
             " ": "index",
             "urun": "product",
             "profil": "profile",
@@ -438,23 +442,17 @@ var App = function (_React$Component7) {
             "filtrele": "filter"
         };
         window.onpopstate = function (event) {
-            if (event) {
-                if (window.history.state == null) {
-                    window.history.back();
-                } else {
-                    this.setState({
-                        content: window.history.state.content
-                    });
-                }
-            } else {
-                // Continue user action through link or button
-            }
-        }.bind(_this7);
+            var pathNames = getPathNames();
+            var page = pathNames[0];
+            this.setState({
+                "content": this.contentFromSlug[page]
+            });
+        }.bind(_this8);
 
-        _this7.changeContent = _this7.changeContent.bind(_this7);
-        _this7.logout = _this7.logout.bind(_this7);
-        _this7.changeHeader = _this7.changeHeader.bind(_this7);
-        return _this7;
+        _this8.changeContent = _this8.changeContent.bind(_this8);
+        _this8.logout = _this8.logout.bind(_this8);
+        _this8.changeHeader = _this8.changeHeader.bind(_this8);
+        return _this8;
     }
 
     _createClass(App, [{
@@ -479,22 +477,29 @@ var App = function (_React$Component7) {
         }
     }, {
         key: "changeContent",
-        value: function changeContent(href) {
-            firstLoading = false;
-            // ^ filtrele sayfası sadece ilk yüklemede loasingSpin'e düşeceği için ihtiyaç duydum
-            var foo = href.split(SITEURL);
-            var bar = foo[foo.length - 1];
-            slug = bar.split("/")[0];
-            var content = this.contentFromSlug[slug];
-            window.history.pushState({ content: content }, "Title", bar);
-            this.setState({
-                "content": content
-            });
+        value: function changeContent(href, direct) {
+            direct = direct || false;
+            if (direct) {
+                var cont = this.contentFromSlug[href];
+                window.history.pushState({ content: cont }, "title", SITEURL + href);
+                this.setState({
+                    "content": this.contentFromSlug[href]
+                });
+            } else {
+                var pathNames = getPathNames(href);
+                var page = pathNames[0];
+                var _cont = this.contentFromSlug[page];
+                window.history.pushState({ content: _cont }, "title", href);
+                console.log(_cont);
+                this.setState({
+                    "content": _cont
+                });
+            }
         }
     }, {
         key: "logout",
         value: function logout() {
-            var _this8 = this;
+            var _this9 = this;
 
             fetch(SITEURL + 'api/logout', {
                 method: 'POST',
@@ -504,10 +509,11 @@ var App = function (_React$Component7) {
             }).then(function (response) {
                 if (!response.ok) throw new Error(response.status);else return response.json();
             }).then(function (json) {
-                _this8.setState({
+                _this9.setState({
                     form: "login"
                 });
                 setCookie('user', null);
+                _this9.changeContent(' ');
             }).catch(function (error) {});
         }
     }, {

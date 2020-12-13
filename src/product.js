@@ -27,9 +27,9 @@ class Product extends React.Component {
     }
     manageOtherSlug() {
         const pathNames = getPathNames();
-        this.productSlug = pathNames[2];
-        this.sortBy = (pathNames[3])?pathNames[3]:"time";
-        this.pageNumber = (pathNames[4])?pathNames[4]:1;
+        this.productSlug = pathNames[1];
+        this.sortBy = (pathNames[2])?pathNames[2]:"time";
+        this.pageNumber = (pathNames[3])?pathNames[3]:1;
         if(this.sortBy!="time" && this.sortBy!="like") {
             this.sortBy = "time";
         }

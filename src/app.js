@@ -73,7 +73,7 @@ class Menu extends React.Component {
         } else if(this.props.form=="login") {
             core = (
                 <FloatRight>
-                    <a onClick={this.openLogin}>
+                    <a href="giris-yap" onClick={(e)=>{e.preventDefault();this.props.changeContent("giris-yap", true)}}>
                         <button class="ui blue button">
                             <i class="icon">
                                 <i class="fa fa-user" aria-hidden="true"></i>
@@ -284,17 +284,11 @@ class App extends React.Component {
             "filtrele":"filter"
         }
         window.onpopstate = function(event) {
-            if(event){
-                if(window.history.state==null) {
-                    window.history.back();
-                } else {
-                    this.setState({
-                        content:window.history.state.content
-                    });
-                }
-            } else{
-                // Continue user action through link or button
-            }
+            const pathNames = getPathNames();
+            const page = pathNames[0];
+            this.setState({
+                "content":this.contentFromSlug[page]
+            });
         }.bind(this);
 
         this.changeContent = this.changeContent.bind(this);
@@ -319,17 +313,24 @@ class App extends React.Component {
             "unreadCommentsCount":unread
         });
     }
-    changeContent(href) {
-        firstLoading=false;
-        // ^ filtrele sayfası sadece ilk yüklemede loasingSpin'e düşeceği için ihtiyaç duydum
-        let foo = href.split(SITEURL);
-        let bar = foo[foo.length-1];
-        slug = bar.split("/")[0];
-        let content = this.contentFromSlug[slug];
-        window.history.pushState({content:content}, "Title", bar);
-        this.setState({
-            "content":content
-        });
+    changeContent(href, direct) {
+        direct = direct || false;
+        if(direct) {
+            const cont = this.contentFromSlug[href];
+            window.history.pushState({content:cont}, "title", SITEURL + href);
+            this.setState({
+                "content":this.contentFromSlug[href]
+            })
+        } else {
+            const pathNames = getPathNames(href);
+            const page = pathNames[0];
+            const cont = this.contentFromSlug[page];
+            window.history.pushState({content:cont}, "title", href);
+            console.log(cont);
+            this.setState({
+                "content":cont
+            });
+        }
     }
     logout() {
         fetch(SITEURL + 'api/logout', {
@@ -345,6 +346,7 @@ class App extends React.Component {
                 form:"login"
             });
             setCookie('user', null);
+            this.changeContent(' ');
         }).catch((error)=>{
             
         });

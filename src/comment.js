@@ -185,7 +185,7 @@ class TopOfComment extends React.Component{
                 <Row size="two" nonStackable={true}>
                     <Column>
                         <div className="comment-header-wrapper">
-                            <H type="3" text={this.props.title} optional="comment-header" href={this.slugPrefix + "/" + this.props.slug} handleOnClick={(e)=>{e.preventDefault();this.props.changeContent(e.target.href)}}/>
+                            <H type="3" text={this.props.title} optional="comment-header" href={SITEURL + this.slugPrefix + "/" + this.props.slug} handleOnClick={(e)=>{e.preventDefault();this.props.changeContent(e.target.href)}}/>
                         </div>
                     </Column>
                     <Column>

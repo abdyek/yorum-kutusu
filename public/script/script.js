@@ -48,8 +48,9 @@ function getSlugsExtra(pageName) {
     return valuableSlugs;
 }
 
-function getPathNames() {
-    const url = new URL(window.location.href);
+function getPathNames(href) {
+    href = href || window.location.href;
+    const url = new URL(href);
     const pathname = url.pathname;
     const pathNames = pathname.split("/");
     const ret = [];
@@ -57,6 +58,10 @@ function getPathNames() {
         if(pathNames[i]) {
             ret.push(pathNames[i]);
         }
+    }
+    if(ret[0]=="yorum-kutusu") {
+        // localhost/yorum-kutusu
+        ret.shift();
     }
     return ret;
 }
