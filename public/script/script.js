@@ -62,8 +62,35 @@ function getPathNames() {
 }
 
 function setCookie(key, value) {
-    document.cookie = key + "=" + value;
+    let now = new Date();
+    let time = now.getTime();
+    let expireTime = time + 31556926000;
+    now.setTime(expireTime);
+    document.cookie = key+'='+value+';expires='+now.toUTCString()+';path=/';
 }
-function getCookie(key) {
-    return document.cookie.split('; ').find(row=>row.startWith(key)).split('=')[1];
+
+function getCookie(cname) {
+    let name = cname + "=";
+    let decodedCookie = decodeURIComponent(document.cookie);
+    let ca = decodedCookie.split(';');
+    for(let i = 0; i <ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
 }
+
+function isMobile() {
+    return (window.innerWidth<768)?true: false
+}
+
+function validateEmail(email) {
+    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+}
+
