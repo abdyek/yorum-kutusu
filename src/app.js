@@ -5,7 +5,6 @@ class Menu extends React.Component {
         this.logout = this.logout.bind(this);
         this.openUnreadComments = this.openUnreadComments.bind(this);
         this.openProfile = this.openProfile.bind(this);
-        this.openLogin = this.openLogin.bind(this);
     }
     refreshUnreadComments() {
         // burada istekle yeni okunmamış mesajları çekicez
@@ -21,11 +20,7 @@ class Menu extends React.Component {
     }
     openProfile(e) {
         e.preventDefault();
-        this.props.changeContent("profil/"+this.props.userSlug);
-    }
-    openLogin(e) {
-        e.preventDefault();
-        this.props.changeContent("giris-yap");
+        this.props.changeContent(SITEURL+"profil/"+this.props.userSlug);
     }
     render() {
         let core;
@@ -98,7 +93,7 @@ class Logo extends React.Component {
         this.goHome = this.goHome.bind(this);
     }
     goHome(e) {
-        this.props.changeContent(" ");
+        this.props.changeContent(" ", true);
     }
     render() {
         return(
@@ -346,7 +341,7 @@ class App extends React.Component {
                 form:"login"
             });
             setCookie('user', null);
-            this.changeContent(' ');
+            this.changeContent(' ', true);
         }).catch((error)=>{
             
         });

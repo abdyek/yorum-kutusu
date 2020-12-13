@@ -39,28 +39,32 @@ var Comment = function (_React$Component) {
         value: function likeToggle() {
             var _this2 = this;
 
-            this.make = this.state.liked ? false : true;
-            this.setState({
-                likeButtonDisabled: true
-            });
-            fetch(SITEURL + 'api/likeComment', {
-                method: 'POST',
-                header: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    commentID: this.props.id,
-                    like: this.make
-                })
-            }).then(function (response) {
-                if (!response.ok) throw new Error(response.status);else return response.json();
-            }).then(function (json) {
-                _this2.setState({
-                    likeButtonDisabled: false,
-                    liked: _this2.make,
-                    likeCount: json['other']['count']
+            if (isMember()) {
+                this.make = this.state.liked ? false : true;
+                this.setState({
+                    likeButtonDisabled: true
                 });
-            }).catch(function (error) {});
+                fetch(SITEURL + 'api/likeComment', {
+                    method: 'POST',
+                    header: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        commentID: this.props.id,
+                        like: this.make
+                    })
+                }).then(function (response) {
+                    if (!response.ok) throw new Error(response.status);else return response.json();
+                }).then(function (json) {
+                    _this2.setState({
+                        likeButtonDisabled: false,
+                        liked: _this2.make,
+                        likeCount: json['other']['count']
+                    });
+                }).catch(function (error) {});
+            } else {
+                this.props.changeContent('giris-yap', true);
+            }
         }
     }, {
         key: 'openReportArea',

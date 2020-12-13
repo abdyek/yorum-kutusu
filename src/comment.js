@@ -20,30 +20,34 @@ class Comment extends React.Component {
         this.confirmDelete = this.confirmDelete.bind(this);
     }
     likeToggle() {
-        this.make = (this.state.liked)?false:true;
-        this.setState({
-            likeButtonDisabled:true
-        });
-        fetch(SITEURL + 'api/likeComment', {
-            method: 'POST',
-            header: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                commentID: this.props.id,
-                like: this.make
-            })
-        }).then((response)=>{
-            if(!response.ok) throw new Error(response.status);
-            else return response.json();
-        }).then((json)=>{
+        if(isMember()) {
+            this.make = (this.state.liked)?false:true;
             this.setState({
-                likeButtonDisabled:false,
-                liked:this.make,
-                likeCount: json['other']['count']
+                likeButtonDisabled:true
             });
-        }).catch((error)=>{
-        });
+            fetch(SITEURL + 'api/likeComment', {
+                method: 'POST',
+                header: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    commentID: this.props.id,
+                    like: this.make
+                })
+            }).then((response)=>{
+                if(!response.ok) throw new Error(response.status);
+                else return response.json();
+            }).then((json)=>{
+                this.setState({
+                    likeButtonDisabled:false,
+                    liked:this.make,
+                    likeCount: json['other']['count']
+                });
+            }).catch((error)=>{
+            });
+        } else {
+            this.props.changeContent('giris-yap', true);
+        }
     }
     openReportArea() {
         this.setState({

@@ -36,8 +36,8 @@ var LogIn = function (_React$Component) {
     _createClass(LogIn, [{
         key: "componentDidMount",
         value: function componentDidMount() {
-            if (getCookie('user') && getCookie('user') != 'null') {
-                this.props.changeContent(' ');
+            if (isMember()) {
+                this.props.changeContent(' ', true);
             }
         }
     }, {
@@ -74,7 +74,7 @@ var LogIn = function (_React$Component) {
                 setCookie('user', hash);
                 _this2.props.changeHeader("user-empty-unread");
                 setTimeout(function () {
-                    _this2.props.changeContent(' ');
+                    _this2.props.changeContent(' ', true);
                 }, 2000);
             }).catch(function (error) {
                 if (error.message == 401) {

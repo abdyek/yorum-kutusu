@@ -48,6 +48,10 @@ function getSlugsExtra(pageName) {
     return valuableSlugs;
 }
 
+function isMember() {
+    return (getCookie('user') && getCookie('user')!='null');
+}
+
 function getPathNames(href) {
     href = href || window.location.href;
     const url = new URL(href);

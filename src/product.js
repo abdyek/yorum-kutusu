@@ -210,29 +210,33 @@ class Product extends React.Component {
 		this.refreshComments();
 	}
     followToggle() {
-        let make = (this.state.followed)?false:true;
-        this.setState({
-            followButtonDisabled:true
-        });
-        fetch(SITEURL + 'api/followProduct', {
-            method: 'POST',
-            header: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                productID: this.state.productID,
-                follow:make
-            })
-        }).then((response)=>{
-            if(!response.ok) throw new Error(response.status);
-            else return response.json();
-        }).then((json)=>{
+        if(isMember()) {
+            let make = (this.state.followed)?false:true;
             this.setState({
-                followButtonDisabled:false,
-                followed:make
+                followButtonDisabled:true
             });
-        }).catch((error)=>{
-        });
+            fetch(SITEURL + 'api/followProduct', {
+                method: 'POST',
+                header: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    productID: this.state.productID,
+                    follow:make
+                })
+            }).then((response)=>{
+                if(!response.ok) throw new Error(response.status);
+                else return response.json();
+            }).then((json)=>{
+                this.setState({
+                    followButtonDisabled:false,
+                    followed:make
+                });
+            }).catch((error)=>{
+            });
+        } else {
+            this.props.changeContent('giris-yap', true);
+        }
     }
     render() {
         if(this.state.form=="normal") {

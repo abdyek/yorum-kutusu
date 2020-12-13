@@ -252,27 +252,31 @@ var Product = function (_React$Component) {
         value: function followToggle() {
             var _this4 = this;
 
-            var make = this.state.followed ? false : true;
-            this.setState({
-                followButtonDisabled: true
-            });
-            fetch(SITEURL + 'api/followProduct', {
-                method: 'POST',
-                header: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    productID: this.state.productID,
-                    follow: make
-                })
-            }).then(function (response) {
-                if (!response.ok) throw new Error(response.status);else return response.json();
-            }).then(function (json) {
-                _this4.setState({
-                    followButtonDisabled: false,
-                    followed: make
+            if (isMember()) {
+                var make = this.state.followed ? false : true;
+                this.setState({
+                    followButtonDisabled: true
                 });
-            }).catch(function (error) {});
+                fetch(SITEURL + 'api/followProduct', {
+                    method: 'POST',
+                    header: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        productID: this.state.productID,
+                        follow: make
+                    })
+                }).then(function (response) {
+                    if (!response.ok) throw new Error(response.status);else return response.json();
+                }).then(function (json) {
+                    _this4.setState({
+                        followButtonDisabled: false,
+                        followed: make
+                    });
+                }).catch(function (error) {});
+            } else {
+                this.props.changeContent('giris-yap', true);
+            }
         }
     }, {
         key: "render",

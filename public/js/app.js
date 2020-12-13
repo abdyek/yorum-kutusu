@@ -18,7 +18,6 @@ var Menu = function (_React$Component) {
         _this.logout = _this.logout.bind(_this);
         _this.openUnreadComments = _this.openUnreadComments.bind(_this);
         _this.openProfile = _this.openProfile.bind(_this);
-        _this.openLogin = _this.openLogin.bind(_this);
         return _this;
     }
 
@@ -44,13 +43,7 @@ var Menu = function (_React$Component) {
         key: "openProfile",
         value: function openProfile(e) {
             e.preventDefault();
-            this.props.changeContent("profil/" + this.props.userSlug);
-        }
-    }, {
-        key: "openLogin",
-        value: function openLogin(e) {
-            e.preventDefault();
-            this.props.changeContent("giris-yap");
+            this.props.changeContent(SITEURL + "profil/" + this.props.userSlug);
         }
     }, {
         key: "render",
@@ -178,7 +171,7 @@ var Logo = function (_React$Component2) {
     _createClass(Logo, [{
         key: "goHome",
         value: function goHome(e) {
-            this.props.changeContent(" ");
+            this.props.changeContent(" ", true);
         }
     }, {
         key: "render",
@@ -513,7 +506,7 @@ var App = function (_React$Component7) {
                     form: "login"
                 });
                 setCookie('user', null);
-                _this9.changeContent(' ');
+                _this9.changeContent(' ', true);
             }).catch(function (error) {});
         }
     }, {

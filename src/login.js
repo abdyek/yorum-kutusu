@@ -19,8 +19,8 @@ class LogIn extends React.Component {
         }
     }
     componentDidMount() {
-        if(getCookie('user') && getCookie('user')!='null') {
-            this.props.changeContent(' ');
+        if(isMember()) {
+            this.props.changeContent(' ', true);
         }
     }
     changeContent(e) {
@@ -52,7 +52,7 @@ class LogIn extends React.Component {
             setCookie('user', hash);
             this.props.changeHeader("user-empty-unread");
             setTimeout(()=>{
-                this.props.changeContent(' ');
+                this.props.changeContent(' ', true);
             }, 2000);
         }).catch((error)=>{
             if(error.message==401) {
