@@ -5,8 +5,12 @@ class Comment extends React.Component {
             // normal, report, edit, delete, message, loading
             form:"normal",
             topMessage: this.props.topMessage,
-            message: this.props.message
+            message: this.props.message,
+            likeCount:this.props.likeCount,
+            liked:this.props.liked,
+            likeButtonDisabled:false
         };
+        this.likeToggle = this.likeToggle.bind(this);
         this.openReportArea = this.openReportArea.bind(this);
         this.closeReportArea = this.closeReportArea.bind(this);
         this.openEditArea = this.openEditArea.bind(this);
@@ -14,6 +18,32 @@ class Comment extends React.Component {
         this.openDeleteArea = this.openDeleteArea.bind(this);
         this.closeDeleteArea = this.closeDeleteArea.bind(this);
         this.confirmDelete = this.confirmDelete.bind(this);
+    }
+    likeToggle() {
+        this.make = (this.state.liked)?false:true;
+        this.setState({
+            likeButtonDisabled:true
+        });
+        fetch(SITEURL + 'api/likeComment', {
+            method: 'POST',
+            header: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                commentID: this.props.id,
+                like: this.make
+            })
+        }).then((response)=>{
+            if(!response.ok) throw new Error(response.status);
+            else return response.json();
+        }).then((json)=>{
+            this.setState({
+                likeButtonDisabled:false,
+                liked:this.make,
+                likeCount: json['other']['count']
+            });
+        }).catch((error)=>{
+        });
     }
     openReportArea() {
         this.setState({
@@ -76,7 +106,7 @@ class Comment extends React.Component {
                         <Column>
                             <RaisedSegment otherClass="comment">
                                 <TopOfComment text={this.props.text} slug={this.props.slug} title={this.props.title} owner={this.props.owner} handleOpenEditArea={this.openEditArea} handleOpenDeleteArea={this.openDeleteArea} changeContent={this.props.changeContent} type={this.props.type}/>
-                                <BottomOfComment likeCount={this.props.likeCount} liked={this.props.liked} date={this.props.date} handleOpenReportArea={this.openReportArea} handleCloseReportArea={this.closeReportArea} tags={this.props.tags} owner={this.props.owner} changeContent={this.props.changeContent} id={this.props.id}/>
+                                <BottomOfComment likeCount={this.state.likeCount} liked={this.state.liked} likeButtonDisabled={this.state.likeButtonDisabled} likeToggle={this.likeToggle} date={this.props.date} handleOpenReportArea={this.openReportArea} handleCloseReportArea={this.closeReportArea} tags={this.props.tags} owner={this.props.owner} changeContent={this.props.changeContent} id={this.props.id}/>
                             </RaisedSegment>
                         </Column>
                     </Row>
@@ -218,7 +248,7 @@ class BottomOfComment extends React.Component {
                     </Column>
                     <Column>
                         <FloatRight>
-                            <LikeButton likeCount={this.props.likeCount} liked={this.props.liked} id={this.props.id}/>
+                            <LikeButton likeCount={this.props.likeCount} liked={this.props.liked} likeButtonDisabled={this.props.likeButtonDisabled} id={this.props.id} likeToggle={this.props.likeToggle}/>
                             <ReportButton handleOpenReportArea={this.props.handleOpenReportArea} disabled={this.props.owner}/>
                         </FloatRight>
                     </Column>
@@ -231,64 +261,16 @@ class BottomOfComment extends React.Component {
 class LikeButton extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            liked:this.props.liked,
-            likeCount: this.props.likeCount,
-            disabled:false
-        };
-        this.likeToggle = this.likeToggle.bind(this);
-    }
-    likeToggle() {
-        this.make = (this.state.liked)?false:true;
-        this.setState({
-            disabled:true
-        });
-        fetch(SITEURL + 'api/likeComment', {
-            method: 'POST',
-            header: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                commentID: this.props.id,
-                like: this.make
-            })
-        }).then((response)=>{
-            if(!response.ok) throw new Error(response.status);
-            else return response.json();
-        }).then((json)=>{
-            this.setState({
-                disabled:false,
-                liked:this.make,
-                likeCount: json['other']['count']
-            });
-        }).catch((error)=>{
-        });
-        /*
-        let likeCount = this.state.likeCount;
-        if(this.state.liked) {
-            likeCount--;
-            this.setState({
-                liked:false,
-                likeCount: likeCount
-            });
-        } else {
-            likeCount++;
-            this.setState({
-                liked:true,
-                likeCount: likeCount
-            });
-        }
-        */
     }
     render() {
-        this.disabled = (this.state.disabled)?" disabled":"";
-        this.buttonClass = (this.state.liked)? "ui blue button": "ui button";
+        this.disabled = (this.props.likeButtonDisabled)?" disabled":"";
+        this.buttonClass = (this.props.liked)? "ui blue button": "ui button";
         return(
-            <button className={this.buttonClass + this.disabled} onClick={this.likeToggle}>
+            <button className={this.buttonClass + this.disabled} onClick={this.props.likeToggle}>
                 <i className="icon">
                     <i className="fa fa-thumbs-up" aria-hidden="true"></i>
                 </i>
-                {this.state.likeCount}
+                {this.props.likeCount}
             </button>
         )
     }
@@ -871,18 +853,18 @@ class Comments extends React.Component {
 				let com = this.props.comments[i];
 				this.comments.push(
                                     <Comment
-                                            changeContent={this.props.changeContent}
-                                            key={com.id}
-                                            id={com.id}
-                                            text={com.text}
-                                            type={com.type}
-                                            slug={com.slug}
-                                            likeCount={com.likeCount}
-                                            liked={com.liked}
-                                            title={com.title}
-                                            date={com.date}
-                                            tags={com.tags}
-                                            owner={com.owner}
+                                        changeContent={this.props.changeContent}
+                                        key={com.id}
+                                        id={com.id}
+                                        text={com.text}
+                                        type={com.type}
+                                        slug={com.slug}
+                                        likeCount={com.likeCount}
+                                        liked={com.liked}
+                                        title={com.title}
+                                        date={com.date}
+                                        tags={com.tags}
+                                        owner={com.owner}
                                     />
 				)
 			}
