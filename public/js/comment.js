@@ -1,5 +1,7 @@
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -15,7 +17,7 @@ var Comment = function (_React$Component) {
         var _this = _possibleConstructorReturn(this, (Comment.__proto__ || Object.getPrototypeOf(Comment)).call(this, props));
 
         _this.state = {
-            // normal, report, edit, delete, message, loading
+            // normal, report, edit, delete, message, loading, newComment
             form: "normal",
             topMessage: _this.props.topMessage,
             message: _this.props.message,
@@ -174,7 +176,7 @@ var Comment = function (_React$Component) {
                     )
                 );
             } else if (this.state.form == "loading") {
-                return React.createElement(RowLoadingSpin, null);
+                return React.createElement(RowLoadingSpin, { nonSegment: true });
             }
         }
     }]);
@@ -790,15 +792,16 @@ var WriteComment = function (_React$Component9) {
                 buttonClassName: "ui green disabled button"
             };
         }
+        var propsTags = _this11.props.tags;
+        var stateTags = [];
+        for (var i = 0; i < propsTags.length; i++) {
+            stateTags[propsTags[i].slug] = propsTags[i];
+            stateTags[propsTags[i].slug]['rateValue'] = '-';
+        }
         _this11.state = {
             // normal, loading, sent
             form: "normal",
-            messageType: "success", // success, warning, danger
-            messageText: "bu neyin mesajı bilmiyorum",
-            message: {
-                type: "success",
-                text: "başarılı bir message"
-            },
+            tags: stateTags,
             commentText: _this11.props.commentText,
             sendButtonClassName: _this11.var.buttonClassName,
             topMessage: {
@@ -806,6 +809,7 @@ var WriteComment = function (_React$Component9) {
                 text: null
             }
         };
+        _this11.selectOption = _this11.selectOption.bind(_this11);
         _this11.sendComment = _this11.sendComment.bind(_this11);
         _this11.changeComment = _this11.changeComment.bind(_this11);
         _this11.showTopMessage = _this11.showTopMessage.bind(_this11);
@@ -813,35 +817,50 @@ var WriteComment = function (_React$Component9) {
     }
 
     _createClass(WriteComment, [{
+        key: 'selectOption',
+        value: function selectOption(e, slug) {
+            console.log("slug" + slug, " değer ", e.target.value);
+            var tags = this.state.tags;
+            tags[slug]['rateValue'] = e.target.value;
+            this.setState({
+                tags: tags
+            });
+        }
+    }, {
         key: 'sendComment',
         value: function sendComment() {
-            //this.setState({
-            //form:"loading"
-            //});
-            // gerekli API işlemleri buraya yapılacak
-            // yorum düzenleme de buradan gönderileceği için, düzenleme mi yoksa yeni yorum gönderme mi kontrolleri burada yaparım
-            //if(this.props.forEdit) {
-            // başarılı olması durumunda edited 'e çeviricez
-            //setTimeout(function() {
-            //this.setState({
-            //form:"edited"
-            //})
-            //}.bind(this), 1000);
-            //}
-            // başarısız olma durumunda kullanılabilecek bir üst mesaj
-            this.showTopMessage("success", "başarılı bir şekilde yorumunuz gönderildi");
+            var _this12 = this;
+
             this.setState({
-                form: "sent"
+                form: "loading"
             });
-            /*
-            this.setState({
-                form:"sent",
-                message: {
-                    type:"warning",
-                    text:"hata hata!!"
+            var values = Object.values(this.state.tags);
+            var rating = {};
+            for (var i = 0; i < values.length; i++) {
+                rating[values['slug']] = values['rateValue'];
+            }
+            fetch(SITEURL + 'api/comment', {
+                method: 'POST',
+                header: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    productID: this.props.productID,
+                    commentText: this.state.commentText,
+                    rating: rating
+                })
+            }).then(function (response) {
+                if (!response.ok) throw new Error(response.status);else return response.json();
+            }).then(function (json) {
+                _this12.setState({
+                    form: "sent"
+                });
+                console.log("burası çalışıyor mu");
+            }).catch(function (error) {
+                if (error.message == 422) {
+                    _this12.showTopMessage("warning", "Her ürüne sadece bir kere yorum yapabilirsiniz");
                 }
             });
-            */
         }
     }, {
         key: 'changeComment',
@@ -867,6 +886,7 @@ var WriteComment = function (_React$Component9) {
                 text: text
             };
             this.setState({
+                form: "normal",
                 topMessage: topMessage
             });
         }
@@ -938,7 +958,7 @@ var WriteComment = function (_React$Component9) {
                                 React.createElement(
                                     Column,
                                     null,
-                                    React.createElement(Rating, { tags: this.props.tags, forEdit: this.props.forEdit })
+                                    React.createElement(Rating, { tags: this.state.tags, forEdit: this.props.forEdit, selectOption: this.selectOption })
                                 )
                             ),
                             React.createElement(
@@ -964,41 +984,15 @@ var WriteComment = function (_React$Component9) {
             } else if (this.state.form == "loading") {
                 return React.createElement(RowLoadingSpin, null);
             } else if (this.state.form == "sent") {
-                return (
-                    // bu kısım başarılı olması durumunda gösterilecek
-                    // API ile konuşturan yunus emre'ye not: buradaki Comment componentinin özelliklerini WriteComment'in state'i üzerinde tuttuğun API reponse'u değerleri
-                    // üzerinden dolduracaksın
-                    React.createElement(Comment, { text: this.state.commentText,
-                        likeCount: '0',
-                        liked: false,
-                        title: 'Buraya kullan\u0131c\u0131 ad\u0131 gelecek',
-                        date: '19 Temmuz - 21:45',
-                        tags: [{
-                            id: 3,
-                            passive: false,
-                            text: "Batarya",
-                            color: "yellow",
-                            rateValue: "5"
-                        }, {
-                            id: 4,
-                            passive: false,
-                            text: "Kamera",
-                            color: "orange",
-                            rateValue: "4"
-                        }, {
-                            id: 5,
-                            passive: false,
-                            text: "Tasarım",
-                            color: "",
-                            rateValue: "-"
-                        }],
-                        owner: true,
-                        topMessage: {
-                            type: this.state.topMessage.type,
-                            text: this.state.topMessage.text
-                        }
-                    })
-                );
+                return React.createElement(Comment, { text: this.state.commentText,
+                    likeCount: '0',
+                    liked: false,
+                    title: 'Buraya kullan\u0131c\u0131 ad\u0131 gelecek',
+                    date: '19 Temmuz - 21:45', tags: this.state.tags, owner: true, topMessage: {
+                        type: this.state.topMessage.type,
+                        text: this.state.topMessage.text
+                    }
+                });
             }
         }
     }]);
@@ -1022,7 +1016,7 @@ var Rating = function (_React$Component10) {
             var keyArr = Object.keys(this.props.tags);
             for (var i = 0; i < keyArr.length; i++) {
                 if (!this.props.tags[keyArr[i]].passive) {
-                    this.ratingLines.push(React.createElement(RatingLine, { key: keyArr[i], tagKey: this.props.tags[keyArr[i]].id, tagName: this.props.tags[keyArr[i]].text, forEdit: this.props.forEdit, rateValue: this.props.tags[keyArr[i]].rateValue }));
+                    this.ratingLines.push(React.createElement(RatingLine, _defineProperty({ key: keyArr[i], tagKey: this.props.tags[keyArr[i]].id, tagName: this.props.tags[keyArr[i]].text, tagSlug: this.props.tags[keyArr[i]].slug, forEdit: this.props.forEdit, rateValue: this.props.tags[keyArr[i]].rateValue, selectOption: this.props.selectOption }, 'rateValue', this.props.tags[keyArr[i]].rateValue)));
                 }
             }
             return React.createElement(
@@ -1047,41 +1041,15 @@ var RatingLine = function (_React$Component11) {
     function RatingLine(props) {
         _classCallCheck(this, RatingLine);
 
-        var _this13 = _possibleConstructorReturn(this, (RatingLine.__proto__ || Object.getPrototypeOf(RatingLine)).call(this, props));
-
-        _this13.rateValue = _this13.props.forEdit ? _this13.props.rateValue : "-";
-        _this13.colors = {
-            "-": "",
-            1: "red",
-            2: "red",
-            3: "orange",
-            4: "orange",
-            5: "yellow",
-            6: "yellow",
-            7: "teal",
-            8: "teal",
-            9: "blue",
-            10: "blue"
-        };
-        _this13.state = {
-            rateValue: _this13.rateValue,
-            color: _this13.colors[_this13.rateValue]
-        };
-        _this13.selectOption = _this13.selectOption.bind(_this13);
-        return _this13;
+        return _possibleConstructorReturn(this, (RatingLine.__proto__ || Object.getPrototypeOf(RatingLine)).call(this, props));
     }
 
     _createClass(RatingLine, [{
-        key: 'selectOption',
-        value: function selectOption(e) {
-            this.setState({
-                rateValue: e.target.value,
-                color: this.colors[e.target.value]
-            });
-        }
-    }, {
         key: 'render',
         value: function render() {
+            var _this15 = this;
+
+            this.color = getRatingColor(this.props.rateValue);
             return React.createElement(
                 Row,
                 { size: 'one' },
@@ -1097,7 +1065,7 @@ var RatingLine = function (_React$Component11) {
                             React.createElement(
                                 Center,
                                 null,
-                                React.createElement(Tag, { key: this.props.tagKey, passive: false, text: this.props.tagName, color: this.state.color, rateValue: this.state.rateValue })
+                                React.createElement(Tag, { key: this.props.tagKey, passive: false, text: this.props.tagName, color: this.color, rateValue: this.props.rateValue })
                             )
                         ),
                         React.createElement(
@@ -1114,7 +1082,9 @@ var RatingLine = function (_React$Component11) {
                                         { className: 'field' },
                                         React.createElement(
                                             'select',
-                                            { onChange: this.selectOption },
+                                            { onChange: function onChange(e) {
+                                                    return _this15.props.selectOption(e, _this15.props.tagSlug);
+                                                } },
                                             React.createElement(
                                                 'option',
                                                 { value: '-' },
@@ -1213,11 +1183,11 @@ var DeleteArea = function (_React$Component13) {
     function DeleteArea(props) {
         _classCallCheck(this, DeleteArea);
 
-        var _this15 = _possibleConstructorReturn(this, (DeleteArea.__proto__ || Object.getPrototypeOf(DeleteArea)).call(this, props));
+        var _this17 = _possibleConstructorReturn(this, (DeleteArea.__proto__ || Object.getPrototypeOf(DeleteArea)).call(this, props));
 
-        _this15.cancelFunc = _this15.cancelFunc.bind(_this15);
-        _this15.confirmFunc = _this15.confirmFunc.bind(_this15);
-        return _this15;
+        _this17.cancelFunc = _this17.cancelFunc.bind(_this17);
+        _this17.confirmFunc = _this17.confirmFunc.bind(_this17);
+        return _this17;
     }
 
     _createClass(DeleteArea, [{

@@ -191,7 +191,7 @@ var Product = function (_React$Component) {
                 }
                 return tags;
             } else if (key == "tags") {
-                var _tags = {};
+                var _tags = [];
                 for (var _i2 = 0; _i2 < data.length; _i2++) {
                     _tags[_i2] = {
                         passive: data[_i2].tagPassive == "1" ? true : false,
@@ -201,7 +201,6 @@ var Product = function (_React$Component) {
                         rateValue: data[_i2].tagAvarageRating
                     };
                 }
-                console.log(_tags);
                 return _tags;
             }
         }
@@ -290,7 +289,7 @@ var Product = function (_React$Component) {
                     this.state.commentType == "all" ? React.createElement(PageNavigation, { sortBy: this.state.sortBy, form: this.state.commentsForm, handleChangeSortBy: this.changeSortBy, pageCount: this.state.pageCount, currentPage: this.state.pageNumber, handleChangePageNumber: this.changePageNumber }) : React.createElement(SpecialCommentHeader, { specialInfo: this.state.specialInfo, showAllComments: this.showAllComments }),
                     React.createElement(Comments, { comments: this.state.comments, form: this.state.commentsForm, changeContent: this.props.changeContent }),
                     this.state.commentType == "all" ? React.createElement(PageNavigation, { sortBy: this.state.sortBy, form: this.state.commentsForm, handleChangeSortBy: this.changeSortBy, pageCount: this.state.pageCount, currentPage: this.state.pageNumber, handleChangePageNumber: this.changePageNumber }) : "",
-                    React.createElement(WriteComment, { tags: this.state.tagsInfo })
+                    React.createElement(WriteComment, { tags: this.state.tagsInfo, productID: this.state.productID })
                 );
             } else if (this.state.form == "loading") {
                 document.title = "Ürün";

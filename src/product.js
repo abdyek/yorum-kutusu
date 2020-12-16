@@ -160,7 +160,7 @@ class Product extends React.Component {
                 }
                 return tags;
             } else if(key=="tags") {
-                let tags = {};
+                let tags = [];
                 for(let i=0; i<data.length;i++) {
                     tags[i] = {
                         passive: (data[i].tagPassive=="1")?true:false,
@@ -170,7 +170,6 @@ class Product extends React.Component {
                         rateValue: data[i].tagAvarageRating
                     }
                 }
-                console.log(tags);
                 return tags;
             }
 
@@ -252,7 +251,7 @@ class Product extends React.Component {
                     	<PageNavigation sortBy={this.state.sortBy} form={this.state.commentsForm} handleChangeSortBy={this.changeSortBy} pageCount={this.state.pageCount} currentPage={this.state.pageNumber} handleChangePageNumber={this.changePageNumber} />
 					:""
 					}
-                    <WriteComment tags={this.state.tagsInfo}/>
+                    <WriteComment tags={this.state.tagsInfo} productID={this.state.productID}/>
                 </div>
             )
         } else if(this.state.form=="loading") {

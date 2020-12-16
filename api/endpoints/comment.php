@@ -107,7 +107,7 @@ class Comment extends Request {
     }
     // post ve put'un orta metodu
     private function commitRating() {
-        $tags = $this->data['rating'];
+        $tags = isset($this->data['rating'])?$this->data['rating']:[];
         foreach($tags as $key=>$val) {
             $twpID = Database::getRow('SELECT tag_with_product_id FROM tag_with_product twp INNER JOIN tag t ON t.tag_id=twp.tag_id WHERE t.tag_name=? AND twp.product_id=?', [$key, $this->data['productID']])['tag_with_product_id'];
             $check = Database::existCheck('SELECT tag_rating_value FROM tag_rating WHERE tag_with_product_id=? AND member_id=? AND tag_rating_value=?', [$twpID, USERID, $val]);

@@ -37,6 +37,7 @@ class Product extends Request {
         $this->tagsInfo = [];
         foreach($tags as $tag) {
             $this->tagsInfo[] = [
+                'id'=>$tag['tag_id'],
                 'slug'=>$tag['tag_slug'],
                 'tagName'=>$tag['tag_name'],
                 'tagAvarageRating'=>$tag['tag_avarage_rating'],

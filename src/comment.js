@@ -2,7 +2,7 @@ class Comment extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            // normal, report, edit, delete, message, loading
+            // normal, report, edit, delete, message, loading, newComment
             form:"normal",
             topMessage: this.props.topMessage,
             message: this.props.message,
@@ -138,7 +138,7 @@ class Comment extends React.Component {
             )
         } else if(this.state.form=="loading") {
             return(
-                <RowLoadingSpin />
+                <RowLoadingSpin nonSegment={true} />
             )
         }
     }
@@ -522,15 +522,16 @@ class WriteComment extends React.Component {
                 buttonClassName: "ui green disabled button"
             };
         }
+        let propsTags = this.props.tags;
+        let stateTags = [];
+        for(let i=0;i<propsTags.length; i++) {
+            stateTags[propsTags[i].slug] = propsTags[i];
+            stateTags[propsTags[i].slug]['rateValue']='-';
+        }
         this.state = {
             // normal, loading, sent
             form:"normal",
-            messageType:"success",  // success, warning, danger
-            messageText:"bu neyin mesajı bilmiyorum",
-            message: {
-                type:"success",
-                text:"başarılı bir message"
-            },
+            tags: stateTags,
             commentText:this.props.commentText,
             sendButtonClassName: this.var.buttonClassName,
             topMessage: {
@@ -538,38 +539,51 @@ class WriteComment extends React.Component {
                 text:null
             }
         };
+        this.selectOption = this.selectOption.bind(this);
         this.sendComment = this.sendComment.bind(this);
         this.changeComment = this.changeComment.bind(this);
         this.showTopMessage = this.showTopMessage.bind(this);
     }
-    sendComment() {
-        //this.setState({
-            //form:"loading"
-        //});
-        // gerekli API işlemleri buraya yapılacak
-        // yorum düzenleme de buradan gönderileceği için, düzenleme mi yoksa yeni yorum gönderme mi kontrolleri burada yaparım
-        //if(this.props.forEdit) {
-            // başarılı olması durumunda edited 'e çeviricez
-            //setTimeout(function() {
-                //this.setState({
-                    //form:"edited"
-                //})
-            //}.bind(this), 1000);
-        //}
-        // başarısız olma durumunda kullanılabilecek bir üst mesaj
-        this.showTopMessage("success", "başarılı bir şekilde yorumunuz gönderildi");
+    selectOption(e,slug) {
+        console.log("slug" + slug, " değer ", e.target.value);
+        let tags = this.state.tags;
+        tags[slug]['rateValue'] = e.target.value;
         this.setState({
-            form:"sent"
+            tags:tags
         });
-        /*
+    }
+    sendComment() {
         this.setState({
-            form:"sent",
-            message: {
-                type:"warning",
-                text:"hata hata!!"
+            form:"loading"
+        });
+        let values = Object.values(this.state.tags);
+        let rating = {};
+        for(let i=0;i<values.length;i++) {
+            rating[values['slug']]=values['rateValue'];
+        }
+        fetch(SITEURL + 'api/comment', {
+            method: 'POST',
+            header: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                productID:this.props.productID,
+                commentText: this.state.commentText,
+                rating: rating
+            })
+        }).then((response)=>{
+            if(!response.ok) throw new Error(response.status);
+            else return response.json();
+        }).then((json)=>{
+            this.setState({
+                form:"sent"
+            });
+            console.log("burası çalışıyor mu");
+        }).catch((error)=>{
+            if(error.message==422) {
+                this.showTopMessage("warning", "Her ürüne sadece bir kere yorum yapabilirsiniz");
             }
         });
-        */
     }
     changeComment(e) {
         if(!e.target.value.length) {
@@ -591,6 +605,7 @@ class WriteComment extends React.Component {
             text:text
         };
         this.setState({
+            form:"normal",
             topMessage:topMessage
         })
     }
@@ -633,7 +648,7 @@ class WriteComment extends React.Component {
                             </Row>
                             <Row size="one">
                                 <Column>
-                                    <Rating tags={this.props.tags} forEdit={this.props.forEdit}/>
+                                    <Rating tags={this.state.tags} forEdit={this.props.forEdit} selectOption={this.selectOption}/>
                                 </Column>
                             </Row>
                             <Row size="one">
@@ -655,39 +670,11 @@ class WriteComment extends React.Component {
             )
         } else if(this.state.form=="sent") {
             return(
-                // bu kısım başarılı olması durumunda gösterilecek
-                // API ile konuşturan yunus emre'ye not: buradaki Comment componentinin özelliklerini WriteComment'in state'i üzerinde tuttuğun API reponse'u değerleri
-                // üzerinden dolduracaksın
                 <Comment text={this.state.commentText}
                     likeCount="0"
                     liked={false}
                     title="Buraya kullanıcı adı gelecek"
-                    date="19 Temmuz - 21:45"
-                    tags={[{
-                            id:3,
-                            passive:false,
-                            text:"Batarya",
-                            color:"yellow",
-                            rateValue: "5"
-                        },
-                        {
-                            id:4,
-                            passive:false,
-                            text:"Kamera",
-                            color:"orange",
-                            rateValue: "4"
-                        },
-                        {
-                            id:5,
-                            passive:false,
-                            text:"Tasarım",
-                            color:"",
-                            rateValue: "-"
-                        }
-                        ]
-                    }
-                    owner={true}
-                    topMessage={{
+                    date="19 Temmuz - 21:45" tags={this.state.tags} owner={true} topMessage={{
                         type: this.state.topMessage.type,
                         text: this.state.topMessage.text
                     }}
@@ -707,7 +694,7 @@ class Rating extends React.Component {
         for(let i=0;i<keyArr.length;i++) {
             if(!this.props.tags[keyArr[i]].passive) {
                 this.ratingLines.push(
-                    <RatingLine key={keyArr[i]} tagKey={this.props.tags[keyArr[i]].id} tagName={this.props.tags[keyArr[i]].text} forEdit={this.props.forEdit} rateValue={this.props.tags[keyArr[i]].rateValue}/>
+                    <RatingLine key={keyArr[i]} tagKey={this.props.tags[keyArr[i]].id} tagName={this.props.tags[keyArr[i]].text} tagSlug={this.props.tags[keyArr[i]].slug} forEdit={this.props.forEdit} rateValue={this.props.tags[keyArr[i]].rateValue} selectOption={this.props.selectOption} rateValue={this.props.tags[keyArr[i]].rateValue}/>
                 )
             }
         }
@@ -726,47 +713,23 @@ class Rating extends React.Component {
 class RatingLine extends React.Component {
     constructor(props) {
         super(props);
-        this.rateValue = (this.props.forEdit)? this.props.rateValue:"-";
-        this.colors = {
-            "-": "",
-            1: "red",
-            2: "red",
-            3: "orange",
-            4: "orange",
-            5: "yellow",
-            6: "yellow",
-            7: "teal",
-            8: "teal",
-            9: "blue",
-            10: "blue"
-        };
-        this.state = {
-            rateValue: this.rateValue,
-            color: this.colors[this.rateValue]
-        };
-        this.selectOption = this.selectOption.bind(this);
-    }
-    selectOption(e) {
-        this.setState({
-            rateValue: e.target.value,
-            color:this.colors[e.target.value]
-        });
     }
     render() {
+        this.color = getRatingColor(this.props.rateValue);
         return(
             <Row size="one">
                 <Column>
                     <Row size="two">
                         <Column>
                             <Center>
-                                <Tag key={this.props.tagKey} passive={false} text={this.props.tagName} color={this.state.color} rateValue={this.state.rateValue}/>
+                                <Tag key={this.props.tagKey} passive={false} text={this.props.tagName} color={this.color} rateValue={this.props.rateValue}/>
                             </Center>
                         </Column>
                         <Column>
                             <Center>
                                 <div className="ui form">
                                     <div className="field">
-                                        <select onChange={this.selectOption}>
+                                        <select onChange={(e)=>this.props.selectOption(e, this.props.tagSlug)}>
                                             <option value="-">Seçilmemiş</option>
                                             <option value="1">1</option>
                                             <option value="2">2</option>
