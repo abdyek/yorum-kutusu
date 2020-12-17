@@ -60,7 +60,7 @@ class Product extends Request {
         $arr = [$this->productInfo['id']];
         $comments = Database::getRows($sql, $arr);
         $this->commentsInfo = [];
-        foreach($comments as $com) {
+        foreach($comments as $key=>$com) {
             $rating = Database::getRows('SELECT t.tag_slug, t.tag_name, tr.tag_rating_value FROM tag_rating tr INNER JOIN tag_with_product twp ON twp.tag_with_product_id=tr.tag_with_product_id INNER JOIN tag t ON t.tag_id=twp.tag_id WHERE tr.member_id=? AND twp.product_id=?', [$com['member_id'], $this->productInfo['id']]);
             $liked = (defined('USERID') and Database::getRow('SELECT * FROM comment_like WHERE member_id=? and comment_id=?', [USERID, $com['comment_id']]))?true:false;
             $ratingInfo = [];
@@ -71,6 +71,10 @@ class Product extends Request {
                     'ratingValue'=>$rate['tag_rating_value']
                 ];
             }
+            $this->hasComment = (defined('USERID') and USERID==$com['member_id'])?true:false;
+            if($this->hasComment) {
+                $this->ownCommentIndex = $key;
+            }
             $this->commentsInfo[] = [
                 'commentID'=>$com['comment_id'],
                 'commentText'=>$com['comment_text'],
@@ -79,7 +83,7 @@ class Product extends Request {
                 'commentLastEditDateTime'=>$com['comment_last_edit_date_time'],
                 'commentLikeCount'=>$com['comment_like_count'],
                 'liked'=>$liked,
-                'isOwner'=>(defined('USERID') and USERID==$com['member_id'])?true:false,
+                'isOwner'=> $this->hasComment,
                 'owner'=>[
                     'id'=>$com['member_id'],
                     'username'=>$com['member_username'],
@@ -91,7 +95,7 @@ class Product extends Request {
         }
     }
     private function getPageCount() {
-        $this->pageCount = intval(Database::getRow('SELECT count(*) as commentCount FROM comment c INNER JOIN product p ON p.product_id = c.product_id WHERE p.product_slug=?', [$this->data['productSlug']])['commentCount'] / 10)+1;
+        $this->pageCount = intval(Database::getRow('SELECT count(*) as commentCount FROM comment c INNER JOIN product p ON p.product_id = c.product_id WHERE p.product_slug=? and c.comment_deleted=0', [$this->data['productSlug']])['commentCount'] / 10)+1;
     }
     private function updateLastSeen() {
         if(defined('USERID') and $this->data['sortBy']=='time' and count($this->commentsInfo)){
@@ -110,6 +114,7 @@ class Product extends Request {
                 'followed'=>$this->followed,
                 'tags'=>array_values($this->tagsInfo),
                 'comments'=>$this->commentsInfo,
+                'ownComment'=>($this->hasComment)?$this->commentsInfo[$this->ownCommentIndex]:null,
                 'pageNumber'=>$this->data['pageNumber'],
                 'pageCount'=> $this->pageCount
             ]);

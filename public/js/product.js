@@ -27,7 +27,6 @@ var Product = function (_React$Component) {
         _this.fetchComment = _this.fetchComment.bind(_this);
         _this.refreshUrl = _this.refreshUrl.bind(_this);
         _this.load = _this.load.bind(_this);
-        _this.normalizer = _this.normalizer.bind(_this);
         _this.changeSortBy = _this.changeSortBy.bind(_this);
         _this.changePageNumber = _this.changePageNumber.bind(_this);
         _this.refreshComments = _this.refreshComments.bind(_this);
@@ -67,15 +66,17 @@ var Product = function (_React$Component) {
             fetch(SITEURL + 'api/product?' + getUrlPar(data), { method: 'GET' }).then(function (response) {
                 if (!response.ok) throw new Error(response.status);else return response.json();
             }).then(function (json) {
+                var ownComment = isMember() ? json['other']['ownComment'] : null;
                 _this2.setState({
                     form: "normal",
                     productName: json['other']['product']['title'],
                     productID: json['other']['product']['id'],
-                    comments: _this2.normalizer('comments', json['other']['comments']),
+                    comments: normalizer('comments', json['other']['comments']),
+                    ownComment: ownComment,
                     commentsForm: json['other']['comments'].length ? 'normal' : 'noComment',
                     pageNumber: json['other']['pageNumber'],
                     pageCount: json['other']['pageCount'],
-                    tagsInfo: _this2.normalizer('tags', json['other']['tags']),
+                    tagsInfo: normalizer('tags', json['other']['tags']),
                     followed: json['other']['followed']
                 });
                 if (json['other']['pageNumber'] != _this2.pageNumber) {
@@ -86,9 +87,7 @@ var Product = function (_React$Component) {
                 console.log(error);
                 if (error.message == 404) {
                     _this2.setState({ form: "notFound" });
-                } else {
-                    // ma
-                }
+                } else {}
             });
         }
     }, {
@@ -106,7 +105,7 @@ var Product = function (_React$Component) {
             }).then(function (json) {
                 _this3.setState({
                     commentsForm: "normal",
-                    comments: _this3.normalizer('comments', json['other']['comments'])
+                    comments: normalizer('comments', json['other']['comments'])
                 });
                 _this3.refreshUrl();
             }).catch(function (error) {
@@ -129,80 +128,6 @@ var Product = function (_React$Component) {
                 "pageNumber": this.pageNumber,
                 "onlyComment": false
             });
-        }
-    }, {
-        key: "normalizer",
-        value: function normalizer(key, data) {
-            if (key == 'comments') {
-                var comments = [];
-                for (var i = 0; i < data.length; i++) {
-                    var com = data[i];
-                    comments.push({
-                        id: com.commentID,
-                        text: com.commentText,
-                        //commentEdited,
-                        //commentLastEditDateTime,
-                        likeCount: com.commentLikeCount,
-                        liked: com.liked,
-                        title: com.owner.username,
-                        type: "profile",
-                        slug: com.owner.slug,
-                        date: com.commentCreateDateTime,
-                        tags: this.normalizer('comment-rating', com.rating),
-                        /*
-                        tags:{3:{
-                                        passive:false,
-                                        text:"Batarya",
-                                        color:"yellow",
-                                        rateValue: "5",
-                                        slug:"batarya"
-                                },
-                                4:{
-                                        passive:false,
-                                        text:"Kamera",
-                                        color:"orange",
-                                        rateValue: "4",
-                                        slug:"kamera"
-                                },
-                                5:{
-                                        passive:false,
-                                        text:"Tasarım",
-                                        color:"",
-                                        rateValue: "-",
-                                        slug:"tasarim"
-                                }
-                        },
-                        */
-                        owner: com.isOwner
-                    });
-                }
-                return comments;
-            } else if (key == "comment-rating") {
-                var tags = {};
-                var keys = Object.keys(data);
-                for (var _i = 0; _i < keys.length; _i++) {
-                    tags[keys[_i]] = {
-                        passive: false,
-                        text: data[_i].tagName,
-                        color: 'yellow', // bu kısım düzeltilecek
-                        rateValue: data[_i].ratingValue,
-                        slug: data[_i].slug
-                    };
-                }
-                return tags;
-            } else if (key == "tags") {
-                var _tags = [];
-                for (var _i2 = 0; _i2 < data.length; _i2++) {
-                    _tags[_i2] = {
-                        passive: data[_i2].tagPassive == "1" ? true : false,
-                        text: data[_i2].tagName,
-                        color: getRatingColor(data[_i2].tagAvarageRating),
-                        slug: data[_i2].slug,
-                        rateValue: data[_i2].tagAvarageRating
-                    };
-                }
-                return _tags;
-            }
         }
     }, {
         key: "changeSortBy",
@@ -289,7 +214,7 @@ var Product = function (_React$Component) {
                     this.state.commentType == "all" ? React.createElement(PageNavigation, { sortBy: this.state.sortBy, form: this.state.commentsForm, handleChangeSortBy: this.changeSortBy, pageCount: this.state.pageCount, currentPage: this.state.pageNumber, handleChangePageNumber: this.changePageNumber }) : React.createElement(SpecialCommentHeader, { specialInfo: this.state.specialInfo, showAllComments: this.showAllComments }),
                     React.createElement(Comments, { comments: this.state.comments, form: this.state.commentsForm, changeContent: this.props.changeContent }),
                     this.state.commentType == "all" ? React.createElement(PageNavigation, { sortBy: this.state.sortBy, form: this.state.commentsForm, handleChangeSortBy: this.changeSortBy, pageCount: this.state.pageCount, currentPage: this.state.pageNumber, handleChangePageNumber: this.changePageNumber }) : "",
-                    React.createElement(WriteComment, { tags: this.state.tagsInfo, productID: this.state.productID })
+                    React.createElement(WriteComment, { tags: this.state.tagsInfo, productID: this.state.productID, ownComment: this.state.ownComment })
                 );
             } else if (this.state.form == "loading") {
                 document.title = "Ürün";

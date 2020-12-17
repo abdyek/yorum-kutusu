@@ -45,9 +45,11 @@ class LogIn extends React.Component {
                 loading:false,
                 success:true
             });
-            let hash = btoa({
+            let hash = base64FromObject({
                 'userID':json.userID,
-                'unreadComments':0
+                'username':json.username,
+                'slug':json.slug,
+                'unreadComments':0,
             });
             setCookie('user', hash);
             this.props.changeHeader("user-empty-unread");

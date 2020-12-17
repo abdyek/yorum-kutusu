@@ -14,7 +14,6 @@ class Product extends React.Component {
         this.fetchComment = this.fetchComment.bind(this);
         this.refreshUrl = this.refreshUrl.bind(this);
         this.load = this.load.bind(this);
-        this.normalizer= this.normalizer.bind(this);
         this.changeSortBy = this.changeSortBy.bind(this);
         this.changePageNumber = this.changePageNumber.bind(this);
         this.refreshComments = this.refreshComments.bind(this);
@@ -45,15 +44,17 @@ class Product extends React.Component {
             if(!response.ok) throw new Error(response.status);
             else return response.json();
         }).then((json)=>{
+            let ownComment = (isMember())?json['other']['ownComment']:null;
             this.setState({
                 form:"normal",
                 productName:json['other']['product']['title'],
                 productID:json['other']['product']['id'],
-                comments: this.normalizer('comments', json['other']['comments']),
+                comments: normalizer('comments', json['other']['comments']),
+                ownComment:ownComment,
                 commentsForm: (json['other']['comments'].length)?'normal':'noComment',
                 pageNumber: json['other']['pageNumber'],
                 pageCount:json['other']['pageCount'],
-                tagsInfo: this.normalizer('tags', json['other']['tags']),
+                tagsInfo: normalizer('tags', json['other']['tags']),
                 followed: json['other']['followed']
             });
             if(json['other']['pageNumber']!=this.pageNumber) {
@@ -65,7 +66,7 @@ class Product extends React.Component {
             if(error.message==404) {
                 this.setState({form:"notFound"});
             } else {
-                // ma
+
             }
         });
     }
@@ -81,7 +82,7 @@ class Product extends React.Component {
         }).then((json)=> {
             this.setState({
                 commentsForm:"normal",
-                comments: this.normalizer('comments', json['other']['comments'])
+                comments: normalizer('comments', json['other']['comments'])
             });
             this.refreshUrl();
         }).catch((error) => {
@@ -101,79 +102,6 @@ class Product extends React.Component {
             "onlyComment":false
         });
     }
-        normalizer(key, data) {
-            if(key=='comments') {
-                let comments = [];
-                for(let i=0;i<data.length;i++) {
-                    let com = data[i];
-                    comments.push({
-                        id:com.commentID,
-                        text:com.commentText,
-                        //commentEdited,
-                        //commentLastEditDateTime,
-                        likeCount:com.commentLikeCount,
-                        liked:com.liked,
-                        title:com.owner.username,
-                        type:"profile",
-                        slug:com.owner.slug,
-                        date:com.commentCreateDateTime,
-                        tags:this.normalizer('comment-rating', com.rating),
-                        /*
-                        tags:{3:{
-                                        passive:false,
-                                        text:"Batarya",
-                                        color:"yellow",
-                                        rateValue: "5",
-                                        slug:"batarya"
-                                },
-                                4:{
-                                        passive:false,
-                                        text:"Kamera",
-                                        color:"orange",
-                                        rateValue: "4",
-                                        slug:"kamera"
-                                },
-                                5:{
-                                        passive:false,
-                                        text:"Tasarım",
-                                        color:"",
-                                        rateValue: "-",
-                                        slug:"tasarim"
-                                }
-                        },
-                        */
-                        owner:com.isOwner
-                    })
-                }
-                return comments;
-            } else if(key=="comment-rating") {
-                let tags = {};
-                let keys = Object.keys(data);
-                for(let i=0; i<keys.length; i++) {
-                    tags[keys[i]] = {
-                        passive: false,
-                        text:data[i].tagName,
-                        color:'yellow', // bu kısım düzeltilecek
-                        rateValue: data[i].ratingValue,
-                        slug: data[i].slug
-                    }
-                }
-                return tags;
-            } else if(key=="tags") {
-                let tags = [];
-                for(let i=0; i<data.length;i++) {
-                    tags[i] = {
-                        passive: (data[i].tagPassive=="1")?true:false,
-                        text: data[i].tagName,
-                        color: getRatingColor(data[i].tagAvarageRating),
-                        slug: data[i].slug,
-                        rateValue: data[i].tagAvarageRating
-                    }
-                }
-                return tags;
-            }
-
-        }
 	changeSortBy(value) {
             if(value!=this.state.sortBy && this.state.commentsForm!="loading") {
                 // ^ bu ve changePageNumber metodundaki kontrolü kullanıcının aynı anda birden fazla seçim yapmasını engellemek için koydum
@@ -251,7 +179,7 @@ class Product extends React.Component {
                     	<PageNavigation sortBy={this.state.sortBy} form={this.state.commentsForm} handleChangeSortBy={this.changeSortBy} pageCount={this.state.pageCount} currentPage={this.state.pageNumber} handleChangePageNumber={this.changePageNumber} />
 					:""
 					}
-                    <WriteComment tags={this.state.tagsInfo} productID={this.state.productID}/>
+                    <WriteComment tags={this.state.tagsInfo} productID={this.state.productID} ownComment={this.state.ownComment} />
                 </div>
             )
         } else if(this.state.form=="loading") {

@@ -528,17 +528,41 @@ class WriteComment extends React.Component {
             stateTags[propsTags[i].slug] = propsTags[i];
             stateTags[propsTags[i].slug]['rateValue']='-';
         }
-        this.state = {
-            // normal, loading, sent
-            form:"normal",
-            tags: stateTags,
-            commentText:this.props.commentText,
-            sendButtonClassName: this.var.buttonClassName,
-            topMessage: {
-                type:null,
-                text:null
+        if(this.props.ownComment!=null) {
+            let oC = this.props.ownComment;
+            let username = getUserInfo()['username'];
+            this.state = {
+                form:"sent",
+                tags:normalizer('comment-rating', oC.rating),
+                commentText:oC.commentText,
+                date:oC.commentCreateDateTime,
+                liked:oC.liked,
+                likeCount: oC.commentLikeCount,
+                sendButtonClassName: this.var.buttonClassName,
+                username: username,
+                topMessage: {
+                    type:null,
+                    text:null
+                }
             }
-        };
+        } else {
+            let form = (isMember())?"normal":"hidden";
+            this.state = {
+                // normal, loading, sent, hidden
+                form:form,
+                tags: stateTags,
+                commentText:this.props.commentText,
+                sendButtonClassName: this.var.buttonClassName,
+                date: "Şimdi",
+                liked:false,
+                likeCount: 0,
+                username: "Yorum Yaz",
+                topMessage: {
+                    type:null,
+                    text:null
+                }
+            };
+        }
         this.selectOption = this.selectOption.bind(this);
         this.sendComment = this.sendComment.bind(this);
         this.changeComment = this.changeComment.bind(this);
@@ -578,7 +602,6 @@ class WriteComment extends React.Component {
             this.setState({
                 form:"sent"
             });
-            console.log("burası çalışıyor mu");
         }).catch((error)=>{
             if(error.message==422) {
                 this.showTopMessage("warning", "Her ürüne sadece bir kere yorum yapabilirsiniz");
@@ -671,14 +694,18 @@ class WriteComment extends React.Component {
         } else if(this.state.form=="sent") {
             return(
                 <Comment text={this.state.commentText}
-                    likeCount="0"
-                    liked={false}
-                    title="Buraya kullanıcı adı gelecek"
-                    date="19 Temmuz - 21:45" tags={this.state.tags} owner={true} topMessage={{
+                    likeCount={this.state.likeCount}
+                    liked={this.state.liked}
+                    title={this.state.username}
+                    date={this.state.date} tags={this.state.tags} owner={true} topMessage={{
                         type: this.state.topMessage.type,
                         text: this.state.topMessage.text
                     }}
                 />
+            )
+        } else if(this.state.form=="hidden") {
+            return(
+                <div></div>
             )
         }
     }

@@ -8,26 +8,32 @@ class Login extends Request {
         http_response_code(401);
     }
     private function checkMember() {
-        $query = Database::getRow('SELECT * FROM member WHERE member_email=?', [$this->data['email']]);
-        if($query) {
-            $hash = $query['member_password_hash'];
+        $this->member= Database::getRow('SELECT * FROM member WHERE member_email=?', [$this->data['email']]);
+        if($this->member) {
+            $hash = $this->member['member_password_hash'];
             if(password_verify($this->data['password'], $hash)) {
-                $this->sendToken($query['member_id']);
+                $this->sendToken();
                 exit();
             }
         }
     }
-    private function sendToken($userid) {
+    private function sendToken() {
         $jwt = new JWT('secret', 'HS512', Config::JWT_EXP);
         $token = $jwt->encode([
-            'userid'    => $userid,
+            'userid'    => $this->member['member_id'],
             'aud'    => 'http://www.yorumkutusu.com',
             'who' => 'member',
             'remote_addr'=>$_SERVER['REMOTE_ADDR'],
             'iss'    => 'http://www.yorumkutusu.com/api',
         ]); 
         setcookie('jwt', $token, time() + 31557600 , NULL, NULL, NULL, TRUE); 
-        $this->response(['jwt'=>$token, 'userID'=>$userid, 'who'=>'member']);
+        $this->response([
+            'jwt'=>$token,
+            'userID'=>$this->member['member_id'],
+            'username'=>$this->member['member_username'],
+            'slug'=>$this->member['member_slug'],
+            'who'=>'member'
+        ]);
     }
 
 }

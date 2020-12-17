@@ -103,3 +103,103 @@ function validateEmail(email) {
     return re.test(String(email).toLowerCase());
 }
 
+function normalizer(key, data) {
+    if(key=='comments') {
+        let comments = [];
+        for(let i=0;i<data.length;i++) {
+            let com = data[i];
+            comments.push({
+                id:com.commentID,
+                text:com.commentText,
+                //commentEdited,
+                //commentLastEditDateTime,
+                likeCount:com.commentLikeCount,
+                liked:com.liked,
+                title:com.owner.username,
+                type:"profile",
+                slug:com.owner.slug,
+                date:com.commentCreateDateTime,
+                tags:normalizer('comment-rating', com.rating),
+                /*
+                tags:{3:{
+                                passive:false,
+                                text:"Batarya",
+                                color:"yellow",
+                                rateValue: "5",
+                                slug:"batarya"
+                        },
+                        4:{
+                                passive:false,
+                                text:"Kamera",
+                                color:"orange",
+                                rateValue: "4",
+                                slug:"kamera"
+                        },
+                        5:{
+                                passive:false,
+                                text:"Tasarım",
+                                color:"",
+                                rateValue: "-",
+                                slug:"tasarim"
+                        }
+                },
+                */
+                owner:com.isOwner
+            })
+        }
+        return comments;
+    } else if(key=="comment-rating") {
+        let tags = {};
+        let keys = Object.keys(data);
+        for(let i=0; i<keys.length; i++) {
+            tags[keys[i]] = {
+                passive: false,
+                text:data[i].tagName,
+                color:'yellow', // bu kısım düzeltilecek
+                rateValue: data[i].ratingValue,
+                slug: data[i].slug
+            }
+        }
+        return tags;
+    } else if(key=="tags") {
+        let tags = [];
+        for(let i=0; i<data.length;i++) {
+            tags[i] = {
+                passive: (data[i].tagPassive=="1")?true:false,
+                text: data[i].tagName,
+                color: getRatingColor(data[i].tagAvarageRating),
+                slug: data[i].slug,
+                rateValue: data[i].tagAvarageRating
+            }
+        }
+        return tags;
+    }
+
+}
+
+function getUserInfo() {
+    if(!isMember()) {
+        return null;
+    }
+    return objectFromBase64(getCookie('user'));
+}
+
+function encode_utf8(s) {
+  return unescape(encodeURIComponent(s));
+}
+
+function decode_utf8(s) {
+  return decodeURIComponent(escape(s));
+}
+
+function base64FromObject(obj) {
+    let stringified = JSON.stringify(obj);
+    let encodedUTF8 = encode_utf8(stringified);
+    return btoa(encodedUTF8);
+}
+
+function objectFromBase64(encoded) {
+    let decoded = atob(encoded);
+    let decodedUTF8 = decode_utf8(decoded);
+    return JSON.parse(decodedUTF8);
+}

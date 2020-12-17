@@ -67,8 +67,10 @@ var LogIn = function (_React$Component) {
                     loading: false,
                     success: true
                 });
-                var hash = btoa({
+                var hash = base64FromObject({
                     'userID': json.userID,
+                    'username': json.username,
+                    'slug': json.slug,
                     'unreadComments': 0
                 });
                 setCookie('user', hash);

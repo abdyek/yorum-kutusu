@@ -798,17 +798,41 @@ var WriteComment = function (_React$Component9) {
             stateTags[propsTags[i].slug] = propsTags[i];
             stateTags[propsTags[i].slug]['rateValue'] = '-';
         }
-        _this11.state = {
-            // normal, loading, sent
-            form: "normal",
-            tags: stateTags,
-            commentText: _this11.props.commentText,
-            sendButtonClassName: _this11.var.buttonClassName,
-            topMessage: {
-                type: null,
-                text: null
-            }
-        };
+        if (_this11.props.ownComment != null) {
+            var oC = _this11.props.ownComment;
+            var username = getUserInfo()['username'];
+            _this11.state = {
+                form: "sent",
+                tags: normalizer('comment-rating', oC.rating),
+                commentText: oC.commentText,
+                date: oC.commentCreateDateTime,
+                liked: oC.liked,
+                likeCount: oC.commentLikeCount,
+                sendButtonClassName: _this11.var.buttonClassName,
+                username: username,
+                topMessage: {
+                    type: null,
+                    text: null
+                }
+            };
+        } else {
+            var form = isMember() ? "normal" : "hidden";
+            _this11.state = {
+                // normal, loading, sent, hidden
+                form: form,
+                tags: stateTags,
+                commentText: _this11.props.commentText,
+                sendButtonClassName: _this11.var.buttonClassName,
+                date: "Şimdi",
+                liked: false,
+                likeCount: 0,
+                username: "Yorum Yaz",
+                topMessage: {
+                    type: null,
+                    text: null
+                }
+            };
+        }
         _this11.selectOption = _this11.selectOption.bind(_this11);
         _this11.sendComment = _this11.sendComment.bind(_this11);
         _this11.changeComment = _this11.changeComment.bind(_this11);
@@ -855,7 +879,6 @@ var WriteComment = function (_React$Component9) {
                 _this12.setState({
                     form: "sent"
                 });
-                console.log("burası çalışıyor mu");
             }).catch(function (error) {
                 if (error.message == 422) {
                     _this12.showTopMessage("warning", "Her ürüne sadece bir kere yorum yapabilirsiniz");
@@ -985,14 +1008,16 @@ var WriteComment = function (_React$Component9) {
                 return React.createElement(RowLoadingSpin, null);
             } else if (this.state.form == "sent") {
                 return React.createElement(Comment, { text: this.state.commentText,
-                    likeCount: '0',
-                    liked: false,
-                    title: 'Buraya kullan\u0131c\u0131 ad\u0131 gelecek',
-                    date: '19 Temmuz - 21:45', tags: this.state.tags, owner: true, topMessage: {
+                    likeCount: this.state.likeCount,
+                    liked: this.state.liked,
+                    title: this.state.username,
+                    date: this.state.date, tags: this.state.tags, owner: true, topMessage: {
                         type: this.state.topMessage.type,
                         text: this.state.topMessage.text
                     }
                 });
+            } else if (this.state.form == "hidden") {
+                return React.createElement('div', null);
             }
         }
     }]);
