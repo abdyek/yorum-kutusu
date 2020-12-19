@@ -27,6 +27,7 @@ var Product = function (_React$Component) {
         _this.fetchComment = _this.fetchComment.bind(_this);
         _this.refreshUrl = _this.refreshUrl.bind(_this);
         _this.load = _this.load.bind(_this);
+        _this.reloadComment = _this.reloadComment.bind(_this);
         _this.changeSortBy = _this.changeSortBy.bind(_this);
         _this.changePageNumber = _this.changePageNumber.bind(_this);
         _this.refreshComments = _this.refreshComments.bind(_this);
@@ -103,9 +104,11 @@ var Product = function (_React$Component) {
             }), { method: 'GET' }).then(function (response) {
                 if (!response.ok) throw new Error(response.status);else return response.json();
             }).then(function (json) {
+                var ownComment = isMember() ? json['other']['ownComment'] : null;
                 _this3.setState({
                     commentsForm: "normal",
-                    comments: normalizer('comments', json['other']['comments'])
+                    comments: normalizer('comments', json['other']['comments']),
+                    ownComment: ownComment
                 });
                 _this3.refreshUrl();
             }).catch(function (error) {
@@ -128,6 +131,11 @@ var Product = function (_React$Component) {
                 "pageNumber": this.pageNumber,
                 "onlyComment": false
             });
+        }
+    }, {
+        key: "reloadComment",
+        value: function reloadComment() {
+            this.fetchComment();
         }
     }, {
         key: "changeSortBy",
@@ -212,9 +220,28 @@ var Product = function (_React$Component) {
                     null,
                     React.createElement(ProductInfo, { tags: this.state.tagsInfo, productName: this.state.productName, changeContent: this.props.changeContent, followToggle: this.followToggle, followed: this.state.followed, followButtonDisabled: this.state.followButtonDisabled }),
                     this.state.commentType == "all" ? React.createElement(PageNavigation, { sortBy: this.state.sortBy, form: this.state.commentsForm, handleChangeSortBy: this.changeSortBy, pageCount: this.state.pageCount, currentPage: this.state.pageNumber, handleChangePageNumber: this.changePageNumber }) : React.createElement(SpecialCommentHeader, { specialInfo: this.state.specialInfo, showAllComments: this.showAllComments }),
-                    React.createElement(Comments, { comments: this.state.comments, form: this.state.commentsForm, changeContent: this.props.changeContent }),
+                    React.createElement(Comments, { comments: this.state.comments, form: this.state.commentsForm, changeContent: this.props.changeContent, reloadFunc: this.reloadComment }),
                     this.state.commentType == "all" ? React.createElement(PageNavigation, { sortBy: this.state.sortBy, form: this.state.commentsForm, handleChangeSortBy: this.changeSortBy, pageCount: this.state.pageCount, currentPage: this.state.pageNumber, handleChangePageNumber: this.changePageNumber }) : "",
-                    React.createElement(WriteComment, { tags: this.state.tagsInfo, productID: this.state.productID, ownComment: this.state.ownComment })
+                    this.state.ownComment ? React.createElement(Comment, {
+                        productID: this.state.productID,
+                        changeContent: this.props.changeContent,
+                        reloadFunc: this.reloadComment,
+                        id: this.state.ownComment.commentID,
+                        text: this.state.ownComment.commentText,
+                        type: "profile",
+                        slug: "\xFCyeninslug'\u0131",
+                        likeCount: this.state.ownComment.commentLikeCount,
+                        liked: this.state.ownComment.liked,
+                        title: this.state.ownComment.owner.username,
+                        date: this.state.ownComment.commentCreateDateTime,
+                        tags: [],
+                        owner: true
+                    }) : React.createElement(Comment, {
+                        form: "newComment",
+                        productID: this.state.productID,
+                        reloadFunc: this.reloadComment,
+                        tags: []
+                    })
                 );
             } else if (this.state.form == "loading") {
                 document.title = "Ürün";

@@ -1,9 +1,10 @@
 class Comment extends React.Component {
     constructor(props){
         super(props);
+        let form = (this.props.form)?this.props.form:"normal";
         this.state = {
             // normal, report, edit, delete, message, loading, newComment
-            form:"normal",
+            form:form,
             topMessage: this.props.topMessage,
             message: this.props.message,
             likeCount:this.props.likeCount,
@@ -18,6 +19,7 @@ class Comment extends React.Component {
         this.openDeleteArea = this.openDeleteArea.bind(this);
         this.closeDeleteArea = this.closeDeleteArea.bind(this);
         this.confirmDelete = this.confirmDelete.bind(this);
+        this.setForm = this.setForm.bind(this);
     }
     likeToggle() {
         if(isMember()) {
@@ -50,14 +52,10 @@ class Comment extends React.Component {
         }
     }
     openReportArea() {
-        this.setState({
-            form: "report"
-        });
+        this.setForm("report");
     }
     closeReportArea() {
-        this.setState({
-            form: "normal"
-        });
+        this.setForm("normal");
     }
     openEditArea() {
         this.setState({
@@ -66,9 +64,7 @@ class Comment extends React.Component {
         });
     }
     closeEditArea() {
-        this.setState({
-            form:"normal"
-        });
+        this.setForm("normal");
     }
     openDeleteArea() {
         this.setState({
@@ -82,9 +78,7 @@ class Comment extends React.Component {
         });
     }
     confirmDelete() {
-        this.setState({
-            form:"loading"
-        });
+        this.setForm("loading");
         setTimeout(function(){
             this.setState({
                 form:"message",
@@ -94,6 +88,11 @@ class Comment extends React.Component {
                 }
             })
         }.bind(this),1000)
+    }
+    setForm(formType) {
+        this.setState({
+            form:formType
+        });
     }
     render() {
         if(this.state.form=="normal") {
@@ -122,9 +121,14 @@ class Comment extends React.Component {
             )
         } else if(this.state.form=="edit") {
             return(
-                <EditArea tags={this.props.tags} handleCancelButton={this.closeEditArea} commentText={this.props.text} owner={this.props.owner} />
+                <EditArea tags={this.props.tags} handleCancelButton={this.closeEditArea} commentText={this.props.text} owner={this.props.owner} reloadFunc={this.props.reloadFunc} setForm={this.setForm} productID={this.props.productID}/>
             )
-        } else if(this.state.form=="delete") {
+        } else if(this.state.form=="newComment") {
+            return(
+                <EditArea tags={this.props.tags} handleCancelButton={this.closeEditArea} commentText="" owner={true} reloadFunc={this.props.reloadFunc} setForm={this.setForm} newComment={true} productID={this.props.productID}/>
+            )
+        }
+        else if(this.state.form=="delete") {
             return(
                 <DeleteArea handleCancelButton={this.closeDeleteArea} handleConfirmButton={this.confirmDelete}/>
             )
@@ -138,7 +142,7 @@ class Comment extends React.Component {
             )
         } else if(this.state.form=="loading") {
             return(
-                <RowLoadingSpin nonSegment={true} />
+                <RowLoadingSpin />
             )
         }
     }
@@ -783,12 +787,109 @@ class RatingLine extends React.Component {
 class EditArea extends React.Component {
     constructor(props) {
         super(props);
+        let a = <div> <WriteComment tags={this.props.tags} forEdit={true} commentText={this.props.commentText} handleCancelButton={this.props.handleCancelButton} /> </div>
+        this.state = {
+            commentText:this.props.commentText,
+            tags:[]
+        }
+        this.changeComment = this.changeComment.bind(this);
+        this.sendComment = this.sendComment.bind(this);
+    }
+    changeComment(e) {
+        this.setState({
+            commentText:e.target.value
+        });
+    }
+    sendComment() {
+        this.props.setForm("loading");
+        if(this.props.newComment) {
+            // new comment
+            fetch(SITEURL + 'api/comment', {
+                method: 'POST',
+                header: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    productID:this.props.productID,
+                    commentText: this.state.commentText,
+                    rating: {}
+                })
+            }).then((response)=>{
+                if(!response.ok) throw new Error(response.status);
+                else return response.json();
+            }).then((json)=>{
+                this.props.reloadFunc();
+                setTimeout(()=>{
+                    this.props.setForm("normal");
+                },250);
+                // bu yöntem sağlıklı değil, bağlantı çok çok çok yavaş olabilir :(
+                // alternatif bir çözüm bulacağım
+            }).catch((error)=>{
+                if(error.message==422) {
+                    this.showTopMessage("warning", "Her ürüne sadece bir kere yorum yapabilirsiniz");
+                }
+            });
+        } else {
+            // edit comment
+        }
+        //this.props.reloadFunc();
+        // ^ düzenleme isteği ya da gönderme isteği başarılıysa bunu çalıştırıp sayfadaki bütün yorumları güncelleyeceğiz
     }
     render() {
+        this.title = (this.props.newComment)?"Yorum Yaz":"Düzenle";
+        this.buttonName = (this.props.newComment)?"Gönder":"Düzenle";
         return(
-            <div>
-                <WriteComment tags={this.props.tags} forEdit={true} commentText={this.props.commentText} handleCancelButton={this.props.handleCancelButton} />
-            </div>
+            <Row size="one">
+                <Column>
+                    {(null)?
+                        <Row size="one">
+                            <Column>
+                                <BasicMessage type={this.state.topMessage.type} text={this.state.topMessage.text} />
+                            </Column>
+                        </Row>
+                    :""}
+                    <RaisedSegment>
+                        <Row size="two" nonStackable={true}>
+                            <Column>
+                                <H type="4" text={this.title} />
+                            </Column>
+                            <Column>
+                                {
+                                    (!this.props.newComment)?
+                                        <FloatRight>
+                                            <CancelButton handleCancelButton={this.props.handleCancelButton}/>
+                                        </FloatRight>
+                                    :""
+                                }
+                            </Column>
+                        </Row>
+                        <Row size="one">
+                            <Column>
+                            <div className="ui form">
+                                <div className="field">
+                                    <label>Yorumunuz</label>
+                                    <textarea value={this.state.commentText} onChange={this.changeComment}></textarea>
+                                </div>
+                            </div>
+                            </Column>
+                        </Row>
+                        <Row size="one">
+                            <Column>
+                                <Rating tags={this.state.tags} forEdit={this.props.forEdit} selectOption={this.selectOption}/>
+                            </Column>
+                        </Row>
+                        <Row size="one">
+                            <Column>
+                                <FloatRight>
+                                    <button className="ui green button" onClick={this.sendComment}>
+                                        {this.buttonName}
+                                    </button>
+                                </FloatRight>
+                            </Column>
+                        </Row>
+                    </RaisedSegment>
+                </Column>
+            </Row>
         )
     }
 }
@@ -848,6 +949,7 @@ class Comments extends React.Component {
 				this.comments.push(
                                     <Comment
                                         changeContent={this.props.changeContent}
+                                        reloadFunc={this.props.reloadFunc}
                                         key={com.id}
                                         id={com.id}
                                         text={com.text}

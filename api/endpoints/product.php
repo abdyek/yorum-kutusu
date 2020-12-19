@@ -121,6 +121,7 @@ class Product extends Request {
         } else {
             $this->success([
                 'comments'=>$this->commentsInfo,
+                'ownComment'=>($this->hasComment)?$this->commentsInfo[$this->ownCommentIndex]:null,
                 'pageNumber'=>$this->data['pageNumber'],
                 'pageCount'=> $this->pageCount
             ]);

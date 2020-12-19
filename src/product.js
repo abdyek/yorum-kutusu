@@ -14,6 +14,7 @@ class Product extends React.Component {
         this.fetchComment = this.fetchComment.bind(this);
         this.refreshUrl = this.refreshUrl.bind(this);
         this.load = this.load.bind(this);
+        this.reloadComment = this.reloadComment.bind(this);
         this.changeSortBy = this.changeSortBy.bind(this);
         this.changePageNumber = this.changePageNumber.bind(this);
         this.refreshComments = this.refreshComments.bind(this);
@@ -80,9 +81,11 @@ class Product extends React.Component {
             if(!response.ok) throw new Error(response.status);
             else return response.json();
         }).then((json)=> {
+            let ownComment = (isMember())?json['other']['ownComment']:null;
             this.setState({
                 commentsForm:"normal",
-                comments: normalizer('comments', json['other']['comments'])
+                comments: normalizer('comments', json['other']['comments']),
+                ownComment:ownComment
             });
             this.refreshUrl();
         }).catch((error) => {
@@ -101,6 +104,9 @@ class Product extends React.Component {
             "pageNumber":this.pageNumber,
             "onlyComment":false
         });
+    }
+    reloadComment() {
+        this.fetchComment();
     }
 	changeSortBy(value) {
             if(value!=this.state.sortBy && this.state.commentsForm!="loading") {
@@ -174,12 +180,35 @@ class Product extends React.Component {
 					{(this.state.commentType=="all")?
                     	<PageNavigation sortBy={this.state.sortBy} form={this.state.commentsForm} handleChangeSortBy={this.changeSortBy} pageCount={this.state.pageCount} currentPage={this.state.pageNumber} handleChangePageNumber={this.changePageNumber} />
 					:<SpecialCommentHeader specialInfo={this.state.specialInfo} showAllComments={this.showAllComments}/>}
-                    <Comments comments={this.state.comments} form={this.state.commentsForm} changeContent={this.props.changeContent}/>
+                    <Comments comments={this.state.comments} form={this.state.commentsForm} changeContent={this.props.changeContent} reloadFunc={this.reloadComment}/>
 					{(this.state.commentType=="all")?
                     	<PageNavigation sortBy={this.state.sortBy} form={this.state.commentsForm} handleChangeSortBy={this.changeSortBy} pageCount={this.state.pageCount} currentPage={this.state.pageNumber} handleChangePageNumber={this.changePageNumber} />
 					:""
 					}
-                    <WriteComment tags={this.state.tagsInfo} productID={this.state.productID} ownComment={this.state.ownComment} />
+                {
+                    (this.state.ownComment)?
+                        <Comment
+                            productID={this.state.productID}
+                            changeContent={this.props.changeContent}
+                            reloadFunc={this.reloadComment}
+                            id={this.state.ownComment.commentID}
+                            text={this.state.ownComment.commentText}
+                            type="profile"
+                            slug="üyeninslug'ı"
+                            likeCount={this.state.ownComment.commentLikeCount}
+                            liked={this.state.ownComment.liked}
+                            title={this.state.ownComment.owner.username}
+                            date={this.state.ownComment.commentCreateDateTime}
+                            tags={[]}
+                            owner={true}
+                        />:
+                        <Comment
+                            form="newComment"
+                            productID={this.state.productID}
+                            reloadFunc={this.reloadComment}
+                            tags={[]}
+                        />
+                }
                 </div>
             )
         } else if(this.state.form=="loading") {

@@ -16,9 +16,10 @@ var Comment = function (_React$Component) {
 
         var _this = _possibleConstructorReturn(this, (Comment.__proto__ || Object.getPrototypeOf(Comment)).call(this, props));
 
+        var form = _this.props.form ? _this.props.form : "normal";
         _this.state = {
             // normal, report, edit, delete, message, loading, newComment
-            form: "normal",
+            form: form,
             topMessage: _this.props.topMessage,
             message: _this.props.message,
             likeCount: _this.props.likeCount,
@@ -33,6 +34,7 @@ var Comment = function (_React$Component) {
         _this.openDeleteArea = _this.openDeleteArea.bind(_this);
         _this.closeDeleteArea = _this.closeDeleteArea.bind(_this);
         _this.confirmDelete = _this.confirmDelete.bind(_this);
+        _this.setForm = _this.setForm.bind(_this);
         return _this;
     }
 
@@ -71,16 +73,12 @@ var Comment = function (_React$Component) {
     }, {
         key: 'openReportArea',
         value: function openReportArea() {
-            this.setState({
-                form: "report"
-            });
+            this.setForm("report");
         }
     }, {
         key: 'closeReportArea',
         value: function closeReportArea() {
-            this.setState({
-                form: "normal"
-            });
+            this.setForm("normal");
         }
     }, {
         key: 'openEditArea',
@@ -93,9 +91,7 @@ var Comment = function (_React$Component) {
     }, {
         key: 'closeEditArea',
         value: function closeEditArea() {
-            this.setState({
-                form: "normal"
-            });
+            this.setForm("normal");
         }
     }, {
         key: 'openDeleteArea',
@@ -115,9 +111,7 @@ var Comment = function (_React$Component) {
     }, {
         key: 'confirmDelete',
         value: function confirmDelete() {
-            this.setState({
-                form: "loading"
-            });
+            this.setForm("loading");
             setTimeout(function () {
                 this.setState({
                     form: "message",
@@ -127,6 +121,13 @@ var Comment = function (_React$Component) {
                     }
                 });
             }.bind(this), 1000);
+        }
+    }, {
+        key: 'setForm',
+        value: function setForm(formType) {
+            this.setState({
+                form: formType
+            });
         }
     }, {
         key: 'render',
@@ -162,7 +163,9 @@ var Comment = function (_React$Component) {
             } else if (this.state.form == "report") {
                 return React.createElement(ReportArea, { handleCloseReportArea: this.closeReportArea });
             } else if (this.state.form == "edit") {
-                return React.createElement(EditArea, { tags: this.props.tags, handleCancelButton: this.closeEditArea, commentText: this.props.text, owner: this.props.owner });
+                return React.createElement(EditArea, { tags: this.props.tags, handleCancelButton: this.closeEditArea, commentText: this.props.text, owner: this.props.owner, reloadFunc: this.props.reloadFunc, setForm: this.setForm, productID: this.props.productID });
+            } else if (this.state.form == "newComment") {
+                return React.createElement(EditArea, { tags: this.props.tags, handleCancelButton: this.closeEditArea, commentText: '', owner: true, reloadFunc: this.props.reloadFunc, setForm: this.setForm, newComment: true, productID: this.props.productID });
             } else if (this.state.form == "delete") {
                 return React.createElement(DeleteArea, { handleCancelButton: this.closeDeleteArea, handleConfirmButton: this.confirmDelete });
             } else if (this.state.form == "message") {
@@ -176,7 +179,7 @@ var Comment = function (_React$Component) {
                     )
                 );
             } else if (this.state.form == "loading") {
-                return React.createElement(RowLoadingSpin, { nonSegment: true });
+                return React.createElement(RowLoadingSpin, null);
             }
         }
     }]);
@@ -1185,16 +1188,160 @@ var EditArea = function (_React$Component12) {
     function EditArea(props) {
         _classCallCheck(this, EditArea);
 
-        return _possibleConstructorReturn(this, (EditArea.__proto__ || Object.getPrototypeOf(EditArea)).call(this, props));
+        var _this16 = _possibleConstructorReturn(this, (EditArea.__proto__ || Object.getPrototypeOf(EditArea)).call(this, props));
+
+        var a = React.createElement(
+            'div',
+            null,
+            ' ',
+            React.createElement(WriteComment, { tags: _this16.props.tags, forEdit: true, commentText: _this16.props.commentText, handleCancelButton: _this16.props.handleCancelButton }),
+            ' '
+        );
+        _this16.state = {
+            commentText: _this16.props.commentText,
+            tags: []
+        };
+        _this16.changeComment = _this16.changeComment.bind(_this16);
+        _this16.sendComment = _this16.sendComment.bind(_this16);
+        return _this16;
     }
 
     _createClass(EditArea, [{
+        key: 'changeComment',
+        value: function changeComment(e) {
+            this.setState({
+                commentText: e.target.value
+            });
+        }
+    }, {
+        key: 'sendComment',
+        value: function sendComment() {
+            var _this17 = this;
+
+            this.props.setForm("loading");
+            if (this.props.newComment) {
+                // new comment
+                fetch(SITEURL + 'api/comment', {
+                    method: 'POST',
+                    header: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        productID: this.props.productID,
+                        commentText: this.state.commentText,
+                        rating: {}
+                    })
+                }).then(function (response) {
+                    if (!response.ok) throw new Error(response.status);else return response.json();
+                }).then(function (json) {
+                    _this17.props.reloadFunc();
+                    setTimeout(function () {
+                        _this17.props.setForm("normal");
+                    }, 250);
+                    // bu yöntem sağlıklı değil, bağlantı çok çok çok yavaş olabilir :(
+                    // alternatif bir çözüm bulacağım
+                }).catch(function (error) {
+                    if (error.message == 422) {
+                        _this17.showTopMessage("warning", "Her ürüne sadece bir kere yorum yapabilirsiniz");
+                    }
+                });
+            } else {}
+            // edit comment
+
+            //this.props.reloadFunc();
+            // ^ düzenleme isteği ya da gönderme isteği başarılıysa bunu çalıştırıp sayfadaki bütün yorumları güncelleyeceğiz
+        }
+    }, {
         key: 'render',
         value: function render() {
+            this.title = this.props.newComment ? "Yorum Yaz" : "Düzenle";
+            this.buttonName = this.props.newComment ? "Gönder" : "Düzenle";
             return React.createElement(
-                'div',
-                null,
-                React.createElement(WriteComment, { tags: this.props.tags, forEdit: true, commentText: this.props.commentText, handleCancelButton: this.props.handleCancelButton })
+                Row,
+                { size: 'one' },
+                React.createElement(
+                    Column,
+                    null,
+                    null ? React.createElement(
+                        Row,
+                        { size: 'one' },
+                        React.createElement(
+                            Column,
+                            null,
+                            React.createElement(BasicMessage, { type: this.state.topMessage.type, text: this.state.topMessage.text })
+                        )
+                    ) : "",
+                    React.createElement(
+                        RaisedSegment,
+                        null,
+                        React.createElement(
+                            Row,
+                            { size: 'two', nonStackable: true },
+                            React.createElement(
+                                Column,
+                                null,
+                                React.createElement(H, { type: '4', text: this.title })
+                            ),
+                            React.createElement(
+                                Column,
+                                null,
+                                !this.props.newComment ? React.createElement(
+                                    FloatRight,
+                                    null,
+                                    React.createElement(CancelButton, { handleCancelButton: this.props.handleCancelButton })
+                                ) : ""
+                            )
+                        ),
+                        React.createElement(
+                            Row,
+                            { size: 'one' },
+                            React.createElement(
+                                Column,
+                                null,
+                                React.createElement(
+                                    'div',
+                                    { className: 'ui form' },
+                                    React.createElement(
+                                        'div',
+                                        { className: 'field' },
+                                        React.createElement(
+                                            'label',
+                                            null,
+                                            'Yorumunuz'
+                                        ),
+                                        React.createElement('textarea', { value: this.state.commentText, onChange: this.changeComment })
+                                    )
+                                )
+                            )
+                        ),
+                        React.createElement(
+                            Row,
+                            { size: 'one' },
+                            React.createElement(
+                                Column,
+                                null,
+                                React.createElement(Rating, { tags: this.state.tags, forEdit: this.props.forEdit, selectOption: this.selectOption })
+                            )
+                        ),
+                        React.createElement(
+                            Row,
+                            { size: 'one' },
+                            React.createElement(
+                                Column,
+                                null,
+                                React.createElement(
+                                    FloatRight,
+                                    null,
+                                    React.createElement(
+                                        'button',
+                                        { className: 'ui green button', onClick: this.sendComment },
+                                        this.buttonName
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
             );
         }
     }]);
@@ -1208,11 +1355,11 @@ var DeleteArea = function (_React$Component13) {
     function DeleteArea(props) {
         _classCallCheck(this, DeleteArea);
 
-        var _this17 = _possibleConstructorReturn(this, (DeleteArea.__proto__ || Object.getPrototypeOf(DeleteArea)).call(this, props));
+        var _this18 = _possibleConstructorReturn(this, (DeleteArea.__proto__ || Object.getPrototypeOf(DeleteArea)).call(this, props));
 
-        _this17.cancelFunc = _this17.cancelFunc.bind(_this17);
-        _this17.confirmFunc = _this17.confirmFunc.bind(_this17);
-        return _this17;
+        _this18.cancelFunc = _this18.cancelFunc.bind(_this18);
+        _this18.confirmFunc = _this18.confirmFunc.bind(_this18);
+        return _this18;
     }
 
     _createClass(DeleteArea, [{
@@ -1299,6 +1446,7 @@ var Comments = function (_React$Component14) {
                     var com = this.props.comments[i];
                     this.comments.push(React.createElement(Comment, {
                         changeContent: this.props.changeContent,
+                        reloadFunc: this.props.reloadFunc,
                         key: com.id,
                         id: com.id,
                         text: com.text,
