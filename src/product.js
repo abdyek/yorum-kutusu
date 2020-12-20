@@ -191,15 +191,15 @@ class Product extends React.Component {
                             productID={this.state.productID}
                             changeContent={this.props.changeContent}
                             reloadFunc={this.reloadComment}
-                            id={this.state.ownComment.commentID}
-                            text={this.state.ownComment.commentText}
-                            type="profile"
-                            slug="üyeninslug'ı"
-                            likeCount={this.state.ownComment.commentLikeCount}
-                            liked={this.state.ownComment.liked}
-                            title={this.state.ownComment.owner.username}
-                            date={this.state.ownComment.commentCreateDateTime}
-                            tags={[]}
+                            id={this.state.ownComment.commentID}                //
+                            text={this.state.ownComment.commentText}            //
+                            type="profile"                                      //
+                            slug={this.state.ownComment.owner.slug}                                 //
+                            likeCount={this.state.ownComment.commentLikeCount}  //
+                            liked={this.state.ownComment.liked}                 //
+                            title={this.state.ownComment.owner.username}        //
+                            date={this.state.ownComment.commentCreateDateTime}  //
+                            tags={[]}                                           //
                             owner={true}
                         />:
                         <Comment

@@ -125,7 +125,7 @@ class Comment extends React.Component {
             )
         } else if(this.state.form=="newComment") {
             return(
-                <EditArea tags={this.props.tags} handleCancelButton={this.closeEditArea} commentText="" owner={true} reloadFunc={this.props.reloadFunc} setForm={this.setForm} newComment={true} productID={this.props.productID}/>
+                <EditArea tags={this.props.tags} handleCancelButton={this.closeEditArea} commentText="" owner={true} reloadFunc={this.props.reloadFunc} newComment={true} productID={this.props.productID} changeContent={this.props.changeContent}/>
             )
         }
         else if(this.state.form=="delete") {
@@ -789,6 +789,7 @@ class EditArea extends React.Component {
         super(props);
         let a = <div> <WriteComment tags={this.props.tags} forEdit={true} commentText={this.props.commentText} handleCancelButton={this.props.handleCancelButton} /> </div>
         this.state = {
+            sent:false,
             commentText:this.props.commentText,
             tags:[]
         }
@@ -801,7 +802,7 @@ class EditArea extends React.Component {
         });
     }
     sendComment() {
-        this.props.setForm("loading");
+        //this.props.setForm("loading");
         if(this.props.newComment) {
             // new comment
             fetch(SITEURL + 'api/comment', {
@@ -818,12 +819,10 @@ class EditArea extends React.Component {
                 if(!response.ok) throw new Error(response.status);
                 else return response.json();
             }).then((json)=>{
+                this.setState({
+                    sent: true
+                });
                 this.props.reloadFunc();
-                setTimeout(()=>{
-                    this.props.setForm("normal");
-                },250);
-                // bu yöntem sağlıklı değil, bağlantı çok çok çok yavaş olabilir :(
-                // alternatif bir çözüm bulacağım
             }).catch((error)=>{
                 if(error.message==422) {
                     this.showTopMessage("warning", "Her ürüne sadece bir kere yorum yapabilirsiniz");
@@ -838,6 +837,8 @@ class EditArea extends React.Component {
     render() {
         this.title = (this.props.newComment)?"Yorum Yaz":"Düzenle";
         this.buttonName = (this.props.newComment)?"Gönder":"Düzenle";
+        if(!this.state.sent){
+
         return(
             <Row size="one">
                 <Column>
@@ -889,8 +890,25 @@ class EditArea extends React.Component {
                         </Row>
                     </RaisedSegment>
                 </Column>
-            </Row>
-        )
+            </Row>)
+        } else {
+            return(
+                <Comment
+                    productID="-1"
+                    changeContent={this.props.changeContent}
+                    reloadFunc={this.props.reloadFunc}
+                    text={this.state.commentText}            //
+                    type="profile"                                      //
+                    slug={getUserInfo()['slug']}                                 //
+                    likeCount="0"  //
+                    liked={false}                 //
+                    title={getUserInfo()['username']}        //
+                    date="Şu an"  //
+                    tags={[]}                                           //
+                    owner={true}
+                />
+            )
+        }
     }
 }
 

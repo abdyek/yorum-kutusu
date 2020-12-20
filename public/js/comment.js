@@ -165,7 +165,7 @@ var Comment = function (_React$Component) {
             } else if (this.state.form == "edit") {
                 return React.createElement(EditArea, { tags: this.props.tags, handleCancelButton: this.closeEditArea, commentText: this.props.text, owner: this.props.owner, reloadFunc: this.props.reloadFunc, setForm: this.setForm, productID: this.props.productID });
             } else if (this.state.form == "newComment") {
-                return React.createElement(EditArea, { tags: this.props.tags, handleCancelButton: this.closeEditArea, commentText: '', owner: true, reloadFunc: this.props.reloadFunc, setForm: this.setForm, newComment: true, productID: this.props.productID });
+                return React.createElement(EditArea, { tags: this.props.tags, handleCancelButton: this.closeEditArea, commentText: '', owner: true, reloadFunc: this.props.reloadFunc, newComment: true, productID: this.props.productID, changeContent: this.props.changeContent });
             } else if (this.state.form == "delete") {
                 return React.createElement(DeleteArea, { handleCancelButton: this.closeDeleteArea, handleConfirmButton: this.confirmDelete });
             } else if (this.state.form == "message") {
@@ -1198,6 +1198,7 @@ var EditArea = function (_React$Component12) {
             ' '
         );
         _this16.state = {
+            sent: false,
             commentText: _this16.props.commentText,
             tags: []
         };
@@ -1218,7 +1219,7 @@ var EditArea = function (_React$Component12) {
         value: function sendComment() {
             var _this17 = this;
 
-            this.props.setForm("loading");
+            //this.props.setForm("loading");
             if (this.props.newComment) {
                 // new comment
                 fetch(SITEURL + 'api/comment', {
@@ -1234,12 +1235,10 @@ var EditArea = function (_React$Component12) {
                 }).then(function (response) {
                     if (!response.ok) throw new Error(response.status);else return response.json();
                 }).then(function (json) {
+                    _this17.setState({
+                        sent: true
+                    });
                     _this17.props.reloadFunc();
-                    setTimeout(function () {
-                        _this17.props.setForm("normal");
-                    }, 250);
-                    // bu yöntem sağlıklı değil, bağlantı çok çok çok yavaş olabilir :(
-                    // alternatif bir çözüm bulacağım
                 }).catch(function (error) {
                     if (error.message == 422) {
                         _this17.showTopMessage("warning", "Her ürüne sadece bir kere yorum yapabilirsiniz");
@@ -1256,93 +1255,111 @@ var EditArea = function (_React$Component12) {
         value: function render() {
             this.title = this.props.newComment ? "Yorum Yaz" : "Düzenle";
             this.buttonName = this.props.newComment ? "Gönder" : "Düzenle";
-            return React.createElement(
-                Row,
-                { size: 'one' },
-                React.createElement(
-                    Column,
-                    null,
-                    null ? React.createElement(
-                        Row,
-                        { size: 'one' },
-                        React.createElement(
-                            Column,
-                            null,
-                            React.createElement(BasicMessage, { type: this.state.topMessage.type, text: this.state.topMessage.text })
-                        )
-                    ) : "",
+            if (!this.state.sent) {
+
+                return React.createElement(
+                    Row,
+                    { size: 'one' },
                     React.createElement(
-                        RaisedSegment,
+                        Column,
                         null,
-                        React.createElement(
+                        null ? React.createElement(
                             Row,
-                            { size: 'two', nonStackable: true },
+                            { size: 'one' },
                             React.createElement(
                                 Column,
                                 null,
-                                React.createElement(H, { type: '4', text: this.title })
+                                React.createElement(BasicMessage, { type: this.state.topMessage.type, text: this.state.topMessage.text })
+                            )
+                        ) : "",
+                        React.createElement(
+                            RaisedSegment,
+                            null,
+                            React.createElement(
+                                Row,
+                                { size: 'two', nonStackable: true },
+                                React.createElement(
+                                    Column,
+                                    null,
+                                    React.createElement(H, { type: '4', text: this.title })
+                                ),
+                                React.createElement(
+                                    Column,
+                                    null,
+                                    !this.props.newComment ? React.createElement(
+                                        FloatRight,
+                                        null,
+                                        React.createElement(CancelButton, { handleCancelButton: this.props.handleCancelButton })
+                                    ) : ""
+                                )
                             ),
                             React.createElement(
-                                Column,
-                                null,
-                                !this.props.newComment ? React.createElement(
-                                    FloatRight,
-                                    null,
-                                    React.createElement(CancelButton, { handleCancelButton: this.props.handleCancelButton })
-                                ) : ""
-                            )
-                        ),
-                        React.createElement(
-                            Row,
-                            { size: 'one' },
-                            React.createElement(
-                                Column,
-                                null,
+                                Row,
+                                { size: 'one' },
                                 React.createElement(
-                                    'div',
-                                    { className: 'ui form' },
+                                    Column,
+                                    null,
                                     React.createElement(
                                         'div',
-                                        { className: 'field' },
+                                        { className: 'ui form' },
                                         React.createElement(
-                                            'label',
-                                            null,
-                                            'Yorumunuz'
-                                        ),
-                                        React.createElement('textarea', { value: this.state.commentText, onChange: this.changeComment })
+                                            'div',
+                                            { className: 'field' },
+                                            React.createElement(
+                                                'label',
+                                                null,
+                                                'Yorumunuz'
+                                            ),
+                                            React.createElement('textarea', { value: this.state.commentText, onChange: this.changeComment })
+                                        )
                                     )
                                 )
-                            )
-                        ),
-                        React.createElement(
-                            Row,
-                            { size: 'one' },
+                            ),
                             React.createElement(
-                                Column,
-                                null,
-                                React.createElement(Rating, { tags: this.state.tags, forEdit: this.props.forEdit, selectOption: this.selectOption })
-                            )
-                        ),
-                        React.createElement(
-                            Row,
-                            { size: 'one' },
-                            React.createElement(
-                                Column,
-                                null,
+                                Row,
+                                { size: 'one' },
                                 React.createElement(
-                                    FloatRight,
+                                    Column,
+                                    null,
+                                    React.createElement(Rating, { tags: this.state.tags, forEdit: this.props.forEdit, selectOption: this.selectOption })
+                                )
+                            ),
+                            React.createElement(
+                                Row,
+                                { size: 'one' },
+                                React.createElement(
+                                    Column,
                                     null,
                                     React.createElement(
-                                        'button',
-                                        { className: 'ui green button', onClick: this.sendComment },
-                                        this.buttonName
+                                        FloatRight,
+                                        null,
+                                        React.createElement(
+                                            'button',
+                                            { className: 'ui green button', onClick: this.sendComment },
+                                            this.buttonName
+                                        )
                                     )
                                 )
                             )
                         )
                     )
-                )
-            );
+                );
+            } else {
+                return React.createElement(Comment, {
+                    productID: '-1',
+                    changeContent: this.props.changeContent,
+                    reloadFunc: this.props.reloadFunc,
+                    text: this.state.commentText //
+                    , type: 'profile' //
+                    , slug: getUserInfo()['slug'] //
+                    , likeCount: '0' //
+                    , liked: false //
+                    , title: getUserInfo()['username'] //
+                    , date: '\u015Eu an' //
+                    , tags: [] //
+                    , owner: true
+                });
+            }
         }
     }]);
 
