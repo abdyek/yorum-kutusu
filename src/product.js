@@ -180,7 +180,7 @@ class Product extends React.Component {
 					{(this.state.commentType=="all")?
                     	<PageNavigation sortBy={this.state.sortBy} form={this.state.commentsForm} handleChangeSortBy={this.changeSortBy} pageCount={this.state.pageCount} currentPage={this.state.pageNumber} handleChangePageNumber={this.changePageNumber} />
 					:<SpecialCommentHeader specialInfo={this.state.specialInfo} showAllComments={this.showAllComments}/>}
-                    <Comments comments={this.state.comments} form={this.state.commentsForm} changeContent={this.props.changeContent} reloadFunc={this.reloadComment}/>
+                    <Comments comments={this.state.comments} form={this.state.commentsForm} changeContent={this.props.changeContent} reloadFunc={this.reloadComment} productID={this.state.productID}/>
 					{(this.state.commentType=="all")?
                     	<PageNavigation sortBy={this.state.sortBy} form={this.state.commentsForm} handleChangeSortBy={this.changeSortBy} pageCount={this.state.pageCount} currentPage={this.state.pageNumber} handleChangePageNumber={this.changePageNumber} />
 					:""

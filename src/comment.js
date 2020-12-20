@@ -830,6 +830,30 @@ class EditArea extends React.Component {
             });
         } else {
             // edit comment
+            console.log(this.props.productID);
+            fetch(SITEURL + 'api/comment', {
+                method: 'PUT',
+                header: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    productID:this.props.productID,
+                    commentText: this.state.commentText,
+                    rating: {}
+                })
+            }).then((response)=>{
+                if(!response.ok) throw new Error(response.status);
+                else return response.json();
+            }).then((json)=>{
+                this.setState({
+                    sent: true
+                });
+                this.props.reloadFunc();
+            }).catch((error)=>{
+                if(error.message==422) {
+                    this.showTopMessage("warning", "Her ürüne sadece bir kere yorum yapabilirsiniz");
+                }
+            });
         }
         //this.props.reloadFunc();
         // ^ düzenleme isteği ya da gönderme isteği başarılıysa bunu çalıştırıp sayfadaki bütün yorumları güncelleyeceğiz
@@ -894,7 +918,7 @@ class EditArea extends React.Component {
         } else {
             return(
                 <Comment
-                    productID="-1"
+                    productID={this.props.productID}
                     changeContent={this.props.changeContent}
                     reloadFunc={this.props.reloadFunc}
                     text={this.state.commentText}            //
@@ -966,6 +990,7 @@ class Comments extends React.Component {
 				let com = this.props.comments[i];
 				this.comments.push(
                                     <Comment
+                                        productID={this.props.productID}
                                         changeContent={this.props.changeContent}
                                         reloadFunc={this.props.reloadFunc}
                                         key={com.id}

@@ -1244,9 +1244,32 @@ var EditArea = function (_React$Component12) {
                         _this17.showTopMessage("warning", "Her ürüne sadece bir kere yorum yapabilirsiniz");
                     }
                 });
-            } else {}
-            // edit comment
-
+            } else {
+                // edit comment
+                console.log(this.props.productID);
+                fetch(SITEURL + 'api/comment', {
+                    method: 'PUT',
+                    header: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        productID: this.props.productID,
+                        commentText: this.state.commentText,
+                        rating: {}
+                    })
+                }).then(function (response) {
+                    if (!response.ok) throw new Error(response.status);else return response.json();
+                }).then(function (json) {
+                    _this17.setState({
+                        sent: true
+                    });
+                    _this17.props.reloadFunc();
+                }).catch(function (error) {
+                    if (error.message == 422) {
+                        _this17.showTopMessage("warning", "Her ürüne sadece bir kere yorum yapabilirsiniz");
+                    }
+                });
+            }
             //this.props.reloadFunc();
             // ^ düzenleme isteği ya da gönderme isteği başarılıysa bunu çalıştırıp sayfadaki bütün yorumları güncelleyeceğiz
         }
@@ -1346,7 +1369,7 @@ var EditArea = function (_React$Component12) {
                 );
             } else {
                 return React.createElement(Comment, {
-                    productID: '-1',
+                    productID: this.props.productID,
                     changeContent: this.props.changeContent,
                     reloadFunc: this.props.reloadFunc,
                     text: this.state.commentText //
@@ -1462,6 +1485,7 @@ var Comments = function (_React$Component14) {
                 for (var i = 0; i < this.props.comments.length; i++) {
                     var com = this.props.comments[i];
                     this.comments.push(React.createElement(Comment, {
+                        productID: this.props.productID,
                         changeContent: this.props.changeContent,
                         reloadFunc: this.props.reloadFunc,
                         key: com.id,
