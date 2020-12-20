@@ -1220,6 +1220,7 @@ var EditArea = function (_React$Component12) {
             var _this17 = this;
 
             //this.props.setForm("loading");
+            console.log(this.props.productID);
             if (this.props.newComment) {
                 // new comment
                 fetch(SITEURL + 'api/comment', {
@@ -1246,7 +1247,6 @@ var EditArea = function (_React$Component12) {
                 });
             } else {
                 // edit comment
-                console.log(this.props.productID);
                 fetch(SITEURL + 'api/comment', {
                     method: 'PUT',
                     header: {
@@ -1468,8 +1468,114 @@ var DeleteArea = function (_React$Component13) {
     return DeleteArea;
 }(React.Component);
 
-var Comments = function (_React$Component14) {
-    _inherits(Comments, _React$Component14);
+var BottomComment = function (_React$Component14) {
+    _inherits(BottomComment, _React$Component14);
+
+    function BottomComment(props) {
+        _classCallCheck(this, BottomComment);
+
+        var _this19 = _possibleConstructorReturn(this, (BottomComment.__proto__ || Object.getPrototypeOf(BottomComment)).call(this, props));
+
+        _this19.state = {
+            topMessage: null,
+            likeButtonDisabled: false
+        };
+        return _this19;
+    }
+
+    _createClass(BottomComment, [{
+        key: 'render',
+        value: function render() {
+            if (this.props.form == "normal") {
+                return React.createElement(
+                    'div',
+                    null,
+                    this.state.topMessage ? React.createElement(
+                        Row,
+                        { size: 'one' },
+                        React.createElement(
+                            Column,
+                            null,
+                            React.createElement(BasicMessage, { type: this.state.topMessage.type, text: this.state.topMessage.text })
+                        )
+                    ) : "",
+                    React.createElement(
+                        Row,
+                        { size: 'one' },
+                        React.createElement(
+                            Column,
+                            null,
+                            React.createElement(
+                                RaisedSegment,
+                                { otherClass: 'comment' },
+                                React.createElement(TopOfComment, {
+                                    text: this.props.ownComment.commentText,
+                                    slug: this.props.ownComment.owner.slug,
+                                    title: this.props.ownComment.owner.username,
+                                    owner: true,
+                                    handleOpenEditArea: this.props.openEdit,
+                                    handleOpenDeleteArea: this.props.openDelete,
+                                    changeContent: this.props.changeContent,
+                                    type: "profile"
+                                }),
+                                React.createElement(BottomOfComment, {
+                                    likeCount: this.props.ownComment.commentLikeCount,
+                                    liked: this.props.ownComment.liked,
+                                    likeButtonDisabled: this.state.likeButtonDisabled,
+                                    likeToggle: this.likeToggle,
+                                    date: this.props.ownComment.commentCreateDateTime,
+                                    handleOpenReportArea: this.openReportArea,
+                                    handleCloseReportArea: this.closeReportArea,
+                                    tags: [],
+                                    owner: true,
+                                    changeContent: this.props.changeContent,
+                                    id: this.props.ownComment.id
+                                })
+                            )
+                        )
+                    )
+                );
+            } else if (this.props.form == "edit") {
+                return React.createElement(EditArea, {
+                    tags: [],
+                    handleCancelButton: this.props.openNormal,
+                    commentText: this.props.ownComment.commentText,
+                    owner: true,
+                    reloadFunc: this.props.reloadFunc,
+                    productID: this.props.productID
+                });
+            } else if (this.props.form == "newComment") {
+                return React.createElement(EditArea, {
+                    tags: [],
+                    handleCancelButton: this.props.openNormal,
+                    commentText: '',
+                    owner: true,
+                    reloadFunc: this.props.reloadFunc,
+                    newComment: true,
+                    productID: this.props.productID,
+                    changeContent: this.props.changeContent
+                });
+            } else if (this.props.form == "hidden") {
+                return React.createElement(
+                    'div',
+                    null,
+                    'HIDE'
+                );
+            } else if (this.props.form == "delete") {
+                return React.createElement(
+                    'div',
+                    null,
+                    'SILME SORUSU BURAYA GELECEK'
+                );
+            }
+        }
+    }]);
+
+    return BottomComment;
+}(React.Component);
+
+var Comments = function (_React$Component15) {
+    _inherits(Comments, _React$Component15);
 
     function Comments(props) {
         _classCallCheck(this, Comments);

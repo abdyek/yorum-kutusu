@@ -7,7 +7,8 @@ class Product extends React.Component {
             commentType:"all",
             sortBy:"time",
             followButtonDisabled:false,
-            followed:false
+            followed:false,
+            bottomCommentForm:"normal"
         }
         this.manageOtherSlug = this.manageOtherSlug.bind(this);
         this.fetchProduct = this.fetchProduct.bind(this);
@@ -15,11 +16,15 @@ class Product extends React.Component {
         this.refreshUrl = this.refreshUrl.bind(this);
         this.load = this.load.bind(this);
         this.reloadComment = this.reloadComment.bind(this);
+        this.reloadAllComment = this.reloadAllComment.bind(this);
         this.changeSortBy = this.changeSortBy.bind(this);
         this.changePageNumber = this.changePageNumber.bind(this);
         this.refreshComments = this.refreshComments.bind(this);
         this.showAllComments = this.showAllComments.bind(this);
         this.followToggle = this.followToggle.bind(this);
+        this.openEditOfBottomComment = this.openEditOfBottomComment.bind(this);
+        this.openDeleteOfBottomComment = this.openDeleteOfBottomComment.bind(this);
+        this.openNormalOfBottomComment = this.openNormalOfBottomComment.bind(this);
     }
     componentDidMount() {
         this.manageOtherSlug();
@@ -40,6 +45,17 @@ class Product extends React.Component {
         let commentType = "all";  // all, spacial
         // not: buradaki değer atamalar ve değişkenlerin bir kısmı deneme amaçlı, setState içindeki hemen hemen hepsi api tarafından gelecek
     }
+    detectBottomCommentForm(ownComment) {
+        if(isMember()) {
+            if(ownComment){
+                return "normal";
+            } else {
+                return "newComment";
+            }
+        } else {
+            return "hidden";
+        }
+    }
     fetchProduct(data) {
         fetch(SITEURL + 'api/product?' + getUrlPar(data), {method: 'GET'}).then((response)=>{
             if(!response.ok) throw new Error(response.status);
@@ -52,6 +68,7 @@ class Product extends React.Component {
                 productID:json['other']['product']['id'],
                 comments: normalizer('comments', json['other']['comments']),
                 ownComment:ownComment,
+                bottomCommentForm: this.detectBottomCommentForm(json['other']['ownComment']),
                 commentsForm: (json['other']['comments'].length)?'normal':'noComment',
                 pageNumber: json['other']['pageNumber'],
                 pageCount:json['other']['pageCount'],
@@ -107,6 +124,29 @@ class Product extends React.Component {
     }
     reloadComment() {
         this.fetchComment();
+    }
+    reloadAllComment() {
+        console.log("reload olması gerekiyor");
+        fetch(SITEURL + 'api/product?' + getUrlPar({
+            productSlug:this.productSlug,
+            sortBy: this.sortBy,
+            pageNumber:this.pageNumber,
+            onlyComment:true
+        }), {method: 'GET'}).then((response)=>{
+            if(!response.ok) throw new Error(response.status);
+            else return response.json();
+        }).then((json)=> {
+            let ownComment = (isMember())?json['other']['ownComment']:null;
+            this.setState({
+                commentsForm:"normal",
+                comments: normalizer('comments', json['other']['comments']),
+                ownComment:ownComment,
+                bottomCommentForm: this.detectBottomCommentForm(json['other']['ownComment'])
+            });
+            this.refreshUrl();
+        }).catch((error) => {
+            console.log(error);
+        });
     }
 	changeSortBy(value) {
             if(value!=this.state.sortBy && this.state.commentsForm!="loading") {
@@ -171,6 +211,21 @@ class Product extends React.Component {
             this.props.changeContent('giris-yap', true);
         }
     }
+    openEditOfBottomComment() {
+        this.setState({
+            bottomCommentForm:"edit"
+        });
+    }
+    openDeleteOfBottomComment() {
+        this.setState({
+            bottomCommentForm:"delete"
+        });
+    }
+    openNormalOfBottomComment() {
+        this.setState({
+            bottomCommentForm:"normal"
+        })
+    }
     render() {
         if(this.state.form=="normal") {
 	        document.title = this.state.productName;
@@ -180,35 +235,21 @@ class Product extends React.Component {
 					{(this.state.commentType=="all")?
                     	<PageNavigation sortBy={this.state.sortBy} form={this.state.commentsForm} handleChangeSortBy={this.changeSortBy} pageCount={this.state.pageCount} currentPage={this.state.pageNumber} handleChangePageNumber={this.changePageNumber} />
 					:<SpecialCommentHeader specialInfo={this.state.specialInfo} showAllComments={this.showAllComments}/>}
-                    <Comments comments={this.state.comments} form={this.state.commentsForm} changeContent={this.props.changeContent} reloadFunc={this.reloadComment} productID={this.state.productID}/>
+                    <Comments comments={this.state.comments} form={this.state.commentsForm} changeContent={this.props.changeContent} reloadFunc={this.reloadAllComment} productID={this.state.productID}/>
 					{(this.state.commentType=="all")?
                     	<PageNavigation sortBy={this.state.sortBy} form={this.state.commentsForm} handleChangeSortBy={this.changeSortBy} pageCount={this.state.pageCount} currentPage={this.state.pageNumber} handleChangePageNumber={this.changePageNumber} />
 					:""
 					}
-                {
-                    (this.state.ownComment)?
-                        <Comment
-                            productID={this.state.productID}
-                            changeContent={this.props.changeContent}
-                            reloadFunc={this.reloadComment}
-                            id={this.state.ownComment.commentID}                //
-                            text={this.state.ownComment.commentText}            //
-                            type="profile"                                      //
-                            slug={this.state.ownComment.owner.slug}                                 //
-                            likeCount={this.state.ownComment.commentLikeCount}  //
-                            liked={this.state.ownComment.liked}                 //
-                            title={this.state.ownComment.owner.username}        //
-                            date={this.state.ownComment.commentCreateDateTime}  //
-                            tags={[]}                                           //
-                            owner={true}
-                        />:
-                        <Comment
-                            form="newComment"
-                            productID={this.state.productID}
-                            reloadFunc={this.reloadComment}
-                            tags={[]}
-                        />
-                }
+                    <BottomComment
+                        form={this.state.bottomCommentForm}
+                        reloadFunc={this.reloadAllComment}
+                        productID={this.state.productID}
+                        ownComment={this.state.ownComment}
+                        changeContent={this.props.changeContent}
+                        openEdit={this.openEditOfBottomComment}
+                        openDelete={this.openDeleteOfBottomComment}
+                        openNormal={this.openNormalOfBottomComment}
+                    />
                 </div>
             )
         } else if(this.state.form=="loading") {

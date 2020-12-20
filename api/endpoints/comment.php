@@ -95,7 +95,7 @@ class Comment extends Request {
     }
     private function updateComment() {
         $this->writeHistory();
-        $query = Database::execute('UPDATE comment SET comment_text=?, comment_edited=1, comment_last_edit_date_time=?', [$this->data['commentText'], Other::getCurrentDateTime()]);
+        $query = Database::execute('UPDATE comment SET comment_text=?, comment_edited=1, comment_last_edit_date_time=? WHERE comment_id=?', [$this->data['commentText'], Other::getCurrentDateTime(), $this->comment['comment_id']]);
         if(!$query) {
             $this->responseWithMessage(5);
             exit();

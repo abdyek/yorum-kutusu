@@ -803,6 +803,7 @@ class EditArea extends React.Component {
     }
     sendComment() {
         //this.props.setForm("loading");
+        console.log(this.props.productID);
         if(this.props.newComment) {
             // new comment
             fetch(SITEURL + 'api/comment', {
@@ -830,7 +831,6 @@ class EditArea extends React.Component {
             });
         } else {
             // edit comment
-            console.log(this.props.productID);
             fetch(SITEURL + 'api/comment', {
                 method: 'PUT',
                 header: {
@@ -976,6 +976,92 @@ class DeleteArea extends React.Component {
                 </Column>
             </Row>
         )
+    }
+}
+
+class BottomComment extends React.Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            topMessage: null,
+            likeButtonDisabled: false
+        }
+    }
+    render() {
+        if(this.props.form=="normal") {
+            return(
+                <div>
+                    {(this.state.topMessage)? 
+                        <Row size="one">
+                            <Column>
+                                <BasicMessage type={this.state.topMessage.type} text={this.state.topMessage.text} />
+                            </Column>
+                        </Row>
+                    :""}
+                    <Row size="one">
+                        <Column>
+                            <RaisedSegment otherClass="comment">
+                                <TopOfComment
+                                    text={this.props.ownComment.commentText}
+                                    slug={this.props.ownComment.owner.slug}
+                                    title={this.props.ownComment.owner.username}
+                                    owner={true}
+                                    handleOpenEditArea={this.props.openEdit}
+                                    handleOpenDeleteArea={this.props.openDelete}
+                                    changeContent={this.props.changeContent}
+                                    type={"profile"}
+                                />
+                                <BottomOfComment
+                                    likeCount={this.props.ownComment.commentLikeCount}
+                                    liked={this.props.ownComment.liked}
+                                    likeButtonDisabled={this.state.likeButtonDisabled}
+                                    likeToggle={this.likeToggle}
+                                    date={this.props.ownComment.commentCreateDateTime}
+                                    handleOpenReportArea={this.openReportArea}
+                                    handleCloseReportArea={this.closeReportArea}
+                                    tags={[]}
+                                    owner={true}
+                                    changeContent={this.props.changeContent}
+                                    id={this.props.ownComment.id}
+                                />
+                            </RaisedSegment>
+                        </Column>
+                    </Row>
+                </div>
+            )
+        } else if (this.props.form=="edit") {
+            return(
+                <EditArea
+                    tags={[]}
+                    handleCancelButton={this.props.openNormal}
+                    commentText={this.props.ownComment.commentText}
+                    owner={true}
+                    reloadFunc={this.props.reloadFunc}
+                    productID={this.props.productID}
+                />
+            )
+        } else if(this.props.form=="newComment") {
+            return(
+                <EditArea
+                    tags={[]}
+                    handleCancelButton={this.props.openNormal}
+                    commentText=""
+                    owner={true}
+                    reloadFunc={this.props.reloadFunc}
+                    newComment={true}
+                    productID={this.props.productID}
+                    changeContent={this.props.changeContent}
+                />
+            )
+        } else if(this.props.form=="hidden") {
+            return(
+                <div>HIDE</div>
+            )
+        } else if(this.props.form=="delete") {
+            return(
+                <div>SILME SORUSU BURAYA GELECEK</div>
+            )
+        }
     }
 }
 

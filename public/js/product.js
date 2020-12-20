@@ -20,7 +20,8 @@ var Product = function (_React$Component) {
             commentType: "all",
             sortBy: "time",
             followButtonDisabled: false,
-            followed: false
+            followed: false,
+            bottomCommentForm: "normal"
         };
         _this.manageOtherSlug = _this.manageOtherSlug.bind(_this);
         _this.fetchProduct = _this.fetchProduct.bind(_this);
@@ -28,11 +29,15 @@ var Product = function (_React$Component) {
         _this.refreshUrl = _this.refreshUrl.bind(_this);
         _this.load = _this.load.bind(_this);
         _this.reloadComment = _this.reloadComment.bind(_this);
+        _this.reloadAllComment = _this.reloadAllComment.bind(_this);
         _this.changeSortBy = _this.changeSortBy.bind(_this);
         _this.changePageNumber = _this.changePageNumber.bind(_this);
         _this.refreshComments = _this.refreshComments.bind(_this);
         _this.showAllComments = _this.showAllComments.bind(_this);
         _this.followToggle = _this.followToggle.bind(_this);
+        _this.openEditOfBottomComment = _this.openEditOfBottomComment.bind(_this);
+        _this.openDeleteOfBottomComment = _this.openDeleteOfBottomComment.bind(_this);
+        _this.openNormalOfBottomComment = _this.openNormalOfBottomComment.bind(_this);
         return _this;
     }
 
@@ -60,6 +65,19 @@ var Product = function (_React$Component) {
             // not: buradaki değer atamalar ve değişkenlerin bir kısmı deneme amaçlı, setState içindeki hemen hemen hepsi api tarafından gelecek
         }
     }, {
+        key: "detectBottomCommentForm",
+        value: function detectBottomCommentForm(ownComment) {
+            if (isMember()) {
+                if (ownComment) {
+                    return "normal";
+                } else {
+                    return "newComment";
+                }
+            } else {
+                return "hidden";
+            }
+        }
+    }, {
         key: "fetchProduct",
         value: function fetchProduct(data) {
             var _this2 = this;
@@ -74,6 +92,7 @@ var Product = function (_React$Component) {
                     productID: json['other']['product']['id'],
                     comments: normalizer('comments', json['other']['comments']),
                     ownComment: ownComment,
+                    bottomCommentForm: _this2.detectBottomCommentForm(json['other']['ownComment']),
                     commentsForm: json['other']['comments'].length ? 'normal' : 'noComment',
                     pageNumber: json['other']['pageNumber'],
                     pageCount: json['other']['pageCount'],
@@ -138,6 +157,32 @@ var Product = function (_React$Component) {
             this.fetchComment();
         }
     }, {
+        key: "reloadAllComment",
+        value: function reloadAllComment() {
+            var _this4 = this;
+
+            console.log("reload olması gerekiyor");
+            fetch(SITEURL + 'api/product?' + getUrlPar({
+                productSlug: this.productSlug,
+                sortBy: this.sortBy,
+                pageNumber: this.pageNumber,
+                onlyComment: true
+            }), { method: 'GET' }).then(function (response) {
+                if (!response.ok) throw new Error(response.status);else return response.json();
+            }).then(function (json) {
+                var ownComment = isMember() ? json['other']['ownComment'] : null;
+                _this4.setState({
+                    commentsForm: "normal",
+                    comments: normalizer('comments', json['other']['comments']),
+                    ownComment: ownComment,
+                    bottomCommentForm: _this4.detectBottomCommentForm(json['other']['ownComment'])
+                });
+                _this4.refreshUrl();
+            }).catch(function (error) {
+                console.log(error);
+            });
+        }
+    }, {
         key: "changeSortBy",
         value: function changeSortBy(value) {
             if (value != this.state.sortBy && this.state.commentsForm != "loading") {
@@ -182,7 +227,7 @@ var Product = function (_React$Component) {
     }, {
         key: "followToggle",
         value: function followToggle() {
-            var _this4 = this;
+            var _this5 = this;
 
             if (isMember()) {
                 var make = this.state.followed ? false : true;
@@ -201,7 +246,7 @@ var Product = function (_React$Component) {
                 }).then(function (response) {
                     if (!response.ok) throw new Error(response.status);else return response.json();
                 }).then(function (json) {
-                    _this4.setState({
+                    _this5.setState({
                         followButtonDisabled: false,
                         followed: make
                     });
@@ -209,6 +254,27 @@ var Product = function (_React$Component) {
             } else {
                 this.props.changeContent('giris-yap', true);
             }
+        }
+    }, {
+        key: "openEditOfBottomComment",
+        value: function openEditOfBottomComment() {
+            this.setState({
+                bottomCommentForm: "edit"
+            });
+        }
+    }, {
+        key: "openDeleteOfBottomComment",
+        value: function openDeleteOfBottomComment() {
+            this.setState({
+                bottomCommentForm: "delete"
+            });
+        }
+    }, {
+        key: "openNormalOfBottomComment",
+        value: function openNormalOfBottomComment() {
+            this.setState({
+                bottomCommentForm: "normal"
+            });
         }
     }, {
         key: "render",
@@ -220,27 +286,17 @@ var Product = function (_React$Component) {
                     null,
                     React.createElement(ProductInfo, { tags: this.state.tagsInfo, productName: this.state.productName, changeContent: this.props.changeContent, followToggle: this.followToggle, followed: this.state.followed, followButtonDisabled: this.state.followButtonDisabled }),
                     this.state.commentType == "all" ? React.createElement(PageNavigation, { sortBy: this.state.sortBy, form: this.state.commentsForm, handleChangeSortBy: this.changeSortBy, pageCount: this.state.pageCount, currentPage: this.state.pageNumber, handleChangePageNumber: this.changePageNumber }) : React.createElement(SpecialCommentHeader, { specialInfo: this.state.specialInfo, showAllComments: this.showAllComments }),
-                    React.createElement(Comments, { comments: this.state.comments, form: this.state.commentsForm, changeContent: this.props.changeContent, reloadFunc: this.reloadComment, productID: this.state.productID }),
+                    React.createElement(Comments, { comments: this.state.comments, form: this.state.commentsForm, changeContent: this.props.changeContent, reloadFunc: this.reloadAllComment, productID: this.state.productID }),
                     this.state.commentType == "all" ? React.createElement(PageNavigation, { sortBy: this.state.sortBy, form: this.state.commentsForm, handleChangeSortBy: this.changeSortBy, pageCount: this.state.pageCount, currentPage: this.state.pageNumber, handleChangePageNumber: this.changePageNumber }) : "",
-                    this.state.ownComment ? React.createElement(Comment, {
+                    React.createElement(BottomComment, {
+                        form: this.state.bottomCommentForm,
+                        reloadFunc: this.reloadAllComment,
                         productID: this.state.productID,
+                        ownComment: this.state.ownComment,
                         changeContent: this.props.changeContent,
-                        reloadFunc: this.reloadComment,
-                        id: this.state.ownComment.commentID //
-                        , text: this.state.ownComment.commentText //
-                        , type: "profile" //
-                        , slug: this.state.ownComment.owner.slug //
-                        , likeCount: this.state.ownComment.commentLikeCount //
-                        , liked: this.state.ownComment.liked //
-                        , title: this.state.ownComment.owner.username //
-                        , date: this.state.ownComment.commentCreateDateTime //
-                        , tags: [] //
-                        , owner: true
-                    }) : React.createElement(Comment, {
-                        form: "newComment",
-                        productID: this.state.productID,
-                        reloadFunc: this.reloadComment,
-                        tags: []
+                        openEdit: this.openEditOfBottomComment,
+                        openDelete: this.openDeleteOfBottomComment,
+                        openNormal: this.openNormalOfBottomComment
                     })
                 );
             } else if (this.state.form == "loading") {
@@ -279,10 +335,10 @@ var ProductInfo = function (_React$Component2) {
     function ProductInfo(props) {
         _classCallCheck(this, ProductInfo);
 
-        var _this5 = _possibleConstructorReturn(this, (ProductInfo.__proto__ || Object.getPrototypeOf(ProductInfo)).call(this, props));
+        var _this6 = _possibleConstructorReturn(this, (ProductInfo.__proto__ || Object.getPrototypeOf(ProductInfo)).call(this, props));
 
-        _this5.followButton = _this5.followButton.bind(_this5);
-        return _this5;
+        _this6.followButton = _this6.followButton.bind(_this6);
+        return _this6;
     }
 
     _createClass(ProductInfo, [{
@@ -361,7 +417,7 @@ var SpecialCommentHeader = function (_React$Component3) {
     _createClass(SpecialCommentHeader, [{
         key: "render",
         value: function render() {
-            var _this7 = this;
+            var _this8 = this;
 
             return React.createElement(
                 Row,
@@ -392,7 +448,7 @@ var SpecialCommentHeader = function (_React$Component3) {
                                     React.createElement(
                                         "a",
                                         { onClick: function onClick(e) {
-                                                e.preventDefault();_this7.props.showAllComments();
+                                                e.preventDefault();_this8.props.showAllComments();
                                             } },
                                         "T\xFCm\xFCn\xFC G\xF6ster"
                                     )
