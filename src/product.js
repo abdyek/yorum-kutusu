@@ -126,7 +126,9 @@ class Product extends React.Component {
         this.fetchComment();
     }
     reloadAllComment() {
-        console.log("reload olması gerekiyor");
+        this.setState({
+            bottomCommentForm:"loading"
+        });
         fetch(SITEURL + 'api/product?' + getUrlPar({
             productSlug:this.productSlug,
             sortBy: this.sortBy,

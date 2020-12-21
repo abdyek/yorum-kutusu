@@ -121,7 +121,7 @@ class Comment extends React.Component {
             )
         } else if(this.state.form=="edit") {
             return(
-                <EditArea tags={this.props.tags} handleCancelButton={this.closeEditArea} commentText={this.props.text} owner={this.props.owner} reloadFunc={this.props.reloadFunc} setForm={this.setForm} productID={this.props.productID}/>
+                <EditArea tags={this.props.tags} handleCancelButton={this.closeEditArea} commentText={this.props.text} owner={this.props.owner} reloadFunc={this.props.reloadFunc} setForm={this.setForm} productID={this.props.productID} setForm={this.setForm}/>
             )
         } else if(this.state.form=="newComment") {
             return(
@@ -789,7 +789,6 @@ class EditArea extends React.Component {
         super(props);
         let a = <div> <WriteComment tags={this.props.tags} forEdit={true} commentText={this.props.commentText} handleCancelButton={this.props.handleCancelButton} /> </div>
         this.state = {
-            sent:false,
             commentText:this.props.commentText,
             tags:[]
         }
@@ -802,7 +801,6 @@ class EditArea extends React.Component {
         });
     }
     sendComment() {
-        //this.props.setForm("loading");
         console.log(this.props.productID);
         if(this.props.newComment) {
             // new comment
@@ -820,9 +818,6 @@ class EditArea extends React.Component {
                 if(!response.ok) throw new Error(response.status);
                 else return response.json();
             }).then((json)=>{
-                this.setState({
-                    sent: true
-                });
                 this.props.reloadFunc();
             }).catch((error)=>{
                 if(error.message==422) {
@@ -830,6 +825,9 @@ class EditArea extends React.Component {
                 }
             });
         } else {
+            if(this.props.setForm){
+                this.props.setForm('loading');
+            }
             // edit comment
             fetch(SITEURL + 'api/comment', {
                 method: 'PUT',
@@ -845,9 +843,9 @@ class EditArea extends React.Component {
                 if(!response.ok) throw new Error(response.status);
                 else return response.json();
             }).then((json)=>{
-                this.setState({
-                    sent: true
-                });
+                if(this.props.setForm){
+                    this.props.setForm('normal');
+                }
                 this.props.reloadFunc();
             }).catch((error)=>{
                 if(error.message==422) {
@@ -855,8 +853,6 @@ class EditArea extends React.Component {
                 }
             });
         }
-        //this.props.reloadFunc();
-        // ^ düzenleme isteği ya da gönderme isteği başarılıysa bunu çalıştırıp sayfadaki bütün yorumları güncelleyeceğiz
     }
     render() {
         this.title = (this.props.newComment)?"Yorum Yaz":"Düzenle";
@@ -915,23 +911,6 @@ class EditArea extends React.Component {
                     </RaisedSegment>
                 </Column>
             </Row>)
-        } else {
-            return(
-                <Comment
-                    productID={this.props.productID}
-                    changeContent={this.props.changeContent}
-                    reloadFunc={this.props.reloadFunc}
-                    text={this.state.commentText}            //
-                    type="profile"                                      //
-                    slug={getUserInfo()['slug']}                                 //
-                    likeCount="0"  //
-                    liked={false}                 //
-                    title={getUserInfo()['username']}        //
-                    date="Şu an"  //
-                    tags={[]}                                           //
-                    owner={true}
-                />
-            )
         }
     }
 }
@@ -1060,6 +1039,10 @@ class BottomComment extends React.Component {
         } else if(this.props.form=="delete") {
             return(
                 <div>SILME SORUSU BURAYA GELECEK</div>
+            )
+        } else if(this.props.form=="loading") {
+            return(
+                <RowLoadingSpin />
             )
         }
     }

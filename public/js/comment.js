@@ -163,7 +163,7 @@ var Comment = function (_React$Component) {
             } else if (this.state.form == "report") {
                 return React.createElement(ReportArea, { handleCloseReportArea: this.closeReportArea });
             } else if (this.state.form == "edit") {
-                return React.createElement(EditArea, { tags: this.props.tags, handleCancelButton: this.closeEditArea, commentText: this.props.text, owner: this.props.owner, reloadFunc: this.props.reloadFunc, setForm: this.setForm, productID: this.props.productID });
+                return React.createElement(EditArea, _defineProperty({ tags: this.props.tags, handleCancelButton: this.closeEditArea, commentText: this.props.text, owner: this.props.owner, reloadFunc: this.props.reloadFunc, setForm: this.setForm, productID: this.props.productID }, 'setForm', this.setForm));
             } else if (this.state.form == "newComment") {
                 return React.createElement(EditArea, { tags: this.props.tags, handleCancelButton: this.closeEditArea, commentText: '', owner: true, reloadFunc: this.props.reloadFunc, newComment: true, productID: this.props.productID, changeContent: this.props.changeContent });
             } else if (this.state.form == "delete") {
@@ -1198,7 +1198,6 @@ var EditArea = function (_React$Component12) {
             ' '
         );
         _this16.state = {
-            sent: false,
             commentText: _this16.props.commentText,
             tags: []
         };
@@ -1219,7 +1218,6 @@ var EditArea = function (_React$Component12) {
         value: function sendComment() {
             var _this17 = this;
 
-            //this.props.setForm("loading");
             console.log(this.props.productID);
             if (this.props.newComment) {
                 // new comment
@@ -1236,9 +1234,6 @@ var EditArea = function (_React$Component12) {
                 }).then(function (response) {
                     if (!response.ok) throw new Error(response.status);else return response.json();
                 }).then(function (json) {
-                    _this17.setState({
-                        sent: true
-                    });
                     _this17.props.reloadFunc();
                 }).catch(function (error) {
                     if (error.message == 422) {
@@ -1246,6 +1241,9 @@ var EditArea = function (_React$Component12) {
                     }
                 });
             } else {
+                if (this.props.setForm) {
+                    this.props.setForm('loading');
+                }
                 // edit comment
                 fetch(SITEURL + 'api/comment', {
                     method: 'PUT',
@@ -1260,9 +1258,9 @@ var EditArea = function (_React$Component12) {
                 }).then(function (response) {
                     if (!response.ok) throw new Error(response.status);else return response.json();
                 }).then(function (json) {
-                    _this17.setState({
-                        sent: true
-                    });
+                    if (_this17.props.setForm) {
+                        _this17.props.setForm('normal');
+                    }
                     _this17.props.reloadFunc();
                 }).catch(function (error) {
                     if (error.message == 422) {
@@ -1270,8 +1268,6 @@ var EditArea = function (_React$Component12) {
                     }
                 });
             }
-            //this.props.reloadFunc();
-            // ^ düzenleme isteği ya da gönderme isteği başarılıysa bunu çalıştırıp sayfadaki bütün yorumları güncelleyeceğiz
         }
     }, {
         key: 'render',
@@ -1367,21 +1363,6 @@ var EditArea = function (_React$Component12) {
                         )
                     )
                 );
-            } else {
-                return React.createElement(Comment, {
-                    productID: this.props.productID,
-                    changeContent: this.props.changeContent,
-                    reloadFunc: this.props.reloadFunc,
-                    text: this.state.commentText //
-                    , type: 'profile' //
-                    , slug: getUserInfo()['slug'] //
-                    , likeCount: '0' //
-                    , liked: false //
-                    , title: getUserInfo()['username'] //
-                    , date: '\u015Eu an' //
-                    , tags: [] //
-                    , owner: true
-                });
             }
         }
     }]);
@@ -1567,6 +1548,8 @@ var BottomComment = function (_React$Component14) {
                     null,
                     'SILME SORUSU BURAYA GELECEK'
                 );
+            } else if (this.props.form == "loading") {
+                return React.createElement(RowLoadingSpin, null);
             }
         }
     }]);

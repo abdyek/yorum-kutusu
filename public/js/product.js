@@ -161,7 +161,9 @@ var Product = function (_React$Component) {
         value: function reloadAllComment() {
             var _this4 = this;
 
-            console.log("reload olması gerekiyor");
+            this.setState({
+                bottomCommentForm: "loading"
+            });
             fetch(SITEURL + 'api/product?' + getUrlPar({
                 productSlug: this.productSlug,
                 sortBy: this.sortBy,
