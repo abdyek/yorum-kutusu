@@ -1038,17 +1038,49 @@ var Rating = function (_React$Component10) {
         _classCallCheck(this, Rating);
 
         return _possibleConstructorReturn(this, (Rating.__proto__ || Object.getPrototypeOf(Rating)).call(this, props));
+        //this.cikti = [];
     }
+    /*
+    render() {
+        for(let i=0;i<Object.keys(this.props.tags).length;i++) {
+            this.cikti.push(
+                <ol> aktif/basif - {this.props.tags[i].passive},
+                    text - {this.props.tags[i].text},
+                    color - {this.props.tags[i].color},
+                    rateValue - {this.props.tags[i].rateValue},
+                    slug - {this.props.tags[i].slug}
+                </ol>
+            )
+        }
+        return(
+            <div>
+                <li>
+                    {this.cikti}
+                </li>
+            </div>
+        )
+    }
+    */
+
 
     _createClass(Rating, [{
         key: 'render',
         value: function render() {
             this.ratingLines = [];
-            var keyArr = Object.keys(this.props.tags);
-            for (var i = 0; i < keyArr.length; i++) {
-                if (!this.props.tags[keyArr[i]].passive) {
-                    this.ratingLines.push(React.createElement(RatingLine, _defineProperty({ key: keyArr[i], tagKey: this.props.tags[keyArr[i]].id, tagName: this.props.tags[keyArr[i]].text, tagSlug: this.props.tags[keyArr[i]].slug, forEdit: this.props.forEdit, rateValue: this.props.tags[keyArr[i]].rateValue, selectOption: this.props.selectOption }, 'rateValue', this.props.tags[keyArr[i]].rateValue)));
-                }
+            var keys = Object.keys(this.props.tags);
+            for (var i = 0; i < keys.length; i++) {
+                var _React$createElement2;
+
+                var j = keys[i];
+                this.ratingLines.push(React.createElement(RatingLine, (_React$createElement2 = {
+                    key: j,
+                    tagKey: this.props.tags[j].id,
+                    tagName: this.props.tags[j].text,
+                    tagSlug: this.props.tags[j].slug,
+                    forEdit: this.props.forEdit,
+                    rateValue: this.props.tags[j].rateValue,
+                    selectOption: this.props.selectOption
+                }, _defineProperty(_React$createElement2, 'rateValue', this.props.tags[j].rateValue), _defineProperty(_React$createElement2, 'rateColor', this.props.tags[j].color), _React$createElement2)));
             }
             return React.createElement(
                 Row,
@@ -1080,7 +1112,6 @@ var RatingLine = function (_React$Component11) {
         value: function render() {
             var _this15 = this;
 
-            this.color = getRatingColor(this.props.rateValue);
             return React.createElement(
                 Row,
                 { size: 'one' },
@@ -1096,7 +1127,7 @@ var RatingLine = function (_React$Component11) {
                             React.createElement(
                                 Center,
                                 null,
-                                React.createElement(Tag, { key: this.props.tagKey, passive: false, text: this.props.tagName, color: this.color, rateValue: this.props.rateValue })
+                                React.createElement(Tag, { key: this.props.tagKey, passive: false, text: this.props.tagName, color: this.props.rateColor, rateValue: this.props.rateValue })
                             )
                         ),
                         React.createElement(
@@ -1115,7 +1146,7 @@ var RatingLine = function (_React$Component11) {
                                             'select',
                                             { onChange: function onChange(e) {
                                                     return _this15.props.selectOption(e, _this15.props.tagSlug);
-                                                } },
+                                                }, value: this.props.rateVale },
                                             React.createElement(
                                                 'option',
                                                 { value: '-' },
@@ -1202,10 +1233,11 @@ var EditArea = function (_React$Component12) {
         );
         _this16.state = {
             commentText: _this16.props.commentText,
-            tags: []
+            tags: _this16.props.tags
         };
         _this16.changeComment = _this16.changeComment.bind(_this16);
         _this16.sendComment = _this16.sendComment.bind(_this16);
+        _this16.selectOption = _this16.selectOption.bind(_this16);
         return _this16;
     }
 
@@ -1271,6 +1303,14 @@ var EditArea = function (_React$Component12) {
                     }
                 });
             }
+        }
+    }, {
+        key: 'selectOption',
+        value: function selectOption(e, slug) {
+            console.log("seçme işlemleri burada gerçekleşecek");
+            console.log(slug + " - " + e.target.value);
+            var oldTags = this.state.tags;
+            //oldTags[]
         }
     }, {
         key: 'render',
@@ -1530,8 +1570,9 @@ var BottomComment = function (_React$Component14) {
                                     likeToggle: this.likeToggle,
                                     date: this.props.ownComment.commentCreateDateTime,
                                     handleOpenReportArea: this.openReportArea,
-                                    handleCloseReportArea: this.closeReportArea,
-                                    tags: [],
+                                    handleCloseReportArea: this.closeReportArea
+                                    //tags={[]}
+                                    , tags: normalizer('comment-rating', this.props.ownComment.rating),
                                     owner: true,
                                     changeContent: this.props.changeContent,
                                     id: this.props.ownComment.id
@@ -1542,7 +1583,7 @@ var BottomComment = function (_React$Component14) {
                 );
             } else if (this.props.form == "edit") {
                 return React.createElement(EditArea, {
-                    tags: [],
+                    tags: normalizer('comment-rating', this.props.ownComment.rating),
                     handleCancelButton: this.props.openNormal,
                     commentText: this.props.ownComment.commentText,
                     owner: true,
@@ -1551,7 +1592,7 @@ var BottomComment = function (_React$Component14) {
                 });
             } else if (this.props.form == "newComment") {
                 return React.createElement(EditArea, {
-                    tags: [],
+                    tags: normalizer('comment-rating', this.props.ownComment.rating),
                     handleCancelButton: this.props.openNormal,
                     commentText: '',
                     owner: true,

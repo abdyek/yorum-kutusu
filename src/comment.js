@@ -721,16 +721,47 @@ class WriteComment extends React.Component {
 class Rating extends React.Component {
     constructor(props){
         super(props);
+        //this.cikti = [];
     }
+    /*
+    render() {
+        for(let i=0;i<Object.keys(this.props.tags).length;i++) {
+            this.cikti.push(
+                <ol> aktif/basif - {this.props.tags[i].passive},
+                    text - {this.props.tags[i].text},
+                    color - {this.props.tags[i].color},
+                    rateValue - {this.props.tags[i].rateValue},
+                    slug - {this.props.tags[i].slug}
+                </ol>
+            )
+        }
+        return(
+            <div>
+                <li>
+                    {this.cikti}
+                </li>
+            </div>
+        )
+    }
+    */
     render() {
         this.ratingLines = [];
-        let keyArr = Object.keys(this.props.tags);
-        for(let i=0;i<keyArr.length;i++) {
-            if(!this.props.tags[keyArr[i]].passive) {
-                this.ratingLines.push(
-                    <RatingLine key={keyArr[i]} tagKey={this.props.tags[keyArr[i]].id} tagName={this.props.tags[keyArr[i]].text} tagSlug={this.props.tags[keyArr[i]].slug} forEdit={this.props.forEdit} rateValue={this.props.tags[keyArr[i]].rateValue} selectOption={this.props.selectOption} rateValue={this.props.tags[keyArr[i]].rateValue}/>
-                )
-            }
+        let keys = Object.keys(this.props.tags);
+        for(let i=0;i<keys.length;i++) {
+            let j = keys[i];
+            this.ratingLines.push(
+                <RatingLine
+                    key={j}
+                    tagKey={this.props.tags[j].id}
+                    tagName={this.props.tags[j].text}
+                    tagSlug={this.props.tags[j].slug}
+                    forEdit={this.props.forEdit}
+                    rateValue={this.props.tags[j].rateValue}
+                    selectOption={this.props.selectOption}
+                    rateValue={this.props.tags[j].rateValue}
+                    rateColor={this.props.tags[j].color}
+                />
+            )
         }
         return(
             <Row size="sixteen">
@@ -749,21 +780,20 @@ class RatingLine extends React.Component {
         super(props);
     }
     render() {
-        this.color = getRatingColor(this.props.rateValue);
         return(
             <Row size="one">
                 <Column>
                     <Row size="two">
                         <Column>
                             <Center>
-                                <Tag key={this.props.tagKey} passive={false} text={this.props.tagName} color={this.color} rateValue={this.props.rateValue}/>
+                                <Tag key={this.props.tagKey} passive={false} text={this.props.tagName} color={this.props.rateColor} rateValue={this.props.rateValue}/>
                             </Center>
                         </Column>
                         <Column>
                             <Center>
                                 <div className="ui form">
                                     <div className="field">
-                                        <select onChange={(e)=>this.props.selectOption(e, this.props.tagSlug)}>
+                                        <select onChange={(e)=>this.props.selectOption(e, this.props.tagSlug)} value={this.props.rateVale}>
                                             <option value="-">Seçilmemiş</option>
                                             <option value="1">1</option>
                                             <option value="2">2</option>
@@ -793,10 +823,11 @@ class EditArea extends React.Component {
         let a = <div> <WriteComment tags={this.props.tags} forEdit={true} commentText={this.props.commentText} handleCancelButton={this.props.handleCancelButton} /> </div>
         this.state = {
             commentText:this.props.commentText,
-            tags:[]
+            tags:this.props.tags
         }
         this.changeComment = this.changeComment.bind(this);
         this.sendComment = this.sendComment.bind(this);
+        this.selectOption = this.selectOption.bind(this);
     }
     changeComment(e) {
         this.setState({
@@ -856,6 +887,12 @@ class EditArea extends React.Component {
                 }
             });
         }
+    }
+    selectOption(e, slug) {
+        console.log("seçme işlemleri burada gerçekleşecek");
+        console.log(slug + " - " +  e.target.value);
+        let oldTags = this.state.tags;
+        //oldTags[]
     }
     render() {
         this.title = (this.props.newComment)?"Yorum Yaz":"Düzenle";
@@ -1023,7 +1060,8 @@ class BottomComment extends React.Component {
                                     date={this.props.ownComment.commentCreateDateTime}
                                     handleOpenReportArea={this.openReportArea}
                                     handleCloseReportArea={this.closeReportArea}
-                                    tags={[]}
+                                    //tags={[]}
+                                    tags={normalizer('comment-rating', this.props.ownComment.rating)}
                                     owner={true}
                                     changeContent={this.props.changeContent}
                                     id={this.props.ownComment.id}
@@ -1036,7 +1074,7 @@ class BottomComment extends React.Component {
         } else if (this.props.form=="edit") {
             return(
                 <EditArea
-                    tags={[]}
+                    tags={normalizer('comment-rating', this.props.ownComment.rating)}
                     handleCancelButton={this.props.openNormal}
                     commentText={this.props.ownComment.commentText}
                     owner={true}
@@ -1047,7 +1085,7 @@ class BottomComment extends React.Component {
         } else if(this.props.form=="newComment") {
             return(
                 <EditArea
-                    tags={[]}
+                    tags={normalizer('comment-rating', this.props.ownComment.rating)}
                     handleCancelButton={this.props.openNormal}
                     commentText=""
                     owner={true}

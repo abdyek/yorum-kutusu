@@ -310,6 +310,7 @@ var Product = function (_React$Component) {
                         form: this.state.bottomCommentForm,
                         reloadFunc: this.reloadAllComment,
                         productID: this.state.productID,
+                        tags: this.state.tagsInfo,
                         ownComment: this.state.ownComment,
                         changeContent: this.props.changeContent,
                         openEdit: this.openEditOfBottomComment,

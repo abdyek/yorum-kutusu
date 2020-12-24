@@ -155,7 +155,7 @@ function normalizer(key, data) {
             tags[keys[i]] = {
                 passive: false,
                 text:data[i].tagName,
-                color:'yellow', // bu kısım düzeltilecek
+                color:getRatingColor(data[i].ratingValue),
                 rateValue: data[i].ratingValue,
                 slug: data[i].slug
             }
