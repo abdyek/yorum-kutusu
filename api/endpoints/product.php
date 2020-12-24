@@ -11,6 +11,7 @@ class Product extends Request {
         if(!$this->data['onlyComment']) {
             $this->getTags();
         }
+        $this->hasComment = null;
         $this->getFollowInfo();
         $this->getPageCount();
         $this->getCommentsWithRating();

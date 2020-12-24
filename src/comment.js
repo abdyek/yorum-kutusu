@@ -18,7 +18,8 @@ class Comment extends React.Component {
         this.closeEditArea = this.closeEditArea.bind(this);
         this.openDeleteArea = this.openDeleteArea.bind(this);
         this.closeDeleteArea = this.closeDeleteArea.bind(this);
-        this.confirmDelete = this.confirmDelete.bind(this);
+        this.openLoadingSpin = this.openLoadingSpin.bind(this);
+        this.hide = this.hide.bind(this);
         this.setForm = this.setForm.bind(this);
     }
     likeToggle() {
@@ -77,17 +78,15 @@ class Comment extends React.Component {
             form:"normal"
         });
     }
-    confirmDelete() {
-        this.setForm("loading");
-        setTimeout(function(){
-            this.setState({
-                form:"message",
-                message: {
-                    messageType: "success",
-                    messageText: "Başarılı bir şekilde yorumunuz kaldırıldı"
-                }
-            })
-        }.bind(this),1000)
+    openLoadingSpin() {
+        this.setState({
+            form:"loading"
+        });
+    }
+    hide() {
+        this.setState({
+            form:"hidden"
+        })
     }
     setForm(formType) {
         this.setState({
@@ -130,7 +129,7 @@ class Comment extends React.Component {
         }
         else if(this.state.form=="delete") {
             return(
-                <DeleteArea handleCancelButton={this.closeDeleteArea} handleConfirmButton={this.confirmDelete}/>
+                <DeleteArea handleCancelButton={this.closeDeleteArea} runBeforeDelete={this.openLoadingSpin} runAfterDelete={this.hide} reloadFunc={this.props.reloadFunc} id={this.props.id}/>
             )
         } else if(this.state.form=="message") {
             return(
@@ -143,6 +142,10 @@ class Comment extends React.Component {
         } else if(this.state.form=="loading") {
             return(
                 <RowLoadingSpin />
+            )
+        } else if(this.state.form=="hidden") {
+            return(
+                ""
             )
         }
     }
@@ -918,14 +921,36 @@ class EditArea extends React.Component {
 class DeleteArea extends React.Component {
     constructor(props) {
         super(props);
-        this.cancelFunc = this.cancelFunc.bind(this);
-        this.confirmFunc = this.confirmFunc.bind(this);
+        this.state = {
+            form:"normal"
+        }
+        this.deleteComment = this.deleteComment.bind(this);
     }
-    confirmFunc() {
-        this.props.handleConfirmButton();
-    }
-    cancelFunc() {
-        this.props.handleCancelButton();
+    deleteComment() {
+        this.props.runBeforeDelete();
+        fetch(SITEURL + 'api/comment', {
+            method: 'DELETE',
+            header: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                commentID: this.props.id
+            })
+        }).then((response)=>{
+            if(!response.ok) throw new Error(response.status);
+            else return response.json();
+        }).then((json)=>{
+            this.props.runAfterDelete();
+            this.props.reloadFunc();
+        }).catch((error)=>{
+            if(error.message==404) {
+                this.props.runAfterDelete();
+                this.props.reloadFunc();
+            } else {
+                this.props.runAfterDelete();
+                this.props.reloadFunc();
+            }
+        });
     }
     render() {
         return(
@@ -940,13 +965,13 @@ class DeleteArea extends React.Component {
                         <Row size="two" nonStackable={true}>
                             <Column>
                                 <FloatRight>
-                                    <button className="ui green button" onClick={this.confirmFunc}>
+                                    <button className="ui green button" onClick={this.deleteComment}>
                                         Evet
                                     </button>
                                 </FloatRight>
                             </Column>
                             <Column>
-                                <button className="ui red button" onClick={this.cancelFunc}>
+                                <button className="ui red button" onClick={this.props.handleCancelButton}>
                                     Hayır
                                 </button>
                             </Column>
@@ -1034,11 +1059,11 @@ class BottomComment extends React.Component {
             )
         } else if(this.props.form=="hidden") {
             return(
-                <div>HIDE</div>
+                ""
             )
         } else if(this.props.form=="delete") {
             return(
-                <div>SILME SORUSU BURAYA GELECEK</div>
+                <DeleteArea handleCancelButton={this.props.openNormal} runBeforeDelete={this.props.openLoadingSpin} runAfterDelete={this.props.hide} reloadFunc={this.props.reloadFunc} id={this.props.ownComment.commentID}/>
             )
         } else if(this.props.form=="loading") {
             return(

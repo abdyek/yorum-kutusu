@@ -25,6 +25,8 @@ class Product extends React.Component {
         this.openEditOfBottomComment = this.openEditOfBottomComment.bind(this);
         this.openDeleteOfBottomComment = this.openDeleteOfBottomComment.bind(this);
         this.openNormalOfBottomComment = this.openNormalOfBottomComment.bind(this);
+        this.hideBottomComment = this.hideBottomComment.bind(this);
+        this.openLoadingSpinOfBottomComment = this.openLoadingSpinOfBottomComment.bind(this);
     }
     componentDidMount() {
         this.manageOtherSlug();
@@ -140,7 +142,7 @@ class Product extends React.Component {
         }).then((json)=> {
             let ownComment = (isMember())?json['other']['ownComment']:null;
             this.setState({
-                commentsForm:"normal",
+                commentsForm: (json['other']['comments'].length)?'normal':'noComment',
                 comments: normalizer('comments', json['other']['comments']),
                 ownComment:ownComment,
                 bottomCommentForm: this.detectBottomCommentForm(json['other']['ownComment'])
@@ -228,6 +230,16 @@ class Product extends React.Component {
             bottomCommentForm:"normal"
         })
     }
+    hideBottomComment() {
+        this.setState({
+            bottomCommentForm:"hidden"
+        });
+    }
+    openLoadingSpinOfBottomComment() {
+        this.setState({
+            bottomCommentForm:"loading"
+        });
+    }
     render() {
         if(this.state.form=="normal") {
 	        document.title = this.state.productName;
@@ -251,6 +263,8 @@ class Product extends React.Component {
                         openEdit={this.openEditOfBottomComment}
                         openDelete={this.openDeleteOfBottomComment}
                         openNormal={this.openNormalOfBottomComment}
+                        hide={this.hideBottomComment}
+                        openLoadingSpin={this.openLoadingSpinOfBottomComment}
                     />
                 </div>
             )

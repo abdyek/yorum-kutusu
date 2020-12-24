@@ -33,7 +33,8 @@ var Comment = function (_React$Component) {
         _this.closeEditArea = _this.closeEditArea.bind(_this);
         _this.openDeleteArea = _this.openDeleteArea.bind(_this);
         _this.closeDeleteArea = _this.closeDeleteArea.bind(_this);
-        _this.confirmDelete = _this.confirmDelete.bind(_this);
+        _this.openLoadingSpin = _this.openLoadingSpin.bind(_this);
+        _this.hide = _this.hide.bind(_this);
         _this.setForm = _this.setForm.bind(_this);
         return _this;
     }
@@ -109,18 +110,18 @@ var Comment = function (_React$Component) {
             });
         }
     }, {
-        key: 'confirmDelete',
-        value: function confirmDelete() {
-            this.setForm("loading");
-            setTimeout(function () {
-                this.setState({
-                    form: "message",
-                    message: {
-                        messageType: "success",
-                        messageText: "Başarılı bir şekilde yorumunuz kaldırıldı"
-                    }
-                });
-            }.bind(this), 1000);
+        key: 'openLoadingSpin',
+        value: function openLoadingSpin() {
+            this.setState({
+                form: "loading"
+            });
+        }
+    }, {
+        key: 'hide',
+        value: function hide() {
+            this.setState({
+                form: "hidden"
+            });
         }
     }, {
         key: 'setForm',
@@ -167,7 +168,7 @@ var Comment = function (_React$Component) {
             } else if (this.state.form == "newComment") {
                 return React.createElement(EditArea, { tags: this.props.tags, handleCancelButton: this.closeEditArea, commentText: '', owner: true, reloadFunc: this.props.reloadFunc, newComment: true, productID: this.props.productID, changeContent: this.props.changeContent });
             } else if (this.state.form == "delete") {
-                return React.createElement(DeleteArea, { handleCancelButton: this.closeDeleteArea, handleConfirmButton: this.confirmDelete });
+                return React.createElement(DeleteArea, { handleCancelButton: this.closeDeleteArea, runBeforeDelete: this.openLoadingSpin, runAfterDelete: this.hide, reloadFunc: this.props.reloadFunc, id: this.props.id });
             } else if (this.state.form == "message") {
                 return React.createElement(
                     Row,
@@ -180,6 +181,8 @@ var Comment = function (_React$Component) {
                 );
             } else if (this.state.form == "loading") {
                 return React.createElement(RowLoadingSpin, null);
+            } else if (this.state.form == "hidden") {
+                return "";
             }
         }
     }]);
@@ -1378,20 +1381,41 @@ var DeleteArea = function (_React$Component13) {
 
         var _this18 = _possibleConstructorReturn(this, (DeleteArea.__proto__ || Object.getPrototypeOf(DeleteArea)).call(this, props));
 
-        _this18.cancelFunc = _this18.cancelFunc.bind(_this18);
-        _this18.confirmFunc = _this18.confirmFunc.bind(_this18);
+        _this18.state = {
+            form: "normal"
+        };
+        _this18.deleteComment = _this18.deleteComment.bind(_this18);
         return _this18;
     }
 
     _createClass(DeleteArea, [{
-        key: 'confirmFunc',
-        value: function confirmFunc() {
-            this.props.handleConfirmButton();
-        }
-    }, {
-        key: 'cancelFunc',
-        value: function cancelFunc() {
-            this.props.handleCancelButton();
+        key: 'deleteComment',
+        value: function deleteComment() {
+            var _this19 = this;
+
+            this.props.runBeforeDelete();
+            fetch(SITEURL + 'api/comment', {
+                method: 'DELETE',
+                header: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    commentID: this.props.id
+                })
+            }).then(function (response) {
+                if (!response.ok) throw new Error(response.status);else return response.json();
+            }).then(function (json) {
+                _this19.props.runAfterDelete();
+                _this19.props.reloadFunc();
+            }).catch(function (error) {
+                if (error.message == 404) {
+                    _this19.props.runAfterDelete();
+                    _this19.props.reloadFunc();
+                } else {
+                    _this19.props.runAfterDelete();
+                    _this19.props.reloadFunc();
+                }
+            });
         }
     }, {
         key: 'render',
@@ -1425,7 +1449,7 @@ var DeleteArea = function (_React$Component13) {
                                     null,
                                     React.createElement(
                                         'button',
-                                        { className: 'ui green button', onClick: this.confirmFunc },
+                                        { className: 'ui green button', onClick: this.deleteComment },
                                         'Evet'
                                     )
                                 )
@@ -1435,7 +1459,7 @@ var DeleteArea = function (_React$Component13) {
                                 null,
                                 React.createElement(
                                     'button',
-                                    { className: 'ui red button', onClick: this.cancelFunc },
+                                    { className: 'ui red button', onClick: this.props.handleCancelButton },
                                     'Hay\u0131r'
                                 )
                             )
@@ -1455,13 +1479,13 @@ var BottomComment = function (_React$Component14) {
     function BottomComment(props) {
         _classCallCheck(this, BottomComment);
 
-        var _this19 = _possibleConstructorReturn(this, (BottomComment.__proto__ || Object.getPrototypeOf(BottomComment)).call(this, props));
+        var _this20 = _possibleConstructorReturn(this, (BottomComment.__proto__ || Object.getPrototypeOf(BottomComment)).call(this, props));
 
-        _this19.state = {
+        _this20.state = {
             topMessage: null,
             likeButtonDisabled: false
         };
-        return _this19;
+        return _this20;
     }
 
     _createClass(BottomComment, [{
@@ -1537,17 +1561,9 @@ var BottomComment = function (_React$Component14) {
                     changeContent: this.props.changeContent
                 });
             } else if (this.props.form == "hidden") {
-                return React.createElement(
-                    'div',
-                    null,
-                    'HIDE'
-                );
+                return "";
             } else if (this.props.form == "delete") {
-                return React.createElement(
-                    'div',
-                    null,
-                    'SILME SORUSU BURAYA GELECEK'
-                );
+                return React.createElement(DeleteArea, { handleCancelButton: this.props.openNormal, runBeforeDelete: this.props.openLoadingSpin, runAfterDelete: this.props.hide, reloadFunc: this.props.reloadFunc, id: this.props.ownComment.commentID });
             } else if (this.props.form == "loading") {
                 return React.createElement(RowLoadingSpin, null);
             }

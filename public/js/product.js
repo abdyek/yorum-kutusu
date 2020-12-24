@@ -38,6 +38,8 @@ var Product = function (_React$Component) {
         _this.openEditOfBottomComment = _this.openEditOfBottomComment.bind(_this);
         _this.openDeleteOfBottomComment = _this.openDeleteOfBottomComment.bind(_this);
         _this.openNormalOfBottomComment = _this.openNormalOfBottomComment.bind(_this);
+        _this.hideBottomComment = _this.hideBottomComment.bind(_this);
+        _this.openLoadingSpinOfBottomComment = _this.openLoadingSpinOfBottomComment.bind(_this);
         return _this;
     }
 
@@ -174,7 +176,7 @@ var Product = function (_React$Component) {
             }).then(function (json) {
                 var ownComment = isMember() ? json['other']['ownComment'] : null;
                 _this4.setState({
-                    commentsForm: "normal",
+                    commentsForm: json['other']['comments'].length ? 'normal' : 'noComment',
                     comments: normalizer('comments', json['other']['comments']),
                     ownComment: ownComment,
                     bottomCommentForm: _this4.detectBottomCommentForm(json['other']['ownComment'])
@@ -279,6 +281,20 @@ var Product = function (_React$Component) {
             });
         }
     }, {
+        key: "hideBottomComment",
+        value: function hideBottomComment() {
+            this.setState({
+                bottomCommentForm: "hidden"
+            });
+        }
+    }, {
+        key: "openLoadingSpinOfBottomComment",
+        value: function openLoadingSpinOfBottomComment() {
+            this.setState({
+                bottomCommentForm: "loading"
+            });
+        }
+    }, {
         key: "render",
         value: function render() {
             if (this.state.form == "normal") {
@@ -298,7 +314,9 @@ var Product = function (_React$Component) {
                         changeContent: this.props.changeContent,
                         openEdit: this.openEditOfBottomComment,
                         openDelete: this.openDeleteOfBottomComment,
-                        openNormal: this.openNormalOfBottomComment
+                        openNormal: this.openNormalOfBottomComment,
+                        hide: this.hideBottomComment,
+                        openLoadingSpin: this.openLoadingSpinOfBottomComment
                     })
                 );
             } else if (this.state.form == "loading") {
