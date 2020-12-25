@@ -3,7 +3,7 @@ class Comment extends React.Component {
         super(props);
         let form = (this.props.form)?this.props.form:"normal";
         this.state = {
-            // normal, report, edit, delete, message, loading, newComment
+            // normal, report, edit, delete, message, loading
             form:form,
             topMessage: this.props.topMessage,
             message: this.props.message,
@@ -108,7 +108,7 @@ class Comment extends React.Component {
                         <Column>
                             <RaisedSegment otherClass="comment">
                                 <TopOfComment text={this.props.text} slug={this.props.slug} title={this.props.title} owner={this.props.owner} handleOpenEditArea={this.openEditArea} handleOpenDeleteArea={this.openDeleteArea} changeContent={this.props.changeContent} type={this.props.type}/>
-                                <BottomOfComment likeCount={this.state.likeCount} liked={this.state.liked} likeButtonDisabled={this.state.likeButtonDisabled} likeToggle={this.likeToggle} date={this.props.date} handleOpenReportArea={this.openReportArea} handleCloseReportArea={this.closeReportArea} tags={this.props.tags} owner={this.props.owner} changeContent={this.props.changeContent} id={this.props.id}/>
+                                <BottomOfComment likeCount={this.state.likeCount} liked={this.state.liked} likeButtonDisabled={this.state.likeButtonDisabled} likeToggle={this.likeToggle} date={this.props.date} handleOpenReportArea={this.openReportArea} handleCloseReportArea={this.closeReportArea} tags={this.props.rating} owner={this.props.owner} changeContent={this.props.changeContent} id={this.props.id}/>
                             </RaisedSegment>
                         </Column>
                     </Row>
@@ -120,14 +120,9 @@ class Comment extends React.Component {
             )
         } else if(this.state.form=="edit") {
             return(
-                <EditArea tags={this.props.tags} handleCancelButton={this.closeEditArea} commentText={this.props.text} owner={this.props.owner} reloadFunc={this.props.reloadFunc} setForm={this.setForm} productID={this.props.productID} setForm={this.setForm}/>
+                <EditArea rating={this.props.rating} tags={this.props.tags} handleCancelButton={this.closeEditArea} commentText={this.props.text} owner={this.props.owner} reloadFunc={this.props.reloadFunc} setForm={this.setForm} productID={this.props.productID} setForm={this.setForm}/>
             )
-        } else if(this.state.form=="newComment") {
-            return(
-                <EditArea tags={this.props.tags} handleCancelButton={this.closeEditArea} commentText="" owner={true} reloadFunc={this.props.reloadFunc} newComment={true} productID={this.props.productID} changeContent={this.props.changeContent}/>
-            )
-        }
-        else if(this.state.form=="delete") {
+        } else if(this.state.form=="delete") {
             return(
                 <DeleteArea handleCancelButton={this.closeDeleteArea} runBeforeDelete={this.openLoadingSpin} runAfterDelete={this.hide} reloadFunc={this.props.reloadFunc} id={this.props.id}/>
             )
@@ -513,237 +508,10 @@ class Reported extends React.Component {
     }
 }
 
-class WriteComment extends React.Component {
-    constructor(props) {
-        super(props);
-        if(this.props.forEdit) {
-            this.var = {
-                title: "Yorum Düzenle",
-                buttonName: "Düzenle",
-                buttonClassName: "ui green button"
-            };
-        } else {
-            this.var = {
-                title: "Yorum Yaz",
-                buttonName: "Gönder",
-                buttonClassName: "ui green disabled button"
-            };
-        }
-        let propsTags = this.props.tags;
-        let stateTags = [];
-        for(let i=0;i<propsTags.length; i++) {
-            stateTags[propsTags[i].slug] = propsTags[i];
-            stateTags[propsTags[i].slug]['rateValue']='-';
-        }
-        if(this.props.ownComment!=null) {
-            let oC = this.props.ownComment;
-            let username = getUserInfo()['username'];
-            this.state = {
-                form:"sent",
-                tags:normalizer('comment-rating', oC.rating),
-                commentText:oC.commentText,
-                date:oC.commentCreateDateTime,
-                liked:oC.liked,
-                likeCount: oC.commentLikeCount,
-                sendButtonClassName: this.var.buttonClassName,
-                username: username,
-                topMessage: {
-                    type:null,
-                    text:null
-                }
-            }
-        } else {
-            let form = (isMember())?"normal":"hidden";
-            this.state = {
-                // normal, loading, sent, hidden
-                form:form,
-                tags: stateTags,
-                commentText:this.props.commentText,
-                sendButtonClassName: this.var.buttonClassName,
-                date: "Şimdi",
-                liked:false,
-                likeCount: 0,
-                username: "Yorum Yaz",
-                topMessage: {
-                    type:null,
-                    text:null
-                }
-            };
-        }
-        this.selectOption = this.selectOption.bind(this);
-        this.sendComment = this.sendComment.bind(this);
-        this.changeComment = this.changeComment.bind(this);
-        this.showTopMessage = this.showTopMessage.bind(this);
-    }
-    selectOption(e,slug) {
-        console.log("slug" + slug, " değer ", e.target.value);
-        let tags = this.state.tags;
-        tags[slug]['rateValue'] = e.target.value;
-        this.setState({
-            tags:tags
-        });
-    }
-    sendComment() {
-        this.setState({
-            form:"loading"
-        });
-        let values = Object.values(this.state.tags);
-        let rating = {};
-        for(let i=0;i<values.length;i++) {
-            rating[values['slug']]=values['rateValue'];
-        }
-        fetch(SITEURL + 'api/comment', {
-            method: 'POST',
-            header: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                productID:this.props.productID,
-                commentText: this.state.commentText,
-                rating: rating
-            })
-        }).then((response)=>{
-            if(!response.ok) throw new Error(response.status);
-            else return response.json();
-        }).then((json)=>{
-            this.setState({
-                form:"sent"
-            });
-        }).catch((error)=>{
-            if(error.message==422) {
-                this.showTopMessage("warning", "Her ürüne sadece bir kere yorum yapabilirsiniz");
-            }
-        });
-    }
-    changeComment(e) {
-        if(!e.target.value.length) {
-            this.setState({
-                sendButtonClassName:"ui green disabled button",
-            })
-        } else {
-            this.setState({
-                sendButtonClassName:"ui green button",
-            })
-        }
-        this.setState({
-            commentText: e.target.value
-        });
-    }
-    showTopMessage(type, text) {
-        let topMessage = {
-            type:type,
-            text:text
-        };
-        this.setState({
-            form:"normal",
-            topMessage:topMessage
-        })
-    }
-    render() {
-        if(this.state.form=="normal") {
-            return(
-                <Row size="one">
-                    <Column>
-                        {(this.state.topMessage)?
-                            <Row size="one">
-                                <Column>
-                                    <BasicMessage type={this.state.topMessage.type} text={this.state.topMessage.text} />
-                                </Column>
-                            </Row>
-                        :""}
-                        <RaisedSegment>
-                            <Row size="two" nonStackable={true}>
-                                <Column>
-                                    <H type="4" text={this.var.title} />
-                                </Column>
-                                <Column>
-                                    {
-                                        (this.props.forEdit)?
-                                            <FloatRight>
-                                                <CancelButton handleCancelButton={this.props.handleCancelButton}/>
-                                            </FloatRight>
-                                        :""
-                                    }
-                                </Column>
-                            </Row>
-                            <Row size="one">
-                                <Column>
-                                <div className="ui form">
-                                    <div className="field">
-                                        <label>Yorumunuz</label>
-                                        <textarea value={this.state.commentText} onChange={this.changeComment}></textarea>
-                                    </div>
-                                </div>
-                                </Column>
-                            </Row>
-                            <Row size="one">
-                                <Column>
-                                    <Rating tags={this.state.tags} forEdit={this.props.forEdit} selectOption={this.selectOption}/>
-                                </Column>
-                            </Row>
-                            <Row size="one">
-                                <Column>
-                                    <FloatRight>
-                                        <button className={this.state.sendButtonClassName} onClick={this.sendComment}>
-                                            {this.var.buttonName}
-                                        </button>
-                                    </FloatRight>
-                                </Column>
-                            </Row>
-                        </RaisedSegment>
-                    </Column>
-                </Row>
-            )
-        } else if(this.state.form=="loading") {
-            return(
-                <RowLoadingSpin />
-            )
-        } else if(this.state.form=="sent") {
-            return(
-                <Comment text={this.state.commentText}
-                    likeCount={this.state.likeCount}
-                    liked={this.state.liked}
-                    title={this.state.username}
-                    date={this.state.date} tags={this.state.tags} owner={true} topMessage={{
-                        type: this.state.topMessage.type,
-                        text: this.state.topMessage.text
-                    }}
-                />
-            )
-        } else if(this.state.form=="hidden") {
-            return(
-                <div></div>
-            )
-        }
-    }
-}
-
 class Rating extends React.Component {
     constructor(props){
         super(props);
-        //this.cikti = [];
     }
-    /*
-    render() {
-        for(let i=0;i<Object.keys(this.props.tags).length;i++) {
-            this.cikti.push(
-                <ol> aktif/basif - {this.props.tags[i].passive},
-                    text - {this.props.tags[i].text},
-                    color - {this.props.tags[i].color},
-                    rateValue - {this.props.tags[i].rateValue},
-                    slug - {this.props.tags[i].slug}
-                </ol>
-            )
-        }
-        return(
-            <div>
-                <li>
-                    {this.cikti}
-                </li>
-            </div>
-        )
-    }
-    */
     render() {
         this.ratingLines = [];
         let keys = Object.keys(this.props.tags);
@@ -755,11 +523,9 @@ class Rating extends React.Component {
                     tagKey={this.props.tags[j].id}
                     tagName={this.props.tags[j].text}
                     tagSlug={this.props.tags[j].slug}
-                    forEdit={this.props.forEdit}
-                    rateValue={this.props.tags[j].rateValue}
+                    value={this.props.tags[j].value}
+                    color={this.props.tags[j].color}
                     selectOption={this.props.selectOption}
-                    rateValue={this.props.tags[j].rateValue}
-                    rateColor={this.props.tags[j].color}
                 />
             )
         }
@@ -786,14 +552,14 @@ class RatingLine extends React.Component {
                     <Row size="two">
                         <Column>
                             <Center>
-                                <Tag key={this.props.tagKey} passive={false} text={this.props.tagName} color={this.props.rateColor} rateValue={this.props.rateValue}/>
+                                <Tag key={this.props.tagKey} passive={false} text={this.props.tagName} color={this.props.color} rateValue={this.props.value}/>
                             </Center>
                         </Column>
                         <Column>
                             <Center>
                                 <div className="ui form">
                                     <div className="field">
-                                        <select onChange={(e)=>this.props.selectOption(e, this.props.tagSlug)} value={this.props.rateVale}>
+                                        <select onChange={(e)=>this.props.selectOption(e, this.props.tagSlug)} value={this.props.value}>
                                             <option value="-">Seçilmemiş</option>
                                             <option value="1">1</option>
                                             <option value="2">2</option>
@@ -820,14 +586,34 @@ class RatingLine extends React.Component {
 class EditArea extends React.Component {
     constructor(props) {
         super(props);
-        let a = <div> <WriteComment tags={this.props.tags} forEdit={true} commentText={this.props.commentText} handleCancelButton={this.props.handleCancelButton} /> </div>
         this.state = {
             commentText:this.props.commentText,
-            tags:this.props.tags
+            rating:this.props.rating,
+            tags:this.mergeTagAndRating()
         }
+        this.mergeTagAndRating = this.mergeTagAndRating.bind(this);
         this.changeComment = this.changeComment.bind(this);
         this.sendComment = this.sendComment.bind(this);
         this.selectOption = this.selectOption.bind(this);
+    }
+    mergeTagAndRating() {
+        let tags = {};
+        for(let i=0;i<this.props.tags.length;i++) {
+            if(!this.props.tags[i].passive) {
+                tags[this.props.tags[i].slug] = {
+                    slug:this.props.tags[i].slug,
+                    text:this.props.tags[i].text,
+                    color:getRatingColor('-'),
+                    value:'-'
+                }
+            }
+        }
+        // overwriting
+        for(let i=0;i<this.props.rating.length;i++) {
+            tags[this.props.rating[i].slug].value = this.props.rating[i].rateValue;
+            tags[this.props.rating[i].slug].color = getRatingColor(this.props.rating[i].rateValue);
+        }
+        return tags;
     }
     changeComment(e) {
         this.setState({
@@ -846,7 +632,7 @@ class EditArea extends React.Component {
                 body: JSON.stringify({
                     productID:this.props.productID,
                     commentText: this.state.commentText,
-                    rating: {}
+                    rating: normalizer("rating", this.state.tags)
                 })
             }).then((response)=>{
                 if(!response.ok) throw new Error(response.status);
@@ -871,7 +657,7 @@ class EditArea extends React.Component {
                 body: JSON.stringify({
                     productID:this.props.productID,
                     commentText: this.state.commentText,
-                    rating: {}
+                    rating: normalizer("rating", this.state.tags)
                 })
             }).then((response)=>{
                 if(!response.ok) throw new Error(response.status);
@@ -889,16 +675,17 @@ class EditArea extends React.Component {
         }
     }
     selectOption(e, slug) {
-        console.log("seçme işlemleri burada gerçekleşecek");
         console.log(slug + " - " +  e.target.value);
-        let oldTags = this.state.tags;
-        //oldTags[]
+        let temp = this.state.tags;
+        temp[slug].value = e.target.value;
+        temp[slug].color = getRatingColor(e.target.value);
+        this.setState({
+            tags:temp
+        });
     }
     render() {
         this.title = (this.props.newComment)?"Yorum Yaz":"Düzenle";
         this.buttonName = (this.props.newComment)?"Gönder":"Düzenle";
-        if(!this.state.sent){
-
         return(
             <Row size="one">
                 <Column>
@@ -936,7 +723,7 @@ class EditArea extends React.Component {
                         </Row>
                         <Row size="one">
                             <Column>
-                                <Rating tags={this.state.tags} forEdit={this.props.forEdit} selectOption={this.selectOption}/>
+                                <Rating tags={this.state.tags} selectOption={this.selectOption}/>
                             </Column>
                         </Row>
                         <Row size="one">
@@ -951,7 +738,6 @@ class EditArea extends React.Component {
                     </RaisedSegment>
                 </Column>
             </Row>)
-        }
     }
 }
 
@@ -1074,7 +860,8 @@ class BottomComment extends React.Component {
         } else if (this.props.form=="edit") {
             return(
                 <EditArea
-                    tags={normalizer('comment-rating', this.props.ownComment.rating)}
+                    rating={normalizer('comment-rating', this.props.ownComment.rating)}
+                    tags={this.props.tags}
                     handleCancelButton={this.props.openNormal}
                     commentText={this.props.ownComment.commentText}
                     owner={true}
@@ -1085,7 +872,8 @@ class BottomComment extends React.Component {
         } else if(this.props.form=="newComment") {
             return(
                 <EditArea
-                    tags={normalizer('comment-rating', this.props.ownComment.rating)}
+                    tags={this.props.tags}
+                    rating={[]}
                     handleCancelButton={this.props.openNormal}
                     commentText=""
                     owner={true}
@@ -1125,6 +913,7 @@ class Comments extends React.Component {
                                         productID={this.props.productID}
                                         changeContent={this.props.changeContent}
                                         reloadFunc={this.props.reloadFunc}
+                                        tags={this.props.tags}
                                         key={com.id}
                                         id={com.id}
                                         text={com.text}
@@ -1134,7 +923,7 @@ class Comments extends React.Component {
                                         liked={com.liked}
                                         title={com.title}
                                         date={com.date}
-                                        tags={com.tags}
+                                        rating={com.rating}
                                         owner={com.owner}
                                     />
 				)

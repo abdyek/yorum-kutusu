@@ -18,7 +18,7 @@ var Comment = function (_React$Component) {
 
         var form = _this.props.form ? _this.props.form : "normal";
         _this.state = {
-            // normal, report, edit, delete, message, loading, newComment
+            // normal, report, edit, delete, message, loading
             form: form,
             topMessage: _this.props.topMessage,
             message: _this.props.message,
@@ -156,7 +156,7 @@ var Comment = function (_React$Component) {
                                 RaisedSegment,
                                 { otherClass: 'comment' },
                                 React.createElement(TopOfComment, { text: this.props.text, slug: this.props.slug, title: this.props.title, owner: this.props.owner, handleOpenEditArea: this.openEditArea, handleOpenDeleteArea: this.openDeleteArea, changeContent: this.props.changeContent, type: this.props.type }),
-                                React.createElement(BottomOfComment, { likeCount: this.state.likeCount, liked: this.state.liked, likeButtonDisabled: this.state.likeButtonDisabled, likeToggle: this.likeToggle, date: this.props.date, handleOpenReportArea: this.openReportArea, handleCloseReportArea: this.closeReportArea, tags: this.props.tags, owner: this.props.owner, changeContent: this.props.changeContent, id: this.props.id })
+                                React.createElement(BottomOfComment, { likeCount: this.state.likeCount, liked: this.state.liked, likeButtonDisabled: this.state.likeButtonDisabled, likeToggle: this.likeToggle, date: this.props.date, handleOpenReportArea: this.openReportArea, handleCloseReportArea: this.closeReportArea, tags: this.props.rating, owner: this.props.owner, changeContent: this.props.changeContent, id: this.props.id })
                             )
                         )
                     )
@@ -164,9 +164,7 @@ var Comment = function (_React$Component) {
             } else if (this.state.form == "report") {
                 return React.createElement(ReportArea, { handleCloseReportArea: this.closeReportArea });
             } else if (this.state.form == "edit") {
-                return React.createElement(EditArea, _defineProperty({ tags: this.props.tags, handleCancelButton: this.closeEditArea, commentText: this.props.text, owner: this.props.owner, reloadFunc: this.props.reloadFunc, setForm: this.setForm, productID: this.props.productID }, 'setForm', this.setForm));
-            } else if (this.state.form == "newComment") {
-                return React.createElement(EditArea, { tags: this.props.tags, handleCancelButton: this.closeEditArea, commentText: '', owner: true, reloadFunc: this.props.reloadFunc, newComment: true, productID: this.props.productID, changeContent: this.props.changeContent });
+                return React.createElement(EditArea, _defineProperty({ rating: this.props.rating, tags: this.props.tags, handleCancelButton: this.closeEditArea, commentText: this.props.text, owner: this.props.owner, reloadFunc: this.props.reloadFunc, setForm: this.setForm, productID: this.props.productID }, 'setForm', this.setForm));
             } else if (this.state.form == "delete") {
                 return React.createElement(DeleteArea, { handleCancelButton: this.closeDeleteArea, runBeforeDelete: this.openLoadingSpin, runAfterDelete: this.hide, reloadFunc: this.props.reloadFunc, id: this.props.id });
             } else if (this.state.form == "message") {
@@ -777,291 +775,14 @@ var Reported = function (_React$Component8) {
     return Reported;
 }(React.Component);
 
-var WriteComment = function (_React$Component9) {
-    _inherits(WriteComment, _React$Component9);
-
-    function WriteComment(props) {
-        _classCallCheck(this, WriteComment);
-
-        var _this11 = _possibleConstructorReturn(this, (WriteComment.__proto__ || Object.getPrototypeOf(WriteComment)).call(this, props));
-
-        if (_this11.props.forEdit) {
-            _this11.var = {
-                title: "Yorum Düzenle",
-                buttonName: "Düzenle",
-                buttonClassName: "ui green button"
-            };
-        } else {
-            _this11.var = {
-                title: "Yorum Yaz",
-                buttonName: "Gönder",
-                buttonClassName: "ui green disabled button"
-            };
-        }
-        var propsTags = _this11.props.tags;
-        var stateTags = [];
-        for (var i = 0; i < propsTags.length; i++) {
-            stateTags[propsTags[i].slug] = propsTags[i];
-            stateTags[propsTags[i].slug]['rateValue'] = '-';
-        }
-        if (_this11.props.ownComment != null) {
-            var oC = _this11.props.ownComment;
-            var username = getUserInfo()['username'];
-            _this11.state = {
-                form: "sent",
-                tags: normalizer('comment-rating', oC.rating),
-                commentText: oC.commentText,
-                date: oC.commentCreateDateTime,
-                liked: oC.liked,
-                likeCount: oC.commentLikeCount,
-                sendButtonClassName: _this11.var.buttonClassName,
-                username: username,
-                topMessage: {
-                    type: null,
-                    text: null
-                }
-            };
-        } else {
-            var form = isMember() ? "normal" : "hidden";
-            _this11.state = {
-                // normal, loading, sent, hidden
-                form: form,
-                tags: stateTags,
-                commentText: _this11.props.commentText,
-                sendButtonClassName: _this11.var.buttonClassName,
-                date: "Şimdi",
-                liked: false,
-                likeCount: 0,
-                username: "Yorum Yaz",
-                topMessage: {
-                    type: null,
-                    text: null
-                }
-            };
-        }
-        _this11.selectOption = _this11.selectOption.bind(_this11);
-        _this11.sendComment = _this11.sendComment.bind(_this11);
-        _this11.changeComment = _this11.changeComment.bind(_this11);
-        _this11.showTopMessage = _this11.showTopMessage.bind(_this11);
-        return _this11;
-    }
-
-    _createClass(WriteComment, [{
-        key: 'selectOption',
-        value: function selectOption(e, slug) {
-            console.log("slug" + slug, " değer ", e.target.value);
-            var tags = this.state.tags;
-            tags[slug]['rateValue'] = e.target.value;
-            this.setState({
-                tags: tags
-            });
-        }
-    }, {
-        key: 'sendComment',
-        value: function sendComment() {
-            var _this12 = this;
-
-            this.setState({
-                form: "loading"
-            });
-            var values = Object.values(this.state.tags);
-            var rating = {};
-            for (var i = 0; i < values.length; i++) {
-                rating[values['slug']] = values['rateValue'];
-            }
-            fetch(SITEURL + 'api/comment', {
-                method: 'POST',
-                header: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    productID: this.props.productID,
-                    commentText: this.state.commentText,
-                    rating: rating
-                })
-            }).then(function (response) {
-                if (!response.ok) throw new Error(response.status);else return response.json();
-            }).then(function (json) {
-                _this12.setState({
-                    form: "sent"
-                });
-            }).catch(function (error) {
-                if (error.message == 422) {
-                    _this12.showTopMessage("warning", "Her ürüne sadece bir kere yorum yapabilirsiniz");
-                }
-            });
-        }
-    }, {
-        key: 'changeComment',
-        value: function changeComment(e) {
-            if (!e.target.value.length) {
-                this.setState({
-                    sendButtonClassName: "ui green disabled button"
-                });
-            } else {
-                this.setState({
-                    sendButtonClassName: "ui green button"
-                });
-            }
-            this.setState({
-                commentText: e.target.value
-            });
-        }
-    }, {
-        key: 'showTopMessage',
-        value: function showTopMessage(type, text) {
-            var topMessage = {
-                type: type,
-                text: text
-            };
-            this.setState({
-                form: "normal",
-                topMessage: topMessage
-            });
-        }
-    }, {
-        key: 'render',
-        value: function render() {
-            if (this.state.form == "normal") {
-                return React.createElement(
-                    Row,
-                    { size: 'one' },
-                    React.createElement(
-                        Column,
-                        null,
-                        this.state.topMessage ? React.createElement(
-                            Row,
-                            { size: 'one' },
-                            React.createElement(
-                                Column,
-                                null,
-                                React.createElement(BasicMessage, { type: this.state.topMessage.type, text: this.state.topMessage.text })
-                            )
-                        ) : "",
-                        React.createElement(
-                            RaisedSegment,
-                            null,
-                            React.createElement(
-                                Row,
-                                { size: 'two', nonStackable: true },
-                                React.createElement(
-                                    Column,
-                                    null,
-                                    React.createElement(H, { type: '4', text: this.var.title })
-                                ),
-                                React.createElement(
-                                    Column,
-                                    null,
-                                    this.props.forEdit ? React.createElement(
-                                        FloatRight,
-                                        null,
-                                        React.createElement(CancelButton, { handleCancelButton: this.props.handleCancelButton })
-                                    ) : ""
-                                )
-                            ),
-                            React.createElement(
-                                Row,
-                                { size: 'one' },
-                                React.createElement(
-                                    Column,
-                                    null,
-                                    React.createElement(
-                                        'div',
-                                        { className: 'ui form' },
-                                        React.createElement(
-                                            'div',
-                                            { className: 'field' },
-                                            React.createElement(
-                                                'label',
-                                                null,
-                                                'Yorumunuz'
-                                            ),
-                                            React.createElement('textarea', { value: this.state.commentText, onChange: this.changeComment })
-                                        )
-                                    )
-                                )
-                            ),
-                            React.createElement(
-                                Row,
-                                { size: 'one' },
-                                React.createElement(
-                                    Column,
-                                    null,
-                                    React.createElement(Rating, { tags: this.state.tags, forEdit: this.props.forEdit, selectOption: this.selectOption })
-                                )
-                            ),
-                            React.createElement(
-                                Row,
-                                { size: 'one' },
-                                React.createElement(
-                                    Column,
-                                    null,
-                                    React.createElement(
-                                        FloatRight,
-                                        null,
-                                        React.createElement(
-                                            'button',
-                                            { className: this.state.sendButtonClassName, onClick: this.sendComment },
-                                            this.var.buttonName
-                                        )
-                                    )
-                                )
-                            )
-                        )
-                    )
-                );
-            } else if (this.state.form == "loading") {
-                return React.createElement(RowLoadingSpin, null);
-            } else if (this.state.form == "sent") {
-                return React.createElement(Comment, { text: this.state.commentText,
-                    likeCount: this.state.likeCount,
-                    liked: this.state.liked,
-                    title: this.state.username,
-                    date: this.state.date, tags: this.state.tags, owner: true, topMessage: {
-                        type: this.state.topMessage.type,
-                        text: this.state.topMessage.text
-                    }
-                });
-            } else if (this.state.form == "hidden") {
-                return React.createElement('div', null);
-            }
-        }
-    }]);
-
-    return WriteComment;
-}(React.Component);
-
-var Rating = function (_React$Component10) {
-    _inherits(Rating, _React$Component10);
+var Rating = function (_React$Component9) {
+    _inherits(Rating, _React$Component9);
 
     function Rating(props) {
         _classCallCheck(this, Rating);
 
         return _possibleConstructorReturn(this, (Rating.__proto__ || Object.getPrototypeOf(Rating)).call(this, props));
-        //this.cikti = [];
     }
-    /*
-    render() {
-        for(let i=0;i<Object.keys(this.props.tags).length;i++) {
-            this.cikti.push(
-                <ol> aktif/basif - {this.props.tags[i].passive},
-                    text - {this.props.tags[i].text},
-                    color - {this.props.tags[i].color},
-                    rateValue - {this.props.tags[i].rateValue},
-                    slug - {this.props.tags[i].slug}
-                </ol>
-            )
-        }
-        return(
-            <div>
-                <li>
-                    {this.cikti}
-                </li>
-            </div>
-        )
-    }
-    */
-
 
     _createClass(Rating, [{
         key: 'render',
@@ -1069,18 +790,16 @@ var Rating = function (_React$Component10) {
             this.ratingLines = [];
             var keys = Object.keys(this.props.tags);
             for (var i = 0; i < keys.length; i++) {
-                var _React$createElement2;
-
                 var j = keys[i];
-                this.ratingLines.push(React.createElement(RatingLine, (_React$createElement2 = {
+                this.ratingLines.push(React.createElement(RatingLine, {
                     key: j,
                     tagKey: this.props.tags[j].id,
                     tagName: this.props.tags[j].text,
                     tagSlug: this.props.tags[j].slug,
-                    forEdit: this.props.forEdit,
-                    rateValue: this.props.tags[j].rateValue,
+                    value: this.props.tags[j].value,
+                    color: this.props.tags[j].color,
                     selectOption: this.props.selectOption
-                }, _defineProperty(_React$createElement2, 'rateValue', this.props.tags[j].rateValue), _defineProperty(_React$createElement2, 'rateColor', this.props.tags[j].color), _React$createElement2)));
+                }));
             }
             return React.createElement(
                 Row,
@@ -1098,8 +817,8 @@ var Rating = function (_React$Component10) {
     return Rating;
 }(React.Component);
 
-var RatingLine = function (_React$Component11) {
-    _inherits(RatingLine, _React$Component11);
+var RatingLine = function (_React$Component10) {
+    _inherits(RatingLine, _React$Component10);
 
     function RatingLine(props) {
         _classCallCheck(this, RatingLine);
@@ -1110,7 +829,7 @@ var RatingLine = function (_React$Component11) {
     _createClass(RatingLine, [{
         key: 'render',
         value: function render() {
-            var _this15 = this;
+            var _this13 = this;
 
             return React.createElement(
                 Row,
@@ -1127,7 +846,7 @@ var RatingLine = function (_React$Component11) {
                             React.createElement(
                                 Center,
                                 null,
-                                React.createElement(Tag, { key: this.props.tagKey, passive: false, text: this.props.tagName, color: this.props.rateColor, rateValue: this.props.rateValue })
+                                React.createElement(Tag, { key: this.props.tagKey, passive: false, text: this.props.tagName, color: this.props.color, rateValue: this.props.value })
                             )
                         ),
                         React.createElement(
@@ -1145,8 +864,8 @@ var RatingLine = function (_React$Component11) {
                                         React.createElement(
                                             'select',
                                             { onChange: function onChange(e) {
-                                                    return _this15.props.selectOption(e, _this15.props.tagSlug);
-                                                }, value: this.props.rateVale },
+                                                    return _this13.props.selectOption(e, _this13.props.tagSlug);
+                                                }, value: this.props.value },
                                             React.createElement(
                                                 'option',
                                                 { value: '-' },
@@ -1216,32 +935,48 @@ var RatingLine = function (_React$Component11) {
     return RatingLine;
 }(React.Component);
 
-var EditArea = function (_React$Component12) {
-    _inherits(EditArea, _React$Component12);
+var EditArea = function (_React$Component11) {
+    _inherits(EditArea, _React$Component11);
 
     function EditArea(props) {
         _classCallCheck(this, EditArea);
 
-        var _this16 = _possibleConstructorReturn(this, (EditArea.__proto__ || Object.getPrototypeOf(EditArea)).call(this, props));
+        var _this14 = _possibleConstructorReturn(this, (EditArea.__proto__ || Object.getPrototypeOf(EditArea)).call(this, props));
 
-        var a = React.createElement(
-            'div',
-            null,
-            ' ',
-            React.createElement(WriteComment, { tags: _this16.props.tags, forEdit: true, commentText: _this16.props.commentText, handleCancelButton: _this16.props.handleCancelButton }),
-            ' '
-        );
-        _this16.state = {
-            commentText: _this16.props.commentText,
-            tags: _this16.props.tags
+        _this14.state = {
+            commentText: _this14.props.commentText,
+            rating: _this14.props.rating,
+            tags: _this14.mergeTagAndRating()
         };
-        _this16.changeComment = _this16.changeComment.bind(_this16);
-        _this16.sendComment = _this16.sendComment.bind(_this16);
-        _this16.selectOption = _this16.selectOption.bind(_this16);
-        return _this16;
+        _this14.mergeTagAndRating = _this14.mergeTagAndRating.bind(_this14);
+        _this14.changeComment = _this14.changeComment.bind(_this14);
+        _this14.sendComment = _this14.sendComment.bind(_this14);
+        _this14.selectOption = _this14.selectOption.bind(_this14);
+        return _this14;
     }
 
     _createClass(EditArea, [{
+        key: 'mergeTagAndRating',
+        value: function mergeTagAndRating() {
+            var tags = {};
+            for (var i = 0; i < this.props.tags.length; i++) {
+                if (!this.props.tags[i].passive) {
+                    tags[this.props.tags[i].slug] = {
+                        slug: this.props.tags[i].slug,
+                        text: this.props.tags[i].text,
+                        color: getRatingColor('-'),
+                        value: '-'
+                    };
+                }
+            }
+            // overwriting
+            for (var _i = 0; _i < this.props.rating.length; _i++) {
+                tags[this.props.rating[_i].slug].value = this.props.rating[_i].rateValue;
+                tags[this.props.rating[_i].slug].color = getRatingColor(this.props.rating[_i].rateValue);
+            }
+            return tags;
+        }
+    }, {
         key: 'changeComment',
         value: function changeComment(e) {
             this.setState({
@@ -1251,7 +986,7 @@ var EditArea = function (_React$Component12) {
     }, {
         key: 'sendComment',
         value: function sendComment() {
-            var _this17 = this;
+            var _this15 = this;
 
             console.log(this.props.productID);
             if (this.props.newComment) {
@@ -1264,15 +999,15 @@ var EditArea = function (_React$Component12) {
                     body: JSON.stringify({
                         productID: this.props.productID,
                         commentText: this.state.commentText,
-                        rating: {}
+                        rating: normalizer("rating", this.state.tags)
                     })
                 }).then(function (response) {
                     if (!response.ok) throw new Error(response.status);else return response.json();
                 }).then(function (json) {
-                    _this17.props.reloadFunc();
+                    _this15.props.reloadFunc();
                 }).catch(function (error) {
                     if (error.message == 422) {
-                        _this17.showTopMessage("warning", "Her ürüne sadece bir kere yorum yapabilirsiniz");
+                        _this15.showTopMessage("warning", "Her ürüne sadece bir kere yorum yapabilirsiniz");
                     }
                 });
             } else {
@@ -1288,18 +1023,18 @@ var EditArea = function (_React$Component12) {
                     body: JSON.stringify({
                         productID: this.props.productID,
                         commentText: this.state.commentText,
-                        rating: {}
+                        rating: normalizer("rating", this.state.tags)
                     })
                 }).then(function (response) {
                     if (!response.ok) throw new Error(response.status);else return response.json();
                 }).then(function (json) {
-                    if (_this17.props.setForm) {
-                        _this17.props.setForm('normal');
+                    if (_this15.props.setForm) {
+                        _this15.props.setForm('normal');
                     }
-                    _this17.props.reloadFunc();
+                    _this15.props.reloadFunc();
                 }).catch(function (error) {
                     if (error.message == 422) {
-                        _this17.showTopMessage("warning", "Her ürüne sadece bir kere yorum yapabilirsiniz");
+                        _this15.showTopMessage("warning", "Her ürüne sadece bir kere yorum yapabilirsiniz");
                     }
                 });
             }
@@ -1307,131 +1042,131 @@ var EditArea = function (_React$Component12) {
     }, {
         key: 'selectOption',
         value: function selectOption(e, slug) {
-            console.log("seçme işlemleri burada gerçekleşecek");
             console.log(slug + " - " + e.target.value);
-            var oldTags = this.state.tags;
-            //oldTags[]
+            var temp = this.state.tags;
+            temp[slug].value = e.target.value;
+            temp[slug].color = getRatingColor(e.target.value);
+            this.setState({
+                tags: temp
+            });
         }
     }, {
         key: 'render',
         value: function render() {
             this.title = this.props.newComment ? "Yorum Yaz" : "Düzenle";
             this.buttonName = this.props.newComment ? "Gönder" : "Düzenle";
-            if (!this.state.sent) {
-
-                return React.createElement(
-                    Row,
-                    { size: 'one' },
+            return React.createElement(
+                Row,
+                { size: 'one' },
+                React.createElement(
+                    Column,
+                    null,
+                    null ? React.createElement(
+                        Row,
+                        { size: 'one' },
+                        React.createElement(
+                            Column,
+                            null,
+                            React.createElement(BasicMessage, { type: this.state.topMessage.type, text: this.state.topMessage.text })
+                        )
+                    ) : "",
                     React.createElement(
-                        Column,
+                        RaisedSegment,
                         null,
-                        null ? React.createElement(
+                        React.createElement(
+                            Row,
+                            { size: 'two', nonStackable: true },
+                            React.createElement(
+                                Column,
+                                null,
+                                React.createElement(H, { type: '4', text: this.title })
+                            ),
+                            React.createElement(
+                                Column,
+                                null,
+                                !this.props.newComment ? React.createElement(
+                                    FloatRight,
+                                    null,
+                                    React.createElement(CancelButton, { handleCancelButton: this.props.handleCancelButton })
+                                ) : ""
+                            )
+                        ),
+                        React.createElement(
                             Row,
                             { size: 'one' },
                             React.createElement(
                                 Column,
                                 null,
-                                React.createElement(BasicMessage, { type: this.state.topMessage.type, text: this.state.topMessage.text })
-                            )
-                        ) : "",
-                        React.createElement(
-                            RaisedSegment,
-                            null,
-                            React.createElement(
-                                Row,
-                                { size: 'two', nonStackable: true },
                                 React.createElement(
-                                    Column,
-                                    null,
-                                    React.createElement(H, { type: '4', text: this.title })
-                                ),
-                                React.createElement(
-                                    Column,
-                                    null,
-                                    !this.props.newComment ? React.createElement(
-                                        FloatRight,
-                                        null,
-                                        React.createElement(CancelButton, { handleCancelButton: this.props.handleCancelButton })
-                                    ) : ""
-                                )
-                            ),
-                            React.createElement(
-                                Row,
-                                { size: 'one' },
-                                React.createElement(
-                                    Column,
-                                    null,
+                                    'div',
+                                    { className: 'ui form' },
                                     React.createElement(
                                         'div',
-                                        { className: 'ui form' },
+                                        { className: 'field' },
                                         React.createElement(
-                                            'div',
-                                            { className: 'field' },
-                                            React.createElement(
-                                                'label',
-                                                null,
-                                                'Yorumunuz'
-                                            ),
-                                            React.createElement('textarea', { value: this.state.commentText, onChange: this.changeComment })
-                                        )
+                                            'label',
+                                            null,
+                                            'Yorumunuz'
+                                        ),
+                                        React.createElement('textarea', { value: this.state.commentText, onChange: this.changeComment })
                                     )
                                 )
-                            ),
+                            )
+                        ),
+                        React.createElement(
+                            Row,
+                            { size: 'one' },
                             React.createElement(
-                                Row,
-                                { size: 'one' },
-                                React.createElement(
-                                    Column,
-                                    null,
-                                    React.createElement(Rating, { tags: this.state.tags, forEdit: this.props.forEdit, selectOption: this.selectOption })
-                                )
-                            ),
+                                Column,
+                                null,
+                                React.createElement(Rating, { tags: this.state.tags, selectOption: this.selectOption })
+                            )
+                        ),
+                        React.createElement(
+                            Row,
+                            { size: 'one' },
                             React.createElement(
-                                Row,
-                                { size: 'one' },
+                                Column,
+                                null,
                                 React.createElement(
-                                    Column,
+                                    FloatRight,
                                     null,
                                     React.createElement(
-                                        FloatRight,
-                                        null,
-                                        React.createElement(
-                                            'button',
-                                            { className: 'ui green button', onClick: this.sendComment },
-                                            this.buttonName
-                                        )
+                                        'button',
+                                        { className: 'ui green button', onClick: this.sendComment },
+                                        this.buttonName
                                     )
                                 )
                             )
                         )
                     )
-                );
-            }
+                )
+            );
         }
     }]);
 
     return EditArea;
 }(React.Component);
 
-var DeleteArea = function (_React$Component13) {
-    _inherits(DeleteArea, _React$Component13);
+var DeleteArea = function (_React$Component12) {
+    _inherits(DeleteArea, _React$Component12);
 
     function DeleteArea(props) {
         _classCallCheck(this, DeleteArea);
 
-        var _this18 = _possibleConstructorReturn(this, (DeleteArea.__proto__ || Object.getPrototypeOf(DeleteArea)).call(this, props));
+        var _this16 = _possibleConstructorReturn(this, (DeleteArea.__proto__ || Object.getPrototypeOf(DeleteArea)).call(this, props));
 
-        _this18.state = {
+        _this16.state = {
             form: "normal"
         };
-        _this18.deleteComment = _this18.deleteComment.bind(_this18);
-        return _this18;
+        _this16.deleteComment = _this16.deleteComment.bind(_this16);
+        return _this16;
     }
 
     _createClass(DeleteArea, [{
         key: 'deleteComment',
         value: function deleteComment() {
-            var _this19 = this;
+            var _this17 = this;
 
             this.props.runBeforeDelete();
             fetch(SITEURL + 'api/comment', {
@@ -1445,15 +1180,15 @@ var DeleteArea = function (_React$Component13) {
             }).then(function (response) {
                 if (!response.ok) throw new Error(response.status);else return response.json();
             }).then(function (json) {
-                _this19.props.runAfterDelete();
-                _this19.props.reloadFunc();
+                _this17.props.runAfterDelete();
+                _this17.props.reloadFunc();
             }).catch(function (error) {
                 if (error.message == 404) {
-                    _this19.props.runAfterDelete();
-                    _this19.props.reloadFunc();
+                    _this17.props.runAfterDelete();
+                    _this17.props.reloadFunc();
                 } else {
-                    _this19.props.runAfterDelete();
-                    _this19.props.reloadFunc();
+                    _this17.props.runAfterDelete();
+                    _this17.props.reloadFunc();
                 }
             });
         }
@@ -1513,19 +1248,19 @@ var DeleteArea = function (_React$Component13) {
     return DeleteArea;
 }(React.Component);
 
-var BottomComment = function (_React$Component14) {
-    _inherits(BottomComment, _React$Component14);
+var BottomComment = function (_React$Component13) {
+    _inherits(BottomComment, _React$Component13);
 
     function BottomComment(props) {
         _classCallCheck(this, BottomComment);
 
-        var _this20 = _possibleConstructorReturn(this, (BottomComment.__proto__ || Object.getPrototypeOf(BottomComment)).call(this, props));
+        var _this18 = _possibleConstructorReturn(this, (BottomComment.__proto__ || Object.getPrototypeOf(BottomComment)).call(this, props));
 
-        _this20.state = {
+        _this18.state = {
             topMessage: null,
             likeButtonDisabled: false
         };
-        return _this20;
+        return _this18;
     }
 
     _createClass(BottomComment, [{
@@ -1583,7 +1318,8 @@ var BottomComment = function (_React$Component14) {
                 );
             } else if (this.props.form == "edit") {
                 return React.createElement(EditArea, {
-                    tags: normalizer('comment-rating', this.props.ownComment.rating),
+                    rating: normalizer('comment-rating', this.props.ownComment.rating),
+                    tags: this.props.tags,
                     handleCancelButton: this.props.openNormal,
                     commentText: this.props.ownComment.commentText,
                     owner: true,
@@ -1592,7 +1328,8 @@ var BottomComment = function (_React$Component14) {
                 });
             } else if (this.props.form == "newComment") {
                 return React.createElement(EditArea, {
-                    tags: normalizer('comment-rating', this.props.ownComment.rating),
+                    tags: this.props.tags,
+                    rating: [],
                     handleCancelButton: this.props.openNormal,
                     commentText: '',
                     owner: true,
@@ -1614,8 +1351,8 @@ var BottomComment = function (_React$Component14) {
     return BottomComment;
 }(React.Component);
 
-var Comments = function (_React$Component15) {
-    _inherits(Comments, _React$Component15);
+var Comments = function (_React$Component14) {
+    _inherits(Comments, _React$Component14);
 
     function Comments(props) {
         _classCallCheck(this, Comments);
@@ -1634,6 +1371,7 @@ var Comments = function (_React$Component15) {
                         productID: this.props.productID,
                         changeContent: this.props.changeContent,
                         reloadFunc: this.props.reloadFunc,
+                        tags: this.props.tags,
                         key: com.id,
                         id: com.id,
                         text: com.text,
@@ -1643,7 +1381,7 @@ var Comments = function (_React$Component15) {
                         liked: com.liked,
                         title: com.title,
                         date: com.date,
-                        tags: com.tags,
+                        rating: com.rating,
                         owner: com.owner
                     }));
                 }

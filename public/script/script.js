@@ -2,7 +2,9 @@ window.history.pushState({content: firstContent}, "", "");
 let firstLoading = true;
 
 function getRatingColor(value) {
-    if(value>=0 && value<3) {
+    if(value=="-") {
+        return "";
+    } else if(value>=0 && value<3) {
         return "red";
     } else if(value>=3 && value<5) {
         return "orange";
@@ -119,7 +121,8 @@ function normalizer(key, data) {
                 type:"profile",
                 slug:com.owner.slug,
                 date:com.commentCreateDateTime,
-                tags:normalizer('comment-rating', com.rating),
+                rating:normalizer('comment-rating', com.rating),
+                // tag 'dı rating yaptım
                 /*
                 tags:{3:{
                                 passive:false,
@@ -149,30 +152,38 @@ function normalizer(key, data) {
         }
         return comments;
     } else if(key=="comment-rating") {
-        let tags = {};
+        let tags = [];
         let keys = Object.keys(data);
         for(let i=0; i<keys.length; i++) {
-            tags[keys[i]] = {
+            tags.push({
                 passive: false,
                 text:data[i].tagName,
                 color:getRatingColor(data[i].ratingValue),
                 rateValue: data[i].ratingValue,
                 slug: data[i].slug
-            }
+            });
         }
         return tags;
     } else if(key=="tags") {
         let tags = [];
         for(let i=0; i<data.length;i++) {
-            tags[i] = {
+            tags.push({
                 passive: (data[i].tagPassive=="1")?true:false,
                 text: data[i].tagName,
                 color: getRatingColor(data[i].tagAvarageRating),
                 slug: data[i].slug,
                 rateValue: data[i].tagAvarageRating
-            }
+            });
         }
         return tags;
+    } else if(key=="rating") {
+        // used in EditComment::sendComment();
+        let rating = {};
+        let values = Object.values(data);
+        for(let i=0;i<values.length;i++) {
+            rating[values[i].slug] = values[i].value
+        }
+        return rating;
     }
 
 }

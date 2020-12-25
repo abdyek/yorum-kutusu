@@ -304,7 +304,14 @@ var Product = function (_React$Component) {
                     null,
                     React.createElement(ProductInfo, { tags: this.state.tagsInfo, productName: this.state.productName, changeContent: this.props.changeContent, followToggle: this.followToggle, followed: this.state.followed, followButtonDisabled: this.state.followButtonDisabled }),
                     this.state.commentType == "all" ? React.createElement(PageNavigation, { sortBy: this.state.sortBy, form: this.state.commentsForm, handleChangeSortBy: this.changeSortBy, pageCount: this.state.pageCount, currentPage: this.state.pageNumber, handleChangePageNumber: this.changePageNumber }) : React.createElement(SpecialCommentHeader, { specialInfo: this.state.specialInfo, showAllComments: this.showAllComments }),
-                    React.createElement(Comments, { comments: this.state.comments, form: this.state.commentsForm, changeContent: this.props.changeContent, reloadFunc: this.reloadAllComment, productID: this.state.productID }),
+                    React.createElement(Comments, {
+                        comments: this.state.comments,
+                        tags: this.state.tagsInfo,
+                        form: this.state.commentsForm,
+                        changeContent: this.props.changeContent,
+                        reloadFunc: this.reloadAllComment,
+                        productID: this.state.productID
+                    }),
                     this.state.commentType == "all" ? React.createElement(PageNavigation, { sortBy: this.state.sortBy, form: this.state.commentsForm, handleChangeSortBy: this.changeSortBy, pageCount: this.state.pageCount, currentPage: this.state.pageNumber, handleChangePageNumber: this.changePageNumber }) : "",
                     React.createElement(BottomComment, {
                         form: this.state.bottomCommentForm,
