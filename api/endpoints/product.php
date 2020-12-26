@@ -115,14 +115,14 @@ class Product extends Request {
                 'followed'=>$this->followed,
                 'tags'=>array_values($this->tagsInfo),
                 'comments'=>$this->commentsInfo,
-                'ownComment'=>($this->hasComment)?$this->commentsInfo[$this->ownCommentIndex]:null,
+                'ownComment'=>(isset($this->ownCommentIndex))?$this->commentsInfo[$this->ownCommentIndex]:null,
                 'pageNumber'=>$this->data['pageNumber'],
                 'pageCount'=> $this->pageCount
             ]);
         } else {
             $this->success([
                 'comments'=>$this->commentsInfo,
-                'ownComment'=>($this->hasComment)?$this->commentsInfo[$this->ownCommentIndex]:null,
+                'ownComment'=>(isset($this->ownCommentIndex))?$this->commentsInfo[$this->ownCommentIndex]:null,
                 'pageNumber'=>$this->data['pageNumber'],
                 'pageCount'=> $this->pageCount
             ]);
