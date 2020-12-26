@@ -110,14 +110,28 @@ class Comment extends Request {
         $tags = isset($this->data['rating'])?$this->data['rating']:[];
         foreach($tags as $key=>$val) {
             $twpID = Database::getRow('SELECT tag_with_product_id FROM tag_with_product twp INNER JOIN tag t ON t.tag_id=twp.tag_id WHERE t.tag_name=? AND twp.product_id=?', [$key, $this->data['productID']])['tag_with_product_id'];
-            $check = Database::existCheck('SELECT tag_rating_value FROM tag_rating WHERE tag_with_product_id=? AND member_id=? AND tag_rating_value=?', [$twpID, USERID, $val]);
-            if($check) {
+            $check = Database::existCheck('SELECT tag_rating_value FROM tag_rating WHERE tag_with_product_id=? AND member_id=?', [$twpID, USERID]);
+            if($check and $check['tag_rating_value']==$val) {
                 continue;
             }
             Database::execute('DELETE FROM tag_rating WHERE tag_with_product_id=? AND member_id=?', [$twpID, USERID]);
+            if($val=='-') {
+                continue;
+            }
             Database::execute('INSERT INTO tag_rating_history (tag_with_product_id, member_id, tag_rating_value) VAlUES(?,?,?)', [$twpID, USERID, $val]);
             Database::execute('INSERT INTO tag_rating (tag_with_product_id, member_id, tag_rating_value) VAlUES(?,?,?)', [$twpID, USERID, $val]);
+            $this->updateRateValue($twpID, $val, $check);
         }
+    }
+    private function updateRateValue($twpID, $val, $check, $forDelete=false) {
+        $oldRate = ($check)?$check['tag_rating_value']:null;
+        if($check) {
+            Database::execute('UPDATE tag_with_product SET tag_avarage_rating=((tag_avarage_rating * rating_count)-?+?)/rating_count WHERE tag_with_product_id=?', [$oldRate, $val, $twpID]);
+        } else {
+            $sign = ($forDelete)?' - ':' + ';
+            Database::execute('UPDATE tag_with_product SET tag_avarage_rating=((tag_avarage_rating * rating_count)'.$sign.'?)/(rating_count'.$sign.'1), rating_count=rating_count'.$sign.'1 WHERE tag_with_product_id=?', [$val, $twpID]);
+        }
+        // burada hesaplanacak
     }
     protected function delete() {
         if(WHO=='admin') {
@@ -125,9 +139,11 @@ class Comment extends Request {
         } elseif(WHO=='member') {
             $this->deleteByMember();
         }
+        $this->removeRating();
     }
     private function deleteByAdmin() {
-        if(!Database::existCheck('SELECT comment_id FROM comment WHERE comment_deleted=0 AND comment_id=?', [$this->data['commentID']])) {
+        $this->comment = Database::existCheck('SELECT comment_id, product_id FROM comment WHERE comment_deleted=0 AND comment_id=?', [$this->data['commentID']]);
+        if(!$this->comment) {
             $this->setHttpStatus(404);
             exit();
         }
@@ -146,7 +162,8 @@ class Comment extends Request {
         $this->success();
     }
     private function deleteByMember() {
-        if(!Database::existCheck('SELECT comment_id FROM comment WHERE comment_deleted=0 AND member_id=? AND comment_id=?', [USERID, $this->data['commentID']])) {
+        $this->comment = Database::existCheck('SELECT comment_id, product_id FROM comment WHERE comment_deleted=0 AND member_id=? AND comment_id=?', [USERID, $this->data['commentID']]);
+        if(!$this->comment) {
             $this->setHttpStatus(404);
             exit();
         }
@@ -164,6 +181,14 @@ class Comment extends Request {
             exit();
         }
         $this->success();
+    }
+    private function removeRating() {
+        $twps = Database::getRows('SELECT * FROM tag_with_product twp INNER JOIN tag_rating tr ON tr.tag_with_product_id=twp.tag_with_product_id WHERE twp.product_id=1 and tr.member_id=1', [$this->comment['product_id'], USERID]);
+        $val = Database::getRow('SELECT tag_rating');
+        foreach($twps as $twp) {
+            Database::execute('DELETE FROM tag_rating WHERE tag_with_product_id=? AND member_id=?', [$twp['tag_with_product_id'], USERID]);
+            $this->updateRateValue($twp['tag_with_product_id'], $twp['tag_rating_value'], false, true);
+        }
     }
 
 }

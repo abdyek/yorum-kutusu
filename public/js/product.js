@@ -170,7 +170,7 @@ var Product = function (_React$Component) {
                 productSlug: this.productSlug,
                 sortBy: this.sortBy,
                 pageNumber: this.pageNumber,
-                onlyComment: true
+                onlyComment: false
             }), { method: 'GET' }).then(function (response) {
                 if (!response.ok) throw new Error(response.status);else return response.json();
             }).then(function (json) {
@@ -179,7 +179,8 @@ var Product = function (_React$Component) {
                     commentsForm: json['other']['comments'].length ? 'normal' : 'noComment',
                     comments: normalizer('comments', json['other']['comments']),
                     ownComment: ownComment,
-                    bottomCommentForm: _this4.detectBottomCommentForm(json['other']['ownComment'])
+                    bottomCommentForm: _this4.detectBottomCommentForm(json['other']['ownComment']),
+                    tagsInfo: normalizer('tags', json['other']['tags'])
                 });
                 _this4.refreshUrl();
             }).catch(function (error) {

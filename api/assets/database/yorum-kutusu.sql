@@ -95,7 +95,8 @@ CREATE TABLE `tag_with_product` (
   `member_id` int(11) DEFAULT NULL,
   `tag_with_product_deleted` tinyint(1) NOT NULL DEFAULT 0,
   `tag_with_product_create_date_time` datetime NOT NULL DEFAULT current_timestamp(),
-  `tag_avarage_rating` float DEFAULT 5
+  `tag_avarage_rating` float DEFAULT 5,
+  `rating_count` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `tag_with_product_history` (

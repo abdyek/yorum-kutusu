@@ -135,7 +135,7 @@ class Product extends React.Component {
             productSlug:this.productSlug,
             sortBy: this.sortBy,
             pageNumber:this.pageNumber,
-            onlyComment:true
+            onlyComment:false
         }), {method: 'GET'}).then((response)=>{
             if(!response.ok) throw new Error(response.status);
             else return response.json();
@@ -145,7 +145,8 @@ class Product extends React.Component {
                 commentsForm: (json['other']['comments'].length)?'normal':'noComment',
                 comments: normalizer('comments', json['other']['comments']),
                 ownComment:ownComment,
-                bottomCommentForm: this.detectBottomCommentForm(json['other']['ownComment'])
+                bottomCommentForm: this.detectBottomCommentForm(json['other']['ownComment']),
+                tagsInfo: normalizer('tags', json['other']['tags'])
             });
             this.refreshUrl();
         }).catch((error) => {
