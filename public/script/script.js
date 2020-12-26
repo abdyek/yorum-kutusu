@@ -172,7 +172,7 @@ function normalizer(key, data) {
                 text: data[i].tagName,
                 color: getRatingColor(data[i].tagAvarageRating),
                 slug: data[i].slug,
-                rateValue: data[i].tagAvarageRating
+                rateValue: (isFloat(parseFloat(data[i].tagAvarageRating)))?parseFloat(data[i].tagAvarageRating).toFixed(1):data[i].tagAvarageRating
             });
         }
         return tags;
@@ -213,4 +213,8 @@ function objectFromBase64(encoded) {
     let decoded = atob(encoded);
     let decodedUTF8 = decode_utf8(decoded);
     return JSON.parse(decodedUTF8);
+}
+
+function isFloat(n){
+    return Number(n) === n && n % 1 !== 0;
 }

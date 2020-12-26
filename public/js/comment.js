@@ -946,7 +946,8 @@ var EditArea = function (_React$Component11) {
         _this14.state = {
             commentText: _this14.props.commentText,
             rating: _this14.props.rating,
-            tags: _this14.mergeTagAndRating()
+            tags: _this14.mergeTagAndRating(),
+            sendButtonState: _this14.props.commentText.length ? "" : "disabled"
         };
         _this14.mergeTagAndRating = _this14.mergeTagAndRating.bind(_this14);
         _this14.changeComment = _this14.changeComment.bind(_this14);
@@ -980,7 +981,8 @@ var EditArea = function (_React$Component11) {
         key: 'changeComment',
         value: function changeComment(e) {
             this.setState({
-                commentText: e.target.value
+                commentText: e.target.value,
+                sendButtonState: e.target.value.length ? "" : "disabled"
             });
         }
     }, {
@@ -1133,7 +1135,7 @@ var EditArea = function (_React$Component11) {
                                     null,
                                     React.createElement(
                                         'button',
-                                        { className: 'ui green button', onClick: this.sendComment },
+                                        { className: "ui green " + this.state.sendButtonState + " button", onClick: this.sendComment },
                                         this.buttonName
                                     )
                                 )

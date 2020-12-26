@@ -589,7 +589,8 @@ class EditArea extends React.Component {
         this.state = {
             commentText:this.props.commentText,
             rating:this.props.rating,
-            tags:this.mergeTagAndRating()
+            tags:this.mergeTagAndRating(),
+            sendButtonState: (this.props.commentText.length)?"":"disabled"
         }
         this.mergeTagAndRating = this.mergeTagAndRating.bind(this);
         this.changeComment = this.changeComment.bind(this);
@@ -617,7 +618,8 @@ class EditArea extends React.Component {
     }
     changeComment(e) {
         this.setState({
-            commentText:e.target.value
+            commentText:e.target.value,
+            sendButtonState: (e.target.value.length)?"":"disabled"
         });
     }
     sendComment() {
@@ -729,7 +731,7 @@ class EditArea extends React.Component {
                         <Row size="one">
                             <Column>
                                 <FloatRight>
-                                    <button className="ui green button" onClick={this.sendComment}>
+                                    <button className={"ui green "+this.state.sendButtonState+" button"} onClick={this.sendComment}>
                                         {this.buttonName}
                                     </button>
                                 </FloatRight>
