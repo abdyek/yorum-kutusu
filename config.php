@@ -50,7 +50,9 @@
             6=>'success',
             7=>'Bu isim ya da slug\'a sahip bir ürün zaten var!',
             8=>'BU isim ya da slug\'a sahip bir etiket zaten var! Bu istek onaylansaydı çakışma olurdu.',
-            9=>'Bir sorun var'
+            9=>'Bir sorun var',
+            10=>'Bu ID\'ye sahip yorum yok',
+            11=>'Bu ID\'ye sahip şikayet seçeneği yok'
         ];
         const ADMIN_NOTES = [
             'newProductRequestDeleteNote'=>'Yeni ürün ekleme istediğiniz kabul edilmedi'
@@ -362,6 +364,17 @@
                             'max'=>200
                         ]
                     ],
+                    'GET'=>[]
+                ]
+            ],
+            'reportOptions'=>[
+                'methods'=>['POST', 'GET'],
+                'authorization'=>[
+                    'POST'=>['admin'],
+                    'GET'=>['member']
+                ],
+                'keys'=>[
+                    'POST'=>[],
                     'GET'=>[]
                 ]
             ],

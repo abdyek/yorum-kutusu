@@ -405,6 +405,21 @@ CREATE TABLE `report_option` (
   `report_option_name` varchar(60) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE `hidden_comment` (
+  `hidden_comment_id` int(11) NOT NULL,
+  `comment_id` int(11) NOT NULL,
+  `member_id` int(11) NOT NULL,
+  `comment_report_request_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `show_comment_history` (
+  `show_comment_history_id` int(11) NOT NULL,
+  `comment_id` int(11) NOT NULL,
+  `member_id` int(11) NOT NULL,
+  `comment_report_request_id` int(11) NOT NULL,
+  `show_comment_history_date_time` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 --
 -- Indexes for dumped tables
 --
@@ -617,6 +632,18 @@ ALTER TABLE `comment_report_response`
 ALTER TABLE `report_option`
   ADD PRIMARY KEY (`report_option_id`);
 
+ALTER TABLE `hidden_comment`
+  ADD PRIMARY KEY (`hidden_comment_id`),
+  ADD KEY `comment_id` (`comment_id`), 
+  ADD KEY `member_id` (`member_id`),
+  ADD KEY `comment_report_request_id` (`comment_report_request_id`);
+
+ALTER TABLE `show_comment_history`
+  ADD PRIMARY KEY (`show_comment_history_id`),
+  ADD KEY `comment_id` (`comment_id`), 
+  ADD KEY `member_id` (`member_id`),
+  ADD KEY `comment_report_request_id` (`comment_report_request_id`);
+
 --
 -- AUTO_INCREMENT for dumped tables
 --
@@ -748,6 +775,11 @@ ALTER TABLE `comment_report_response`
 ALTER TABLE `report_option`
   MODIFY `report_option_id` int(11) NOT NULL AUTO_INCREMENT;
 
+ALTER TABLE `hidden_comment`
+  MODIFY `hidden_comment_id` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `show_comment_history`
+  MODIFY `show_comment_history_id` int(11) NOT NULL AUTO_INCREMENT;
 
 -- ilişkiler
 ALTER TABLE `product`
@@ -903,6 +935,15 @@ ALTER TABLE `comment_report_response`
   ADD CONSTRAINT `comment_report_response_fk_1` FOREIGN KEY (`admin_id`) REFERENCES `admin` (`admin_id`),
   ADD CONSTRAINT `comment_report_response_fk_2` FOREIGN KEY (`comment_report_request_id`) REFERENCES `comment_report_request` (`comment_report_request_id`);
 
+ALTER TABLE `hidden_comment`
+  ADD CONSTRAINT `hidden_comment_fk_1` FOREIGN KEY (`comment_id`) REFERENCES `comment` (`comment_id`),
+  ADD CONSTRAINT `hidden_comment_fk_2` FOREIGN KEY (`member_id`) REFERENCES `member` (`member_id`),
+  ADD CONSTRAINT `hidden_comment_fk_3` FOREIGN KEY (`comment_report_request_id`) REFERENCES `comment_report_request` (`comment_report_request_id`);
+
+ALTER TABLE `show_comment_history`
+  ADD CONSTRAINT `show_comment_history_fk_1` FOREIGN KEY (`comment_id`) REFERENCES `comment` (`comment_id`),
+  ADD CONSTRAINT `show_comment_history_fk_2` FOREIGN KEY (`member_id`) REFERENCES `member` (`member_id`),
+  ADD CONSTRAINT `show_comment_history_fk_3` FOREIGN KEY (`comment_report_request_id`) REFERENCES `comment_report_request` (`comment_report_request_id`);
 
 COMMIT;
 

@@ -116,7 +116,7 @@ class Comment extends React.Component {
             )
         } else if(this.state.form=="report") {
             return(
-                <ReportArea handleCloseReportArea={this.closeReportArea}/>
+                <ReportArea handleCloseReportArea={this.closeReportArea} commentID={this.props.id}/>
             )
         } else if(this.state.form=="edit") {
             return(
@@ -308,25 +308,47 @@ class ReportArea extends React.Component {
         this.limitOfReportText = 200;
         this.state = {
             // normal, loading, reported
-            form:"normal",
-            messageType:"success",  // success, warning, danger
-            messageText:"",
+            form:"loading",
+            reportedType:"",  // success, warning, danger
+            reportedHeader:"",
+            reportedText:"",
             selectOptionWarning:false,
-            reason:0,
+            option:"-1",
             reportText: '',
             reportTextSize:0,
             reportTextLimitWarning: false
         };
+        this.fetchReportOptions();
+        this.fetchReportOptions = this.fetchReportOptions.bind(this);
         this.closeReportArea = this.closeReportArea.bind(this);
         this.sendReport = this.sendReport.bind(this);
-        this.changeReason = this.changeReason.bind(this);
+        this.changeOption = this.changeOption.bind(this);
         this.changeTextarea = this.changeTextarea.bind(this);
+    }
+    fetchReportOptions() {
+        fetch(SITEURL + 'api/reportOptions', {
+            method: 'GET',
+            header: {
+                'Content-Type': 'application/json'
+            }
+        }).then((response)=>{
+            if(!response.ok) throw new Error(response.status);
+            else return response.json();
+        }).then((json)=>{
+            console.log(json);
+            this.setState({
+                form:"normal",
+                options:json['other']['reportOptions']
+            });
+        }).catch((error)=>{
+
+        });
     }
     closeReportArea() {
         this.props.handleCloseReportArea();
     }
     sendReport() {
-        if(this.state.reason==0) {
+        if(this.state.option=="-1") {
             this.setState({
                 selectOptionWarning:true
             });
@@ -334,12 +356,34 @@ class ReportArea extends React.Component {
             this.setState({
                 form:"loading"
             });
+            fetch(SITEURL + 'api/report', {
+                method: 'POST',
+                header: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    commentID:this.props.commentID,
+                    reportOptionID: this.state.option,
+                    reportText:this.state.reportText
+                })
+            }).then((response)=>{
+                if(!response.ok) throw new Error(response.status);
+                else return response.json();
+            }).then((json)=>{
+                this.setState({
+                    form:"reported",
+                    reportedType:"success",  // success, warning, danger
+                    reportedHeader:"Geri bildirim gönderildi",
+                    reportedText:"Geri bildirim göndererek daha kaliteli bir ortam oluşturma konusunda bize yardımcı olduğunuz için teşekkür ederiz"
+                });
+            }).catch((error)=>{
+                
+            });
         }
-        // burada API'ye gönderme şeyleri de olacak
     }
-    changeReason(e) {
+    changeOption(e) {
         this.setState({
-            reason:e.target.value
+            option:e.target.value
         });
         if(e.target.value) {
             this.setState({
@@ -386,35 +430,18 @@ class ReportArea extends React.Component {
                                                 Bu yorum hakkında geri bildirimde bulunuyorsunuz.
                                             </div>
                                             <p>
-                                                Bildirimin asılsız olması durumunda size olan güvenimizin azalacağını unutmayın.
+                                                Çok fazla yanlış geri bildirim yapmanız halinde, ileride yapacağınız geri bildirimler dikkate alınmayabilir.
                                             </p>
                                         </div>
                                     </Column>
                                 </Row>
                                 <Row size="one">
                                     <Column>
-                                        <ReportReason handleChangeReason={this.changeReason} reasons={[
-                                            {
-                                                key:0,
-                                                value: " -- Lütfen birini seçin -- "
-                                            },
-                                            {
-                                                key:1,
-                                                value: "Hakaret"
-                                            },
-                                            {
-                                                key:2,
-                                                value: "Siyasi içerik"
-                                            },
-                                            {
-                                                key:3,
-                                                value: "Uygunsuz Kullanıcı Adı"
-                                            }, 
-                                        ]} />
+                                        <ReportOptions handleChangeOption={this.changeOption} options={this.state.options} selected={this.state.option} />
                                     </Column>
                                 </Row>
                                 {this.state.selectOptionWarning ?
-                                    <BasicMessage type="warning" text="'Neden' boş bırakılamaz!"/>
+                                    <BasicMessage type="warning" text='"Neden" boş bırakılamaz!'/>
                                 : ''}
                                 <Row size="one">
                                     <Column>
@@ -454,55 +481,45 @@ class ReportArea extends React.Component {
             )
         } else if(this.state.form=="reported") {
             return(
-                <Reported messageType={this.state.messageType} text={this.state.messageText}/>
+                <Row size="one">
+                    <Column>
+                        <RaisedSegment>
+                            <div className={"ui "+this.state.reportedType+" message"}>
+                                <div className="header">
+                                    {this.state.reportedHeader}
+                                </div>
+                                <p>
+                                    {this.state.reportedText}
+                                </p>
+                            </div>
+                        </RaisedSegment>
+                    </Column>
+                </Row>
             )
         }
     }
 }
 
-class ReportReason extends React.Component {
+class ReportOptions extends React.Component {
     constructor(props) {
         super(props);
-        this.changeReason = this.changeReason.bind(this);
-    }
-    changeReason(e) {
-        this.props.handleChangeReason(e);
     }
     render() {
         const options = [];
-        for(let i=0;i<this.props.reasons.length;i++) {
-            options.push(<option value={i} key={this.props.reasons[i].key}>{this.props.reasons[i].value}</option>)
+        options.push(<option value="-1" key="-1">-- Lütfen Seçiniz --</option>)
+        for(let i=0;i<this.props.options.length;i++) {
+            options.push(<option value={this.props.options[i].id} key={this.props.options[i].id}>{this.props.options[i].optionName}</option>)
         }
         return(
             <div>
                 <div className="ui form">
                     <div className="field">
                         <label>Neden</label>
-                        <select onChange={this.changeReason}>
+                        <select onChange={this.props.handleChangeOption} value={this.props.option}>
                             {options}
                         </select>
                     </div>
                 </div>
-            </div>
-        )
-    }
-}
-
-class Reported extends React.Component {
-    render() {
-        return(
-            <div>
-                <Row size="one">
-                    <Column>
-                        <RaisedSegment>
-                            <Row size="one">
-                                <Column>
-                                    <BasicMessage type={this.props.messageType} text={this.props.text}/>
-                                </Column>
-                            </Row>
-                        </RaisedSegment>
-                    </Column>
-                </Row>
             </div>
         )
     }

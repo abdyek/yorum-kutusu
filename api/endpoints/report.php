@@ -4,14 +4,16 @@ class Report extends Request {
     protected function post() {
         if(!Database::existCheck('SELECT * FROM comment WHERE comment_id=? AND comment_deleted=0', [$this->data['commentID']])){
             $this->setHttpStatus(404);
+            $this->responseWithMessage(10);
             exit();
         }
         if(!Database::existCheck('SELECT * FROM report_option WHERE report_option_id=?', [$this->data['reportOptionID']])) {
-            $this->setHttpStatus(422);
+            $this->setHttpStatus(404);
+            $this->responseWithMessage(11);
             exit();
         }
-        if(Database::existCheck('SELECT * FROM comment_report_request WHERE member_id=? AND comment_id=?', [USERID, $this->data['commentID']])) {
-            $this->success();
+        if(Database::existCheck('SELECT * FROM comment_report_request WHERE member_id=? AND comment_id=? AND report_answered=0', [USERID, $this->data['commentID']])) {
+            $this->setHttpStatus(422);
             exit();
         }
         $this->reportFunc();
