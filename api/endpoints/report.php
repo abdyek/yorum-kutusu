@@ -17,6 +17,7 @@ class Report extends Request {
             exit();
         }
         $this->reportFunc();
+        $this->hideComment();
     }
     private function reportFunc() {
         $query = Database::executeWithError('INSERT INTO comment_report_request (member_id, comment_id, report_option_id, report_text) VALUES (?,?,?,?)', [USERID, $this->data['commentID'], $this->data['reportOptionID'], $this->data['reportText']]);
@@ -26,6 +27,13 @@ class Report extends Request {
             exit();
         }
         $this->success();
+    }
+    private function hideComment() {
+        if(!$this->data['hide']){
+            return;
+        }
+        $crrID = Database::getRow('SELECT comment_report_request_id FROM comment_report_request WHERE comment_id=? AND member_id=?', [$this->data['commentID'], USERID])['comment_report_request_id'];
+        Database::execute('INSERT INTO hidden_comment (comment_id, member_id, comment_report_request_id) VALUES(?,?,?)', [$this->data['commentID'], USERID, $crrID]);
     }
     protected function get() {
         $request = Database::getRows('SELECT * FROM comment_report_request crr INNER JOIN comment c ON crr.comment_id=c.comment_id INNER JOIN report_option ro ON crr.report_option_id = ro.report_option_id WHERE report_answered=0');

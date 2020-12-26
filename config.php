@@ -362,6 +362,10 @@
                         'reportText'=>[
                             'min'=>0,
                             'max'=>200
+                        ],
+                        'hide'=>[
+                            'min'=>0,
+                            'max'=>1
                         ]
                     ],
                     'GET'=>[]

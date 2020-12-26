@@ -140,6 +140,7 @@ class Comment extends Request {
             $this->deleteByMember();
         }
         $this->removeRating();
+        $this->removeHiddenComment();
     }
     private function deleteByAdmin() {
         $this->comment = Database::existCheck('SELECT comment_id, product_id FROM comment WHERE comment_deleted=0 AND comment_id=?', [$this->data['commentID']]);
@@ -189,6 +190,9 @@ class Comment extends Request {
             Database::execute('DELETE FROM tag_rating WHERE tag_with_product_id=? AND member_id=?', [$twp['tag_with_product_id'], USERID]);
             $this->updateRateValue($twp['tag_with_product_id'], $twp['tag_rating_value'], false, true);
         }
+    }
+    private function removeHiddenComment() {
+        Database::execute('DELETE FROM hidden_comment WHERE comment_id=?', [$this->data['commentID']]);
     }
 
 }

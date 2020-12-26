@@ -14,6 +14,7 @@ class Product extends Request {
         $this->hasComment = null;
         $this->getFollowInfo();
         $this->getPageCount();
+        $this->getHiddenComment();
         $this->getCommentsWithRating();
         $this->updateLastSeen();
         $this->mergeAllInfo();
@@ -44,6 +45,17 @@ class Product extends Request {
                 'tagAvarageRating'=>$tag['tag_avarage_rating'],
                 'tagPassive'=>$tag['tag_passive']
             ];
+        }
+    }
+    private function getHiddenComment() {
+        if(WHO=='member') {
+            $query = Database::getRows('SELECT comment_id FROM hidden_comment WHERE member_id=?', [USERID]);
+            $this->hiddenComment = [];
+            foreach($query as $key=>$q) {
+                $this->hiddenComment[] = $q['comment_id'];
+            }
+        } else {
+            $this->hiddenComment = [];
         }
     }
     private function getCommentsWithRating() {
@@ -85,6 +97,7 @@ class Product extends Request {
                 'commentLikeCount'=>$com['comment_like_count'],
                 'liked'=>$liked,
                 'isOwner'=> $this->hasComment,
+                'hidden'=>(in_array($com['comment_id'], $this->hiddenComment))?true:false,
                 'owner'=>[
                     'id'=>$com['member_id'],
                     'username'=>$com['member_username'],

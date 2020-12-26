@@ -116,5 +116,7 @@ class ProductCRUD extends Request {
             USERID,
             $this->data['adminNote']
         ]);
+        // comment delete işlemlerini yapmıyor, o unutulmuş
+        // comment delete işlemlerini burada yapmayı düşünürsen hidden_comment'i unutma
     }
 }
