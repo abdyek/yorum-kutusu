@@ -147,7 +147,9 @@ function normalizer(key, data) {
                         }
                 },
                 */
-                owner:com.isOwner
+                owner:com.isOwner,
+                reported:com.reported,
+                hidden:com.hidden
             })
         }
         return comments;

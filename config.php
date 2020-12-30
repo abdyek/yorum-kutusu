@@ -382,6 +382,20 @@
                     'GET'=>[]
                 ]
             ],
+            'removeHideComment'=>[
+                'methods'=>['POST'],
+                'authorization'=>[
+                    'POST'=>['member']
+                ],
+                'keys'=>[
+                    'POST'=>[
+                        'commentID'=>[
+                            'min'=>1,
+                            'max'=>11
+                        ]
+                    ]
+                ]
+            ],
             'search'=>[
                 'methods'=>['GET'],
                 'authorization'=>[

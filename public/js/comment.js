@@ -17,8 +17,10 @@ var Comment = function (_React$Component) {
         var _this = _possibleConstructorReturn(this, (Comment.__proto__ || Object.getPrototypeOf(Comment)).call(this, props));
 
         var form = _this.props.form ? _this.props.form : "normal";
+        form = _this.props.hidden ? "hidden" : form;
+        console.log("burası" + _this.props.hidden);;
         _this.state = {
-            // normal, report, edit, delete, message, loading
+            // normal, report, edit, delete, message, loading, hidden
             form: form,
             topMessage: _this.props.topMessage,
             message: _this.props.message,
@@ -34,13 +36,15 @@ var Comment = function (_React$Component) {
         _this.openDeleteArea = _this.openDeleteArea.bind(_this);
         _this.closeDeleteArea = _this.closeDeleteArea.bind(_this);
         _this.openLoadingSpin = _this.openLoadingSpin.bind(_this);
-        _this.hide = _this.hide.bind(_this);
+        _this.makeNone = _this.makeNone.bind(_this);
         _this.setForm = _this.setForm.bind(_this);
+        _this.justOneTime = _this.justOneTime.bind(_this);
+        _this.removeHide = _this.removeHide.bind(_this);
         return _this;
     }
 
     _createClass(Comment, [{
-        key: 'likeToggle',
+        key: "likeToggle",
         value: function likeToggle() {
             var _this2 = this;
 
@@ -72,17 +76,17 @@ var Comment = function (_React$Component) {
             }
         }
     }, {
-        key: 'openReportArea',
+        key: "openReportArea",
         value: function openReportArea() {
             this.setForm("report");
         }
     }, {
-        key: 'closeReportArea',
+        key: "closeReportArea",
         value: function closeReportArea() {
             this.setForm("normal");
         }
     }, {
-        key: 'openEditArea',
+        key: "openEditArea",
         value: function openEditArea() {
             this.setState({
                 form: "edit",
@@ -90,12 +94,12 @@ var Comment = function (_React$Component) {
             });
         }
     }, {
-        key: 'closeEditArea',
+        key: "closeEditArea",
         value: function closeEditArea() {
             this.setForm("normal");
         }
     }, {
-        key: 'openDeleteArea',
+        key: "openDeleteArea",
         value: function openDeleteArea() {
             this.setState({
                 form: "delete",
@@ -103,43 +107,68 @@ var Comment = function (_React$Component) {
             });
         }
     }, {
-        key: 'closeDeleteArea',
+        key: "closeDeleteArea",
         value: function closeDeleteArea() {
             this.setState({
                 form: "normal"
             });
         }
     }, {
-        key: 'openLoadingSpin',
+        key: "openLoadingSpin",
         value: function openLoadingSpin() {
             this.setState({
                 form: "loading"
             });
         }
     }, {
-        key: 'hide',
-        value: function hide() {
+        key: "makeNone",
+        value: function makeNone() {
             this.setState({
-                form: "hidden"
+                form: "none"
             });
         }
     }, {
-        key: 'setForm',
+        key: "setForm",
         value: function setForm(formType) {
             this.setState({
                 form: formType
             });
         }
     }, {
-        key: 'render',
+        key: "justOneTime",
+        value: function justOneTime() {
+            this.setState({
+                form: "normal"
+            });
+        }
+    }, {
+        key: "removeHide",
+        value: function removeHide() {
+            this.setState({
+                form: "normal"
+            });
+            fetch(SITEURL + 'api/removeHideComment', {
+                method: 'POST',
+                header: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    commentID: this.props.id
+                })
+            }).then(function (response) {
+                if (!response.ok) throw new Error(response.status);else return response.json();
+            }).then(function (json) {}).catch(function (error) {});
+        }
+    }, {
+        key: "render",
         value: function render() {
             if (this.state.form == "normal") {
                 return React.createElement(
-                    'div',
+                    "div",
                     null,
                     this.state.topMessage ? React.createElement(
                         Row,
-                        { size: 'one' },
+                        { size: "one" },
                         React.createElement(
                             Column,
                             null,
@@ -148,15 +177,15 @@ var Comment = function (_React$Component) {
                     ) : "",
                     React.createElement(
                         Row,
-                        { size: 'one' },
+                        { size: "one" },
                         React.createElement(
                             Column,
                             null,
                             React.createElement(
                                 RaisedSegment,
-                                { otherClass: 'comment' },
+                                { otherClass: "comment" },
                                 React.createElement(TopOfComment, { text: this.props.text, slug: this.props.slug, title: this.props.title, owner: this.props.owner, handleOpenEditArea: this.openEditArea, handleOpenDeleteArea: this.openDeleteArea, changeContent: this.props.changeContent, type: this.props.type }),
-                                React.createElement(BottomOfComment, { likeCount: this.state.likeCount, liked: this.state.liked, likeButtonDisabled: this.state.likeButtonDisabled, likeToggle: this.likeToggle, date: this.props.date, handleOpenReportArea: this.openReportArea, handleCloseReportArea: this.closeReportArea, tags: this.props.rating, owner: this.props.owner, changeContent: this.props.changeContent, id: this.props.id })
+                                React.createElement(BottomOfComment, { likeCount: this.state.likeCount, liked: this.state.liked, likeButtonDisabled: this.state.likeButtonDisabled, likeToggle: this.likeToggle, date: this.props.date, handleOpenReportArea: this.openReportArea, handleCloseReportArea: this.closeReportArea, tags: this.props.rating, owner: this.props.owner, changeContent: this.props.changeContent, id: this.props.id, reported: this.props.reported })
                             )
                         )
                     )
@@ -164,13 +193,13 @@ var Comment = function (_React$Component) {
             } else if (this.state.form == "report") {
                 return React.createElement(ReportArea, { handleCloseReportArea: this.closeReportArea, commentID: this.props.id });
             } else if (this.state.form == "edit") {
-                return React.createElement(EditArea, _defineProperty({ rating: this.props.rating, tags: this.props.tags, handleCancelButton: this.closeEditArea, commentText: this.props.text, owner: this.props.owner, reloadFunc: this.props.reloadFunc, setForm: this.setForm, productID: this.props.productID }, 'setForm', this.setForm));
+                return React.createElement(EditArea, _defineProperty({ rating: this.props.rating, tags: this.props.tags, handleCancelButton: this.closeEditArea, commentText: this.props.text, owner: this.props.owner, reloadFunc: this.props.reloadFunc, setForm: this.setForm, productID: this.props.productID }, "setForm", this.setForm));
             } else if (this.state.form == "delete") {
-                return React.createElement(DeleteArea, { handleCancelButton: this.closeDeleteArea, runBeforeDelete: this.openLoadingSpin, runAfterDelete: this.hide, reloadFunc: this.props.reloadFunc, id: this.props.id });
+                return React.createElement(DeleteArea, { handleCancelButton: this.closeDeleteArea, runBeforeDelete: this.openLoadingSpin, runAfterDelete: this.makeNone, reloadFunc: this.props.reloadFunc, id: this.props.id });
             } else if (this.state.form == "message") {
                 return React.createElement(
                     Row,
-                    { size: 'one' },
+                    { size: "one" },
                     React.createElement(
                         Column,
                         null,
@@ -179,8 +208,10 @@ var Comment = function (_React$Component) {
                 );
             } else if (this.state.form == "loading") {
                 return React.createElement(RowLoadingSpin, null);
-            } else if (this.state.form == "hidden") {
+            } else if (this.state.form == "none") {
                 return "";
+            } else if (this.state.form == "hidden") {
+                return React.createElement(HiddenArea, { justOneTime: this.justOneTime, removeHide: this.removeHide });
             }
         }
     }]);
@@ -188,53 +219,118 @@ var Comment = function (_React$Component) {
     return Comment;
 }(React.Component);
 
-var TopOfComment = function (_React$Component2) {
-    _inherits(TopOfComment, _React$Component2);
+var HiddenArea = function (_React$Component2) {
+    _inherits(HiddenArea, _React$Component2);
+
+    function HiddenArea() {
+        _classCallCheck(this, HiddenArea);
+
+        return _possibleConstructorReturn(this, (HiddenArea.__proto__ || Object.getPrototypeOf(HiddenArea)).apply(this, arguments));
+    }
+
+    _createClass(HiddenArea, [{
+        key: "render",
+        value: function render() {
+            return React.createElement(
+                Row,
+                { size: "one" },
+                React.createElement(
+                    Column,
+                    null,
+                    React.createElement(
+                        RaisedSegment,
+                        { otherClass: "comment" },
+                        React.createElement(
+                            Row,
+                            { size: "one" },
+                            React.createElement(
+                                Column,
+                                null,
+                                React.createElement(
+                                    "div",
+                                    { className: "ui olive message" },
+                                    "Bu yorumu gizlediniz"
+                                )
+                            )
+                        ),
+                        React.createElement(
+                            Row,
+                            { size: "one" },
+                            React.createElement(
+                                Column,
+                                null,
+                                React.createElement(
+                                    FloatRight,
+                                    null,
+                                    React.createElement(
+                                        "button",
+                                        { className: "ui yellow button", onClick: this.props.justOneTime },
+                                        "\u015Eimdilik G\xF6ster"
+                                    ),
+                                    React.createElement(
+                                        "button",
+                                        { className: "ui olive button", onClick: this.props.removeHide },
+                                        "G\xF6r\xFCn\xFCr Yap"
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            );
+        }
+    }]);
+
+    return HiddenArea;
+}(React.Component);
+
+var TopOfComment = function (_React$Component3) {
+    _inherits(TopOfComment, _React$Component3);
 
     function TopOfComment(props) {
         _classCallCheck(this, TopOfComment);
 
-        var _this3 = _possibleConstructorReturn(this, (TopOfComment.__proto__ || Object.getPrototypeOf(TopOfComment)).call(this, props));
+        var _this4 = _possibleConstructorReturn(this, (TopOfComment.__proto__ || Object.getPrototypeOf(TopOfComment)).call(this, props));
 
-        _this3.minifyLimit = 750;
-        _this3.slugPrefix = _this3.props.type == "profile" ? "profil" : "urun";
+        _this4.minifyLimit = 750;
+        _this4.slugPrefix = _this4.props.type == "profile" ? "profil" : "urun";
         // ^ comment'i iki yerde kullandığım ve 2 tür title yapısı olduğu için böyle bir çözüm buldum
-        _this3.state = {
+        _this4.state = {
             readAll: false
         };
-        _this3.openEditArea = _this3.openEditArea.bind(_this3);
-        _this3.openDeleteArea = _this3.openDeleteArea.bind(_this3);
-        _this3.readAll = _this3.readAll.bind(_this3);
-        _this3.minifyText = _this3.minifyText.bind(_this3);
-        if (_this3.props.text.length > _this3.minifyLimit) {
-            _this3.minifiedText = _this3.minifyText(_this3.props.text, _this3.minifyLimit);
+        _this4.openEditArea = _this4.openEditArea.bind(_this4);
+        _this4.openDeleteArea = _this4.openDeleteArea.bind(_this4);
+        _this4.readAll = _this4.readAll.bind(_this4);
+        _this4.minifyText = _this4.minifyText.bind(_this4);
+        if (_this4.props.text.length > _this4.minifyLimit) {
+            _this4.minifiedText = _this4.minifyText(_this4.props.text, _this4.minifyLimit);
         } else {
-            _this3.state = {
+            _this4.state = {
                 readAll: true
             };
         }
-        return _this3;
+        return _this4;
     }
 
     _createClass(TopOfComment, [{
-        key: 'openEditArea',
+        key: "openEditArea",
         value: function openEditArea() {
             this.props.handleOpenEditArea();
         }
     }, {
-        key: 'openDeleteArea',
+        key: "openDeleteArea",
         value: function openDeleteArea() {
             this.props.handleOpenDeleteArea();
         }
     }, {
-        key: 'readAll',
+        key: "readAll",
         value: function readAll() {
             this.setState({
                 readAll: true
             });
         }
     }, {
-        key: 'minifyText',
+        key: "minifyText",
         value: function minifyText(text, limit) {
             var minifiedText = "";
             for (var i = 0; i < limit; i++) {
@@ -243,24 +339,24 @@ var TopOfComment = function (_React$Component2) {
             return minifiedText;
         }
     }, {
-        key: 'render',
+        key: "render",
         value: function render() {
-            var _this4 = this;
+            var _this5 = this;
 
             return React.createElement(
-                'div',
+                "div",
                 null,
                 React.createElement(
                     Row,
-                    { size: 'two', nonStackable: true },
+                    { size: "two", nonStackable: true },
                     React.createElement(
                         Column,
                         null,
                         React.createElement(
-                            'div',
-                            { className: 'comment-header-wrapper' },
-                            React.createElement(H, { type: '3', text: this.props.title, optional: 'comment-header', href: SITEURL + this.slugPrefix + "/" + this.props.slug, handleOnClick: function handleOnClick(e) {
-                                    e.preventDefault();_this4.props.changeContent(e.target.href);
+                            "div",
+                            { className: "comment-header-wrapper" },
+                            React.createElement(H, { type: "3", text: this.props.title, optional: "comment-header", href: SITEURL + this.slugPrefix + "/" + this.props.slug, handleOnClick: function handleOnClick(e) {
+                                    e.preventDefault();_this5.props.changeContent(e.target.href);
                                 } })
                         )
                     ),
@@ -271,25 +367,25 @@ var TopOfComment = function (_React$Component2) {
                             FloatRight,
                             null,
                             this.props.owner ? React.createElement(
-                                'div',
+                                "div",
                                 null,
                                 React.createElement(
-                                    'button',
-                                    { className: 'ui icon teal button', onClick: this.openEditArea },
+                                    "button",
+                                    { className: "ui icon teal button", onClick: this.openEditArea },
                                     React.createElement(
-                                        'i',
-                                        { className: 'icon' },
-                                        React.createElement('i', { className: 'fa fa-pencil-square-o', 'aria-hidden': 'true' })
+                                        "i",
+                                        { className: "icon" },
+                                        React.createElement("i", { className: "fa fa-pencil-square-o", "aria-hidden": "true" })
                                     ),
                                     !isMobile() ? "Düzenle" : ""
                                 ),
                                 React.createElement(
-                                    'button',
-                                    { className: 'ui icon orange button', onClick: this.openDeleteArea },
+                                    "button",
+                                    { className: "ui icon orange button", onClick: this.openDeleteArea },
                                     React.createElement(
-                                        'i',
-                                        { className: 'icon' },
-                                        React.createElement('i', { className: 'fa fa-trash', 'aria-hidden': 'true' })
+                                        "i",
+                                        { className: "icon" },
+                                        React.createElement("i", { className: "fa fa-trash", "aria-hidden": "true" })
                                     ),
                                     !isMobile() ? "Sil" : ""
                                 )
@@ -299,20 +395,20 @@ var TopOfComment = function (_React$Component2) {
                 ),
                 React.createElement(
                     Row,
-                    { size: 'one' },
+                    { size: "one" },
                     React.createElement(
                         Column,
                         null,
                         React.createElement(
-                            'div',
-                            { className: 'comment-text' },
+                            "div",
+                            { className: "comment-text" },
                             this.state.readAll ? this.props.text : this.minifiedText
                         )
                     )
                 ),
                 !this.state.readAll ? React.createElement(
                     Row,
-                    { size: 'one' },
+                    { size: "one" },
                     React.createElement(
                         Column,
                         null,
@@ -320,9 +416,9 @@ var TopOfComment = function (_React$Component2) {
                             FloatRight,
                             null,
                             React.createElement(
-                                'a',
-                                { className: 'read-all', onClick: this.readAll },
-                                'Devam\u0131n\u0131 Oku'
+                                "a",
+                                { className: "read-all", onClick: this.readAll },
+                                "Devam\u0131n\u0131 Oku"
                             )
                         )
                     )
@@ -334,8 +430,8 @@ var TopOfComment = function (_React$Component2) {
     return TopOfComment;
 }(React.Component);
 
-var BottomOfComment = function (_React$Component3) {
-    _inherits(BottomOfComment, _React$Component3);
+var BottomOfComment = function (_React$Component4) {
+    _inherits(BottomOfComment, _React$Component4);
 
     function BottomOfComment() {
         _classCallCheck(this, BottomOfComment);
@@ -344,14 +440,14 @@ var BottomOfComment = function (_React$Component3) {
     }
 
     _createClass(BottomOfComment, [{
-        key: 'render',
+        key: "render",
         value: function render() {
             return React.createElement(
-                'div',
+                "div",
                 null,
                 React.createElement(
                     Row,
-                    { size: 'one' },
+                    { size: "one" },
                     React.createElement(
                         Column,
                         null,
@@ -360,13 +456,13 @@ var BottomOfComment = function (_React$Component3) {
                 ),
                 React.createElement(
                     Row,
-                    { size: 'two', nonStackable: true },
+                    { size: "two", nonStackable: true },
                     React.createElement(
                         Column,
                         null,
                         React.createElement(
-                            'div',
-                            { className: 'comment-date' },
+                            "div",
+                            { className: "comment-date" },
                             this.props.date
                         )
                     ),
@@ -377,7 +473,7 @@ var BottomOfComment = function (_React$Component3) {
                             FloatRight,
                             null,
                             React.createElement(LikeButton, { likeCount: this.props.likeCount, liked: this.props.liked, likeButtonDisabled: this.props.likeButtonDisabled, id: this.props.id, likeToggle: this.props.likeToggle }),
-                            React.createElement(ReportButton, { handleOpenReportArea: this.props.handleOpenReportArea, disabled: this.props.owner })
+                            React.createElement(ReportButton, { handleOpenReportArea: this.props.handleOpenReportArea, disabled: this.props.owner || this.props.reported })
                         )
                     )
                 )
@@ -388,8 +484,8 @@ var BottomOfComment = function (_React$Component3) {
     return BottomOfComment;
 }(React.Component);
 
-var LikeButton = function (_React$Component4) {
-    _inherits(LikeButton, _React$Component4);
+var LikeButton = function (_React$Component5) {
+    _inherits(LikeButton, _React$Component5);
 
     function LikeButton(props) {
         _classCallCheck(this, LikeButton);
@@ -398,17 +494,17 @@ var LikeButton = function (_React$Component4) {
     }
 
     _createClass(LikeButton, [{
-        key: 'render',
+        key: "render",
         value: function render() {
             this.disabled = this.props.likeButtonDisabled ? " disabled" : "";
             this.buttonClass = this.props.liked ? "ui blue button" : "ui button";
             return React.createElement(
-                'button',
+                "button",
                 { className: this.buttonClass + this.disabled, onClick: this.props.likeToggle },
                 React.createElement(
-                    'i',
-                    { className: 'icon' },
-                    React.createElement('i', { className: 'fa fa-thumbs-up', 'aria-hidden': 'true' })
+                    "i",
+                    { className: "icon" },
+                    React.createElement("i", { className: "fa fa-thumbs-up", "aria-hidden": "true" })
                 ),
                 this.props.likeCount
             );
@@ -418,34 +514,34 @@ var LikeButton = function (_React$Component4) {
     return LikeButton;
 }(React.Component);
 
-var ReportButton = function (_React$Component5) {
-    _inherits(ReportButton, _React$Component5);
+var ReportButton = function (_React$Component6) {
+    _inherits(ReportButton, _React$Component6);
 
     function ReportButton(props) {
         _classCallCheck(this, ReportButton);
 
-        var _this7 = _possibleConstructorReturn(this, (ReportButton.__proto__ || Object.getPrototypeOf(ReportButton)).call(this, props));
+        var _this8 = _possibleConstructorReturn(this, (ReportButton.__proto__ || Object.getPrototypeOf(ReportButton)).call(this, props));
 
-        _this7.openReportArea = _this7.openReportArea.bind(_this7);
-        _this7.buttonClass = _this7.props.disabled ? "ui icon disabled button" : "ui icon button";
-        return _this7;
+        _this8.openReportArea = _this8.openReportArea.bind(_this8);
+        _this8.buttonClass = _this8.props.disabled ? "ui icon disabled button" : "ui icon button";
+        return _this8;
     }
 
     _createClass(ReportButton, [{
-        key: 'openReportArea',
+        key: "openReportArea",
         value: function openReportArea() {
             this.props.handleOpenReportArea();
         }
     }, {
-        key: 'render',
+        key: "render",
         value: function render() {
             return React.createElement(
-                'button',
+                "button",
                 { className: this.buttonClass, onClick: this.openReportArea },
                 React.createElement(
-                    'i',
-                    { className: 'icon' },
-                    React.createElement('i', { className: 'fa fa-exclamation-triangle', 'aria-hidden': 'true' })
+                    "i",
+                    { className: "icon" },
+                    React.createElement("i", { className: "fa fa-exclamation-triangle", "aria-hidden": "true" })
                 )
             );
         }
@@ -454,40 +550,42 @@ var ReportButton = function (_React$Component5) {
     return ReportButton;
 }(React.Component);
 
-var ReportArea = function (_React$Component6) {
-    _inherits(ReportArea, _React$Component6);
+var ReportArea = function (_React$Component7) {
+    _inherits(ReportArea, _React$Component7);
 
     function ReportArea(props) {
         _classCallCheck(this, ReportArea);
 
-        var _this8 = _possibleConstructorReturn(this, (ReportArea.__proto__ || Object.getPrototypeOf(ReportArea)).call(this, props));
+        var _this9 = _possibleConstructorReturn(this, (ReportArea.__proto__ || Object.getPrototypeOf(ReportArea)).call(this, props));
 
-        _this8.limitOfReportText = 200;
-        _this8.state = {
-            // normal, loading, reported
+        _this9.limitOfReportText = 200;
+        _this9.state = {
+            // normal, loading, message
             form: "loading",
-            reportedType: "", // success, warning, danger
-            reportedHeader: "",
-            reportedText: "",
+            messageType: "", // colors
+            messageHeader: "",
+            messageText: "",
+            hideComment: true,
             selectOptionWarning: false,
             option: "-1",
             reportText: '',
             reportTextSize: 0,
             reportTextLimitWarning: false
         };
-        _this8.fetchReportOptions();
-        _this8.fetchReportOptions = _this8.fetchReportOptions.bind(_this8);
-        _this8.closeReportArea = _this8.closeReportArea.bind(_this8);
-        _this8.sendReport = _this8.sendReport.bind(_this8);
-        _this8.changeOption = _this8.changeOption.bind(_this8);
-        _this8.changeTextarea = _this8.changeTextarea.bind(_this8);
-        return _this8;
+        _this9.fetchReportOptions();
+        _this9.fetchReportOptions = _this9.fetchReportOptions.bind(_this9);
+        _this9.closeReportArea = _this9.closeReportArea.bind(_this9);
+        _this9.sendReport = _this9.sendReport.bind(_this9);
+        _this9.changeOption = _this9.changeOption.bind(_this9);
+        _this9.changeTextarea = _this9.changeTextarea.bind(_this9);
+        _this9.toggleHideComment = _this9.toggleHideComment.bind(_this9);
+        return _this9;
     }
 
     _createClass(ReportArea, [{
-        key: 'fetchReportOptions',
+        key: "fetchReportOptions",
         value: function fetchReportOptions() {
-            var _this9 = this;
+            var _this10 = this;
 
             fetch(SITEURL + 'api/reportOptions', {
                 method: 'GET',
@@ -498,21 +596,21 @@ var ReportArea = function (_React$Component6) {
                 if (!response.ok) throw new Error(response.status);else return response.json();
             }).then(function (json) {
                 console.log(json);
-                _this9.setState({
+                _this10.setState({
                     form: "normal",
                     options: json['other']['reportOptions']
                 });
             }).catch(function (error) {});
         }
     }, {
-        key: 'closeReportArea',
+        key: "closeReportArea",
         value: function closeReportArea() {
             this.props.handleCloseReportArea();
         }
     }, {
-        key: 'sendReport',
+        key: "sendReport",
         value: function sendReport() {
-            var _this10 = this;
+            var _this11 = this;
 
             if (this.state.option == "-1") {
                 this.setState({
@@ -530,22 +628,32 @@ var ReportArea = function (_React$Component6) {
                     body: JSON.stringify({
                         commentID: this.props.commentID,
                         reportOptionID: this.state.option,
-                        reportText: this.state.reportText
+                        reportText: this.state.reportText,
+                        hide: this.state.hideComment
                     })
                 }).then(function (response) {
                     if (!response.ok) throw new Error(response.status);else return response.json();
                 }).then(function (json) {
-                    _this10.setState({
-                        form: "reported",
-                        reportedType: "success", // success, warning, danger
-                        reportedHeader: "Geri bildirim gönderildi",
-                        reportedText: "Geri bildirim göndererek daha kaliteli bir ortam oluşturma konusunda bize yardımcı olduğunuz için teşekkür ederiz"
+                    _this11.setState({
+                        form: "message",
+                        messageType: "success", // success, warning, danger
+                        messageHeader: "Geri bildirim gönderildi",
+                        messageText: "Geri bildirim göndererek daha kaliteli bir ortam oluşturma konusunda bize yardımcı olduğunuz için teşekkür ederiz"
                     });
-                }).catch(function (error) {});
+                }).catch(function (error) {
+                    if (error.message == 422) {
+                        _this11.setState({
+                            form: "message",
+                            messageType: "red",
+                            messageHeader: "Zaten şikayet edilmiş",
+                            messageText: "Bu yorum için zaten henüz değerlendirilmemiş bir şikayetiniz mevcut"
+                        });
+                    }
+                });
             }
         }
     }, {
-        key: 'changeOption',
+        key: "changeOption",
         value: function changeOption(e) {
             this.setState({
                 option: e.target.value
@@ -557,7 +665,7 @@ var ReportArea = function (_React$Component6) {
             }
         }
     }, {
-        key: 'changeTextarea',
+        key: "changeTextarea",
         value: function changeTextarea(e) {
             this.setState({
                 reportText: e.target.value,
@@ -574,15 +682,22 @@ var ReportArea = function (_React$Component6) {
             }
         }
     }, {
-        key: 'render',
+        key: "toggleHideComment",
+        value: function toggleHideComment() {
+            this.setState({
+                hideComment: this.state.hideComment ? false : true
+            });
+        }
+    }, {
+        key: "render",
         value: function render() {
             if (this.state.form == "normal") {
                 return React.createElement(
-                    'div',
+                    "div",
                     null,
                     React.createElement(
                         Row,
-                        { size: 'one' },
+                        { size: "one" },
                         React.createElement(
                             Column,
                             null,
@@ -591,11 +706,11 @@ var ReportArea = function (_React$Component6) {
                                 null,
                                 React.createElement(
                                     Row,
-                                    { size: 'two', nonStackable: true },
+                                    { size: "two", nonStackable: true },
                                     React.createElement(
                                         Column,
                                         null,
-                                        React.createElement(H, { type: '3', text: 'Geri Bildirim' })
+                                        React.createElement(H, { type: "3", text: "Geri Bildirim" })
                                     ),
                                     React.createElement(
                                         Column,
@@ -609,62 +724,84 @@ var ReportArea = function (_React$Component6) {
                                 ),
                                 React.createElement(
                                     Row,
-                                    { size: 'one' },
+                                    { size: "one" },
                                     React.createElement(
                                         Column,
                                         null,
                                         React.createElement(
-                                            'div',
-                                            { className: 'ui yellow message' },
+                                            "div",
+                                            { className: "ui yellow message" },
                                             React.createElement(
-                                                'div',
-                                                { className: 'header' },
-                                                'Bu yorum hakk\u0131nda geri bildirimde bulunuyorsunuz.'
+                                                "div",
+                                                { className: "header" },
+                                                "Bu yorum hakk\u0131nda geri bildirimde bulunuyorsunuz."
                                             ),
                                             React.createElement(
-                                                'p',
+                                                "p",
                                                 null,
-                                                '\xC7ok fazla yanl\u0131\u015F geri bildirim yapman\u0131z halinde, ileride yapaca\u011F\u0131n\u0131z geri bildirimler dikkate al\u0131nmayabilir.'
+                                                "\xC7ok fazla yanl\u0131\u015F geri bildirim yapman\u0131z halinde, ileride yapaca\u011F\u0131n\u0131z geri bildirimler dikkate al\u0131nmayabilir."
                                             )
                                         )
                                     )
                                 ),
                                 React.createElement(
                                     Row,
-                                    { size: 'one' },
+                                    { size: "one" },
                                     React.createElement(
                                         Column,
                                         null,
                                         React.createElement(ReportOptions, { handleChangeOption: this.changeOption, options: this.state.options, selected: this.state.option })
                                     )
                                 ),
-                                this.state.selectOptionWarning ? React.createElement(BasicMessage, { type: 'warning', text: '"Neden" bo\u015F b\u0131rak\u0131lamaz!' }) : '',
+                                this.state.selectOptionWarning ? React.createElement(BasicMessage, { type: "warning", text: "\"Neden\" bo\u015F b\u0131rak\u0131lamaz!" }) : '',
                                 React.createElement(
                                     Row,
-                                    { size: 'one' },
+                                    { size: "one" },
                                     React.createElement(
                                         Column,
                                         null,
                                         React.createElement(
-                                            'div',
-                                            { className: 'ui form' },
+                                            "div",
+                                            { className: "ui form" },
                                             React.createElement(
-                                                'div',
-                                                { className: 'field' },
+                                                "div",
+                                                { className: "field" },
                                                 React.createElement(
-                                                    'label',
+                                                    "label",
                                                     null,
-                                                    'A\xE7\u0131klama'
+                                                    "A\xE7\u0131klama"
                                                 ),
-                                                React.createElement('textarea', { rows: '2', onChange: this.changeTextarea, value: this.state.reportText })
+                                                React.createElement("textarea", { rows: "2", onChange: this.changeTextarea, value: this.state.reportText })
                                             )
                                         )
                                     )
                                 ),
-                                this.state.reportTextLimitWarning ? React.createElement(BasicMessage, { type: 'warning', text: 'A\xE7\u0131klama bu kadar uzun olamaz!' }) : '',
+                                this.state.reportTextLimitWarning ? React.createElement(BasicMessage, { type: "warning", text: "A\xE7\u0131klama bu kadar uzun olamaz!" }) : '',
                                 React.createElement(
                                     Row,
-                                    { size: 'one' },
+                                    { size: "one" },
+                                    React.createElement(
+                                        Column,
+                                        null,
+                                        React.createElement(
+                                            "div",
+                                            { className: "field" },
+                                            React.createElement(
+                                                "div",
+                                                { className: "ui checkbox" },
+                                                React.createElement("input", { type: "checkbox", id: "hiddenCommentCheckbox", checked: this.state.hideComment, onChange: this.toggleHideComment }),
+                                                React.createElement(
+                                                    "label",
+                                                    { "for": "hiddenCommentCheckbox" },
+                                                    "Ayr\u0131ca bu yorumu gizle"
+                                                )
+                                            )
+                                        )
+                                    )
+                                ),
+                                React.createElement(
+                                    Row,
+                                    { size: "one" },
                                     React.createElement(
                                         Column,
                                         null,
@@ -672,18 +809,18 @@ var ReportArea = function (_React$Component6) {
                                             FloatRight,
                                             null,
                                             React.createElement(
-                                                'div',
+                                                "div",
                                                 null,
                                                 React.createElement(
-                                                    'span',
-                                                    { className: 'report-text-count ' },
+                                                    "span",
+                                                    { className: "report-text-count " },
                                                     this.state.reportTextSize,
-                                                    '/200'
+                                                    "/200"
                                                 ),
                                                 React.createElement(
-                                                    'button',
+                                                    "button",
                                                     { className: this.state.reportTextLimitWarning ? "ui blue disabled button" : "ui blue button", onClick: this.sendReport },
-                                                    'G\xF6nder'
+                                                    "G\xF6nder"
                                                 )
                                             )
                                         )
@@ -695,14 +832,14 @@ var ReportArea = function (_React$Component6) {
                 );
             } else if (this.state.form == "loading") {
                 return React.createElement(
-                    'div',
+                    "div",
                     null,
                     React.createElement(RowLoadingSpin, null)
                 );
-            } else if (this.state.form == "reported") {
+            } else if (this.state.form == "message") {
                 return React.createElement(
                     Row,
-                    { size: 'one' },
+                    { size: "one" },
                     React.createElement(
                         Column,
                         null,
@@ -710,17 +847,17 @@ var ReportArea = function (_React$Component6) {
                             RaisedSegment,
                             null,
                             React.createElement(
-                                'div',
-                                { className: "ui " + this.state.reportedType + " message" },
+                                "div",
+                                { className: "ui " + this.state.messageType + " message" },
                                 React.createElement(
-                                    'div',
-                                    { className: 'header' },
-                                    this.state.reportedHeader
+                                    "div",
+                                    { className: "header" },
+                                    this.state.messageHeader
                                 ),
                                 React.createElement(
-                                    'p',
+                                    "p",
                                     null,
-                                    this.state.reportedText
+                                    this.state.messageText
                                 )
                             )
                         )
@@ -733,8 +870,8 @@ var ReportArea = function (_React$Component6) {
     return ReportArea;
 }(React.Component);
 
-var ReportOptions = function (_React$Component7) {
-    _inherits(ReportOptions, _React$Component7);
+var ReportOptions = function (_React$Component8) {
+    _inherits(ReportOptions, _React$Component8);
 
     function ReportOptions(props) {
         _classCallCheck(this, ReportOptions);
@@ -743,37 +880,37 @@ var ReportOptions = function (_React$Component7) {
     }
 
     _createClass(ReportOptions, [{
-        key: 'render',
+        key: "render",
         value: function render() {
             var options = [];
             options.push(React.createElement(
-                'option',
-                { value: '-1', key: '-1' },
-                '-- L\xFCtfen Se\xE7iniz --'
+                "option",
+                { value: "-1", key: "-1" },
+                "-- L\xFCtfen Se\xE7iniz --"
             ));
             for (var i = 0; i < this.props.options.length; i++) {
                 options.push(React.createElement(
-                    'option',
+                    "option",
                     { value: this.props.options[i].id, key: this.props.options[i].id },
                     this.props.options[i].optionName
                 ));
             }
             return React.createElement(
-                'div',
+                "div",
                 null,
                 React.createElement(
-                    'div',
-                    { className: 'ui form' },
+                    "div",
+                    { className: "ui form" },
                     React.createElement(
-                        'div',
-                        { className: 'field' },
+                        "div",
+                        { className: "field" },
                         React.createElement(
-                            'label',
+                            "label",
                             null,
-                            'Neden'
+                            "Neden"
                         ),
                         React.createElement(
-                            'select',
+                            "select",
                             { onChange: this.props.handleChangeOption, value: this.props.option },
                             options
                         )
@@ -786,8 +923,8 @@ var ReportOptions = function (_React$Component7) {
     return ReportOptions;
 }(React.Component);
 
-var Rating = function (_React$Component8) {
-    _inherits(Rating, _React$Component8);
+var Rating = function (_React$Component9) {
+    _inherits(Rating, _React$Component9);
 
     function Rating(props) {
         _classCallCheck(this, Rating);
@@ -796,7 +933,7 @@ var Rating = function (_React$Component8) {
     }
 
     _createClass(Rating, [{
-        key: 'render',
+        key: "render",
         value: function render() {
             this.ratingLines = [];
             var keys = Object.keys(this.props.tags);
@@ -814,11 +951,11 @@ var Rating = function (_React$Component8) {
             }
             return React.createElement(
                 Row,
-                { size: 'sixteen' },
-                React.createElement(WideColumn, { size: 'two' }),
+                { size: "sixteen" },
+                React.createElement(WideColumn, { size: "two" }),
                 React.createElement(
                     WideColumn,
-                    { size: 'twelve' },
+                    { size: "twelve" },
                     this.ratingLines
                 )
             );
@@ -828,8 +965,8 @@ var Rating = function (_React$Component8) {
     return Rating;
 }(React.Component);
 
-var RatingLine = function (_React$Component9) {
-    _inherits(RatingLine, _React$Component9);
+var RatingLine = function (_React$Component10) {
+    _inherits(RatingLine, _React$Component10);
 
     function RatingLine(props) {
         _classCallCheck(this, RatingLine);
@@ -838,19 +975,19 @@ var RatingLine = function (_React$Component9) {
     }
 
     _createClass(RatingLine, [{
-        key: 'render',
+        key: "render",
         value: function render() {
-            var _this14 = this;
+            var _this15 = this;
 
             return React.createElement(
                 Row,
-                { size: 'one' },
+                { size: "one" },
                 React.createElement(
                     Column,
                     null,
                     React.createElement(
                         Row,
-                        { size: 'two' },
+                        { size: "two" },
                         React.createElement(
                             Column,
                             null,
@@ -867,70 +1004,70 @@ var RatingLine = function (_React$Component9) {
                                 Center,
                                 null,
                                 React.createElement(
-                                    'div',
-                                    { className: 'ui form' },
+                                    "div",
+                                    { className: "ui form" },
                                     React.createElement(
-                                        'div',
-                                        { className: 'field' },
+                                        "div",
+                                        { className: "field" },
                                         React.createElement(
-                                            'select',
+                                            "select",
                                             { onChange: function onChange(e) {
-                                                    return _this14.props.selectOption(e, _this14.props.tagSlug);
+                                                    return _this15.props.selectOption(e, _this15.props.tagSlug);
                                                 }, value: this.props.value },
                                             React.createElement(
-                                                'option',
-                                                { value: '-' },
-                                                'Se\xE7ilmemi\u015F'
+                                                "option",
+                                                { value: "-" },
+                                                "Se\xE7ilmemi\u015F"
                                             ),
                                             React.createElement(
-                                                'option',
-                                                { value: '1' },
-                                                '1'
+                                                "option",
+                                                { value: "1" },
+                                                "1"
                                             ),
                                             React.createElement(
-                                                'option',
-                                                { value: '2' },
-                                                '2'
+                                                "option",
+                                                { value: "2" },
+                                                "2"
                                             ),
                                             React.createElement(
-                                                'option',
-                                                { value: '3' },
-                                                '3'
+                                                "option",
+                                                { value: "3" },
+                                                "3"
                                             ),
                                             React.createElement(
-                                                'option',
-                                                { value: '4' },
-                                                '4'
+                                                "option",
+                                                { value: "4" },
+                                                "4"
                                             ),
                                             React.createElement(
-                                                'option',
-                                                { value: '5' },
-                                                '5'
+                                                "option",
+                                                { value: "5" },
+                                                "5"
                                             ),
                                             React.createElement(
-                                                'option',
-                                                { value: '6' },
-                                                '6'
+                                                "option",
+                                                { value: "6" },
+                                                "6"
                                             ),
                                             React.createElement(
-                                                'option',
-                                                { value: '7' },
-                                                '7'
+                                                "option",
+                                                { value: "7" },
+                                                "7"
                                             ),
                                             React.createElement(
-                                                'option',
-                                                { value: '8' },
-                                                '8'
+                                                "option",
+                                                { value: "8" },
+                                                "8"
                                             ),
                                             React.createElement(
-                                                'option',
-                                                { value: '9' },
-                                                '9'
+                                                "option",
+                                                { value: "9" },
+                                                "9"
                                             ),
                                             React.createElement(
-                                                'option',
-                                                { value: '10' },
-                                                '10'
+                                                "option",
+                                                { value: "10" },
+                                                "10"
                                             )
                                         )
                                     )
@@ -946,29 +1083,29 @@ var RatingLine = function (_React$Component9) {
     return RatingLine;
 }(React.Component);
 
-var EditArea = function (_React$Component10) {
-    _inherits(EditArea, _React$Component10);
+var EditArea = function (_React$Component11) {
+    _inherits(EditArea, _React$Component11);
 
     function EditArea(props) {
         _classCallCheck(this, EditArea);
 
-        var _this15 = _possibleConstructorReturn(this, (EditArea.__proto__ || Object.getPrototypeOf(EditArea)).call(this, props));
+        var _this16 = _possibleConstructorReturn(this, (EditArea.__proto__ || Object.getPrototypeOf(EditArea)).call(this, props));
 
-        _this15.state = {
-            commentText: _this15.props.commentText,
-            rating: _this15.props.rating,
-            tags: _this15.mergeTagAndRating(),
-            sendButtonState: _this15.props.commentText.length ? "" : "disabled"
+        _this16.state = {
+            commentText: _this16.props.commentText,
+            rating: _this16.props.rating,
+            tags: _this16.mergeTagAndRating(),
+            sendButtonState: _this16.props.commentText.length ? "" : "disabled"
         };
-        _this15.mergeTagAndRating = _this15.mergeTagAndRating.bind(_this15);
-        _this15.changeComment = _this15.changeComment.bind(_this15);
-        _this15.sendComment = _this15.sendComment.bind(_this15);
-        _this15.selectOption = _this15.selectOption.bind(_this15);
-        return _this15;
+        _this16.mergeTagAndRating = _this16.mergeTagAndRating.bind(_this16);
+        _this16.changeComment = _this16.changeComment.bind(_this16);
+        _this16.sendComment = _this16.sendComment.bind(_this16);
+        _this16.selectOption = _this16.selectOption.bind(_this16);
+        return _this16;
     }
 
     _createClass(EditArea, [{
-        key: 'mergeTagAndRating',
+        key: "mergeTagAndRating",
         value: function mergeTagAndRating() {
             var tags = {};
             for (var i = 0; i < this.props.tags.length; i++) {
@@ -989,7 +1126,7 @@ var EditArea = function (_React$Component10) {
             return tags;
         }
     }, {
-        key: 'changeComment',
+        key: "changeComment",
         value: function changeComment(e) {
             this.setState({
                 commentText: e.target.value,
@@ -997,9 +1134,9 @@ var EditArea = function (_React$Component10) {
             });
         }
     }, {
-        key: 'sendComment',
+        key: "sendComment",
         value: function sendComment() {
-            var _this16 = this;
+            var _this17 = this;
 
             console.log(this.props.productID);
             if (this.props.newComment) {
@@ -1017,10 +1154,10 @@ var EditArea = function (_React$Component10) {
                 }).then(function (response) {
                     if (!response.ok) throw new Error(response.status);else return response.json();
                 }).then(function (json) {
-                    _this16.props.reloadFunc();
+                    _this17.props.reloadFunc();
                 }).catch(function (error) {
                     if (error.message == 422) {
-                        _this16.showTopMessage("warning", "Her ürüne sadece bir kere yorum yapabilirsiniz");
+                        _this17.showTopMessage("warning", "Her ürüne sadece bir kere yorum yapabilirsiniz");
                     }
                 });
             } else {
@@ -1041,19 +1178,19 @@ var EditArea = function (_React$Component10) {
                 }).then(function (response) {
                     if (!response.ok) throw new Error(response.status);else return response.json();
                 }).then(function (json) {
-                    if (_this16.props.setForm) {
-                        _this16.props.setForm('normal');
+                    if (_this17.props.setForm) {
+                        _this17.props.setForm('normal');
                     }
-                    _this16.props.reloadFunc();
+                    _this17.props.reloadFunc();
                 }).catch(function (error) {
                     if (error.message == 422) {
-                        _this16.showTopMessage("warning", "Her ürüne sadece bir kere yorum yapabilirsiniz");
+                        _this17.showTopMessage("warning", "Her ürüne sadece bir kere yorum yapabilirsiniz");
                     }
                 });
             }
         }
     }, {
-        key: 'selectOption',
+        key: "selectOption",
         value: function selectOption(e, slug) {
             console.log(slug + " - " + e.target.value);
             var temp = this.state.tags;
@@ -1064,19 +1201,19 @@ var EditArea = function (_React$Component10) {
             });
         }
     }, {
-        key: 'render',
+        key: "render",
         value: function render() {
             this.title = this.props.newComment ? "Yorum Yaz" : "Düzenle";
             this.buttonName = this.props.newComment ? "Gönder" : "Düzenle";
             return React.createElement(
                 Row,
-                { size: 'one' },
+                { size: "one" },
                 React.createElement(
                     Column,
                     null,
                     null ? React.createElement(
                         Row,
-                        { size: 'one' },
+                        { size: "one" },
                         React.createElement(
                             Column,
                             null,
@@ -1088,11 +1225,11 @@ var EditArea = function (_React$Component10) {
                         null,
                         React.createElement(
                             Row,
-                            { size: 'two', nonStackable: true },
+                            { size: "two", nonStackable: true },
                             React.createElement(
                                 Column,
                                 null,
-                                React.createElement(H, { type: '4', text: this.title })
+                                React.createElement(H, { type: "4", text: this.title })
                             ),
                             React.createElement(
                                 Column,
@@ -1106,29 +1243,29 @@ var EditArea = function (_React$Component10) {
                         ),
                         React.createElement(
                             Row,
-                            { size: 'one' },
+                            { size: "one" },
                             React.createElement(
                                 Column,
                                 null,
                                 React.createElement(
-                                    'div',
-                                    { className: 'ui form' },
+                                    "div",
+                                    { className: "ui form" },
                                     React.createElement(
-                                        'div',
-                                        { className: 'field' },
+                                        "div",
+                                        { className: "field" },
                                         React.createElement(
-                                            'label',
+                                            "label",
                                             null,
-                                            'Yorumunuz'
+                                            "Yorumunuz"
                                         ),
-                                        React.createElement('textarea', { value: this.state.commentText, onChange: this.changeComment })
+                                        React.createElement("textarea", { value: this.state.commentText, onChange: this.changeComment })
                                     )
                                 )
                             )
                         ),
                         React.createElement(
                             Row,
-                            { size: 'one' },
+                            { size: "one" },
                             React.createElement(
                                 Column,
                                 null,
@@ -1137,7 +1274,7 @@ var EditArea = function (_React$Component10) {
                         ),
                         React.createElement(
                             Row,
-                            { size: 'one' },
+                            { size: "one" },
                             React.createElement(
                                 Column,
                                 null,
@@ -1145,7 +1282,7 @@ var EditArea = function (_React$Component10) {
                                     FloatRight,
                                     null,
                                     React.createElement(
-                                        'button',
+                                        "button",
                                         { className: "ui green " + this.state.sendButtonState + " button", onClick: this.sendComment },
                                         this.buttonName
                                     )
@@ -1161,25 +1298,25 @@ var EditArea = function (_React$Component10) {
     return EditArea;
 }(React.Component);
 
-var DeleteArea = function (_React$Component11) {
-    _inherits(DeleteArea, _React$Component11);
+var DeleteArea = function (_React$Component12) {
+    _inherits(DeleteArea, _React$Component12);
 
     function DeleteArea(props) {
         _classCallCheck(this, DeleteArea);
 
-        var _this17 = _possibleConstructorReturn(this, (DeleteArea.__proto__ || Object.getPrototypeOf(DeleteArea)).call(this, props));
+        var _this18 = _possibleConstructorReturn(this, (DeleteArea.__proto__ || Object.getPrototypeOf(DeleteArea)).call(this, props));
 
-        _this17.state = {
+        _this18.state = {
             form: "normal"
         };
-        _this17.deleteComment = _this17.deleteComment.bind(_this17);
-        return _this17;
+        _this18.deleteComment = _this18.deleteComment.bind(_this18);
+        return _this18;
     }
 
     _createClass(DeleteArea, [{
-        key: 'deleteComment',
+        key: "deleteComment",
         value: function deleteComment() {
-            var _this18 = this;
+            var _this19 = this;
 
             this.props.runBeforeDelete();
             fetch(SITEURL + 'api/comment', {
@@ -1193,24 +1330,24 @@ var DeleteArea = function (_React$Component11) {
             }).then(function (response) {
                 if (!response.ok) throw new Error(response.status);else return response.json();
             }).then(function (json) {
-                _this18.props.runAfterDelete();
-                _this18.props.reloadFunc();
+                _this19.props.runAfterDelete();
+                _this19.props.reloadFunc();
             }).catch(function (error) {
                 if (error.message == 404) {
-                    _this18.props.runAfterDelete();
-                    _this18.props.reloadFunc();
+                    _this19.props.runAfterDelete();
+                    _this19.props.reloadFunc();
                 } else {
-                    _this18.props.runAfterDelete();
-                    _this18.props.reloadFunc();
+                    _this19.props.runAfterDelete();
+                    _this19.props.reloadFunc();
                 }
             });
         }
     }, {
-        key: 'render',
+        key: "render",
         value: function render() {
             return React.createElement(
                 Row,
-                { size: 'one' },
+                { size: "one" },
                 React.createElement(
                     Column,
                     null,
@@ -1219,16 +1356,16 @@ var DeleteArea = function (_React$Component11) {
                         null,
                         React.createElement(
                             Row,
-                            { size: 'one' },
+                            { size: "one" },
                             React.createElement(
                                 Column,
                                 null,
-                                React.createElement(BasicMessage, { type: 'danger', text: 'Bu yorumu kal\u0131c\u0131 olarak silmek istedi\u011Finizden emin misiniz?' })
+                                React.createElement(BasicMessage, { type: "danger", text: "Bu yorumu kal\u0131c\u0131 olarak silmek istedi\u011Finizden emin misiniz?" })
                             )
                         ),
                         React.createElement(
                             Row,
-                            { size: 'two', nonStackable: true },
+                            { size: "two", nonStackable: true },
                             React.createElement(
                                 Column,
                                 null,
@@ -1236,9 +1373,9 @@ var DeleteArea = function (_React$Component11) {
                                     FloatRight,
                                     null,
                                     React.createElement(
-                                        'button',
-                                        { className: 'ui green button', onClick: this.deleteComment },
-                                        'Evet'
+                                        "button",
+                                        { className: "ui green button", onClick: this.deleteComment },
+                                        "Evet"
                                     )
                                 )
                             ),
@@ -1246,9 +1383,9 @@ var DeleteArea = function (_React$Component11) {
                                 Column,
                                 null,
                                 React.createElement(
-                                    'button',
-                                    { className: 'ui red button', onClick: this.props.handleCancelButton },
-                                    'Hay\u0131r'
+                                    "button",
+                                    { className: "ui red button", onClick: this.props.handleCancelButton },
+                                    "Hay\u0131r"
                                 )
                             )
                         )
@@ -1261,31 +1398,31 @@ var DeleteArea = function (_React$Component11) {
     return DeleteArea;
 }(React.Component);
 
-var BottomComment = function (_React$Component12) {
-    _inherits(BottomComment, _React$Component12);
+var BottomComment = function (_React$Component13) {
+    _inherits(BottomComment, _React$Component13);
 
     function BottomComment(props) {
         _classCallCheck(this, BottomComment);
 
-        var _this19 = _possibleConstructorReturn(this, (BottomComment.__proto__ || Object.getPrototypeOf(BottomComment)).call(this, props));
+        var _this20 = _possibleConstructorReturn(this, (BottomComment.__proto__ || Object.getPrototypeOf(BottomComment)).call(this, props));
 
-        _this19.state = {
+        _this20.state = {
             topMessage: null,
             likeButtonDisabled: false
         };
-        return _this19;
+        return _this20;
     }
 
     _createClass(BottomComment, [{
-        key: 'render',
+        key: "render",
         value: function render() {
             if (this.props.form == "normal") {
                 return React.createElement(
-                    'div',
+                    "div",
                     null,
                     this.state.topMessage ? React.createElement(
                         Row,
-                        { size: 'one' },
+                        { size: "one" },
                         React.createElement(
                             Column,
                             null,
@@ -1294,13 +1431,13 @@ var BottomComment = function (_React$Component12) {
                     ) : "",
                     React.createElement(
                         Row,
-                        { size: 'one' },
+                        { size: "one" },
                         React.createElement(
                             Column,
                             null,
                             React.createElement(
                                 RaisedSegment,
-                                { otherClass: 'comment' },
+                                { otherClass: "comment" },
                                 React.createElement(TopOfComment, {
                                     text: this.props.ownComment.commentText,
                                     slug: this.props.ownComment.owner.slug,
@@ -1344,7 +1481,7 @@ var BottomComment = function (_React$Component12) {
                     tags: this.props.tags,
                     rating: [],
                     handleCancelButton: this.props.openNormal,
-                    commentText: '',
+                    commentText: "",
                     owner: true,
                     reloadFunc: this.props.reloadFunc,
                     newComment: true,
@@ -1364,8 +1501,8 @@ var BottomComment = function (_React$Component12) {
     return BottomComment;
 }(React.Component);
 
-var Comments = function (_React$Component13) {
-    _inherits(Comments, _React$Component13);
+var Comments = function (_React$Component14) {
+    _inherits(Comments, _React$Component14);
 
     function Comments(props) {
         _classCallCheck(this, Comments);
@@ -1374,7 +1511,7 @@ var Comments = function (_React$Component13) {
     }
 
     _createClass(Comments, [{
-        key: 'render',
+        key: "render",
         value: function render() {
             if (this.props.form == "normal") {
                 this.comments = [];
@@ -1395,11 +1532,13 @@ var Comments = function (_React$Component13) {
                         title: com.title,
                         date: com.date,
                         rating: com.rating,
-                        owner: com.owner
+                        owner: com.owner,
+                        reported: com.reported,
+                        hidden: com.hidden
                     }));
                 }
                 return React.createElement(
-                    'div',
+                    "div",
                     null,
                     this.comments
                 );
@@ -1408,14 +1547,14 @@ var Comments = function (_React$Component13) {
             } else if (this.props.form == "noComment") {
                 return React.createElement(
                     Row,
-                    { size: 'one' },
+                    { size: "one" },
                     React.createElement(
                         Column,
                         null,
                         React.createElement(
-                            'div',
-                            { 'class': 'ui big yellow message' },
-                            'Yorum yok, ilk yorum senden olsun!'
+                            "div",
+                            { "class": "ui big yellow message" },
+                            "Yorum yok, ilk yorum senden olsun!"
                         )
                     )
                 );

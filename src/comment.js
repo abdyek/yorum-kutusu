@@ -2,8 +2,10 @@ class Comment extends React.Component {
     constructor(props){
         super(props);
         let form = (this.props.form)?this.props.form:"normal";
+        form = (this.props.hidden)?"hidden":form;
+        console.log("burası" + this.props.hidden);;
         this.state = {
-            // normal, report, edit, delete, message, loading
+            // normal, report, edit, delete, message, loading, hidden
             form:form,
             topMessage: this.props.topMessage,
             message: this.props.message,
@@ -19,8 +21,10 @@ class Comment extends React.Component {
         this.openDeleteArea = this.openDeleteArea.bind(this);
         this.closeDeleteArea = this.closeDeleteArea.bind(this);
         this.openLoadingSpin = this.openLoadingSpin.bind(this);
-        this.hide = this.hide.bind(this);
+        this.makeNone = this.makeNone.bind(this);
         this.setForm = this.setForm.bind(this);
+        this.justOneTime = this.justOneTime.bind(this);
+        this.removeHide = this.removeHide.bind(this);
     }
     likeToggle() {
         if(isMember()) {
@@ -83,15 +87,40 @@ class Comment extends React.Component {
             form:"loading"
         });
     }
-    hide() {
+    makeNone() {
         this.setState({
-            form:"hidden"
+            form:"none"
         })
     }
     setForm(formType) {
         this.setState({
             form:formType
         });
+    }
+    justOneTime(){
+        this.setState({
+            form:"normal"
+        });
+    }
+    removeHide(){
+        this.setState({
+            form:"normal"
+        });
+        fetch(SITEURL + 'api/removeHideComment', {
+            method: 'POST',
+            header: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                commentID:this.props.id
+            })
+        }).then((response)=>{
+            if(!response.ok) throw new Error(response.status);
+            else return response.json();
+        }).then((json)=>{
+        }).catch((error)=>{
+        });
+        
     }
     render() {
         if(this.state.form=="normal") {
@@ -108,7 +137,7 @@ class Comment extends React.Component {
                         <Column>
                             <RaisedSegment otherClass="comment">
                                 <TopOfComment text={this.props.text} slug={this.props.slug} title={this.props.title} owner={this.props.owner} handleOpenEditArea={this.openEditArea} handleOpenDeleteArea={this.openDeleteArea} changeContent={this.props.changeContent} type={this.props.type}/>
-                                <BottomOfComment likeCount={this.state.likeCount} liked={this.state.liked} likeButtonDisabled={this.state.likeButtonDisabled} likeToggle={this.likeToggle} date={this.props.date} handleOpenReportArea={this.openReportArea} handleCloseReportArea={this.closeReportArea} tags={this.props.rating} owner={this.props.owner} changeContent={this.props.changeContent} id={this.props.id}/>
+                                <BottomOfComment likeCount={this.state.likeCount} liked={this.state.liked} likeButtonDisabled={this.state.likeButtonDisabled} likeToggle={this.likeToggle} date={this.props.date} handleOpenReportArea={this.openReportArea} handleCloseReportArea={this.closeReportArea} tags={this.props.rating} owner={this.props.owner} changeContent={this.props.changeContent} id={this.props.id} reported={this.props.reported}/>
                             </RaisedSegment>
                         </Column>
                     </Row>
@@ -124,7 +153,7 @@ class Comment extends React.Component {
             )
         } else if(this.state.form=="delete") {
             return(
-                <DeleteArea handleCancelButton={this.closeDeleteArea} runBeforeDelete={this.openLoadingSpin} runAfterDelete={this.hide} reloadFunc={this.props.reloadFunc} id={this.props.id}/>
+                <DeleteArea handleCancelButton={this.closeDeleteArea} runBeforeDelete={this.openLoadingSpin} runAfterDelete={this.makeNone} reloadFunc={this.props.reloadFunc} id={this.props.id}/>
             )
         } else if(this.state.form=="message") {
             return(
@@ -138,11 +167,41 @@ class Comment extends React.Component {
             return(
                 <RowLoadingSpin />
             )
-        } else if(this.state.form=="hidden") {
+        } else if(this.state.form=="none") {
             return(
                 ""
             )
+        } else if(this.state.form=="hidden") {
+            return(
+                <HiddenArea justOneTime={this.justOneTime} removeHide={this.removeHide}/>
+            )
         }
+    }
+}
+
+class HiddenArea extends React.Component {
+    render() {
+        return(
+            <Row size="one">
+                <Column>
+                    <RaisedSegment otherClass="comment">
+                        <Row size="one">
+                            <Column>
+                                <div className="ui olive message">Bu yorumu gizlediniz</div>
+                            </Column>
+                        </Row>
+                        <Row size="one">
+                            <Column>
+                                <FloatRight>
+                                    <button className="ui yellow button" onClick={this.props.justOneTime}>Şimdilik Göster</button>
+                                    <button className="ui olive button" onClick={this.props.removeHide}>Görünür Yap</button>
+                                </FloatRight>
+                            </Column>
+                        </Row>
+                    </RaisedSegment>
+                </Column>
+            </Row>
+        )
     }
 }
 
@@ -255,7 +314,7 @@ class BottomOfComment extends React.Component {
                     <Column>
                         <FloatRight>
                             <LikeButton likeCount={this.props.likeCount} liked={this.props.liked} likeButtonDisabled={this.props.likeButtonDisabled} id={this.props.id} likeToggle={this.props.likeToggle}/>
-                            <ReportButton handleOpenReportArea={this.props.handleOpenReportArea} disabled={this.props.owner}/>
+                            <ReportButton handleOpenReportArea={this.props.handleOpenReportArea} disabled={this.props.owner || this.props.reported}/>
                         </FloatRight>
                     </Column>
                 </Row>
@@ -307,11 +366,12 @@ class ReportArea extends React.Component {
         super(props);
         this.limitOfReportText = 200;
         this.state = {
-            // normal, loading, reported
+            // normal, loading, message
             form:"loading",
-            reportedType:"",  // success, warning, danger
-            reportedHeader:"",
-            reportedText:"",
+            messageType:"",  // colors
+            messageHeader:"",
+            messageText:"",
+            hideComment:true,
             selectOptionWarning:false,
             option:"-1",
             reportText: '',
@@ -324,6 +384,7 @@ class ReportArea extends React.Component {
         this.sendReport = this.sendReport.bind(this);
         this.changeOption = this.changeOption.bind(this);
         this.changeTextarea = this.changeTextarea.bind(this);
+        this.toggleHideComment = this.toggleHideComment.bind(this);
     }
     fetchReportOptions() {
         fetch(SITEURL + 'api/reportOptions', {
@@ -364,20 +425,28 @@ class ReportArea extends React.Component {
                 body: JSON.stringify({
                     commentID:this.props.commentID,
                     reportOptionID: this.state.option,
-                    reportText:this.state.reportText
+                    reportText:this.state.reportText,
+                    hide:this.state.hideComment
                 })
             }).then((response)=>{
                 if(!response.ok) throw new Error(response.status);
                 else return response.json();
             }).then((json)=>{
                 this.setState({
-                    form:"reported",
-                    reportedType:"success",  // success, warning, danger
-                    reportedHeader:"Geri bildirim gönderildi",
-                    reportedText:"Geri bildirim göndererek daha kaliteli bir ortam oluşturma konusunda bize yardımcı olduğunuz için teşekkür ederiz"
+                    form:"message",
+                    messageType:"success",  // success, warning, danger
+                    messageHeader:"Geri bildirim gönderildi",
+                    messageText:"Geri bildirim göndererek daha kaliteli bir ortam oluşturma konusunda bize yardımcı olduğunuz için teşekkür ederiz"
                 });
             }).catch((error)=>{
-                
+                if(error.message==422) {
+                    this.setState({
+                        form:"message",
+                        messageType:"red",
+                        messageHeader:"Zaten şikayet edilmiş",
+                        messageText:"Bu yorum için zaten henüz değerlendirilmemiş bir şikayetiniz mevcut"
+                    })
+                }
             });
         }
     }
@@ -405,6 +474,11 @@ class ReportArea extends React.Component {
                 reportTextLimitWarning: false
             })
         }
+    }
+    toggleHideComment() {
+        this.setState({
+            hideComment: (this.state.hideComment)?false:true
+        });
     }
     render() {
         if(this.state.form=="normal") {
@@ -458,6 +532,16 @@ class ReportArea extends React.Component {
                                 : ''}
                                 <Row size="one">
                                     <Column>
+                                        <div className="field">
+                                            <div className="ui checkbox">
+                                                <input type="checkbox" id="hiddenCommentCheckbox" checked={this.state.hideComment} onChange={this.toggleHideComment}/>
+                                                <label for="hiddenCommentCheckbox">Ayrıca bu yorumu gizle</label>
+                                            </div>
+                                        </div>
+                                    </Column>
+                                </Row>
+                                <Row size="one">
+                                    <Column>
                                         <FloatRight>
                                             <div>
                                                 <span className="report-text-count ">
@@ -479,17 +563,17 @@ class ReportArea extends React.Component {
                     <RowLoadingSpin />
                 </div>
             )
-        } else if(this.state.form=="reported") {
+        } else if(this.state.form=="message") {
             return(
                 <Row size="one">
                     <Column>
                         <RaisedSegment>
-                            <div className={"ui "+this.state.reportedType+" message"}>
+                            <div className={"ui "+this.state.messageType+" message"}>
                                 <div className="header">
-                                    {this.state.reportedHeader}
+                                    {this.state.messageHeader}
                                 </div>
                                 <p>
-                                    {this.state.reportedText}
+                                    {this.state.messageText}
                                 </p>
                             </div>
                         </RaisedSegment>
@@ -944,6 +1028,8 @@ class Comments extends React.Component {
                                         date={com.date}
                                         rating={com.rating}
                                         owner={com.owner}
+                                        reported={com.reported}
+                                        hidden={com.hidden}
                                     />
 				)
 			}

@@ -15,6 +15,7 @@ class Product extends Request {
         $this->getFollowInfo();
         $this->getPageCount();
         $this->getHiddenComment();
+        $this->getReportedComment();
         $this->getCommentsWithRating();
         $this->updateLastSeen();
         $this->mergeAllInfo();
@@ -48,14 +49,21 @@ class Product extends Request {
         }
     }
     private function getHiddenComment() {
+        $this->hiddenComment = [];
         if(WHO=='member') {
             $query = Database::getRows('SELECT comment_id FROM hidden_comment WHERE member_id=?', [USERID]);
-            $this->hiddenComment = [];
             foreach($query as $key=>$q) {
                 $this->hiddenComment[] = $q['comment_id'];
             }
-        } else {
-            $this->hiddenComment = [];
+        }
+    }
+    private function getReportedComment() {
+        $this->reportedComment = [];
+        if(WHO=='member') {
+            $query = Database::getRows('SELECT comment_id FROM comment_report_request WHERE report_answered=0 and member_id=?', [USERID]);
+            foreach($query as $q) {
+                $this->reportedComment[] = $q['comment_id'];
+            }
         }
     }
     private function getCommentsWithRating() {
@@ -97,6 +105,7 @@ class Product extends Request {
                 'commentLikeCount'=>$com['comment_like_count'],
                 'liked'=>$liked,
                 'isOwner'=> $this->hasComment,
+                'reported'=> (in_array($com['comment_id'],$this->reportedComment))?true:false,
                 'hidden'=>(in_array($com['comment_id'], $this->hiddenComment))?true:false,
                 'owner'=>[
                     'id'=>$com['member_id'],
