@@ -3,7 +3,6 @@ class Comment extends React.Component {
         super(props);
         let form = (this.props.form)?this.props.form:"normal";
         form = (this.props.hidden)?"hidden":form;
-        console.log("burası" + this.props.hidden);;
         this.state = {
             // normal, report, edit, delete, message, loading, hidden
             form:form,
@@ -137,7 +136,20 @@ class Comment extends React.Component {
                         <Column>
                             <RaisedSegment otherClass="comment">
                                 <TopOfComment text={this.props.text} slug={this.props.slug} title={this.props.title} owner={this.props.owner} handleOpenEditArea={this.openEditArea} handleOpenDeleteArea={this.openDeleteArea} changeContent={this.props.changeContent} type={this.props.type}/>
-                                <BottomOfComment likeCount={this.state.likeCount} liked={this.state.liked} likeButtonDisabled={this.state.likeButtonDisabled} likeToggle={this.likeToggle} date={this.props.date} handleOpenReportArea={this.openReportArea} handleCloseReportArea={this.closeReportArea} tags={this.props.rating} owner={this.props.owner} changeContent={this.props.changeContent} id={this.props.id} reported={this.props.reported}/>
+                                <BottomOfComment
+                                    likeCount={this.state.likeCount}
+                                    liked={this.state.liked}
+                                    likeButtonDisabled={this.state.likeButtonDisabled}
+                                    likeToggle={this.likeToggle}
+                                    date={this.props.date}
+                                    handleOpenReportArea={this.openReportArea}
+                                    handleCloseReportArea={this.closeReportArea}
+                                    tags={this.props.rating}
+                                    owner={this.props.owner}
+                                    changeContent={this.props.changeContent}
+                                    id={this.props.id}
+                                    reported={this.props.reported}
+                                />
                             </RaisedSegment>
                         </Column>
                     </Row>
@@ -314,7 +326,7 @@ class BottomOfComment extends React.Component {
                     <Column>
                         <FloatRight>
                             <LikeButton likeCount={this.props.likeCount} liked={this.props.liked} likeButtonDisabled={this.props.likeButtonDisabled} id={this.props.id} likeToggle={this.props.likeToggle}/>
-                            <ReportButton handleOpenReportArea={this.props.handleOpenReportArea} disabled={this.props.owner || this.props.reported}/>
+                            <ReportButton handleOpenReportArea={this.props.handleOpenReportArea} disabled={this.props.owner || this.props.reported} changeContent={this.props.changeContent}/>
                         </FloatRight>
                     </Column>
                 </Row>
@@ -348,7 +360,11 @@ class ReportButton extends React.Component {
         this.buttonClass = (this.props.disabled)?"ui icon disabled button":"ui icon button";
     }
     openReportArea() {
-        this.props.handleOpenReportArea();
+        if(isMember()) {
+            this.props.handleOpenReportArea();
+        } else {
+            this.props.changeContent('giris-yap', true);
+        }
     }
     render() {
         return (

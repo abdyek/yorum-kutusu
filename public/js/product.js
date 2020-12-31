@@ -388,7 +388,7 @@ var ProductInfo = function (_React$Component2) {
                     React.createElement(
                         Column,
                         null,
-                        React.createElement(H, { type: "1", text: this.props.productName })
+                        React.createElement(H, { type: "1", text: this.props.productName, id: "productHeader" })
                     ),
                     React.createElement(
                         Column,

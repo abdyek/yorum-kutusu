@@ -314,7 +314,7 @@ class ProductInfo extends React.Component {
             <div>
                 <Row size="two" nonStackable={true}>
                     <Column>
-                        <H type="1" text={this.props.productName} />
+                        <H type="1" text={this.props.productName} id={"productHeader"}/>
                     </Column>
 		<Column>
             <FloatRight>

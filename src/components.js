@@ -109,22 +109,20 @@ class H extends React.Component {
         if(this.props.textAlign=="center") {
             this.textAlign = " center aligned ";
         }
-        if(!this.props.optional) {
-            this.optional = "";
-        } else {
-            this.optional = this.props.optional;
-        }
+        /* if(!this.props.optional) { this.optional = ""; } else { this.optional = this.props.optional; } */
+        this.optional = (this.props.optional)?this.props.optional:"";
+        this.id = (this.props.id)?this.props.id:"";
         this.a = <a href={this.props.href} onClick={this.props.handleOnClick}>{this.props.text}</a>
         if(this.props.type=="1") {
-            this.h = <h1 className={"ui "+this.textAlign+" header h-title " + this.optional}>{this.a}</h1>
+            this.h = <h1 id={this.id} className={"ui "+this.textAlign+" header h-title " + this.optional}>{this.a}</h1>
         } else if(this.props.type=="2") {
-            this.h = <h2 className={"ui "+this.textAlign+" header h-title " + this.optional}>{this.a}</h2>
+            this.h = <h2 id={this.id} className={"ui "+this.textAlign+" header h-title " + this.optional}>{this.a}</h2>
         } else if(this.props.type=="3") {
-            this.h = <h3 className={"ui "+this.textAlign+" header h-title " + this.optional}>{this.a}</h3>
+            this.h = <h3 id={this.id} className={"ui "+this.textAlign+" header h-title " + this.optional}>{this.a}</h3>
         } else if(this.props.type=="4") {
-            this.h = <h4 className={"ui "+this.textAlign+"header h-title " + this.optional}>{this.a}</h4>
+            this.h = <h4 id={this.id} className={"ui "+this.textAlign+"header h-title " + this.optional}>{this.a}</h4>
         } else if(this.props.type=="5") {
-            this.h = <h5 className={"ui "+this.textAlign+"header h-title " + this.optional}>{this.a}</h5>
+            this.h = <h5 id={this.id} className={"ui "+this.textAlign+"header h-title " + this.optional}>{this.a}</h5>
         }
     }
     render() {

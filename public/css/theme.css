@@ -12,10 +12,14 @@ body {
 }
 
 .comment-header>a {
-    color:#955f31;
+    color:#c16060;
 }
 
 .comment-header>a:hover {
+    color:#e2b7b7;
+}
+
+.comment-text {
     color:#eee;
 }
 
@@ -25,4 +29,18 @@ header {
 
 .footer {
     background-color: #233237 !important;
+}
+
+/* for product page */
+#productHeader > a {
+    color:#eee !important;
+}
+
+.read-all {
+    color:#b7d1e2;
+    cursor:pointer;
+}
+
+.read-all:hover {
+    color:#eee;
 }

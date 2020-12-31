@@ -18,7 +18,6 @@ var Comment = function (_React$Component) {
 
         var form = _this.props.form ? _this.props.form : "normal";
         form = _this.props.hidden ? "hidden" : form;
-        console.log("burası" + _this.props.hidden);;
         _this.state = {
             // normal, report, edit, delete, message, loading, hidden
             form: form,
@@ -185,7 +184,20 @@ var Comment = function (_React$Component) {
                                 RaisedSegment,
                                 { otherClass: "comment" },
                                 React.createElement(TopOfComment, { text: this.props.text, slug: this.props.slug, title: this.props.title, owner: this.props.owner, handleOpenEditArea: this.openEditArea, handleOpenDeleteArea: this.openDeleteArea, changeContent: this.props.changeContent, type: this.props.type }),
-                                React.createElement(BottomOfComment, { likeCount: this.state.likeCount, liked: this.state.liked, likeButtonDisabled: this.state.likeButtonDisabled, likeToggle: this.likeToggle, date: this.props.date, handleOpenReportArea: this.openReportArea, handleCloseReportArea: this.closeReportArea, tags: this.props.rating, owner: this.props.owner, changeContent: this.props.changeContent, id: this.props.id, reported: this.props.reported })
+                                React.createElement(BottomOfComment, {
+                                    likeCount: this.state.likeCount,
+                                    liked: this.state.liked,
+                                    likeButtonDisabled: this.state.likeButtonDisabled,
+                                    likeToggle: this.likeToggle,
+                                    date: this.props.date,
+                                    handleOpenReportArea: this.openReportArea,
+                                    handleCloseReportArea: this.closeReportArea,
+                                    tags: this.props.rating,
+                                    owner: this.props.owner,
+                                    changeContent: this.props.changeContent,
+                                    id: this.props.id,
+                                    reported: this.props.reported
+                                })
                             )
                         )
                     )
@@ -473,7 +485,7 @@ var BottomOfComment = function (_React$Component4) {
                             FloatRight,
                             null,
                             React.createElement(LikeButton, { likeCount: this.props.likeCount, liked: this.props.liked, likeButtonDisabled: this.props.likeButtonDisabled, id: this.props.id, likeToggle: this.props.likeToggle }),
-                            React.createElement(ReportButton, { handleOpenReportArea: this.props.handleOpenReportArea, disabled: this.props.owner || this.props.reported })
+                            React.createElement(ReportButton, { handleOpenReportArea: this.props.handleOpenReportArea, disabled: this.props.owner || this.props.reported, changeContent: this.props.changeContent })
                         )
                     )
                 )
@@ -530,7 +542,11 @@ var ReportButton = function (_React$Component6) {
     _createClass(ReportButton, [{
         key: "openReportArea",
         value: function openReportArea() {
-            this.props.handleOpenReportArea();
+            if (isMember()) {
+                this.props.handleOpenReportArea();
+            } else {
+                this.props.changeContent('giris-yap', true);
+            }
         }
     }, {
         key: "render",

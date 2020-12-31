@@ -246,11 +246,9 @@ var H = function (_React$Component9) {
         if (_this9.props.textAlign == "center") {
             _this9.textAlign = " center aligned ";
         }
-        if (!_this9.props.optional) {
-            _this9.optional = "";
-        } else {
-            _this9.optional = _this9.props.optional;
-        }
+        /* if(!this.props.optional) { this.optional = ""; } else { this.optional = this.props.optional; } */
+        _this9.optional = _this9.props.optional ? _this9.props.optional : "";
+        _this9.id = _this9.props.id ? _this9.props.id : "";
         _this9.a = React.createElement(
             "a",
             { href: _this9.props.href, onClick: _this9.props.handleOnClick },
@@ -259,31 +257,31 @@ var H = function (_React$Component9) {
         if (_this9.props.type == "1") {
             _this9.h = React.createElement(
                 "h1",
-                { className: "ui " + _this9.textAlign + " header h-title " + _this9.optional },
+                { id: _this9.id, className: "ui " + _this9.textAlign + " header h-title " + _this9.optional },
                 _this9.a
             );
         } else if (_this9.props.type == "2") {
             _this9.h = React.createElement(
                 "h2",
-                { className: "ui " + _this9.textAlign + " header h-title " + _this9.optional },
+                { id: _this9.id, className: "ui " + _this9.textAlign + " header h-title " + _this9.optional },
                 _this9.a
             );
         } else if (_this9.props.type == "3") {
             _this9.h = React.createElement(
                 "h3",
-                { className: "ui " + _this9.textAlign + " header h-title " + _this9.optional },
+                { id: _this9.id, className: "ui " + _this9.textAlign + " header h-title " + _this9.optional },
                 _this9.a
             );
         } else if (_this9.props.type == "4") {
             _this9.h = React.createElement(
                 "h4",
-                { className: "ui " + _this9.textAlign + "header h-title " + _this9.optional },
+                { id: _this9.id, className: "ui " + _this9.textAlign + "header h-title " + _this9.optional },
                 _this9.a
             );
         } else if (_this9.props.type == "5") {
             _this9.h = React.createElement(
                 "h5",
-                { className: "ui " + _this9.textAlign + "header h-title " + _this9.optional },
+                { id: _this9.id, className: "ui " + _this9.textAlign + "header h-title " + _this9.optional },
                 _this9.a
             );
         }
