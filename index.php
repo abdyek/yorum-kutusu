@@ -10,7 +10,7 @@ $router->get('/', function() {
     Tool::generatePage('ana-sayfa');
 });
 
-$router->get('/urun/:slug/:slug?/:slug?', function($productURL) {
+$router->get('/urun/:any/:slug?/:slug?', function($productURL) {
     Tool::generatePage('urun');
 });
 
@@ -36,6 +36,10 @@ $router->get('/e-posta-dogrula', function() {
 
 $router->get('/filtrele/:any?', function() {
     Tool::generatePage('filtrele');
+});
+
+$router->get('/urun-duzenle/:any?', function() {
+    Tool::generatePage('urun-duzenle');
 });
 
 // API REQUEST

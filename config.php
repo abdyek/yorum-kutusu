@@ -39,6 +39,10 @@
             'filtrele'=>[
                 'title'=>'Filtrele',
                 'content'=>'filter'
+            ],
+            'urun-duzenle'=>[
+                'title'=>'Ürün Düzenle',
+                'content'=>'editProduct'
             ]
         ];
         const MESSAGE = [

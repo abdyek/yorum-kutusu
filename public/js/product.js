@@ -326,7 +326,8 @@ var Product = function (_React$Component) {
                         openNormal: this.openNormalOfBottomComment,
                         hide: this.hideBottomComment,
                         openLoadingSpin: this.openLoadingSpinOfBottomComment
-                    })
+                    }),
+                    React.createElement(EditProductButton, { changeContent: this.props.changeContent })
                 );
             } else if (this.state.form == "loading") {
                 document.title = "Ürün";
@@ -491,4 +492,52 @@ var SpecialCommentHeader = function (_React$Component3) {
     }]);
 
     return SpecialCommentHeader;
+}(React.Component);
+
+var EditProductButton = function (_React$Component4) {
+    _inherits(EditProductButton, _React$Component4);
+
+    function EditProductButton(props) {
+        _classCallCheck(this, EditProductButton);
+
+        var _this9 = _possibleConstructorReturn(this, (EditProductButton.__proto__ || Object.getPrototypeOf(EditProductButton)).call(this, props));
+
+        _this9.goEditProduct = _this9.goEditProduct.bind(_this9);
+        return _this9;
+    }
+
+    _createClass(EditProductButton, [{
+        key: "goEditProduct",
+        value: function goEditProduct() {
+            if (isMember()) {
+                this.props.changeContent('urun-duzenle', true);
+            } else {
+                this.props.changeContent('giris-yap', true);
+            }
+        }
+    }, {
+        key: "render",
+        value: function render() {
+            return React.createElement(
+                Row,
+                { size: "one" },
+                React.createElement(
+                    Column,
+                    null,
+                    React.createElement(
+                        "button",
+                        { "class": "ui teal button", onClick: this.goEditProduct },
+                        React.createElement(
+                            "i",
+                            { "class": "icon" },
+                            React.createElement("i", { "class": "fa fa-pencil-square-o", "aria-hidden": "true" })
+                        ),
+                        "D\xFCzenle"
+                    )
+                )
+            );
+        }
+    }]);
+
+    return EditProductButton;
 }(React.Component);

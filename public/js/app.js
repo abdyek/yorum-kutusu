@@ -396,6 +396,8 @@ var Content = function (_React$Component6) {
                 case "emailValidationPage":
                     return React.createElement(EmailValidationPage, { changeContent: this.props.changeContent, changeLoading: this.props.changeLoading });
                     break;
+                case "editProduct":
+                    return React.createElement(EditProduct, null);
                 default:
                     return React.createElement(
                         "div",
@@ -432,7 +434,8 @@ var App = function (_React$Component7) {
             "uye-ol": "signup",
             "giris-yap": "login",
             "e-posta-dogrula": "emailValidationPage",
-            "filtrele": "filter"
+            "filtrele": "filter",
+            "urun-duzenle": "editProduct"
         };
         window.onpopstate = function (event) {
             var pathNames = getPathNames();

@@ -251,6 +251,10 @@ class Content extends React.Component {
                     <EmailValidationPage  changeContent={this.props.changeContent}  changeLoading={this.props.changeLoading} />
                 )
                 break;
+            case "editProduct":
+                return (
+                    <EditProduct />
+                )
             default:
                 return (
                     <div>{"Böyle bir sayfa yok" + this.state.content} </div>
@@ -276,7 +280,8 @@ class App extends React.Component {
             "uye-ol":"signup",
             "giris-yap":"login",
             "e-posta-dogrula":"emailValidationPage",
-            "filtrele":"filter"
+            "filtrele":"filter",
+            "urun-duzenle":"editProduct"
         }
         window.onpopstate = function(event) {
             const pathNames = getPathNames();

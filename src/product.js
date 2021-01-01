@@ -275,6 +275,7 @@ class Product extends React.Component {
                         hide={this.hideBottomComment}
                         openLoadingSpin={this.openLoadingSpinOfBottomComment}
                     />
+                    <EditProductButton changeContent={this.props.changeContent} />
                 </div>
             )
         } else if(this.state.form=="loading") {
@@ -367,4 +368,32 @@ class SpecialCommentHeader extends React.Component {
 			</Row>
 		)
 	}
+}
+
+class EditProductButton extends React.Component {
+    constructor(props){
+        super(props);
+        this.goEditProduct = this.goEditProduct.bind(this);
+    }
+    goEditProduct() {
+        if(isMember()) {
+            this.props.changeContent('urun-duzenle', true);
+        } else {
+            this.props.changeContent('giris-yap', true);
+        }
+    }
+    render() {
+        return(
+            <Row size="one">
+                <Column>
+                    <button class="ui teal button" onClick={this.goEditProduct}>
+                        <i class="icon">
+                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                        </i>
+                        Düzenle
+                    </button>
+                </Column>
+            </Row>
+        )
+    }
 }
