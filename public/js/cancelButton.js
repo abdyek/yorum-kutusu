@@ -28,7 +28,7 @@ var CancelButton = function (_React$Component) {
         value: function render() {
             return React.createElement(
                 "button",
-                { className: "ui icon red button", onClick: this.closeFunc },
+                { className: "ui mini icon red button", onClick: this.closeFunc },
                 React.createElement(
                     "i",
                     { className: "icon" },

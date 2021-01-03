@@ -8,7 +8,7 @@ class CancelButton extends React.Component {
     }
     render() {
         return(
-            <button className="ui icon red button" onClick={this.closeFunc}>
+            <button className="ui mini icon red button" onClick={this.closeFunc}>
                 <i className="icon">
                     <i className="fa fa-times" aria-hidden="true"></i>
                 </i>

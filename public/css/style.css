@@ -260,3 +260,8 @@ footer{
 label {
   cursor: pointer !important;
 }
+
+/* form içindeki warning mesajları gizleniyor otomatik olarak onu engellemek için */
+.yorumkutusu-form-message {
+    display:block !important;
+}

@@ -9,19 +9,87 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var Profile = function (_React$Component) {
     _inherits(Profile, _React$Component);
 
-    function Profile() {
+    function Profile(props) {
         _classCallCheck(this, Profile);
 
-        return _possibleConstructorReturn(this, (Profile.__proto__ || Object.getPrototypeOf(Profile)).apply(this, arguments));
+        var _this = _possibleConstructorReturn(this, (Profile.__proto__ || Object.getPrototypeOf(Profile)).call(this, props));
+
+        _this.state = {
+            settingAreaVisible: false,
+            followedProductsVisible: false
+            // setting elementary funcs
+        };_this.openSetting = _this.openSetting.bind(_this);
+        _this.closeSetting = _this.closeSetting.bind(_this);
+        _this.toggleSetting = _this.toggleSetting.bind(_this);
+        // followedProducts elementary funcs
+        _this.openFollowedProducts = _this.openFollowedProducts.bind(_this);
+        _this.closeFollowedProducts = _this.closeFollowedProducts.bind(_this);
+        _this.toggleFollowedProducts = _this.toggleFollowedProducts.bind(_this);
+        return _this;
     }
 
     _createClass(Profile, [{
+        key: "componentDidMount",
+        value: function componentDidMount() {
+            console.log("yükleme kodları burada olacak");
+        }
+    }, {
+        key: "openSetting",
+        value: function openSetting() {
+            this.closeFollowedProducts();
+            this.setState({ settingAreaVisible: true });
+        }
+    }, {
+        key: "closeSetting",
+        value: function closeSetting() {
+            this.setState({ settingAreaVisible: false });
+        }
+    }, {
+        key: "toggleSetting",
+        value: function toggleSetting() {
+            if (this.state.settingAreaVisible) this.closeSetting();else this.openSetting();
+        }
+    }, {
+        key: "openFollowedProducts",
+        value: function openFollowedProducts() {
+            this.closeSetting();
+            this.setState({ followedProductsVisible: true });
+        }
+    }, {
+        key: "closeFollowedProducts",
+        value: function closeFollowedProducts() {
+            this.setState({ followedProductsVisible: false });
+        }
+    }, {
+        key: "toggleFollowedProducts",
+        value: function toggleFollowedProducts() {
+            if (this.state.followedProductsVisible) this.closeFollowedProducts();else this.openFollowedProducts();
+        }
+    }, {
         key: "render",
         value: function render() {
             return React.createElement(
                 "div",
                 null,
-                React.createElement(Account, { changeContent: this.props.changeContent })
+                React.createElement(EmailValidation, { validated: true }),
+                React.createElement(ProfileHeader, {
+                    changeContent: this.props.changeContent,
+                    memberUsername: "Hamam B\xF6ce\u011Fine Kafa Atan Adam"
+                }),
+                React.createElement(OwnerButtons, {
+                    settingButton: this.toggleSetting,
+                    followedProductsButton: this.toggleFollowedProducts
+                }),
+                React.createElement(SettingArea, {
+                    visible: this.state.settingAreaVisible,
+                    close: this.closeSetting
+                }),
+                React.createElement(FollowedProductsArea, {
+                    visible: this.state.followedProductsVisible,
+                    close: this.closeFollowedProducts,
+                    changeContent: this.props.changeContent
+                }),
+                React.createElement(ProfileComments, null)
             );
         }
     }]);
@@ -29,299 +97,378 @@ var Profile = function (_React$Component) {
     return Profile;
 }(React.Component);
 
-var Account = function (_React$Component2) {
-    _inherits(Account, _React$Component2);
+var FollowedProductsArea = function (_React$Component2) {
+    _inherits(FollowedProductsArea, _React$Component2);
 
-    function Account(props) {
-        _classCallCheck(this, Account);
+    function FollowedProductsArea() {
+        _classCallCheck(this, FollowedProductsArea);
 
-        var _this2 = _possibleConstructorReturn(this, (Account.__proto__ || Object.getPrototypeOf(Account)).call(this, props));
-
-        _this2.state = {
-            loading: true,
-            form: "info"
-            //this.load();
-        };_this2.openSettingArea = _this2.openSettingArea.bind(_this2);
-        _this2.closeSettingArea = _this2.closeSettingArea.bind(_this2);
-        _this2.openFollowedProducts = _this2.openFollowedProducts.bind(_this2);
-        _this2.closeFollowedProducts = _this2.closeFollowedProducts.bind(_this2);
-        _this2.changeForm = _this2.changeForm.bind(_this2);
-        _this2.changeLoading = _this2.changeLoading.bind(_this2);
-        _this2.addMoreFollowed = _this2.addMoreFollowed.bind(_this2);
-        return _this2;
+        return _possibleConstructorReturn(this, (FollowedProductsArea.__proto__ || Object.getPrototypeOf(FollowedProductsArea)).apply(this, arguments));
     }
 
-    _createClass(Account, [{
-        key: "componentDidMount",
-        value: function componentDidMount() {
-            var form = "info";
-            var slugs = getSlugsExtra("profil");
-            var userSlug = slugs[0];
-            var extra = slugs[1];
-            var owner = true;
-            if (extra == "takipteki-urunler" && owner) {
-                // owner'ı burada kontrol ediyorum bu şu anlama geliyor: bu if ve else bloğunu api'den veri çektinten sonraaya koymam gerekiyor.
-                form = "followedProducts";
-            } else if (extra == "ayarlar") {
-                form = "setting";
-            }
-            console.log("yükleme komutları buraya " + userSlug);
-            this.setState({
-                // info, setting, followedProducts
-                form: form,
-                openedSetting: false,
-                info: {
-                    userName: "Yunus Emre",
-                    owner: owner
-                },
-                followedProductsInfo: {
-                    0: {
-                        url: "iphone-5s",
-                        productName: "Iphone 5s",
-                        newCommentCount: "5"
-                    },
-                    1: {
-                        url: "le-cola",
-                        productName: "Le-Cola",
-                        newCommentCount: "9312"
-                    },
-                    9: {
-                        url: "mahmut-efendi-kahveleri",
-                        productName: "Mahmut Efendi Kahveleri",
-                        newCommentCount: "0"
-                    }
-                },
-                isThereMoreProduct: true,
-                comments: [{
-                    title: "IPhone 5s",
-                    slug: "iphone-5s",
-                    text: "burası yorum text alanı",
-                    likeCount: 15,
-                    liked: false,
-                    date: "14 Aralık 2019 - 18:49",
-                    tags: [{
-                        id: 3,
-                        passive: false,
-                        text: "Batarya",
-                        color: "yellow",
-                        rateValue: "5",
-                        slug: "batarya"
-                    }, {
-                        id: 4,
-                        passive: false,
-                        text: "Kamera",
-                        color: "orange",
-                        rateValue: "4",
-                        slug: "kamera"
-                    }, {
-                        id: 5,
-                        passive: false,
-                        text: "Tasarım",
-                        color: "",
-                        rateValue: "-",
-                        slug: "tasarim"
-                    }],
-                    owner: false
-                }, {
-                    title: "Le Cola Zero",
-                    slug: "le-cola-zero",
-                    text: "burası yorum text alanı",
-                    likeCount: 15,
-                    liked: true,
-                    date: "14 Aralık 1999- 00:01",
-                    tags: [{
-                        id: 3,
-                        passive: false,
-                        text: "Batarya",
-                        color: "yellow",
-                        rateValue: "5"
-                    }, {
-                        id: 4,
-                        passive: false,
-                        text: "Kamera",
-                        color: "orange",
-                        rateValue: "4"
-                    }, {
-                        id: 5,
-                        passive: false,
-                        text: "Tasarım",
-                        color: "",
-                        rateValue: "-"
-                    }],
-                    owner: false
-                }]
-            });
-            this.changeLoading(false);
-        }
-    }, {
-        key: "openSettingArea",
-        value: function openSettingArea() {
-            this.changeForm("setting");
-        }
-    }, {
-        key: "closeSettingArea",
-        value: function closeSettingArea() {
-            this.changeForm("info");
-        }
-    }, {
-        key: "openFollowedProducts",
-        value: function openFollowedProducts() {
-            this.changeForm("followedProducts");
-        }
-    }, {
-        key: "closeFollowedProducts",
-        value: function closeFollowedProducts() {
-            this.changeForm("info");
-        }
-    }, {
-        key: "changeForm",
-        value: function changeForm(form) {
-            this.setState({
-                form: form
-            });
-        }
-    }, {
-        key: "changeLoading",
-        value: function changeLoading(trueOrFalse) {
-            this.setState({
-                loading: trueOrFalse
-            });
-        }
-    }, {
-        key: "addMoreFollowed",
-        value: function addMoreFollowed() {
-            // buradaki more ve isThereMore JSON'ı ajax ile gelen şey olacak
-            var more = {
-                0: {
-                    url: "iphone-5s",
-                    productName: "Iphone 5s",
-                    newCommentCount: "5"
-                },
-                1: {
-                    url: "le-cola",
-                    productName: "Le-Cola",
-                    newCommentCount: "9312"
-                },
-                9: {
-                    url: "mahmut-efendi-kahveleri",
-                    productName: "Mahmut Efendi Kahveleri",
-                    newCommentCount: "0"
-                },
-                99: {
-                    url: "yeni-gelen",
-                    productName: "Falan filen",
-                    newCommentCount: "19"
-                }
-            };
-            var isThereMore = false;
-            this.setState({
-                followedProductsInfo: more,
-                isThereMoreProduct: isThereMore
-            });
-        }
-    }, {
+    _createClass(FollowedProductsArea, [{
         key: "render",
         value: function render() {
-            if (this.state.loading) {
-                return React.createElement(RowLoadingSpin, { nonSegment: true });
-            } else {
-                this.form;
-                if (this.state.form == "info") {
-                    document.title = this.state.info.userName;
-                    this.form = React.createElement(AccountInfo, { handleOpenSettingArea: this.openSettingArea, handleOpenFollowedProducts: this.openFollowedProducts, info: this.state.info });
-                } else if (this.state.form == "setting") {
-                    document.title = "Ayarlar";
-                    this.form = React.createElement(SettingArea, { closeSettingArea: this.closeSettingArea });
-                } else if (this.state.form == "followedProducts") {
-                    document.title = "Takip Edilen Ürünler";
-                    this.form = React.createElement(FollowedProducts, { closeFollowedProducts: this.closeFollowedProducts, followedProductsInfo: this.state.followedProductsInfo, isThereMoreProduct: this.state.isThereMoreProduct, addMoreFollowed: this.addMoreFollowed, changeContent: this.props.changeContent });
-                }
+            if (this.props.visible) {
                 return React.createElement(
                     "div",
                     null,
-                    React.createElement(EmailValidation, { validated: false }),
                     React.createElement(
                         Row,
-                        { size: "one" },
+                        { size: "two", nonStackable: true },
                         React.createElement(
                             Column,
                             null,
-                            this.form
+                            React.createElement(
+                                "h3",
+                                { className: "ui header yorumkutusu-header" },
+                                "Takipteki \xDCr\xFCnler"
+                            )
+                        ),
+                        React.createElement(
+                            Column,
+                            null,
+                            React.createElement(
+                                FloatRight,
+                                null,
+                                React.createElement(CancelButton, { handleCancelButton: this.props.close })
+                            )
                         )
                     ),
-                    React.createElement(Comments, { comments: this.state.comments, form: "normal", changeContent: this.props.changeContent, type: "product" })
+                    React.createElement(
+                        Row,
+                        null,
+                        React.createElement(
+                            Column,
+                            null,
+                            React.createElement(FollowedProductsTable, {
+                                changeContent: this.props.changeContent
+                            })
+                        )
+                    )
                 );
+            } else {
+                return "";
             }
         }
     }]);
 
-    return Account;
+    return FollowedProductsArea;
 }(React.Component);
 
-var AccountInfo = function (_React$Component3) {
-    _inherits(AccountInfo, _React$Component3);
+var FollowedProductsTable = function (_React$Component3) {
+    _inherits(FollowedProductsTable, _React$Component3);
 
-    function AccountInfo(props) {
-        _classCallCheck(this, AccountInfo);
+    function FollowedProductsTable(props) {
+        _classCallCheck(this, FollowedProductsTable);
 
-        var _this3 = _possibleConstructorReturn(this, (AccountInfo.__proto__ || Object.getPrototypeOf(AccountInfo)).call(this, props));
+        var _this3 = _possibleConstructorReturn(this, (FollowedProductsTable.__proto__ || Object.getPrototypeOf(FollowedProductsTable)).call(this, props));
 
-        _this3.openSettingArea = _this3.openSettingArea.bind(_this3);
-        _this3.openFollowedProducts = _this3.openFollowedProducts.bind(_this3);
+        _this3.state = {
+            form: "normal", // normal, loading
+            info: [{
+                productID: 0,
+                productSlug: "iphone-5s",
+                productName: "Iphone 5s",
+                newComment: "5"
+            }, {
+                productID: 2,
+                productSlug: "mahmut-efendi-kahveleri",
+                productName: "Mahmut Efendi Kahveleri",
+                newComment: "5"
+            }, {
+                productID: 0,
+                productSlug: "starBucks-sumatra",
+                productName: "StarBucks Sumatra",
+                newComment: "99"
+            }]
+        };
         return _this3;
     }
 
-    _createClass(AccountInfo, [{
-        key: "openSettingArea",
-        value: function openSettingArea() {
-            this.props.handleOpenSettingArea();
+    _createClass(FollowedProductsTable, [{
+        key: "render",
+        value: function render() {
+            if (this.state.form == "normal") {
+                this.tr = [];
+                for (var i = 0; i < this.state.info.length; i++) {
+                    this.tr.push(React.createElement(
+                        "tr",
+                        null,
+                        React.createElement(
+                            "td",
+                            { "data-label": this.state.info[i].productSlug },
+                            React.createElement(FollowedProductsCell, {
+                                changeContent: this.state.changeContent,
+                                slug: this.state.info[i].productSlug,
+                                name: this.state.info[i].productName
+                            })
+                        ),
+                        React.createElement(
+                            "td",
+                            null,
+                            this.state.info[i].newComment
+                        )
+                    ));
+                }
+                return React.createElement(
+                    "table",
+                    { "class": "ui inverted table" },
+                    React.createElement(
+                        "thead",
+                        null,
+                        React.createElement(
+                            "tr",
+                            null,
+                            React.createElement(
+                                "th",
+                                null,
+                                "Takipteki \xDCr\xFCn"
+                            ),
+                            React.createElement(
+                                "th",
+                                null,
+                                "Yeni Yorum"
+                            )
+                        )
+                    ),
+                    React.createElement(
+                        "tbody",
+                        null,
+                        this.tr
+                    )
+                );
+            } else if (this.state.form == "loading") {
+                return React.createElement(RowLoadingSpin, { nonSegment: true });
+            }
         }
-    }, {
-        key: "openFollowedProducts",
-        value: function openFollowedProducts() {
-            this.props.handleOpenFollowedProducts();
+    }]);
+
+    return FollowedProductsTable;
+}(React.Component);
+
+var FollowedProductsCell = function (_React$Component4) {
+    _inherits(FollowedProductsCell, _React$Component4);
+
+    function FollowedProductsCell(props) {
+        _classCallCheck(this, FollowedProductsCell);
+
+        var _this4 = _possibleConstructorReturn(this, (FollowedProductsCell.__proto__ || Object.getPrototypeOf(FollowedProductsCell)).call(this, props));
+
+        _this4.goProduct = _this4.goProduct.bind(_this4);
+        return _this4;
+    }
+
+    _createClass(FollowedProductsCell, [{
+        key: "goProduct",
+        value: function goProduct(e) {
+            e.preventDefault();
+            this.props.changeContent(SITEURL + 'urun/' + this.props.slug);
         }
     }, {
         key: "render",
         value: function render() {
             return React.createElement(
-                Center,
+                "div",
                 null,
-                React.createElement("i", { id: "account-icon", className: "fa fa-user-circle", "aria-hidden": "true" }),
-                React.createElement(H, { type: "1", text: this.props.info.userName }),
-                this.props.info.owner ? React.createElement(
-                    "div",
+                React.createElement(
+                    "a",
+                    { className: "yorumkutusu-a", href: SITEURL + 'urun/' + this.props.slug, onClick: this.goProduct },
+                    this.props.name
+                )
+            );
+        }
+    }]);
+
+    return FollowedProductsCell;
+}(React.Component);
+
+var FollowedProductsLabels = function (_React$Component5) {
+    _inherits(FollowedProductsLabels, _React$Component5);
+
+    function FollowedProductsLabels() {
+        _classCallCheck(this, FollowedProductsLabels);
+
+        return _possibleConstructorReturn(this, (FollowedProductsLabels.__proto__ || Object.getPrototypeOf(FollowedProductsLabels)).apply(this, arguments));
+    }
+
+    _createClass(FollowedProductsLabels, [{
+        key: "render",
+        value: function render() {
+            return React.createElement(
+                "div",
+                null,
+                React.createElement(
+                    Row,
+                    { size: "one" },
+                    React.createElement(
+                        Column,
+                        null,
+                        React.createElement(
+                            "div",
+                            { className: "ui label" },
+                            "IPhone 5s",
+                            React.createElement(
+                                "div",
+                                { className: "detail" },
+                                "99"
+                            )
+                        )
+                    )
+                ),
+                React.createElement(
+                    Row,
+                    { size: "one" },
+                    React.createElement(
+                        Column,
+                        null,
+                        React.createElement(
+                            "div",
+                            { className: "ui label" },
+                            "Mahmut Efendi Kahveleri",
+                            React.createElement(
+                                "div",
+                                { className: "detail" },
+                                "12"
+                            )
+                        )
+                    )
+                ),
+                React.createElement(
+                    Row,
+                    { size: "one" },
+                    React.createElement(
+                        Column,
+                        null,
+                        React.createElement(
+                            "div",
+                            { className: "ui label" },
+                            "Startbucks Sumatra",
+                            React.createElement(
+                                "div",
+                                { className: "detail" },
+                                "0"
+                            )
+                        )
+                    )
+                )
+            );
+        }
+    }]);
+
+    return FollowedProductsLabels;
+}(React.Component);
+
+var ProfileHeader = function (_React$Component6) {
+    _inherits(ProfileHeader, _React$Component6);
+
+    function ProfileHeader() {
+        _classCallCheck(this, ProfileHeader);
+
+        return _possibleConstructorReturn(this, (ProfileHeader.__proto__ || Object.getPrototypeOf(ProfileHeader)).apply(this, arguments));
+    }
+
+    _createClass(ProfileHeader, [{
+        key: "render",
+        value: function render() {
+            return React.createElement(
+                Row,
+                { size: "one" },
+                React.createElement(
+                    Column,
+                    null,
+                    React.createElement(
+                        Row,
+                        null,
+                        React.createElement(
+                            Column,
+                            null,
+                            React.createElement(
+                                Center,
+                                null,
+                                React.createElement(
+                                    "h1",
+                                    { className: "ui header yorumkutusu-header" },
+                                    this.props.memberUsername
+                                )
+                            )
+                        )
+                    )
+                )
+            );
+        }
+    }]);
+
+    return ProfileHeader;
+}(React.Component);
+
+var ProfileComments = function (_React$Component7) {
+    _inherits(ProfileComments, _React$Component7);
+
+    function ProfileComments() {
+        _classCallCheck(this, ProfileComments);
+
+        return _possibleConstructorReturn(this, (ProfileComments.__proto__ || Object.getPrototypeOf(ProfileComments)).apply(this, arguments));
+    }
+
+    _createClass(ProfileComments, [{
+        key: "render",
+        value: function render() {
+            return React.createElement("div", null);
+        }
+    }]);
+
+    return ProfileComments;
+}(React.Component);
+
+var OwnerButtons = function (_React$Component8) {
+    _inherits(OwnerButtons, _React$Component8);
+
+    function OwnerButtons() {
+        _classCallCheck(this, OwnerButtons);
+
+        return _possibleConstructorReturn(this, (OwnerButtons.__proto__ || Object.getPrototypeOf(OwnerButtons)).apply(this, arguments));
+    }
+
+    _createClass(OwnerButtons, [{
+        key: "render",
+        value: function render() {
+            return React.createElement(
+                "div",
+                null,
+                React.createElement(
+                    Center,
                     null,
                     React.createElement(
                         "button",
-                        { className: "compact ui teal button", onClick: this.openSettingArea },
-                        React.createElement(
-                            "i",
-                            { className: "icon" },
-                            React.createElement("i", { className: "fa fa-cog", "aria-hidden": "true" })
-                        ),
-                        "Ayarlar"
-                    ),
-                    React.createElement(
-                        "button",
-                        { className: "compact ui teal button", onClick: this.openFollowedProducts },
+                        { className: "ui small teal button", onClick: this.props.followedProductsButton },
                         React.createElement(
                             "i",
                             { className: "icon" },
                             React.createElement("i", { "class": "fa fa-cube", "aria-hidden": "true" })
                         ),
                         "Takipteki \xDCr\xFCnler"
+                    ),
+                    React.createElement(
+                        "button",
+                        { className: "ui small teal button", onClick: this.props.settingButton },
+                        React.createElement(
+                            "i",
+                            { className: "icon" },
+                            React.createElement("i", { className: "fa fa-cog", "aria-hidden": "true" })
+                        ),
+                        "Ayarlar"
                     )
-                ) : ""
+                )
             );
         }
     }]);
 
-    return AccountInfo;
+    return OwnerButtons;
 }(React.Component);
 
-var SettingArea = function (_React$Component4) {
-    _inherits(SettingArea, _React$Component4);
+var SettingArea = function (_React$Component9) {
+    _inherits(SettingArea, _React$Component9);
 
     function SettingArea() {
         _classCallCheck(this, SettingArea);
@@ -332,293 +479,265 @@ var SettingArea = function (_React$Component4) {
     _createClass(SettingArea, [{
         key: "render",
         value: function render() {
-            return React.createElement(
-                "div",
-                null,
-                React.createElement(
+            if (this.props.visible) {
+                return React.createElement(
                     Row,
-                    { size: "two", nonStackable: true },
-                    React.createElement(
-                        Column,
-                        null,
-                        React.createElement(H, { type: "3", text: "Ayarlar" })
-                    ),
+                    { size: "one" },
                     React.createElement(
                         Column,
                         null,
                         React.createElement(
-                            FloatRight,
-                            null,
-                            React.createElement(CancelButton, { handleCancelButton: this.props.closeSettingArea })
-                        )
-                    )
-                ),
-                React.createElement(
-                    Row,
-                    { size: "sixteen" },
-                    React.createElement(WideColumn, { size: "three" }),
-                    React.createElement(
-                        WideColumn,
-                        { size: "ten" },
-                        React.createElement(ChangeItems, null)
-                    )
-                )
-            );
-        }
-    }]);
-
-    return SettingArea;
-}(React.Component);
-
-var FollowedProducts = function (_React$Component5) {
-    _inherits(FollowedProducts, _React$Component5);
-
-    function FollowedProducts(props) {
-        _classCallCheck(this, FollowedProducts);
-
-        var _this5 = _possibleConstructorReturn(this, (FollowedProducts.__proto__ || Object.getPrototypeOf(FollowedProducts)).call(this, props));
-
-        _this5.addMoreFollowed = _this5.addMoreFollowed.bind(_this5);
-        return _this5;
-    }
-
-    _createClass(FollowedProducts, [{
-        key: "addMoreFollowed",
-        value: function addMoreFollowed() {
-            this.props.addMoreFollowed();
-        }
-    }, {
-        key: "render",
-        value: function render() {
-            var _this6 = this;
-
-            this.trs = [];
-            var info = this.props.followedProductsInfo;
-            var keys = Object.keys(info);
-            for (var i = 0; i < keys.length; i++) {
-                this.trs.push(React.createElement(
-                    "tr",
-                    { key: keys[i] },
-                    React.createElement(
-                        "td",
-                        null,
-                        React.createElement(
-                            Center,
-                            null,
+                            Row,
+                            { size: "two", nonStackable: true },
                             React.createElement(
-                                "a",
-                                { href: "urun/" + info[keys[i]].url, onClick: function onClick(e) {
-                                        e.preventDefault();_this6.props.changeContent(e.target.href, e);
-                                    } },
-                                info[keys[i]].productName
-                            )
-                        )
-                    ),
-                    React.createElement(
-                        "td",
-                        null,
-                        React.createElement(
-                            Center,
-                            null,
-                            info[keys[i]].newCommentCount
-                        )
-                    )
-                ));
-            }
-            return React.createElement(
-                "div",
-                null,
-                React.createElement(
-                    Row,
-                    { size: "two", nonStackable: true },
-                    React.createElement(
-                        Column,
-                        null,
-                        React.createElement(H, { type: "3", text: "Takip Edilen \xDCr\xFCnler" })
-                    ),
-                    React.createElement(
-                        Column,
-                        null,
-                        React.createElement(
-                            FloatRight,
-                            null,
-                            React.createElement(CancelButton, { handleCancelButton: this.props.closeFollowedProducts })
-                        )
-                    )
-                ),
-                React.createElement(
-                    Row,
-                    { size: "sixteen" },
-                    React.createElement(WideColumn, { size: "three" }),
-                    React.createElement(
-                        WideColumn,
-                        { size: "ten" },
-                        React.createElement(
-                            "table",
-                            { className: "ui striped table" },
-                            React.createElement(
-                                "thead",
+                                Column,
                                 null,
                                 React.createElement(
-                                    "tr",
-                                    null,
-                                    React.createElement(
-                                        "th",
-                                        null,
-                                        React.createElement(
-                                            Center,
-                                            null,
-                                            "\xDCr\xFCn"
-                                        )
-                                    ),
-                                    React.createElement(
-                                        "th",
-                                        null,
-                                        React.createElement(
-                                            Center,
-                                            null,
-                                            "Yeni Yorum"
-                                        )
-                                    )
+                                    "h2",
+                                    { className: "ui header yorumkutusu-header" },
+                                    "Ayarlar"
                                 )
                             ),
-                            React.createElement(
-                                "tbody",
-                                null,
-                                this.trs
-                            )
-                        ),
-                        this.props.isThereMoreProduct ? React.createElement(
-                            Row,
-                            { size: "one" },
                             React.createElement(
                                 Column,
                                 null,
                                 React.createElement(
                                     FloatRight,
                                     null,
-                                    React.createElement(
-                                        "a",
-                                        { onClick: this.addMoreFollowed },
-                                        "Daha Fazla"
-                                    )
+                                    React.createElement(CancelButton, { handleCancelButton: this.props.close })
                                 )
                             )
-                        ) : ""
+                        ),
+                        React.createElement(
+                            Row,
+                            { size: "sixteen" },
+                            React.createElement(WideColumn, { size: "one" }),
+                            React.createElement(
+                                WideColumn,
+                                { size: "fourteen" },
+                                React.createElement(
+                                    "h3",
+                                    { className: "ui header yorumkutusu-header" },
+                                    "Hesap"
+                                ),
+                                React.createElement(ProfileSettings, null)
+                            )
+                        )
+                    )
+                );
+            } else {
+                return "";
+            }
+        }
+    }]);
+
+    return SettingArea;
+}(React.Component);
+
+var ProfileSettings = function (_React$Component10) {
+    _inherits(ProfileSettings, _React$Component10);
+
+    function ProfileSettings() {
+        _classCallCheck(this, ProfileSettings);
+
+        return _possibleConstructorReturn(this, (ProfileSettings.__proto__ || Object.getPrototypeOf(ProfileSettings)).apply(this, arguments));
+    }
+
+    _createClass(ProfileSettings, [{
+        key: "render",
+        value: function render() {
+            return React.createElement(
+                Row,
+                { size: "one" },
+                React.createElement(
+                    Column,
+                    null,
+                    React.createElement(
+                        Row,
+                        { size: "two" },
+                        React.createElement(
+                            Column,
+                            null,
+                            React.createElement(ChangeEmail, null)
+                        ),
+                        React.createElement(
+                            Column,
+                            null,
+                            React.createElement(ChangePassword, null)
+                        )
                     )
                 )
             );
         }
     }]);
 
-    return FollowedProducts;
+    return ProfileSettings;
 }(React.Component);
 
-var ChangeItems = function (_React$Component6) {
-    _inherits(ChangeItems, _React$Component6);
+var ChangeEmail = function (_React$Component11) {
+    _inherits(ChangeEmail, _React$Component11);
 
-    function ChangeItems(props) {
-        _classCallCheck(this, ChangeItems);
+    function ChangeEmail(props) {
+        _classCallCheck(this, ChangeEmail);
 
-        var _this7 = _possibleConstructorReturn(this, (ChangeItems.__proto__ || Object.getPrototypeOf(ChangeItems)).call(this, props));
+        var _this11 = _possibleConstructorReturn(this, (ChangeEmail.__proto__ || Object.getPrototypeOf(ChangeEmail)).call(this, props));
 
-        _this7.state = {
+        _this11.emailInputs = [{
+            name: "E-posta",
+            state: "email"
+        }, {
+            name: "Yeni E-posta",
+            state: "newEmail1"
+        }, {
+            name: "Yeni E-posta Tekrar",
+            state: "newEmail2"
+        }];
+        _this11.state = {
             form: "normal",
-            topMessage: null,
-            passwordSelected: true,
-            passwordButtonClass: "mini ui blue button",
-            emailSelected: false,
-            emailButtonClass: "mini ui button",
-            input1: "",
-            input2: "",
-            input3: ""
+            email: "",
+            newEmail1: "",
+            newEmail2: "",
+            password: "",
+            buttonDisabled: true,
+            formMessageOnlyText: false,
+            formMessageType: "",
+            formMessageHeader: "",
+            formMessageTextArr: []
         };
-        _this7.selectEmail = _this7.selectEmail.bind(_this7);
-        _this7.selectPassword = _this7.selectPassword.bind(_this7);
-        _this7.changeInput1 = _this7.changeInput1.bind(_this7);
-        _this7.changeInput2 = _this7.changeInput2.bind(_this7);
-        _this7.changeInput3 = _this7.changeInput3.bind(_this7);
-        _this7.send = _this7.send.bind(_this7);
-        _this7.showTopMessage = _this7.showTopMessage.bind(_this7);
-        return _this7;
+        _this11.send = _this11.send.bind(_this11);
+        _this11.changedSuccessfully = _this11.changedSuccessfully.bind(_this11);
+        _this11.checkInputs = _this11.checkInputs.bind(_this11);
+        _this11.changeEmailInput = _this11.changeEmailInput.bind(_this11);
+        _this11.changePassword = _this11.changePassword.bind(_this11);
+        _this11.setFormMessageList = _this11.setFormMessageList.bind(_this11);
+        _this11.setFormMessageText = _this11.setFormMessageText.bind(_this11);
+        _this11.setLoading = _this11.setLoading.bind(_this11);
+        _this11.setNormal = _this11.setNormal.bind(_this11);
+        return _this11;
     }
 
-    _createClass(ChangeItems, [{
-        key: "selectEmail",
-        value: function selectEmail() {
-            this.setState({
-                passwordSelected: false,
-                passwordButtonClass: "mini ui button",
-                emailButtonClass: "mini ui blue button",
-                input1: "",
-                input2: "",
-                input3: "",
-                topMessage: null
-            });
-        }
-    }, {
-        key: "selectPassword",
-        value: function selectPassword() {
-            this.setState({
-                passwordSelected: true,
-                passwordButtonClass: "mini ui blue button",
-                emailButtonClass: "mini ui button",
-                input1: "",
-                input2: "",
-                input3: "",
-                topMessage: null
-            });
-        }
-    }, {
-        key: "changeInput1",
-        value: function changeInput1(e) {
-            this.setState({
-                input1: e.target.value
-            });
-        }
-    }, {
-        key: "changeInput2",
-        value: function changeInput2(e) {
-            this.setState({
-                input2: e.target.value
-            });
-        }
-    }, {
-        key: "changeInput3",
-        value: function changeInput3(e) {
-            this.setState({
-                input3: e.target.value
-            });
-        }
-    }, {
+    _createClass(ChangeEmail, [{
         key: "send",
         value: function send() {
-            if (this.state.passwordSelected) {
-                // parola
-                if (this.state.input2 != this.state.input3) {
-                    this.showTopMessage("warning", "Parola tekrarı ile eşleşmiyor!");
-                } else {
-                    // burada gönderim yapılacak
-                }
-            } else {
-                // e-posta
-                if (!validateEmail(this.state.input1)) {
-                    this.showTopMessage("warning", "Yeni E-posta geçersiz!");
-                } else if (!validateEmail(this.state.input2)) {
-                    this.showTopMessage("warning", "Yeni E-posta Tekrarı geçersiz!");
-                } else {
-                    // burada gönderim yapılacak
-                }
+            if (this.checkInputs()) {
+                this.setLoading();
+                //this.changedSuccessfully();
+                //this.failed(401);
+                //this.failed(400);
+                //this.failed(422, 3);
+                //this.failed(422, 1);
+                console.log("gönderme işlemi burada");
             }
         }
     }, {
-        key: "showTopMessage",
-        value: function showTopMessage(type, text) {
-            this.setState({
-                topMessage: {
-                    type: type,
-                    text: text
+        key: "changedSuccessfully",
+        value: function changedSuccessfully() {
+            this.setFormMessageText("success", "Başarılı!", "Onay için yeni e-postanızı kontrol ediniz");
+        }
+    }, {
+        key: "failed",
+        value: function failed(type, subType) {
+            if (type == 401) {
+                this.setFormMessageText("error", "Başarısız!", "Parolanız doğru değil");
+            } else if (type == 500) {
+                this.setFormMessageText("error", "Başarısız!", "Beklenmedik bir hata oldu");
+            } else if (type == 422 && subType == 3) {
+                this.setFormMessageText("error", "Başarısız!", "Bu e-posta geçersiz");
+            } else if (type = 422 && subType == 1) {
+                this.setFormMessageText("error", "Başarısız!", "Bu e-posta kullanımda");
+            }
+        }
+    }, {
+        key: "checkInputs",
+        value: function checkInputs() {
+            var errors = [];
+            // email
+            for (var i = 0; i < this.emailInputs.length; i++) {
+                console.log(this.state[this.emailInputs[i].state]);
+                if (!validateEmail(this.state[this.emailInputs[i].state])) {
+                    errors.push(this.emailInputs[i].name + " geçersiz");
                 }
+            }
+            if (this.state.newEmail1 != this.state.newEmail2) {
+                errors.push("Yeni e-posta tekrarı ile aynı değil");
+            }
+            if (errors.length) {
+                this.setFormMessageList("error", "Geçersiz alan değerleri", errors);
+                return false;
+            }
+            return true;
+        }
+    }, {
+        key: "changeEmailInput",
+        value: function changeEmailInput(e) {
+            if (e.target.name == "email") {
+                this.setState({
+                    email: e.target.value
+                });
+            } else if (e.target.name == "newEmail1") {
+                this.setState({
+                    newEmail1: e.target.value
+                });
+            } else if (e.target.name == "newEmail2") {
+                this.setState({
+                    newEmail2: e.target.value
+                });
+            }
+        }
+    }, {
+        key: "changePassword",
+        value: function changePassword(e) {
+            if (e.target.value.length >= 10 && e.target.value.length <= 40) this.setButtonDisabledFalse();else this.setButtonDisabledTrue();
+            this.setState({
+                password: e.target.value
+            });
+        }
+    }, {
+        key: "setFormMessageList",
+        value: function setFormMessageList(type, header, arr) {
+            this.setState({
+                formMessageOnlyText: false,
+                formMessageType: type,
+                formMessageHeader: header,
+                formMessageTextArr: arr
+            });
+        }
+    }, {
+        key: "setFormMessageText",
+        value: function setFormMessageText(type, header, text) {
+            this.setState({
+                formMessageOnlyText: true,
+                formMessageType: type,
+                formMessageHeader: header,
+                formMessageTextArr: text
+            });
+        }
+    }, {
+        key: "setLoading",
+        value: function setLoading() {
+            this.setState({
+                form: "loading"
+            });
+        }
+    }, {
+        key: "setNormal",
+        value: function setNormal() {
+            this.setState({
+                form: "normal"
+            });
+        }
+    }, {
+        key: "setButtonDisabledFalse",
+        value: function setButtonDisabledFalse() {
+            this.setState({
+                buttonDisabled: false
+            });
+        }
+    }, {
+        key: "setButtonDisabledTrue",
+        value: function setButtonDisabledTrue() {
+            this.setState({
+                buttonDisabled: true
             });
         }
     }, {
@@ -629,93 +748,63 @@ var ChangeItems = function (_React$Component6) {
                     "div",
                     null,
                     React.createElement(
-                        Row,
-                        { size: "one" },
-                        React.createElement(
-                            Column,
-                            null,
-                            React.createElement(H, { type: "3", text: "De\u011Fi\u015Ftir", textAlign: "center" }),
-                            React.createElement(
-                                Center,
-                                null,
-                                React.createElement(
-                                    "div",
-                                    { id: "password-email-change" },
-                                    React.createElement(
-                                        "button",
-                                        { className: this.state.passwordButtonClass, onClick: this.selectPassword },
-                                        "Parola"
-                                    ),
-                                    React.createElement(
-                                        "button",
-                                        { className: this.state.emailButtonClass, onClick: this.selectEmail },
-                                        "E-posta"
-                                    )
-                                )
-                            )
-                        )
+                        "h4",
+                        { className: "ui header yorumkutusu-header" },
+                        "E-posta De\u011Fi\u015Ftir"
                     ),
-                    this.state.topMessage ? React.createElement(
-                        Row,
-                        { size: "one" },
-                        React.createElement(
-                            Column,
-                            null,
-                            React.createElement(
-                                "div",
-                                { id: "change-top-message" },
-                                React.createElement(BasicMessage, { type: this.state.topMessage.type, text: this.state.topMessage.text })
-                            )
-                        )
-                    ) : "",
                     React.createElement(
-                        "div",
+                        "form",
                         { className: "ui form" },
                         React.createElement(
-                            "h4",
-                            { className: "ui dividing header" },
-                            this.state.passwordSelected ? "Parola" : "E-posta",
-                            " De\u011Fi\u015Ftir"
+                            "div",
+                            { className: "field" },
+                            React.createElement(
+                                "label",
+                                { className: "yorumkutusu-label" },
+                                this.emailInputs[0].name
+                            ),
+                            React.createElement("input", { className: "yorumkutusu-input", type: "email", name: "email", placeholder: this.emailInputs[0].name, value: this.state.email, onChange: this.changeEmailInput })
                         ),
                         React.createElement(
                             "div",
                             { className: "field" },
                             React.createElement(
                                 "label",
-                                null,
-                                this.state.passwordSelected ? "Mevcut Parola" : "Yeni E-posta"
+                                { className: "yorumkutusu-label" },
+                                this.emailInputs[1].name
                             ),
-                            React.createElement("input", { type: this.state.passwordSelected ? "password" : "text", value: this.state.input1, onChange: this.changeInput1 })
+                            React.createElement("input", { className: "yorumkutusu-input", type: "email", name: "newEmail1", placeholder: this.emailInputs[1].name, value: this.state.newEmail1, onChange: this.changeEmailInput })
                         ),
                         React.createElement(
                             "div",
                             { className: "field" },
                             React.createElement(
                                 "label",
-                                null,
-                                this.state.passwordSelected ? "Yeni Parola" : "Yeni E-posta Tekrar"
+                                { className: "yorumkutusu-label" },
+                                this.emailInputs[2].name
                             ),
-                            React.createElement("input", { type: this.state.passwordSelected ? "password" : "text", value: this.state.input2, onChange: this.changeInput2 })
+                            React.createElement("input", { className: "yorumkutusu-input", type: "email", name: "newEmail2", placeholder: this.emailInputs[2].name, value: this.state.newEmail2, onChange: this.changeEmailInput })
                         ),
                         React.createElement(
                             "div",
                             { className: "field" },
                             React.createElement(
                                 "label",
-                                null,
-                                this.state.passwordSelected ? "Yeni Parola Tekrar" : "Parola"
+                                { className: "yorumkutusu-label" },
+                                "Parola"
                             ),
-                            React.createElement("input", { type: "password", value: this.state.input3, onChange: this.changeInput3 })
+                            React.createElement("input", { className: "yorumkutusu-input", type: "password", value: this.state.password, onChange: this.changePassword, placeholder: "Parola" })
                         ),
+                        this.state.formMessageType ? React.createElement(FormMessageList, {
+                            onlyText: this.state.formMessageOnlyText,
+                            header: this.state.formMessageHeader,
+                            mix: this.state.formMessageTextArr,
+                            type: this.state.formMessageType
+                        }) : "",
                         React.createElement(
                             FloatRight,
                             null,
-                            React.createElement(
-                                "button",
-                                { className: "ui blue button", onClick: this.send },
-                                this.state.passwordSelected ? "Parola" : "E-posta",
-                                " De\u011Fi\u015Ftir"
-                            )
+                            React.createElement(FormButton, { text: "De\u011Fi\u015Ftir", disabled: this.state.buttonDisabled, onClickHandler: this.send })
                         )
                     )
                 );
@@ -725,5 +814,166 @@ var ChangeItems = function (_React$Component6) {
         }
     }]);
 
-    return ChangeItems;
+    return ChangeEmail;
+}(React.Component);
+
+var ChangePassword = function (_React$Component12) {
+    _inherits(ChangePassword, _React$Component12);
+
+    function ChangePassword(props) {
+        _classCallCheck(this, ChangePassword);
+
+        var _this12 = _possibleConstructorReturn(this, (ChangePassword.__proto__ || Object.getPrototypeOf(ChangePassword)).call(this, props));
+
+        _this12.send = _this12.send.bind(_this12);
+        return _this12;
+    }
+
+    _createClass(ChangePassword, [{
+        key: "send",
+        value: function send(e) {
+            e.preventDefault();
+            console.log("istek buraya");
+        }
+    }, {
+        key: "render",
+        value: function render() {
+            return React.createElement(
+                "div",
+                null,
+                React.createElement(
+                    "h4",
+                    { className: "ui header yorumkutusu-header" },
+                    "Parola De\u011Fi\u015Ftir"
+                ),
+                React.createElement(
+                    "form",
+                    { className: "ui form" },
+                    React.createElement(
+                        "div",
+                        { className: "field" },
+                        React.createElement(
+                            "label",
+                            { className: "yorumkutusu-label" },
+                            "Parola"
+                        ),
+                        React.createElement("input", { className: "yorumkutusu-input", type: "password", placeholder: "Parola" })
+                    ),
+                    React.createElement(
+                        "div",
+                        { className: "field" },
+                        React.createElement(
+                            "label",
+                            { className: "yorumkutusu-label" },
+                            "Yeni Parola"
+                        ),
+                        React.createElement("input", { className: "yorumkutusu-input", type: "password", placeholder: "Yeni Parola" })
+                    ),
+                    React.createElement(
+                        "div",
+                        { className: "field" },
+                        React.createElement(
+                            "label",
+                            { className: "yorumkutusu-label" },
+                            "Yeni Parola Tekrar"
+                        ),
+                        React.createElement("input", { className: "yorumkutusu-input", type: "password", placeholder: "Yeni Parola Tekrar" })
+                    ),
+                    React.createElement(
+                        FloatRight,
+                        null,
+                        React.createElement(
+                            "button",
+                            { className: "ui green button", onClick: this.send },
+                            "De\u011Fi\u015Ftir"
+                        )
+                    )
+                )
+            );
+        }
+    }]);
+
+    return ChangePassword;
+}(React.Component);
+
+var FormMessageList = function (_React$Component13) {
+    _inherits(FormMessageList, _React$Component13);
+
+    function FormMessageList() {
+        _classCallCheck(this, FormMessageList);
+
+        return _possibleConstructorReturn(this, (FormMessageList.__proto__ || Object.getPrototypeOf(FormMessageList)).apply(this, arguments));
+    }
+
+    _createClass(FormMessageList, [{
+        key: "render",
+
+        // this.props.type = info, error, success, warning
+        value: function render() {
+            if (!this.props.onlyText) {
+                this.li = [];
+                for (var i = 0; i < this.props.mix.length; i++) {
+                    this.li.push(React.createElement(
+                        "li",
+                        null,
+                        this.props.mix[i]
+                    ));
+                }
+            }
+            return React.createElement(
+                "div",
+                { className: "ui " + this.props.type + " message yorumkutusu-form-message" },
+                React.createElement(
+                    "div",
+                    { className: "header" },
+                    this.props.header
+                ),
+                this.props.onlyText ? React.createElement(
+                    "p",
+                    null,
+                    this.props.mix
+                ) : React.createElement(
+                    "ul",
+                    { className: "list" },
+                    this.li
+                )
+            );
+        }
+    }]);
+
+    return FormMessageList;
+}(React.Component);
+
+var FormButton = function (_React$Component14) {
+    _inherits(FormButton, _React$Component14);
+
+    function FormButton(props) {
+        _classCallCheck(this, FormButton);
+
+        var _this14 = _possibleConstructorReturn(this, (FormButton.__proto__ || Object.getPrototypeOf(FormButton)).call(this, props));
+
+        _this14.click = _this14.click.bind(_this14);
+        return _this14;
+    }
+
+    _createClass(FormButton, [{
+        key: "click",
+        value: function click(e) {
+            e.preventDefault();
+            this.props.onClickHandler();
+        }
+    }, {
+        key: "render",
+        value: function render() {
+            this.buttonColor = this.props.color ? this.props.color : "green";
+            this.disabled = this.props.disabled ? "disabled" : "";
+            return React.createElement(
+                "button",
+                { className: "ui " + this.buttonColor + " button " + this.disabled, onClick: this.click },
+                this.props.text
+            );
+        }
+    }]);
+
+    return FormButton;
 }(React.Component);

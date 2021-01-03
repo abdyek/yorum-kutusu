@@ -44,3 +44,33 @@ header {
 .read-all:hover {
     color:#eee;
 }
+
+/* profile page, */
+.yorumkutusu-header {
+    color:#eee !important;
+}
+
+.yorumkutusu-a {
+    color:#eee !important;
+}
+
+.lds-ellipsis div {
+    background-color:#eee;
+}
+
+.yorumkutusu-label {
+    color:#eee !important;
+}
+
+.yorumkutusu-input::placeholder {
+    color:#333 !important;
+}
+
+.yorumkutusu-input:-ms-input-placeholder {
+    color:#333 !important;
+}
+
+.yorumkutusu-input::-ms-input-placeholder {
+    color:#333 !important;
+}
+
