@@ -15,8 +15,12 @@ var Profile = function (_React$Component) {
         var _this = _possibleConstructorReturn(this, (Profile.__proto__ || Object.getPrototypeOf(Profile)).call(this, props));
 
         _this.state = {
+            form: "normal", // normal, loading, notFound
             settingAreaVisible: false,
-            followedProductsVisible: false
+            followedProductsVisible: false,
+            username: "",
+            slug: "",
+            owner: false
             // setting elementary funcs
         };_this.openSetting = _this.openSetting.bind(_this);
         _this.closeSetting = _this.closeSetting.bind(_this);
@@ -25,13 +29,38 @@ var Profile = function (_React$Component) {
         _this.openFollowedProducts = _this.openFollowedProducts.bind(_this);
         _this.closeFollowedProducts = _this.closeFollowedProducts.bind(_this);
         _this.toggleFollowedProducts = _this.toggleFollowedProducts.bind(_this);
+        // set form loading / normal
+        _this.setFormLoading = _this.setFormLoading.bind(_this);
+        _this.setFormNormal = _this.setFormNormal.bind(_this);
         return _this;
     }
 
     _createClass(Profile, [{
         key: "componentDidMount",
         value: function componentDidMount() {
-            console.log("yükleme kodları burada olacak");
+            var _this2 = this;
+
+            this.setFormLoading();
+            var userslug = getPathNames()[1];
+            fetch(SITEURL + 'api/member?' + getUrlPar({
+                slug: userslug,
+                sortBy: "like", // !! only now
+                pageNumber: 1, // !! only now
+                onlyComment: false
+            }), { method: 'GET' }).then(function (response) {
+                if (!response.ok) throw new Error(response.status);else return response.json();
+            }).then(function (json) {
+                _this2.setState({
+                    username: json.other.member.username,
+                    slug: json.other.member.slug,
+                    owner: json.other.member.owner
+                });
+                _this2.setFormNormal();
+            }).catch(function (error) {
+                if (error.message == 404) {
+                    _this2.setState({ form: "notFound" });
+                }
+            });
         }
     }, {
         key: "openSetting",
@@ -66,31 +95,69 @@ var Profile = function (_React$Component) {
             if (this.state.followedProductsVisible) this.closeFollowedProducts();else this.openFollowedProducts();
         }
     }, {
+        key: "setFormLoading",
+        value: function setFormLoading() {
+            this.setState({ form: "loading" });
+        }
+    }, {
+        key: "setFormNormal",
+        value: function setFormNormal() {
+            this.setState({ form: "normal" });
+        }
+    }, {
         key: "render",
         value: function render() {
-            return React.createElement(
-                "div",
-                null,
-                React.createElement(EmailValidation, { validated: true }),
-                React.createElement(ProfileHeader, {
-                    changeContent: this.props.changeContent,
-                    memberUsername: "Hamam B\xF6ce\u011Fine Kafa Atan Adam"
-                }),
-                React.createElement(OwnerButtons, {
-                    settingButton: this.toggleSetting,
-                    followedProductsButton: this.toggleFollowedProducts
-                }),
-                React.createElement(SettingArea, {
-                    visible: this.state.settingAreaVisible,
-                    close: this.closeSetting
-                }),
-                React.createElement(FollowedProductsArea, {
-                    visible: this.state.followedProductsVisible,
-                    close: this.closeFollowedProducts,
-                    changeContent: this.props.changeContent
-                }),
-                React.createElement(ProfileComments, null)
-            );
+            if (this.state.form == "normal") {
+                return React.createElement(
+                    "div",
+                    null,
+                    React.createElement(EmailValidation, { validated: true }),
+                    React.createElement(ProfileHeader, {
+                        changeContent: this.props.changeContent,
+                        memberUsername: this.state.username
+                    }),
+                    React.createElement(OwnerButtons, {
+                        owner: this.state.owner,
+                        settingButton: this.toggleSetting,
+                        followedProductsButton: this.toggleFollowedProducts
+                    }),
+                    React.createElement(SettingArea, {
+                        visible: this.state.settingAreaVisible,
+                        close: this.closeSetting
+                    }),
+                    React.createElement(FollowedProductsArea, {
+                        visible: this.state.followedProductsVisible,
+                        close: this.closeFollowedProducts,
+                        changeContent: this.props.changeContent
+                    }),
+                    React.createElement(ProfileComments, null)
+                );
+            } else if (this.state.form == "loading") {
+                return React.createElement(RowLoadingSpin, { nonSegment: true });
+            } else if (this.state.form == "notFound") {
+                return React.createElement(
+                    Row,
+                    { size: "one" },
+                    React.createElement(
+                        Column,
+                        null,
+                        React.createElement(
+                            "div",
+                            { className: "ui negative huge message" },
+                            React.createElement(
+                                "div",
+                                { className: "header" },
+                                "404"
+                            ),
+                            React.createElement(
+                                "p",
+                                null,
+                                "B\xF6yle bir profil yok"
+                            )
+                        )
+                    )
+                );
+            }
         }
     }]);
 
@@ -162,9 +229,9 @@ var FollowedProductsTable = function (_React$Component3) {
     function FollowedProductsTable(props) {
         _classCallCheck(this, FollowedProductsTable);
 
-        var _this3 = _possibleConstructorReturn(this, (FollowedProductsTable.__proto__ || Object.getPrototypeOf(FollowedProductsTable)).call(this, props));
+        var _this4 = _possibleConstructorReturn(this, (FollowedProductsTable.__proto__ || Object.getPrototypeOf(FollowedProductsTable)).call(this, props));
 
-        _this3.state = {
+        _this4.state = {
             form: "normal", // normal, loading
             info: [{
                 productID: 0,
@@ -183,7 +250,7 @@ var FollowedProductsTable = function (_React$Component3) {
                 newComment: "99"
             }]
         };
-        return _this3;
+        return _this4;
     }
 
     _createClass(FollowedProductsTable, [{
@@ -253,10 +320,10 @@ var FollowedProductsCell = function (_React$Component4) {
     function FollowedProductsCell(props) {
         _classCallCheck(this, FollowedProductsCell);
 
-        var _this4 = _possibleConstructorReturn(this, (FollowedProductsCell.__proto__ || Object.getPrototypeOf(FollowedProductsCell)).call(this, props));
+        var _this5 = _possibleConstructorReturn(this, (FollowedProductsCell.__proto__ || Object.getPrototypeOf(FollowedProductsCell)).call(this, props));
 
-        _this4.goProduct = _this4.goProduct.bind(_this4);
-        return _this4;
+        _this5.goProduct = _this5.goProduct.bind(_this5);
+        return _this5;
     }
 
     _createClass(FollowedProductsCell, [{
@@ -433,34 +500,38 @@ var OwnerButtons = function (_React$Component8) {
     _createClass(OwnerButtons, [{
         key: "render",
         value: function render() {
-            return React.createElement(
-                "div",
-                null,
-                React.createElement(
-                    Center,
+            if (this.props.owner) {
+                return React.createElement(
+                    "div",
                     null,
                     React.createElement(
-                        "button",
-                        { className: "ui small teal button", onClick: this.props.followedProductsButton },
+                        Center,
+                        null,
                         React.createElement(
-                            "i",
-                            { className: "icon" },
-                            React.createElement("i", { className: "fa fa-cube", "aria-hidden": "true" })
+                            "button",
+                            { className: "ui small teal button", onClick: this.props.followedProductsButton },
+                            React.createElement(
+                                "i",
+                                { className: "icon" },
+                                React.createElement("i", { className: "fa fa-cube", "aria-hidden": "true" })
+                            ),
+                            "Takipteki \xDCr\xFCnler"
                         ),
-                        "Takipteki \xDCr\xFCnler"
-                    ),
-                    React.createElement(
-                        "button",
-                        { className: "ui small teal button", onClick: this.props.settingButton },
                         React.createElement(
-                            "i",
-                            { className: "icon" },
-                            React.createElement("i", { className: "fa fa-cog", "aria-hidden": "true" })
-                        ),
-                        "Ayarlar"
+                            "button",
+                            { className: "ui small teal button", onClick: this.props.settingButton },
+                            React.createElement(
+                                "i",
+                                { className: "icon" },
+                                React.createElement("i", { className: "fa fa-cog", "aria-hidden": "true" })
+                            ),
+                            "Ayarlar"
+                        )
                     )
-                )
-            );
+                );
+            } else {
+                return "";
+            }
         }
     }]);
 
@@ -580,9 +651,9 @@ var ChangeEmail = function (_React$Component11) {
     function ChangeEmail(props) {
         _classCallCheck(this, ChangeEmail);
 
-        var _this11 = _possibleConstructorReturn(this, (ChangeEmail.__proto__ || Object.getPrototypeOf(ChangeEmail)).call(this, props));
+        var _this12 = _possibleConstructorReturn(this, (ChangeEmail.__proto__ || Object.getPrototypeOf(ChangeEmail)).call(this, props));
 
-        _this11.emailInputs = [{
+        _this12.emailInputs = [{
             name: "E-posta",
             state: "email"
         }, {
@@ -592,7 +663,7 @@ var ChangeEmail = function (_React$Component11) {
             name: "Yeni E-posta Tekrar",
             state: "newEmail2"
         }];
-        _this11.state = {
+        _this12.state = {
             form: "normal",
             email: "",
             newEmail1: "",
@@ -603,16 +674,16 @@ var ChangeEmail = function (_React$Component11) {
             formMessageHeader: "",
             formMessageTextArr: []
         };
-        _this11.send = _this11.send.bind(_this11);
-        _this11.changedSuccessfully = _this11.changedSuccessfully.bind(_this11);
-        _this11.checkInputs = _this11.checkInputs.bind(_this11);
-        _this11.changeEmailInput = _this11.changeEmailInput.bind(_this11);
-        _this11.changePassword = _this11.changePassword.bind(_this11);
-        _this11.setFormMessageList = _this11.setFormMessageList.bind(_this11);
-        _this11.setFormMessageText = _this11.setFormMessageText.bind(_this11);
-        _this11.setLoading = _this11.setLoading.bind(_this11);
-        _this11.setNormal = _this11.setNormal.bind(_this11);
-        return _this11;
+        _this12.send = _this12.send.bind(_this12);
+        _this12.changedSuccessfully = _this12.changedSuccessfully.bind(_this12);
+        _this12.checkInputs = _this12.checkInputs.bind(_this12);
+        _this12.changeEmailInput = _this12.changeEmailInput.bind(_this12);
+        _this12.changePassword = _this12.changePassword.bind(_this12);
+        _this12.setFormMessageList = _this12.setFormMessageList.bind(_this12);
+        _this12.setFormMessageText = _this12.setFormMessageText.bind(_this12);
+        _this12.setLoading = _this12.setLoading.bind(_this12);
+        _this12.setNormal = _this12.setNormal.bind(_this12);
+        return _this12;
     }
 
     _createClass(ChangeEmail, [{
@@ -834,9 +905,9 @@ var ChangePassword = function (_React$Component13) {
     function ChangePassword(props) {
         _classCallCheck(this, ChangePassword);
 
-        var _this13 = _possibleConstructorReturn(this, (ChangePassword.__proto__ || Object.getPrototypeOf(ChangePassword)).call(this, props));
+        var _this14 = _possibleConstructorReturn(this, (ChangePassword.__proto__ || Object.getPrototypeOf(ChangePassword)).call(this, props));
 
-        _this13.state = {
+        _this14.state = {
             form: "normal", // normal, loading
             password: "",
             newPassword1: "",
@@ -846,14 +917,14 @@ var ChangePassword = function (_React$Component13) {
             formMessageHeader: "",
             formMessageTextArr: []
         };
-        _this13.changedSuccessfully = _this13.changedSuccessfully.bind(_this13);
-        _this13.failed = _this13.failed.bind(_this13);
-        _this13.setFormMessageList = _this13.setFormMessageList.bind(_this13);
-        _this13.setFormMessageText = _this13.setFormMessageText.bind(_this13);
-        _this13.send = _this13.send.bind(_this13);
-        _this13.checkInputs = _this13.checkInputs.bind(_this13);
-        _this13.changeInput = _this13.changeInput.bind(_this13);
-        return _this13;
+        _this14.changedSuccessfully = _this14.changedSuccessfully.bind(_this14);
+        _this14.failed = _this14.failed.bind(_this14);
+        _this14.setFormMessageList = _this14.setFormMessageList.bind(_this14);
+        _this14.setFormMessageText = _this14.setFormMessageText.bind(_this14);
+        _this14.send = _this14.send.bind(_this14);
+        _this14.checkInputs = _this14.checkInputs.bind(_this14);
+        _this14.changeInput = _this14.changeInput.bind(_this14);
+        return _this14;
     }
 
     _createClass(ChangePassword, [{
@@ -1051,10 +1122,10 @@ var FormButton = function (_React$Component15) {
     function FormButton(props) {
         _classCallCheck(this, FormButton);
 
-        var _this15 = _possibleConstructorReturn(this, (FormButton.__proto__ || Object.getPrototypeOf(FormButton)).call(this, props));
+        var _this16 = _possibleConstructorReturn(this, (FormButton.__proto__ || Object.getPrototypeOf(FormButton)).call(this, props));
 
-        _this15.click = _this15.click.bind(_this15);
-        return _this15;
+        _this16.click = _this16.click.bind(_this16);
+        return _this16;
     }
 
     _createClass(FormButton, [{

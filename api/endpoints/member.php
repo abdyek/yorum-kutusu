@@ -2,7 +2,7 @@
 
 class Member extends Request {
     protected function get() {
-        $this->member = Database::existCheck('SELECT * FROM member WHERE member_id=? and member_deleted=0', [$this->data['memberID']]);
+        $this->member = Database::existCheck('SELECT * FROM member WHERE member_slug=? and member_deleted=0', [$this->data['slug']]);
         if(!$this->member) {
             $this->setHttpStatus(404);
             exit();
@@ -14,12 +14,12 @@ class Member extends Request {
         $this->mergeAllInfo();
     }
     private function ownerCheck() {
-        $this->ownerBool = (USERID==$this->data['memberID'])?true:false;
+        $this->ownerBool = (USERID==$this->member['member_id'])?true:false;
     }
     private function prepareMemberInfo() {
         $this->memberInfo = [
-            'memberUsername'=>$this->member['member_username'],
-            'memberSlug'=>$this->member['member_slug'],
+            'username'=>$this->member['member_username'],
+            'slug'=>$this->member['member_slug'],
             'owner'=>$this->ownerBool
         ];
     }
@@ -33,8 +33,7 @@ class Member extends Request {
         } elseif($this->data['sortBy']=='time') {
             $sql = 'SELECT * FROM comment c INNER JOIN member m ON m.member_id = c.member_id  WHERE c.member_id=? AND c.comment_deleted=0 ORDER BY c.comment_create_date_time LIMIT '.$index.', 10';
         }
-        //$comments = Database::getRows('SELECT * FROM comment WHERE member_id=? AND comment_deleted=0', [$this->data['memberID']]);
-        $comments = Database::getRows($sql, [$this->data['memberID']]);
+        $comments = Database::getRows($sql, [$this->member['member_id']]);
         $this->commentsInfo = [];
         foreach($comments as $com) {
             $product = Database::getRow('SELECT product_id, product_name, product_slug FROM product WHERE product_id=? and product_deleted=0', [$com['product_id']]);
@@ -42,7 +41,7 @@ class Member extends Request {
                 continue;
             }
             $liked = (Database::getRow('SELECT * FROM comment_like WHERE comment_id=? AND member_id=?', [$com['comment_id'], USERID]))?true:false;
-            $rating = Database::getRows('SELECT t.tag_slug, t.tag_name, tr.tag_rating_value FROM tag_rating tr INNER JOIN tag_with_product twp ON twp.tag_with_product_id=tr.tag_with_product_id INNER JOIN tag t ON t.tag_id=twp.tag_id WHERE tr.member_id=? AND twp.product_id=?', [$this->data['memberID'], $product['product_id']]);
+            $rating = Database::getRows('SELECT t.tag_slug, t.tag_name, tr.tag_rating_value FROM tag_rating tr INNER JOIN tag_with_product twp ON twp.tag_with_product_id=tr.tag_with_product_id INNER JOIN tag t ON t.tag_id=twp.tag_id WHERE tr.member_id=? AND twp.product_id=?', [$this->member['member_id'], $product['product_id']]);
             $this->ratingInfo = [];
             foreach($rating as $rate) {
                 $this->ratingInfo[] = [

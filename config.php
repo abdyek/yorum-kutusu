@@ -229,9 +229,9 @@
                 ],
                 'keys'=>[
                     'GET'=>[
-                        'memberID'=>[
+                        'slug'=>[
                             'min'=>1,
-                            'max'=>11
+                            'max'=>60
                         ],
                         'sortBy'=>[
                             'min'=>4,

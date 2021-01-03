@@ -2,8 +2,12 @@ class Profile extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            form:"normal", // normal, loading, notFound
             settingAreaVisible:false,
-            followedProductsVisible:false
+            followedProductsVisible:false,
+            username:"",
+            slug:"",
+            owner:false
         }
         // setting elementary funcs
         this.openSetting = this.openSetting.bind(this);
@@ -13,9 +17,33 @@ class Profile extends React.Component {
         this.openFollowedProducts = this.openFollowedProducts.bind(this);
         this.closeFollowedProducts = this.closeFollowedProducts.bind(this);
         this.toggleFollowedProducts = this.toggleFollowedProducts.bind(this);
+        // set form loading / normal
+        this.setFormLoading = this.setFormLoading.bind(this);
+        this.setFormNormal = this.setFormNormal.bind(this);
     }
     componentDidMount() {
-        console.log("yükleme kodları burada olacak");
+        this.setFormLoading();
+        const userslug = getPathNames()[1];
+        fetch(SITEURL + 'api/member?' + getUrlPar({
+            slug:userslug,
+            sortBy: "like",     // !! only now
+            pageNumber:1,       // !! only now
+            onlyComment:false
+        }), {method: 'GET'}).then((response)=>{
+            if(!response.ok) throw new Error(response.status);
+            else return response.json();
+        }).then((json)=> {
+            this.setState({
+                username:json.other.member.username,
+                slug:json.other.member.slug,
+                owner:json.other.member.owner
+            });
+            this.setFormNormal();
+        }).catch((error) => {
+            if(error.message==404) {
+                this.setState({form:"notFound"});
+            }
+        });
     }
     openSetting() {
         this.closeFollowedProducts();
@@ -43,30 +71,54 @@ class Profile extends React.Component {
         else
             this.openFollowedProducts();
     }
+    setFormLoading() {
+        this.setState({ form:"loading" });
+    }
+    setFormNormal() {
+        this.setState({ form:"normal" });
+    }
     render() {
-        return(
-            <div>
-                <EmailValidation validated={true}/>
-                <ProfileHeader
-                    changeContent={this.props.changeContent}
-                    memberUsername="Hamam Böceğine Kafa Atan Adam"
-                />
-                <OwnerButtons
-                    settingButton={this.toggleSetting}
-                    followedProductsButton={this.toggleFollowedProducts}
-                />
-                <SettingArea
-                    visible={this.state.settingAreaVisible}
-                    close={this.closeSetting}
-                />
-                <FollowedProductsArea
-                    visible={this.state.followedProductsVisible}
-                    close={this.closeFollowedProducts}
-                    changeContent={this.props.changeContent}
-                />
-                <ProfileComments />
-            </div>
-        )
+        if(this.state.form=="normal") {
+            return(
+                <div>
+                    <EmailValidation validated={true}/>
+                    <ProfileHeader
+                        changeContent={this.props.changeContent}
+                        memberUsername={this.state.username}
+                    />
+                    <OwnerButtons
+                        owner={this.state.owner}
+                        settingButton={this.toggleSetting}
+                        followedProductsButton={this.toggleFollowedProducts}
+                    />
+                    <SettingArea
+                        visible={this.state.settingAreaVisible}
+                        close={this.closeSetting}
+                    />
+                    <FollowedProductsArea
+                        visible={this.state.followedProductsVisible}
+                        close={this.closeFollowedProducts}
+                        changeContent={this.props.changeContent}
+                    />
+                    <ProfileComments />
+                </div>
+            )
+        } else if(this.state.form=="loading") {
+            return(<RowLoadingSpin nonSegment={true} />)
+        } else if(this.state.form=="notFound") {
+            return(
+                <Row size="one">
+                    <Column>
+                        <div className="ui negative huge message">
+                            <div className="header">
+                                404
+                            </div>
+                            <p>Böyle bir profil yok</p>
+                        </div>
+                    </Column>
+                </Row>
+            )
+        }
     }
 }
 
@@ -243,24 +295,28 @@ class ProfileComments extends React.Component {
 
 class OwnerButtons extends React.Component {
     render() {
-        return (
-            <div>
-                <Center>
-                <button className="ui small teal button" onClick={this.props.followedProductsButton}>
-                    <i className="icon">
-                        <i className="fa fa-cube" aria-hidden="true"></i>
-                    </i>
-                    Takipteki Ürünler
-                </button> 
-                <button className="ui small teal button" onClick={this.props.settingButton}>
-                    <i className="icon">
-                        <i className="fa fa-cog" aria-hidden="true"></i>
-                    </i>
-                    Ayarlar
-                </button> 
-                </Center>
-            </div>
-        )
+        if(this.props.owner) {
+            return (
+                <div>
+                    <Center>
+                    <button className="ui small teal button" onClick={this.props.followedProductsButton}>
+                        <i className="icon">
+                            <i className="fa fa-cube" aria-hidden="true"></i>
+                        </i>
+                        Takipteki Ürünler
+                    </button> 
+                    <button className="ui small teal button" onClick={this.props.settingButton}>
+                        <i className="icon">
+                            <i className="fa fa-cog" aria-hidden="true"></i>
+                        </i>
+                        Ayarlar
+                    </button> 
+                    </Center>
+                </div>
+            )
+        } else {
+            return("")
+        }
     }
 }
 
