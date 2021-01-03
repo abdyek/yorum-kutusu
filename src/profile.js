@@ -146,7 +146,7 @@ class FollowedProductsTable extends React.Component {
                 )
             }
             return (
-                <table class="ui inverted table">
+                <table className="ui inverted table">
                   <thead>
                     <tr><th>Takipteki Ürün</th>
                     <th>Yeni Yorum</th>
@@ -248,7 +248,7 @@ class OwnerButtons extends React.Component {
                 <Center>
                 <button className="ui small teal button" onClick={this.props.followedProductsButton}>
                     <i className="icon">
-                        <i class="fa fa-cube" aria-hidden="true"></i>
+                        <i className="fa fa-cube" aria-hidden="true"></i>
                     </i>
                     Takipteki Ürünler
                 </button> 
@@ -338,7 +338,6 @@ class ChangeEmail extends React.Component {
             newEmail1:"",
             newEmail2:"",
             password:"",
-            buttonDisabled:true,
             formMessageOnlyText:false,
             formMessageType:"",
             formMessageHeader:"",
@@ -362,7 +361,8 @@ class ChangeEmail extends React.Component {
             //this.failed(400);
             //this.failed(422, 3);
             //this.failed(422, 1);
-            console.log("gönderme işlemi burada");
+            //this.failed(403);
+            //this.failed(400);
         }
     }
     changedSuccessfully() {
@@ -375,15 +375,18 @@ class ChangeEmail extends React.Component {
             this.setFormMessageText("error", "Başarısız!", "Beklenmedik bir hata oldu");
         } else if(type==422 && subType==3) {
             this.setFormMessageText("error", "Başarısız!", "Bu e-posta geçersiz");
-        } else if(type=422 && subType==1) {
+        } else if(type==422 && subType==1) {
             this.setFormMessageText("error", "Başarısız!", "Bu e-posta kullanımda");
+        } else if(type==403) {
+            this.setFormMessageText("error", "Başarısız!", "Bu işlem için yetkiniz yok");
+        } else if(type==400) {
+            this.setFormMessageText("error", "Başarısız!", "Bu istek geçersiz");
         }
     }
     checkInputs() {
         let errors = [];
         // email
         for(let i=0;i<this.emailInputs.length;i++) {
-            console.log(this.state[this.emailInputs[i].state]);
             if(!validateEmail(this.state[this.emailInputs[i].state])) {
                 errors.push(this.emailInputs[i].name + " geçersiz");
             }
@@ -391,8 +394,11 @@ class ChangeEmail extends React.Component {
         if(this.state.newEmail1!=this.state.newEmail2) {
             errors.push("Yeni e-posta tekrarı ile aynı değil");
         }
+        if(this.state.password.length<10 || this.state.password.length>40) {
+            errors.push("Geçersiz parola");
+        }
         if(errors.length) {
-            this.setFormMessageList("error", "Geçersiz alan değerleri", errors);
+            this.setFormMessageList("error", "Başarısız", errors);
             return false;
         }
         return true;
@@ -413,10 +419,6 @@ class ChangeEmail extends React.Component {
         }
     }
     changePassword(e){
-        if(e.target.value.length>=10 && e.target.value.length<=40) 
-            this.setButtonDisabledFalse();
-        else 
-            this.setButtonDisabledTrue();
         this.setState({
             password:e.target.value
         });
@@ -447,38 +449,44 @@ class ChangeEmail extends React.Component {
             form:"normal"
         });
     }
-    setButtonDisabledFalse() {
-        this.setState({
-            buttonDisabled: false
-        });
-    }
-    setButtonDisabledTrue() {
-        this.setState({
-            buttonDisabled:true
-        });
-    }
     render() {
         if(this.state.form=="normal") {
             return(
                 <div>
                     <h4 className="ui header yorumkutusu-header">E-posta Değiştir</h4>
                     <form className="ui form">
-                        <div className="field">
-                            <label className="yorumkutusu-label">{this.emailInputs[0].name}</label>
-                            <input className="yorumkutusu-input" type="email" name="email" placeholder={this.emailInputs[0].name} value={this.state.email} onChange={this.changeEmailInput} />
-                        </div>
-                        <div className="field">
-                            <label className="yorumkutusu-label">{this.emailInputs[1].name}</label>
-                            <input className="yorumkutusu-input" type="email" name="newEmail1" placeholder={this.emailInputs[1].name} value={this.state.newEmail1} onChange={this.changeEmailInput}/>
-                        </div>
-                        <div className="field">
-                            <label className="yorumkutusu-label">{this.emailInputs[2].name}</label>
-                            <input className="yorumkutusu-input" type="email" name="newEmail2" placeholder={this.emailInputs[2].name} value={this.state.newEmail2} onChange={this.changeEmailInput}/>
-                        </div>
-                        <div className="field">
-                            <label className="yorumkutusu-label">Parola</label>
-                            <input className="yorumkutusu-input" type="password" value={this.state.password} onChange={this.changePassword} placeholder="Parola"/>
-                        </div>
+                        <FormField
+                            labelText={this.emailInputs[0].name}
+                            inputType="email"
+                            inputName={this.emailInputs[0].state}
+                            inputValue={this.state.email}
+                            inputChange={this.changeEmailInput}
+                            inputPlaceholder={this.emailInputs[0].name}
+                        />
+                        <FormField
+                            labelText={this.emailInputs[1].name}
+                            inputType="email"
+                            inputName={this.emailInputs[1].state}
+                            inputValue={this.state.newEmail1}
+                            inputChange={this.changeEmailInput}
+                            inputPlaceholder={this.emailInputs[1].name}
+                        />
+                        <FormField
+                            labelText={this.emailInputs[2].name}
+                            inputType="email"
+                            inputName={this.emailInputs[2].state}
+                            inputValue={this.state.newEmail2}
+                            inputChange={this.changeEmailInput}
+                            inputPlaceholder={this.emailInputs[2].name}
+                        />
+                        <FormField
+                            labelText="Parola"
+                            inputType="password"
+                            inputName="password"
+                            inputValue={this.state.password}
+                            inputChange={this.changePassword}
+                            inputPlaceholder="Parola"
+                        />
                         {(this.state.formMessageType)?
                             <FormMessageList
                                 onlyText={this.state.formMessageOnlyText}
@@ -487,7 +495,7 @@ class ChangeEmail extends React.Component {
                                 type={this.state.formMessageType}
                             />:""}
                         <FloatRight>
-                            <FormButton text="Değiştir" disabled={this.state.buttonDisabled} onClickHandler={this.send}/>
+                            <FormButton text="Değiştir" onClickHandler={this.send}/>
                         </FloatRight>
                     </form>
                 </div>
@@ -500,38 +508,153 @@ class ChangeEmail extends React.Component {
     }
 }
 
-class ChangePassword extends React.Component {
+class FormField extends React.Component {
     constructor(props) {
         super(props);
-        this.send = this.send.bind(this);
-    }
-    send(e) {
-        e.preventDefault();
-        console.log("istek buraya");
     }
     render() {
         return(
-            <div>
-                <h4 className="ui header yorumkutusu-header">Parola Değiştir</h4>
-                <form className="ui form">
-                    <div className="field">
-                        <label className="yorumkutusu-label">Parola</label>
-                        <input className="yorumkutusu-input" type="password" placeholder="Parola" />
-                    </div>
-                    <div className="field">
-                        <label className="yorumkutusu-label">Yeni Parola</label>
-                        <input className="yorumkutusu-input" type="password" placeholder="Yeni Parola" />
-                    </div>
-                    <div className="field">
-                        <label className="yorumkutusu-label">Yeni Parola Tekrar</label>
-                        <input className="yorumkutusu-input" type="password" placeholder="Yeni Parola Tekrar" />
-                    </div>
-                    <FloatRight>
-                        <button className="ui green button" onClick={this.send}>Değiştir</button>
-                    </FloatRight>
-                </form>
+            <div className="field">
+                <label className="yorumkutusu-label">{this.props.labelText}</label>
+                <input className="yorumkutusu-input" name={this.props.inputName} type={this.props.inputType} value={this.props.inputValue} onChange={this.props.inputChange} placeholder={this.props.inputPlaceholder}/>
             </div>
         )
+    }
+}
+
+class ChangePassword extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            form:"normal", // normal, loading
+            password:"",
+            newPassword1:"",
+            newPassword2:"",
+            formMessageOnlyText:false,
+            formMessageType:"",
+            formMessageHeader:"",
+            formMessageTextArr:[]
+        }
+        this.changedSuccessfully = this.changedSuccessfully.bind(this);
+        this.failed = this.failed.bind(this);
+        this.setFormMessageList = this.setFormMessageList.bind(this);
+        this.setFormMessageText = this.setFormMessageText.bind(this);
+        this.send = this.send.bind(this);
+        this.checkInputs = this.checkInputs.bind(this);
+        this.changeInput = this.changeInput.bind(this);
+    }
+    changedSuccessfully() {
+        this.setFormMessageText("success", "Başarılı!", "Parolanız başarılı bir şekilde değiştirildi");
+    }
+    failed(type) {
+        if(type==401) {
+            this.setFormMessageText("error", "Başarısız!", "Parolanız doğru değil");
+        } else if(type==500) {
+            this.setFormMessageText("error", "Başarısız!", "Beklenmedik bir hata oldu");
+        } else if(type==403) {
+            this.setFormMessageText("error", "Başarısız!", "Bu işlem için yetkiniz yok");
+        } else if(type==400) {
+            this.setFormMessageText("error", "Başarısız!", "Bu istek geçersiz");
+        }
+    }
+    setFormMessageList(type, header, arr) {
+        this.setState({
+            formMessageOnlyText:false,
+            formMessageType:type,
+            formMessageHeader:header,
+            formMessageTextArr:arr
+        });
+    }
+    setFormMessageText(type, header, text) {
+        this.setState({
+            formMessageOnlyText:true,
+            formMessageType:type,
+            formMessageHeader:header,
+            formMessageTextArr:text
+        })
+    }
+    send() {
+        if(this.checkInputs()) {
+            this.changedSuccessfully();
+            //this.failed(401);
+            //this.failed(500);
+            //this.failed(403);
+            //this.failed(400);
+        }
+    }
+    checkInputs() {
+        const inputsInfo = ["password", "newPassword1", "newPassword2"];
+        let errors = [];
+        for(let i=0;i<inputsInfo.length;i++) {
+            if(this.state[inputsInfo[i]].length < 10 || this.state[inputsInfo[i]].length > 40) {
+                errors.push("Parolanın uzunluğu 10 ile 40 karakter arasında olmalı");
+                break;
+            }
+        }
+        if(this.state.newPassword1!=this.state.newPassword2) {
+            errors.push("Yeni parola tekrarı ile aynı değil");
+        }
+        if(errors.length) {
+            this.setFormMessageList("error", "Başarısız!", errors);
+            return false;
+        }
+        return true;
+    }
+    changeInput(e) {
+        if(e.target.name=="password") {
+            this.setState({ password:e.target.value });
+        } else if(e.target.name=="newPassword1") {
+            this.setState({ newPassword1: e.target.value });
+        } else if(e.target.name=="newPassword2") {
+            this.setState({ newPassword2: e.target.value });
+        }
+    }
+    render() {
+        if(this.state.form=="normal") {
+            return(
+                <div>
+                    <h4 className="ui header yorumkutusu-header">Parola Değiştir</h4>
+                    <form className="ui form">
+                        <FormField
+                            labelText="Parola"
+                            inputType="password"
+                            inputName="password"
+                            inputValue={this.state.password}
+                            inputChange={this.changeInput}
+                            inputPlaceholder="Parola"
+                        />
+                        <FormField
+                            labelText="Yeni Parola"
+                            inputType="password"
+                            inputName="newPassword1"
+                            inputValue={this.state.newPassword1}
+                            inputChange={this.changeInput}
+                            inputPlaceholder="Yeni Parola"
+                        />
+                        <FormField
+                            labelText="Yeni Parola Tekrar"
+                            inputType="password"
+                            inputName="newPassword2"
+                            inputValue={this.state.newPassword2}
+                            inputChange={this.changeInput}
+                            inputPlaceholder="Yeni Parola Tekrar"
+                        />
+                        {(this.state.formMessageType)?
+                            <FormMessageList
+                                onlyText={this.state.formMessageOnlyText}
+                                header={this.state.formMessageHeader}
+                                mix={this.state.formMessageTextArr}
+                                type={this.state.formMessageType}
+                            />:""}
+                        <FloatRight>
+                            <FormButton text="Değiştir" onClickHandler={this.send}/>
+                        </FloatRight>
+                    </form>
+                </div>
+            )
+        } else if(this.state.form="loading") {
+            return(<RowLoadingSpin nonSegment={true} />)
+        }
     }
 }
 
@@ -542,7 +665,7 @@ class FormMessageList extends React.Component {
             this.li = [];
             for(let i=0;i<this.props.mix.length;i++) {
                 this.li.push(
-                    <li>{this.props.mix[i]}</li>
+                    <li key={i}>{this.props.mix[i]}</li>
                 )
             }
         }
