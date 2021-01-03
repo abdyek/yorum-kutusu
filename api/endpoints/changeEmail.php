@@ -8,12 +8,12 @@ class ChangeEmail extends Request {
         }
         if(!$this->emailPatternCheck()){
             $this->setHttpStatus(422);
-            $this->responseWithMessage(3);
+            //$this->responseWithMessage(3);
             exit();
         }
         if(!$this->uniqueEmail()) {
             $this->setHttpStatus(422);
-            $this->responseWithMessage(1);
+            //$this->responseWithMessage(1);
             exit();
         }
         if($this->existCheck()) {

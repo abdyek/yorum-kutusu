@@ -6,6 +6,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+var yorumkutusuError = void 0;
+
 var Profile = function (_React$Component) {
     _inherits(Profile, _React$Component);
 
@@ -20,7 +22,8 @@ var Profile = function (_React$Component) {
             followedProductsVisible: false,
             username: "",
             slug: "",
-            owner: false
+            owner: false,
+            email: ""
             // setting elementary funcs
         };_this.openSetting = _this.openSetting.bind(_this);
         _this.closeSetting = _this.closeSetting.bind(_this);
@@ -53,7 +56,8 @@ var Profile = function (_React$Component) {
                 _this2.setState({
                     username: json.other.member.username,
                     slug: json.other.member.slug,
-                    owner: json.other.member.owner
+                    owner: json.other.member.owner,
+                    email: json.other.member.email
                 });
                 _this2.setFormNormal();
             }).catch(function (error) {
@@ -123,7 +127,8 @@ var Profile = function (_React$Component) {
                     }),
                     React.createElement(SettingArea, {
                         visible: this.state.settingAreaVisible,
-                        close: this.closeSetting
+                        close: this.closeSetting,
+                        email: this.state.email
                     }),
                     React.createElement(FollowedProductsArea, {
                         visible: this.state.followedProductsVisible,
@@ -591,7 +596,7 @@ var SettingArea = function (_React$Component9) {
                                     { className: "ui header yorumkutusu-header" },
                                     "Hesap"
                                 ),
-                                React.createElement(ProfileSettings, null)
+                                React.createElement(ProfileSettings, { email: this.props.email })
                             )
                         )
                     )
@@ -629,7 +634,7 @@ var ProfileSettings = function (_React$Component10) {
                         React.createElement(
                             Column,
                             null,
-                            React.createElement(ChangeEmail, null)
+                            React.createElement(ChangeEmail, { email: this.props.email })
                         ),
                         React.createElement(
                             Column,
@@ -654,9 +659,6 @@ var ChangeEmail = function (_React$Component11) {
         var _this12 = _possibleConstructorReturn(this, (ChangeEmail.__proto__ || Object.getPrototypeOf(ChangeEmail)).call(this, props));
 
         _this12.emailInputs = [{
-            name: "E-posta",
-            state: "email"
-        }, {
             name: "Yeni E-posta",
             state: "newEmail1"
         }, {
@@ -665,7 +667,7 @@ var ChangeEmail = function (_React$Component11) {
         }];
         _this12.state = {
             form: "normal",
-            email: "",
+            email: _this12.props.email,
             newEmail1: "",
             newEmail2: "",
             password: "",
@@ -689,15 +691,38 @@ var ChangeEmail = function (_React$Component11) {
     _createClass(ChangeEmail, [{
         key: "send",
         value: function send() {
+            var _this13 = this;
+
             if (this.checkInputs()) {
                 this.setLoading();
-                //this.changedSuccessfully();
-                //this.failed(401);
-                //this.failed(400);
-                //this.failed(422, 3);
-                //this.failed(422, 1);
-                //this.failed(403);
-                //this.failed(400);
+                fetch(SITEURL + 'api/changeEmail', {
+                    method: 'POST',
+                    header: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        password: this.state.password,
+                        newEmail: this.state.newEmail1
+                    })
+                }).then(function (response) {
+                    yorumkutusuError = response;
+                    if (!response.ok) throw new Error(response.status);else return response.json();
+                }).then(function (json) {
+                    _this13.changedSuccessfully();
+                    var newEmail = _this13.state.newEmail1;
+                    _this13.setState({
+                        form: "normal",
+                        email: newEmail,
+                        newEmail1: "",
+                        newEmail2: "",
+                        password: ""
+                    });
+                }).catch(function (error) {
+                    _this13.failed(error.message);
+                    _this13.setState({
+                        form: "normal"
+                    });
+                });
             }
         }
     }, {
@@ -707,15 +732,13 @@ var ChangeEmail = function (_React$Component11) {
         }
     }, {
         key: "failed",
-        value: function failed(type, subType) {
+        value: function failed(type) {
             if (type == 401) {
                 this.setFormMessageText("error", "Başarısız!", "Parolanız doğru değil");
             } else if (type == 500) {
                 this.setFormMessageText("error", "Başarısız!", "Beklenmedik bir hata oldu");
-            } else if (type == 422 && subType == 3) {
-                this.setFormMessageText("error", "Başarısız!", "Bu e-posta geçersiz");
-            } else if (type == 422 && subType == 1) {
-                this.setFormMessageText("error", "Başarısız!", "Bu e-posta kullanımda");
+            } else if (type == 422) {
+                this.setFormMessageText("error", "Başarısız!", "Bu e-posta kullanılamıyor");
             } else if (type == 403) {
                 this.setFormMessageText("error", "Başarısız!", "Bu işlem için yetkiniz yok");
             } else if (type == 400) {
@@ -818,10 +841,17 @@ var ChangeEmail = function (_React$Component11) {
                         "form",
                         { className: "ui form" },
                         React.createElement(FormField, {
+                            labelText: "E-posta",
+                            inputType: "email",
+                            inputName: "E-posta",
+                            inputValue: this.state.email,
+                            disabled: true
+                        }),
+                        React.createElement(FormField, {
                             labelText: this.emailInputs[0].name,
                             inputType: "email",
                             inputName: this.emailInputs[0].state,
-                            inputValue: this.state.email,
+                            inputValue: this.state.newEmail1,
                             inputChange: this.changeEmailInput,
                             inputPlaceholder: this.emailInputs[0].name
                         }),
@@ -829,17 +859,9 @@ var ChangeEmail = function (_React$Component11) {
                             labelText: this.emailInputs[1].name,
                             inputType: "email",
                             inputName: this.emailInputs[1].state,
-                            inputValue: this.state.newEmail1,
-                            inputChange: this.changeEmailInput,
-                            inputPlaceholder: this.emailInputs[1].name
-                        }),
-                        React.createElement(FormField, {
-                            labelText: this.emailInputs[2].name,
-                            inputType: "email",
-                            inputName: this.emailInputs[2].state,
                             inputValue: this.state.newEmail2,
                             inputChange: this.changeEmailInput,
-                            inputPlaceholder: this.emailInputs[2].name
+                            inputPlaceholder: this.emailInputs[1].name
                         }),
                         React.createElement(FormField, {
                             labelText: "Parola",
@@ -883,6 +905,7 @@ var FormField = function (_React$Component12) {
     _createClass(FormField, [{
         key: "render",
         value: function render() {
+            this.disabled = this.props.disabled ? "disabled" : false;
             return React.createElement(
                 "div",
                 { className: "field" },
@@ -891,7 +914,7 @@ var FormField = function (_React$Component12) {
                     { className: "yorumkutusu-label" },
                     this.props.labelText
                 ),
-                React.createElement("input", { className: "yorumkutusu-input", name: this.props.inputName, type: this.props.inputType, value: this.props.inputValue, onChange: this.props.inputChange, placeholder: this.props.inputPlaceholder })
+                React.createElement("input", { className: "yorumkutusu-input", name: this.props.inputName, type: this.props.inputType, value: this.props.inputValue, onChange: this.props.inputChange, placeholder: this.props.inputPlaceholder, disabled: this.disabled })
             );
         }
     }]);
@@ -905,9 +928,9 @@ var ChangePassword = function (_React$Component13) {
     function ChangePassword(props) {
         _classCallCheck(this, ChangePassword);
 
-        var _this14 = _possibleConstructorReturn(this, (ChangePassword.__proto__ || Object.getPrototypeOf(ChangePassword)).call(this, props));
+        var _this15 = _possibleConstructorReturn(this, (ChangePassword.__proto__ || Object.getPrototypeOf(ChangePassword)).call(this, props));
 
-        _this14.state = {
+        _this15.state = {
             form: "normal", // normal, loading
             password: "",
             newPassword1: "",
@@ -917,14 +940,15 @@ var ChangePassword = function (_React$Component13) {
             formMessageHeader: "",
             formMessageTextArr: []
         };
-        _this14.changedSuccessfully = _this14.changedSuccessfully.bind(_this14);
-        _this14.failed = _this14.failed.bind(_this14);
-        _this14.setFormMessageList = _this14.setFormMessageList.bind(_this14);
-        _this14.setFormMessageText = _this14.setFormMessageText.bind(_this14);
-        _this14.send = _this14.send.bind(_this14);
-        _this14.checkInputs = _this14.checkInputs.bind(_this14);
-        _this14.changeInput = _this14.changeInput.bind(_this14);
-        return _this14;
+        _this15.changedSuccessfully = _this15.changedSuccessfully.bind(_this15);
+        _this15.failed = _this15.failed.bind(_this15);
+        _this15.setFormMessageList = _this15.setFormMessageList.bind(_this15);
+        _this15.setFormMessageText = _this15.setFormMessageText.bind(_this15);
+        _this15.setLoading = _this15.setLoading.bind(_this15);
+        _this15.send = _this15.send.bind(_this15);
+        _this15.checkInputs = _this15.checkInputs.bind(_this15);
+        _this15.changeInput = _this15.changeInput.bind(_this15);
+        return _this15;
     }
 
     _createClass(ChangePassword, [{
@@ -966,14 +990,44 @@ var ChangePassword = function (_React$Component13) {
             });
         }
     }, {
+        key: "setLoading",
+        value: function setLoading() {
+            this.setState({ form: "loading" });
+        }
+    }, {
         key: "send",
         value: function send() {
+            var _this16 = this;
+
             if (this.checkInputs()) {
+                this.setLoading();
+                fetch(SITEURL + 'api/changePassword', {
+                    method: 'POST',
+                    header: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        password: this.state.password,
+                        newPassword: this.state.newPassword1
+                    })
+                }).then(function (response) {
+                    yorumkutusuError = response;
+                    if (!response.ok) throw new Error(response.status);else return response.json();
+                }).then(function (json) {
+                    _this16.changedSuccessfully();
+                    _this16.setState({
+                        form: "normal",
+                        password: "",
+                        newPassword1: "",
+                        newPassword2: ""
+                    });
+                }).catch(function (error) {
+                    _this16.failed(error.message);
+                    _this16.setState({
+                        form: "normal"
+                    });
+                });
                 this.changedSuccessfully();
-                //this.failed(401);
-                //this.failed(500);
-                //this.failed(403);
-                //this.failed(400);
             }
         }
     }, {
@@ -1122,10 +1176,10 @@ var FormButton = function (_React$Component15) {
     function FormButton(props) {
         _classCallCheck(this, FormButton);
 
-        var _this16 = _possibleConstructorReturn(this, (FormButton.__proto__ || Object.getPrototypeOf(FormButton)).call(this, props));
+        var _this18 = _possibleConstructorReturn(this, (FormButton.__proto__ || Object.getPrototypeOf(FormButton)).call(this, props));
 
-        _this16.click = _this16.click.bind(_this16);
-        return _this16;
+        _this18.click = _this18.click.bind(_this18);
+        return _this18;
     }
 
     _createClass(FormButton, [{

@@ -20,7 +20,8 @@ class Member extends Request {
         $this->memberInfo = [
             'username'=>$this->member['member_username'],
             'slug'=>$this->member['member_slug'],
-            'owner'=>$this->ownerBool
+            'owner'=>$this->ownerBool,
+            'email'=>($this->ownerBool)?$this->member['member_email']:null
         ];
     }
     private function prepareCommentsWithRating() {

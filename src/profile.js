@@ -1,3 +1,4 @@
+let yorumkutusuError;
 class Profile extends React.Component {
     constructor(props) {
         super(props);
@@ -7,7 +8,8 @@ class Profile extends React.Component {
             followedProductsVisible:false,
             username:"",
             slug:"",
-            owner:false
+            owner:false,
+            email:""
         }
         // setting elementary funcs
         this.openSetting = this.openSetting.bind(this);
@@ -36,7 +38,8 @@ class Profile extends React.Component {
             this.setState({
                 username:json.other.member.username,
                 slug:json.other.member.slug,
-                owner:json.other.member.owner
+                owner:json.other.member.owner,
+                email:json.other.member.email
             });
             this.setFormNormal();
         }).catch((error) => {
@@ -94,6 +97,7 @@ class Profile extends React.Component {
                     <SettingArea
                         visible={this.state.settingAreaVisible}
                         close={this.closeSetting}
+                        email={this.state.email}
                     />
                     <FollowedProductsArea
                         visible={this.state.followedProductsVisible}
@@ -340,7 +344,7 @@ class SettingArea extends React.Component {
                             <WideColumn size="one"></WideColumn>
                             <WideColumn size="fourteen">
                                 <h3 className="ui header yorumkutusu-header">Hesap</h3>
-                                <ProfileSettings />
+                                <ProfileSettings email={this.props.email}/>
                             </WideColumn>
                         </Row>
                     </Column>
@@ -359,7 +363,7 @@ class ProfileSettings extends React.Component {
                 <Column>
                     <Row size="two">
                         <Column>
-                            <ChangeEmail />
+                            <ChangeEmail email={this.props.email}/>
                         </Column>
                         <Column>
                             <ChangePassword />
@@ -376,10 +380,6 @@ class ChangeEmail extends React.Component {
         super(props);
         this.emailInputs = [
             {
-                name:"E-posta",
-                state:"email"
-            },
-            {
                 name:"Yeni E-posta",
                 state:"newEmail1"
             },
@@ -390,7 +390,7 @@ class ChangeEmail extends React.Component {
         ]
         this.state = {
             form:"normal",
-            email:"",
+            email:this.props.email,
             newEmail1:"",
             newEmail2:"",
             password:"",
@@ -412,27 +412,47 @@ class ChangeEmail extends React.Component {
     send() {
         if(this.checkInputs()) {
             this.setLoading();
-            //this.changedSuccessfully();
-            //this.failed(401);
-            //this.failed(400);
-            //this.failed(422, 3);
-            //this.failed(422, 1);
-            //this.failed(403);
-            //this.failed(400);
+            fetch(SITEURL + 'api/changeEmail', {
+                method: 'POST',
+                header: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    password:this.state.password,
+                    newEmail:this.state.newEmail1
+                })
+            }).then((response)=>{
+                yorumkutusuError = response;
+                if(!response.ok) throw new Error(response.status);
+                else return response.json();
+            }).then((json)=>{
+                this.changedSuccessfully();
+                let newEmail = this.state.newEmail1;
+                this.setState({
+                    form:"normal",
+                    email:newEmail,
+                    newEmail1:"",
+                    newEmail2:"",
+                    password:""
+                });
+            }).catch((error)=>{
+                this.failed(error.message);
+                this.setState({
+                    form:"normal"
+                });
+            });
         }
     }
     changedSuccessfully() {
         this.setFormMessageText("success", "Başarılı!", "Onay için yeni e-postanızı kontrol ediniz");
     }
-    failed(type, subType) {
+    failed(type) {
         if(type==401) {
             this.setFormMessageText("error", "Başarısız!", "Parolanız doğru değil");
         } else if(type==500) {
             this.setFormMessageText("error", "Başarısız!", "Beklenmedik bir hata oldu");
-        } else if(type==422 && subType==3) {
-            this.setFormMessageText("error", "Başarısız!", "Bu e-posta geçersiz");
-        } else if(type==422 && subType==1) {
-            this.setFormMessageText("error", "Başarısız!", "Bu e-posta kullanımda");
+        } else if(type==422) {
+            this.setFormMessageText("error", "Başarısız!", "Bu e-posta kullanılamıyor");
         } else if(type==403) {
             this.setFormMessageText("error", "Başarısız!", "Bu işlem için yetkiniz yok");
         } else if(type==400) {
@@ -512,10 +532,17 @@ class ChangeEmail extends React.Component {
                     <h4 className="ui header yorumkutusu-header">E-posta Değiştir</h4>
                     <form className="ui form">
                         <FormField
+                            labelText="E-posta"
+                            inputType="email"
+                            inputName="E-posta"
+                            inputValue={this.state.email}
+                            disabled={true}
+                        />
+                        <FormField
                             labelText={this.emailInputs[0].name}
                             inputType="email"
                             inputName={this.emailInputs[0].state}
-                            inputValue={this.state.email}
+                            inputValue={this.state.newEmail1}
                             inputChange={this.changeEmailInput}
                             inputPlaceholder={this.emailInputs[0].name}
                         />
@@ -523,17 +550,9 @@ class ChangeEmail extends React.Component {
                             labelText={this.emailInputs[1].name}
                             inputType="email"
                             inputName={this.emailInputs[1].state}
-                            inputValue={this.state.newEmail1}
-                            inputChange={this.changeEmailInput}
-                            inputPlaceholder={this.emailInputs[1].name}
-                        />
-                        <FormField
-                            labelText={this.emailInputs[2].name}
-                            inputType="email"
-                            inputName={this.emailInputs[2].state}
                             inputValue={this.state.newEmail2}
                             inputChange={this.changeEmailInput}
-                            inputPlaceholder={this.emailInputs[2].name}
+                            inputPlaceholder={this.emailInputs[1].name}
                         />
                         <FormField
                             labelText="Parola"
@@ -569,10 +588,11 @@ class FormField extends React.Component {
         super(props);
     }
     render() {
+        this.disabled = (this.props.disabled)?"disabled":false;
         return(
             <div className="field">
                 <label className="yorumkutusu-label">{this.props.labelText}</label>
-                <input className="yorumkutusu-input" name={this.props.inputName} type={this.props.inputType} value={this.props.inputValue} onChange={this.props.inputChange} placeholder={this.props.inputPlaceholder}/>
+                <input className="yorumkutusu-input" name={this.props.inputName} type={this.props.inputType} value={this.props.inputValue} onChange={this.props.inputChange} placeholder={this.props.inputPlaceholder} disabled={this.disabled}/>
             </div>
         )
     }
@@ -595,6 +615,7 @@ class ChangePassword extends React.Component {
         this.failed = this.failed.bind(this);
         this.setFormMessageList = this.setFormMessageList.bind(this);
         this.setFormMessageText = this.setFormMessageText.bind(this);
+        this.setLoading = this.setLoading.bind(this);
         this.send = this.send.bind(this);
         this.checkInputs = this.checkInputs.bind(this);
         this.changeInput = this.changeInput.bind(this);
@@ -629,13 +650,40 @@ class ChangePassword extends React.Component {
             formMessageTextArr:text
         })
     }
+    setLoading() {
+        this.setState({form:"loading"});
+    }
     send() {
         if(this.checkInputs()) {
+            this.setLoading();
+            fetch(SITEURL + 'api/changePassword', {
+                method: 'POST',
+                header: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    password:this.state.password,
+                    newPassword:this.state.newPassword1
+                })
+            }).then((response)=>{
+                yorumkutusuError = response;
+                if(!response.ok) throw new Error(response.status);
+                else return response.json();
+            }).then((json)=>{
+                this.changedSuccessfully();
+                this.setState({
+                    form:"normal",
+                    password:"",
+                    newPassword1:"",
+                    newPassword2:""
+                });
+            }).catch((error)=>{
+                this.failed(error.message);
+                this.setState({
+                    form:"normal"
+                });
+            });
             this.changedSuccessfully();
-            //this.failed(401);
-            //this.failed(500);
-            //this.failed(403);
-            //this.failed(400);
         }
     }
     checkInputs() {
