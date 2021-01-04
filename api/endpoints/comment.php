@@ -12,6 +12,7 @@ class Comment extends Request {
             exit();
         }
         $this->writeToDB();
+        $this->increaseNewCommentCount();
         $this->commitRating();
     }
     // post ve put'un ortak methodu
@@ -63,6 +64,9 @@ class Comment extends Request {
             }
             $this->success();
         }
+    }
+    private function increaseNewCommentCount() {
+        Database::execute('UPDATE product_follow SET new_comment_count = new_comment_count + 1 WHERE product_id=?', [$this->data['productID']]);
     }
     protected function put() {
         $this->productCheckWrapper();
@@ -163,7 +167,7 @@ class Comment extends Request {
         $this->success();
     }
     private function deleteByMember() {
-        $this->comment = Database::existCheck('SELECT comment_id, product_id FROM comment WHERE comment_deleted=0 AND member_id=? AND comment_id=?', [USERID, $this->data['commentID']]);
+        $this->comment = Database::existCheck('SELECT comment_id, product_id, comment_create_date_time FROM comment WHERE comment_deleted=0 AND member_id=? AND comment_id=?', [USERID, $this->data['commentID']]);
         if(!$this->comment) {
             $this->setHttpStatus(404);
             exit();
@@ -193,6 +197,9 @@ class Comment extends Request {
     }
     private function removeHiddenComment() {
         Database::execute('DELETE FROM hidden_comment WHERE comment_id=?', [$this->data['commentID']]);
+    }
+    private function decreaseNewCommentCount() {
+        Database::execute('UPDATE product_follow SET new_comment_count = new_comment_count - 1 WHERE product_id=? and new_comment_count>0 and ?>last_seen_date_time', [$this->comment['product_id'], $this->comment['comment_create_date_time']]);
     }
 
 }

@@ -158,17 +158,20 @@ class FollowedProductsArea extends React.Component {
         this.load = this.load.bind(this);
     }
     componentDidMount() {
-        this.load(this.state.pageNumber);
+        this.load();
     }
     load() {
+        let pageNumber = this.state.pageNumber;
         fetch(SITEURL + 'api/followProduct?' + getUrlPar({
-            
+            pageNumber:pageNumber
         }), {method: 'GET'}).then((response)=>{
             if(!response.ok) throw new Error(response.status);
             else return response.json();
         }).then((json)=> {
             this.setState({
                 followProduct: json.other.followProduct,
+                pageNumber:pageNumber+1,
+                loadMoreHidden:!json.other.more,
                 form:"normal"
             });
         }).catch((error) => {
@@ -199,7 +202,6 @@ class FollowedProductsArea extends React.Component {
                             <FollowedProductsLoadMore 
                                 hidden={this.state.loadMoreHidden}
                                 load={this.load}
-                                pageNumber={this.state.pageNumber}
                             />
                         </Column>
                     </Row>
@@ -309,7 +311,7 @@ class FollowedProductsLoadMore extends React.Component {
                 <Row size="one">
                     <Column>
                         <FloatRight>
-                            <a className="yorumkutusu-a-empty">Daha Fazla Göster</a>
+                            <a className="yorumkutusu-a-empty" onClick={this.props.load}>Daha Fazla Göster</a>
                         </FloatRight>
                     </Column>
                 </Row>

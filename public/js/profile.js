@@ -209,18 +209,23 @@ var FollowedProductsArea = function (_React$Component2) {
     _createClass(FollowedProductsArea, [{
         key: "componentDidMount",
         value: function componentDidMount() {
-            this.load(this.state.pageNumber);
+            this.load();
         }
     }, {
         key: "load",
         value: function load() {
             var _this4 = this;
 
-            fetch(SITEURL + 'api/followProduct?' + getUrlPar({}), { method: 'GET' }).then(function (response) {
+            var pageNumber = this.state.pageNumber;
+            fetch(SITEURL + 'api/followProduct?' + getUrlPar({
+                pageNumber: pageNumber
+            }), { method: 'GET' }).then(function (response) {
                 if (!response.ok) throw new Error(response.status);else return response.json();
             }).then(function (json) {
                 _this4.setState({
                     followProduct: json.other.followProduct,
+                    pageNumber: pageNumber + 1,
+                    loadMoreHidden: !json.other.more,
                     form: "normal"
                 });
             }).catch(function (error) {});
@@ -267,8 +272,7 @@ var FollowedProductsArea = function (_React$Component2) {
                             }),
                             React.createElement(FollowedProductsLoadMore, {
                                 hidden: this.state.loadMoreHidden,
-                                load: this.load,
-                                pageNumber: this.state.pageNumber
+                                load: this.load
                             })
                         )
                     )
@@ -488,7 +492,7 @@ var FollowedProductsLoadMore = function (_React$Component6) {
                             null,
                             React.createElement(
                                 "a",
-                                { className: "yorumkutusu-a-empty" },
+                                { className: "yorumkutusu-a-empty", onClick: this.props.load },
                                 "Daha Fazla G\xF6ster"
                             )
                         )

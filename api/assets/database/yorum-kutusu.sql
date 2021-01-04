@@ -271,6 +271,7 @@ CREATE TABLE `product_follow` (
   `product_follow_id` int(11) NOT NULL,
   `member_id` int(11) NOT NULL,
   `product_id` int(11) NOT NULL,
+  `new_comment_count` int(11) NOT NULL DEFAULT 0,
   `last_seen_date_time` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
