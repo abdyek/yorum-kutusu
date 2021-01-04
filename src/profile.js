@@ -157,9 +157,6 @@ class FollowedProductsArea extends React.Component {
         };
         this.load = this.load.bind(this);
     }
-    componentDidMount() {
-        this.load();
-    }
     load() {
         let pageNumber = this.state.pageNumber;
         fetch(SITEURL + 'api/followProduct?' + getUrlPar({
@@ -180,33 +177,37 @@ class FollowedProductsArea extends React.Component {
     }
     render()  {
         if(this.props.visible) {
-            return(
-                <div>
-                    <Row size="two" nonStackable={true}>
-                        <Column>
-                            <h3 className="ui header yorumkutusu-header">Takipteki Ürünler</h3>
-                        </Column>
-                        <Column>
-                            <FloatRight>
-                                <CancelButton handleCancelButton={this.props.close}/>
-                            </FloatRight>
-                        </Column>
-                    </Row>
-                    <Row>
-                        <Column>
-                             <FollowedProductsTable
-                                changeContent={this.props.changeContent}
-                                form={this.state.form}
-                                info={this.state.followProduct}
-                            />
-                            <FollowedProductsLoadMore 
-                                hidden={this.state.loadMoreHidden}
-                                load={this.load}
-                            />
-                        </Column>
-                    </Row>
-                </div>
-            )
+            if(this.state.form=="normal") {
+                return(
+                    <div>
+                        <Row size="two" nonStackable={true}>
+                            <Column>
+                                <h3 className="ui header yorumkutusu-header">Takipteki Ürünler</h3>
+                            </Column>
+                            <Column>
+                                <FloatRight>
+                                    <CancelButton handleCancelButton={this.props.close}/>
+                                </FloatRight>
+                            </Column>
+                        </Row>
+                        <Row>
+                            <Column>
+                                 <FollowedProductsTable
+                                    changeContent={this.props.changeContent}
+                                    info={this.state.followProduct}
+                                />
+                                <FollowedProductsLoadMore 
+                                    hidden={this.state.loadMoreHidden}
+                                    load={this.load}
+                                />
+                            </Column>
+                        </Row>
+                    </div>
+                )
+            } else if(this.state.form=="loading") {
+                this.load();
+                return (<RowLoadingSpin nonSegment={true} />)
+            }
         } else {
             return ""
         }
@@ -218,38 +219,32 @@ class FollowedProductsTable extends React.Component {
         super(props);
     }
     render() {
-        if(this.props.form=="normal") {
-            this.tr = [];
-            for(let i=0;i<this.props.info.length;i++) {
-                this.tr.push(
-                    <tr key={this.props.info[i].productID}>
-                        <td data-label={this.props.info[i].productSlug}>
-                            <FollowedProductsCell
-                                changeContent={this.props.changeContent}
-                                slug={this.props.info[i].productSlug}
-                                name={this.props.info[i].productName}
-                            />
-                        </td>
-                        <td>{this.props.info[i].newComment}</td>
-                    </tr>
-                )
-            }
-            return (
-                <table className="ui inverted table">
-                  <thead>
-                    <tr><th>Takipteki Ürün</th>
-                    <th>Yeni Yorum</th>
-                  </tr></thead>
-                  <tbody>
-                    {this.tr}
-                  </tbody>
-                </table>
-            )
-        } else if(this.props.form=="loading") {
-            return (
-                <RowLoadingSpin nonSegment={true} />
+        this.tr = [];
+        for(let i=0;i<this.props.info.length;i++) {
+            this.tr.push(
+                <tr key={this.props.info[i].productID}>
+                    <td data-label={this.props.info[i].productSlug}>
+                        <FollowedProductsCell
+                            changeContent={this.props.changeContent}
+                            slug={this.props.info[i].productSlug}
+                            name={this.props.info[i].productName}
+                        />
+                    </td>
+                    <td>{this.props.info[i].newComment}</td>
+                </tr>
             )
         }
+        return (
+            <table className="ui inverted table">
+              <thead>
+                <tr><th>Takipteki Ürün</th>
+                <th>Yeni Yorum</th>
+              </tr></thead>
+              <tbody>
+                {this.tr}
+              </tbody>
+            </table>
+        )
     }
 }
 

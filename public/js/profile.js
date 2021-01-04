@@ -207,11 +207,6 @@ var FollowedProductsArea = function (_React$Component2) {
     }
 
     _createClass(FollowedProductsArea, [{
-        key: "componentDidMount",
-        value: function componentDidMount() {
-            this.load();
-        }
-    }, {
         key: "load",
         value: function load() {
             var _this4 = this;
@@ -234,49 +229,53 @@ var FollowedProductsArea = function (_React$Component2) {
         key: "render",
         value: function render() {
             if (this.props.visible) {
-                return React.createElement(
-                    "div",
-                    null,
-                    React.createElement(
-                        Row,
-                        { size: "two", nonStackable: true },
+                if (this.state.form == "normal") {
+                    return React.createElement(
+                        "div",
+                        null,
                         React.createElement(
-                            Column,
-                            null,
+                            Row,
+                            { size: "two", nonStackable: true },
                             React.createElement(
-                                "h3",
-                                { className: "ui header yorumkutusu-header" },
-                                "Takipteki \xDCr\xFCnler"
+                                Column,
+                                null,
+                                React.createElement(
+                                    "h3",
+                                    { className: "ui header yorumkutusu-header" },
+                                    "Takipteki \xDCr\xFCnler"
+                                )
+                            ),
+                            React.createElement(
+                                Column,
+                                null,
+                                React.createElement(
+                                    FloatRight,
+                                    null,
+                                    React.createElement(CancelButton, { handleCancelButton: this.props.close })
+                                )
                             )
                         ),
                         React.createElement(
-                            Column,
+                            Row,
                             null,
                             React.createElement(
-                                FloatRight,
+                                Column,
                                 null,
-                                React.createElement(CancelButton, { handleCancelButton: this.props.close })
+                                React.createElement(FollowedProductsTable, {
+                                    changeContent: this.props.changeContent,
+                                    info: this.state.followProduct
+                                }),
+                                React.createElement(FollowedProductsLoadMore, {
+                                    hidden: this.state.loadMoreHidden,
+                                    load: this.load
+                                })
                             )
                         )
-                    ),
-                    React.createElement(
-                        Row,
-                        null,
-                        React.createElement(
-                            Column,
-                            null,
-                            React.createElement(FollowedProductsTable, {
-                                changeContent: this.props.changeContent,
-                                form: this.state.form,
-                                info: this.state.followProduct
-                            }),
-                            React.createElement(FollowedProductsLoadMore, {
-                                hidden: this.state.loadMoreHidden,
-                                load: this.load
-                            })
-                        )
-                    )
-                );
+                    );
+                } else if (this.state.form == "loading") {
+                    this.load();
+                    return React.createElement(RowLoadingSpin, { nonSegment: true });
+                }
             } else {
                 return "";
             }
@@ -298,58 +297,54 @@ var FollowedProductsTable = function (_React$Component3) {
     _createClass(FollowedProductsTable, [{
         key: "render",
         value: function render() {
-            if (this.props.form == "normal") {
-                this.tr = [];
-                for (var i = 0; i < this.props.info.length; i++) {
-                    this.tr.push(React.createElement(
-                        "tr",
-                        { key: this.props.info[i].productID },
-                        React.createElement(
-                            "td",
-                            { "data-label": this.props.info[i].productSlug },
-                            React.createElement(FollowedProductsCell, {
-                                changeContent: this.props.changeContent,
-                                slug: this.props.info[i].productSlug,
-                                name: this.props.info[i].productName
-                            })
-                        ),
-                        React.createElement(
-                            "td",
-                            null,
-                            this.props.info[i].newComment
-                        )
-                    ));
-                }
-                return React.createElement(
-                    "table",
-                    { className: "ui inverted table" },
+            this.tr = [];
+            for (var i = 0; i < this.props.info.length; i++) {
+                this.tr.push(React.createElement(
+                    "tr",
+                    { key: this.props.info[i].productID },
                     React.createElement(
-                        "thead",
-                        null,
-                        React.createElement(
-                            "tr",
-                            null,
-                            React.createElement(
-                                "th",
-                                null,
-                                "Takipteki \xDCr\xFCn"
-                            ),
-                            React.createElement(
-                                "th",
-                                null,
-                                "Yeni Yorum"
-                            )
-                        )
+                        "td",
+                        { "data-label": this.props.info[i].productSlug },
+                        React.createElement(FollowedProductsCell, {
+                            changeContent: this.props.changeContent,
+                            slug: this.props.info[i].productSlug,
+                            name: this.props.info[i].productName
+                        })
                     ),
                     React.createElement(
-                        "tbody",
+                        "td",
                         null,
-                        this.tr
+                        this.props.info[i].newComment
                     )
-                );
-            } else if (this.props.form == "loading") {
-                return React.createElement(RowLoadingSpin, { nonSegment: true });
+                ));
             }
+            return React.createElement(
+                "table",
+                { className: "ui inverted table" },
+                React.createElement(
+                    "thead",
+                    null,
+                    React.createElement(
+                        "tr",
+                        null,
+                        React.createElement(
+                            "th",
+                            null,
+                            "Takipteki \xDCr\xFCn"
+                        ),
+                        React.createElement(
+                            "th",
+                            null,
+                            "Yeni Yorum"
+                        )
+                    )
+                ),
+                React.createElement(
+                    "tbody",
+                    null,
+                    this.tr
+                )
+            );
         }
     }]);
 
