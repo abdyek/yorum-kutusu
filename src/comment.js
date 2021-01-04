@@ -298,7 +298,7 @@ class TopOfComment extends React.Component{
                     <Row size="one">
                         <Column>
                             <FloatRight>
-                                <a className="read-all" onClick={this.readAll}>Devamını Oku</a>
+                                <a className="yorumkutusu-a-empty" onClick={this.readAll}>Devamını Oku</a>
                             </FloatRight>
                         </Column>
                     </Row>

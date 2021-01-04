@@ -36,14 +36,6 @@ header {
     color:#eee !important;
 }
 
-.read-all {
-    color:#b7d1e2;
-    cursor:pointer;
-}
-
-.read-all:hover {
-    color:#eee;
-}
 
 /* profile page, */
 .yorumkutusu-header {
@@ -74,3 +66,11 @@ header {
     color:#333 !important;
 }
 
+.yorumkutusu-a-empty {
+    color:#b7d1e2;
+    cursor:pointer;
+}
+
+.yorumkutusu-a-empty:hover {
+    color:#eee;
+}

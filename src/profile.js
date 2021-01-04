@@ -1,4 +1,3 @@
-let yorumkutusuError;
 class Profile extends React.Component {
     constructor(props) {
         super(props);
@@ -127,6 +126,55 @@ class Profile extends React.Component {
 }
 
 class FollowedProductsArea extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            form:"loading",
+            loadMoreHidden:true,
+            pageNumber:1,
+            followProduct: [
+                /*
+                {
+                    productID:0,
+                    productSlug:"iphone-5s", 
+                    productName:"Iphone 5s",
+                    newComment: "5"
+                },
+                {
+                    productID:2,
+                    productSlug:"mahmut-efendi-kahveleri", 
+                    productName:"Mahmut Efendi Kahveleri",
+                    newComment: "5"
+                },
+                {
+                    productID:12,
+                    productSlug:"starBucks-sumatra", 
+                    productName:"StarBucks Sumatra",
+                    newComment: "99"
+                }
+                */
+            ]
+        };
+        this.load = this.load.bind(this);
+    }
+    componentDidMount() {
+        this.load(this.state.pageNumber);
+    }
+    load() {
+        fetch(SITEURL + 'api/followProduct?' + getUrlPar({
+            
+        }), {method: 'GET'}).then((response)=>{
+            if(!response.ok) throw new Error(response.status);
+            else return response.json();
+        }).then((json)=> {
+            this.setState({
+                followProduct: json.other.followProduct,
+                form:"normal"
+            });
+        }).catch((error) => {
+
+        });
+    }
     render()  {
         if(this.props.visible) {
             return(
@@ -145,8 +193,14 @@ class FollowedProductsArea extends React.Component {
                         <Column>
                              <FollowedProductsTable
                                 changeContent={this.props.changeContent}
-                            /> 
-                           {/* <FollowedProductsLabels /> */}
+                                form={this.state.form}
+                                info={this.state.followProduct}
+                            />
+                            <FollowedProductsLoadMore 
+                                hidden={this.state.loadMoreHidden}
+                                load={this.load}
+                                pageNumber={this.state.pageNumber}
+                            />
                         </Column>
                     </Row>
                 </div>
@@ -160,44 +214,21 @@ class FollowedProductsArea extends React.Component {
 class FollowedProductsTable extends React.Component {
     constructor(props){
         super(props);
-        this.state = {
-            form:"normal", // normal, loading
-            info: [
-                {
-                    productID:0,
-                    productSlug:"iphone-5s", 
-                    productName:"Iphone 5s",
-                    newComment: "5"
-                },
-                {
-                    productID:2,
-                    productSlug:"mahmut-efendi-kahveleri", 
-                    productName:"Mahmut Efendi Kahveleri",
-                    newComment: "5"
-                },
-                {
-                    productID:0,
-                    productSlug:"starBucks-sumatra", 
-                    productName:"StarBucks Sumatra",
-                    newComment: "99"
-                }
-            ]
-        }
     }
     render() {
-        if(this.state.form=="normal") {
+        if(this.props.form=="normal") {
             this.tr = [];
-            for(let i=0;i<this.state.info.length;i++) {
+            for(let i=0;i<this.props.info.length;i++) {
                 this.tr.push(
-                    <tr>
-                        <td data-label={this.state.info[i].productSlug}>
+                    <tr key={this.props.info[i].productID}>
+                        <td data-label={this.props.info[i].productSlug}>
                             <FollowedProductsCell
-                                changeContent={this.state.changeContent}
-                                slug={this.state.info[i].productSlug}
-                                name={this.state.info[i].productName}
+                                changeContent={this.props.changeContent}
+                                slug={this.props.info[i].productSlug}
+                                name={this.props.info[i].productName}
                             />
                         </td>
-                        <td>{this.state.info[i].newComment}</td>
+                        <td>{this.props.info[i].newComment}</td>
                     </tr>
                 )
             }
@@ -212,7 +243,7 @@ class FollowedProductsTable extends React.Component {
                   </tbody>
                 </table>
             )
-        } else if(this.state.form=="loading") {
+        } else if(this.props.form=="loading") {
             return (
                 <RowLoadingSpin nonSegment={true} />
             )
@@ -268,6 +299,24 @@ class FollowedProductsLabels extends React.Component {
                 </Row>
             </div>
         )
+    }
+}
+
+class FollowedProductsLoadMore extends React.Component {
+    render() {
+        if(!this.props.hidden) {
+            return(
+                <Row size="one">
+                    <Column>
+                        <FloatRight>
+                            <a className="yorumkutusu-a-empty">Daha Fazla Göster</a>
+                        </FloatRight>
+                    </Column>
+                </Row>
+            )
+        } else {
+            return("")
+        }
     }
 }
 
@@ -422,7 +471,6 @@ class ChangeEmail extends React.Component {
                     newEmail:this.state.newEmail1
                 })
             }).then((response)=>{
-                yorumkutusuError = response;
                 if(!response.ok) throw new Error(response.status);
                 else return response.json();
             }).then((json)=>{
@@ -666,7 +714,6 @@ class ChangePassword extends React.Component {
                     newPassword:this.state.newPassword1
                 })
             }).then((response)=>{
-                yorumkutusuError = response;
                 if(!response.ok) throw new Error(response.status);
                 else return response.json();
             }).then((json)=>{

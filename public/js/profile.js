@@ -6,8 +6,6 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var yorumkutusuError = void 0;
-
 var Profile = function (_React$Component) {
     _inherits(Profile, _React$Component);
 
@@ -172,13 +170,62 @@ var Profile = function (_React$Component) {
 var FollowedProductsArea = function (_React$Component2) {
     _inherits(FollowedProductsArea, _React$Component2);
 
-    function FollowedProductsArea() {
+    function FollowedProductsArea(props) {
         _classCallCheck(this, FollowedProductsArea);
 
-        return _possibleConstructorReturn(this, (FollowedProductsArea.__proto__ || Object.getPrototypeOf(FollowedProductsArea)).apply(this, arguments));
+        var _this3 = _possibleConstructorReturn(this, (FollowedProductsArea.__proto__ || Object.getPrototypeOf(FollowedProductsArea)).call(this, props));
+
+        _this3.state = {
+            form: "loading",
+            loadMoreHidden: true,
+            pageNumber: 1,
+            followProduct: [
+                /*
+                {
+                    productID:0,
+                    productSlug:"iphone-5s", 
+                    productName:"Iphone 5s",
+                    newComment: "5"
+                },
+                {
+                    productID:2,
+                    productSlug:"mahmut-efendi-kahveleri", 
+                    productName:"Mahmut Efendi Kahveleri",
+                    newComment: "5"
+                },
+                {
+                    productID:12,
+                    productSlug:"starBucks-sumatra", 
+                    productName:"StarBucks Sumatra",
+                    newComment: "99"
+                }
+                */
+            ]
+        };
+        _this3.load = _this3.load.bind(_this3);
+        return _this3;
     }
 
     _createClass(FollowedProductsArea, [{
+        key: "componentDidMount",
+        value: function componentDidMount() {
+            this.load(this.state.pageNumber);
+        }
+    }, {
+        key: "load",
+        value: function load() {
+            var _this4 = this;
+
+            fetch(SITEURL + 'api/followProduct?' + getUrlPar({}), { method: 'GET' }).then(function (response) {
+                if (!response.ok) throw new Error(response.status);else return response.json();
+            }).then(function (json) {
+                _this4.setState({
+                    followProduct: json.other.followProduct,
+                    form: "normal"
+                });
+            }).catch(function (error) {});
+        }
+    }, {
         key: "render",
         value: function render() {
             if (this.props.visible) {
@@ -214,7 +261,14 @@ var FollowedProductsArea = function (_React$Component2) {
                             Column,
                             null,
                             React.createElement(FollowedProductsTable, {
-                                changeContent: this.props.changeContent
+                                changeContent: this.props.changeContent,
+                                form: this.state.form,
+                                info: this.state.followProduct
+                            }),
+                            React.createElement(FollowedProductsLoadMore, {
+                                hidden: this.state.loadMoreHidden,
+                                load: this.load,
+                                pageNumber: this.state.pageNumber
                             })
                         )
                     )
@@ -234,52 +288,31 @@ var FollowedProductsTable = function (_React$Component3) {
     function FollowedProductsTable(props) {
         _classCallCheck(this, FollowedProductsTable);
 
-        var _this4 = _possibleConstructorReturn(this, (FollowedProductsTable.__proto__ || Object.getPrototypeOf(FollowedProductsTable)).call(this, props));
-
-        _this4.state = {
-            form: "normal", // normal, loading
-            info: [{
-                productID: 0,
-                productSlug: "iphone-5s",
-                productName: "Iphone 5s",
-                newComment: "5"
-            }, {
-                productID: 2,
-                productSlug: "mahmut-efendi-kahveleri",
-                productName: "Mahmut Efendi Kahveleri",
-                newComment: "5"
-            }, {
-                productID: 0,
-                productSlug: "starBucks-sumatra",
-                productName: "StarBucks Sumatra",
-                newComment: "99"
-            }]
-        };
-        return _this4;
+        return _possibleConstructorReturn(this, (FollowedProductsTable.__proto__ || Object.getPrototypeOf(FollowedProductsTable)).call(this, props));
     }
 
     _createClass(FollowedProductsTable, [{
         key: "render",
         value: function render() {
-            if (this.state.form == "normal") {
+            if (this.props.form == "normal") {
                 this.tr = [];
-                for (var i = 0; i < this.state.info.length; i++) {
+                for (var i = 0; i < this.props.info.length; i++) {
                     this.tr.push(React.createElement(
                         "tr",
-                        null,
+                        { key: this.props.info[i].productID },
                         React.createElement(
                             "td",
-                            { "data-label": this.state.info[i].productSlug },
+                            { "data-label": this.props.info[i].productSlug },
                             React.createElement(FollowedProductsCell, {
-                                changeContent: this.state.changeContent,
-                                slug: this.state.info[i].productSlug,
-                                name: this.state.info[i].productName
+                                changeContent: this.props.changeContent,
+                                slug: this.props.info[i].productSlug,
+                                name: this.props.info[i].productName
                             })
                         ),
                         React.createElement(
                             "td",
                             null,
-                            this.state.info[i].newComment
+                            this.props.info[i].newComment
                         )
                     ));
                 }
@@ -310,7 +343,7 @@ var FollowedProductsTable = function (_React$Component3) {
                         this.tr
                     )
                 );
-            } else if (this.state.form == "loading") {
+            } else if (this.props.form == "loading") {
                 return React.createElement(RowLoadingSpin, { nonSegment: true });
             }
         }
@@ -325,10 +358,10 @@ var FollowedProductsCell = function (_React$Component4) {
     function FollowedProductsCell(props) {
         _classCallCheck(this, FollowedProductsCell);
 
-        var _this5 = _possibleConstructorReturn(this, (FollowedProductsCell.__proto__ || Object.getPrototypeOf(FollowedProductsCell)).call(this, props));
+        var _this6 = _possibleConstructorReturn(this, (FollowedProductsCell.__proto__ || Object.getPrototypeOf(FollowedProductsCell)).call(this, props));
 
-        _this5.goProduct = _this5.goProduct.bind(_this5);
-        return _this5;
+        _this6.goProduct = _this6.goProduct.bind(_this6);
+        return _this6;
     }
 
     _createClass(FollowedProductsCell, [{
@@ -431,8 +464,47 @@ var FollowedProductsLabels = function (_React$Component5) {
     return FollowedProductsLabels;
 }(React.Component);
 
-var ProfileHeader = function (_React$Component6) {
-    _inherits(ProfileHeader, _React$Component6);
+var FollowedProductsLoadMore = function (_React$Component6) {
+    _inherits(FollowedProductsLoadMore, _React$Component6);
+
+    function FollowedProductsLoadMore() {
+        _classCallCheck(this, FollowedProductsLoadMore);
+
+        return _possibleConstructorReturn(this, (FollowedProductsLoadMore.__proto__ || Object.getPrototypeOf(FollowedProductsLoadMore)).apply(this, arguments));
+    }
+
+    _createClass(FollowedProductsLoadMore, [{
+        key: "render",
+        value: function render() {
+            if (!this.props.hidden) {
+                return React.createElement(
+                    Row,
+                    { size: "one" },
+                    React.createElement(
+                        Column,
+                        null,
+                        React.createElement(
+                            FloatRight,
+                            null,
+                            React.createElement(
+                                "a",
+                                { className: "yorumkutusu-a-empty" },
+                                "Daha Fazla G\xF6ster"
+                            )
+                        )
+                    )
+                );
+            } else {
+                return "";
+            }
+        }
+    }]);
+
+    return FollowedProductsLoadMore;
+}(React.Component);
+
+var ProfileHeader = function (_React$Component7) {
+    _inherits(ProfileHeader, _React$Component7);
 
     function ProfileHeader() {
         _classCallCheck(this, ProfileHeader);
@@ -474,8 +546,8 @@ var ProfileHeader = function (_React$Component6) {
     return ProfileHeader;
 }(React.Component);
 
-var ProfileComments = function (_React$Component7) {
-    _inherits(ProfileComments, _React$Component7);
+var ProfileComments = function (_React$Component8) {
+    _inherits(ProfileComments, _React$Component8);
 
     function ProfileComments() {
         _classCallCheck(this, ProfileComments);
@@ -493,8 +565,8 @@ var ProfileComments = function (_React$Component7) {
     return ProfileComments;
 }(React.Component);
 
-var OwnerButtons = function (_React$Component8) {
-    _inherits(OwnerButtons, _React$Component8);
+var OwnerButtons = function (_React$Component9) {
+    _inherits(OwnerButtons, _React$Component9);
 
     function OwnerButtons() {
         _classCallCheck(this, OwnerButtons);
@@ -543,8 +615,8 @@ var OwnerButtons = function (_React$Component8) {
     return OwnerButtons;
 }(React.Component);
 
-var SettingArea = function (_React$Component9) {
-    _inherits(SettingArea, _React$Component9);
+var SettingArea = function (_React$Component10) {
+    _inherits(SettingArea, _React$Component10);
 
     function SettingArea() {
         _classCallCheck(this, SettingArea);
@@ -610,8 +682,8 @@ var SettingArea = function (_React$Component9) {
     return SettingArea;
 }(React.Component);
 
-var ProfileSettings = function (_React$Component10) {
-    _inherits(ProfileSettings, _React$Component10);
+var ProfileSettings = function (_React$Component11) {
+    _inherits(ProfileSettings, _React$Component11);
 
     function ProfileSettings() {
         _classCallCheck(this, ProfileSettings);
@@ -650,24 +722,24 @@ var ProfileSettings = function (_React$Component10) {
     return ProfileSettings;
 }(React.Component);
 
-var ChangeEmail = function (_React$Component11) {
-    _inherits(ChangeEmail, _React$Component11);
+var ChangeEmail = function (_React$Component12) {
+    _inherits(ChangeEmail, _React$Component12);
 
     function ChangeEmail(props) {
         _classCallCheck(this, ChangeEmail);
 
-        var _this12 = _possibleConstructorReturn(this, (ChangeEmail.__proto__ || Object.getPrototypeOf(ChangeEmail)).call(this, props));
+        var _this14 = _possibleConstructorReturn(this, (ChangeEmail.__proto__ || Object.getPrototypeOf(ChangeEmail)).call(this, props));
 
-        _this12.emailInputs = [{
+        _this14.emailInputs = [{
             name: "Yeni E-posta",
             state: "newEmail1"
         }, {
             name: "Yeni E-posta Tekrar",
             state: "newEmail2"
         }];
-        _this12.state = {
+        _this14.state = {
             form: "normal",
-            email: _this12.props.email,
+            email: _this14.props.email,
             newEmail1: "",
             newEmail2: "",
             password: "",
@@ -676,22 +748,22 @@ var ChangeEmail = function (_React$Component11) {
             formMessageHeader: "",
             formMessageTextArr: []
         };
-        _this12.send = _this12.send.bind(_this12);
-        _this12.changedSuccessfully = _this12.changedSuccessfully.bind(_this12);
-        _this12.checkInputs = _this12.checkInputs.bind(_this12);
-        _this12.changeEmailInput = _this12.changeEmailInput.bind(_this12);
-        _this12.changePassword = _this12.changePassword.bind(_this12);
-        _this12.setFormMessageList = _this12.setFormMessageList.bind(_this12);
-        _this12.setFormMessageText = _this12.setFormMessageText.bind(_this12);
-        _this12.setLoading = _this12.setLoading.bind(_this12);
-        _this12.setNormal = _this12.setNormal.bind(_this12);
-        return _this12;
+        _this14.send = _this14.send.bind(_this14);
+        _this14.changedSuccessfully = _this14.changedSuccessfully.bind(_this14);
+        _this14.checkInputs = _this14.checkInputs.bind(_this14);
+        _this14.changeEmailInput = _this14.changeEmailInput.bind(_this14);
+        _this14.changePassword = _this14.changePassword.bind(_this14);
+        _this14.setFormMessageList = _this14.setFormMessageList.bind(_this14);
+        _this14.setFormMessageText = _this14.setFormMessageText.bind(_this14);
+        _this14.setLoading = _this14.setLoading.bind(_this14);
+        _this14.setNormal = _this14.setNormal.bind(_this14);
+        return _this14;
     }
 
     _createClass(ChangeEmail, [{
         key: "send",
         value: function send() {
-            var _this13 = this;
+            var _this15 = this;
 
             if (this.checkInputs()) {
                 this.setLoading();
@@ -705,12 +777,11 @@ var ChangeEmail = function (_React$Component11) {
                         newEmail: this.state.newEmail1
                     })
                 }).then(function (response) {
-                    yorumkutusuError = response;
                     if (!response.ok) throw new Error(response.status);else return response.json();
                 }).then(function (json) {
-                    _this13.changedSuccessfully();
-                    var newEmail = _this13.state.newEmail1;
-                    _this13.setState({
+                    _this15.changedSuccessfully();
+                    var newEmail = _this15.state.newEmail1;
+                    _this15.setState({
                         form: "normal",
                         email: newEmail,
                         newEmail1: "",
@@ -718,8 +789,8 @@ var ChangeEmail = function (_React$Component11) {
                         password: ""
                     });
                 }).catch(function (error) {
-                    _this13.failed(error.message);
-                    _this13.setState({
+                    _this15.failed(error.message);
+                    _this15.setState({
                         form: "normal"
                     });
                 });
@@ -893,8 +964,8 @@ var ChangeEmail = function (_React$Component11) {
     return ChangeEmail;
 }(React.Component);
 
-var FormField = function (_React$Component12) {
-    _inherits(FormField, _React$Component12);
+var FormField = function (_React$Component13) {
+    _inherits(FormField, _React$Component13);
 
     function FormField(props) {
         _classCallCheck(this, FormField);
@@ -922,15 +993,15 @@ var FormField = function (_React$Component12) {
     return FormField;
 }(React.Component);
 
-var ChangePassword = function (_React$Component13) {
-    _inherits(ChangePassword, _React$Component13);
+var ChangePassword = function (_React$Component14) {
+    _inherits(ChangePassword, _React$Component14);
 
     function ChangePassword(props) {
         _classCallCheck(this, ChangePassword);
 
-        var _this15 = _possibleConstructorReturn(this, (ChangePassword.__proto__ || Object.getPrototypeOf(ChangePassword)).call(this, props));
+        var _this17 = _possibleConstructorReturn(this, (ChangePassword.__proto__ || Object.getPrototypeOf(ChangePassword)).call(this, props));
 
-        _this15.state = {
+        _this17.state = {
             form: "normal", // normal, loading
             password: "",
             newPassword1: "",
@@ -940,15 +1011,15 @@ var ChangePassword = function (_React$Component13) {
             formMessageHeader: "",
             formMessageTextArr: []
         };
-        _this15.changedSuccessfully = _this15.changedSuccessfully.bind(_this15);
-        _this15.failed = _this15.failed.bind(_this15);
-        _this15.setFormMessageList = _this15.setFormMessageList.bind(_this15);
-        _this15.setFormMessageText = _this15.setFormMessageText.bind(_this15);
-        _this15.setLoading = _this15.setLoading.bind(_this15);
-        _this15.send = _this15.send.bind(_this15);
-        _this15.checkInputs = _this15.checkInputs.bind(_this15);
-        _this15.changeInput = _this15.changeInput.bind(_this15);
-        return _this15;
+        _this17.changedSuccessfully = _this17.changedSuccessfully.bind(_this17);
+        _this17.failed = _this17.failed.bind(_this17);
+        _this17.setFormMessageList = _this17.setFormMessageList.bind(_this17);
+        _this17.setFormMessageText = _this17.setFormMessageText.bind(_this17);
+        _this17.setLoading = _this17.setLoading.bind(_this17);
+        _this17.send = _this17.send.bind(_this17);
+        _this17.checkInputs = _this17.checkInputs.bind(_this17);
+        _this17.changeInput = _this17.changeInput.bind(_this17);
+        return _this17;
     }
 
     _createClass(ChangePassword, [{
@@ -997,7 +1068,7 @@ var ChangePassword = function (_React$Component13) {
     }, {
         key: "send",
         value: function send() {
-            var _this16 = this;
+            var _this18 = this;
 
             if (this.checkInputs()) {
                 this.setLoading();
@@ -1011,19 +1082,18 @@ var ChangePassword = function (_React$Component13) {
                         newPassword: this.state.newPassword1
                     })
                 }).then(function (response) {
-                    yorumkutusuError = response;
                     if (!response.ok) throw new Error(response.status);else return response.json();
                 }).then(function (json) {
-                    _this16.changedSuccessfully();
-                    _this16.setState({
+                    _this18.changedSuccessfully();
+                    _this18.setState({
                         form: "normal",
                         password: "",
                         newPassword1: "",
                         newPassword2: ""
                     });
                 }).catch(function (error) {
-                    _this16.failed(error.message);
-                    _this16.setState({
+                    _this18.failed(error.message);
+                    _this18.setState({
                         form: "normal"
                     });
                 });
@@ -1122,8 +1192,8 @@ var ChangePassword = function (_React$Component13) {
     return ChangePassword;
 }(React.Component);
 
-var FormMessageList = function (_React$Component14) {
-    _inherits(FormMessageList, _React$Component14);
+var FormMessageList = function (_React$Component15) {
+    _inherits(FormMessageList, _React$Component15);
 
     function FormMessageList() {
         _classCallCheck(this, FormMessageList);
@@ -1170,16 +1240,16 @@ var FormMessageList = function (_React$Component14) {
     return FormMessageList;
 }(React.Component);
 
-var FormButton = function (_React$Component15) {
-    _inherits(FormButton, _React$Component15);
+var FormButton = function (_React$Component16) {
+    _inherits(FormButton, _React$Component16);
 
     function FormButton(props) {
         _classCallCheck(this, FormButton);
 
-        var _this18 = _possibleConstructorReturn(this, (FormButton.__proto__ || Object.getPrototypeOf(FormButton)).call(this, props));
+        var _this20 = _possibleConstructorReturn(this, (FormButton.__proto__ || Object.getPrototypeOf(FormButton)).call(this, props));
 
-        _this18.click = _this18.click.bind(_this18);
-        return _this18;
+        _this20.click = _this20.click.bind(_this20);
+        return _this20;
     }
 
     _createClass(FormButton, [{

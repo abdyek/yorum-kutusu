@@ -429,7 +429,7 @@ var TopOfComment = function (_React$Component3) {
                             null,
                             React.createElement(
                                 "a",
-                                { className: "read-all", onClick: this.readAll },
+                                { className: "yorumkutusu-a-empty", onClick: this.readAll },
                                 "Devam\u0131n\u0131 Oku"
                             )
                         )
