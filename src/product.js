@@ -4,13 +4,13 @@ class Product extends React.Component {
         this.state = {
             form:"loading",
             specialInfo:{},
-            commentType:"all",
+            navigationType:"all",
             sortBy:"time",
             followButtonDisabled:false,
             followed:false,
             bottomCommentForm:"normal"
         }
-        this.manageOtherSlug = this.manageOtherSlug.bind(this);
+        this.manageSlugs = this.manageSlugs.bind(this);
         this.fetchProduct = this.fetchProduct.bind(this);
         this.fetchComment = this.fetchComment.bind(this);
         this.refreshUrl = this.refreshUrl.bind(this);
@@ -29,22 +29,30 @@ class Product extends React.Component {
         this.openLoadingSpinOfBottomComment = this.openLoadingSpinOfBottomComment.bind(this);
     }
     componentDidMount() {
-        this.manageOtherSlug();
+        this.manageSlugs();
         this.load();
     }
-    manageOtherSlug() {
+    manageSlugs() {
         const pathNames = getPathNames();
         this.productSlug = pathNames[1];
-        this.sortBy = (pathNames[2])?pathNames[2]:"time";
-        this.pageNumber = (pathNames[3])?pathNames[3]:1;
-        if(this.sortBy!="time" && this.sortBy!="like") {
-            this.sortBy = "time";
+        if(pathNames[2]=="unread") {
+            this.pageType = "unread";
+            this.setState({
+                navigationType:"unread"
+            });
+        } else {
+            this.pageType = "all";
+            this.sortBy = (pathNames[2])?pathNames[2]:"time";
+            this.pageNumber = (pathNames[3])?pathNames[3]:1;
+            if(this.sortBy!="time" && this.sortBy!="like") {
+                this.sortBy = "time";
+            }
+            this.setState({
+                sortBy:this.sortBy
+            });
+            this.refreshUrl();
         }
-        this.setState({
-            sortBy:this.sortBy
-        });
-        this.refreshUrl();
-        let commentType = "all";  // all, spacial
+        let navigationType= "all";  // all, spacial
         // not: buradaki değer atamalar ve değişkenlerin bir kısmı deneme amaçlı, setState içindeki hemen hemen hepsi api tarafından gelecek
     }
     detectBottomCommentForm(ownComment) {
@@ -93,7 +101,7 @@ class Product extends React.Component {
     fetchComment() {
         fetch(SITEURL + 'api/product?' + getUrlPar({
             productSlug:this.productSlug,
-            sortBy: this.sortBy,
+            type: this.sortBy,
             pageNumber:this.pageNumber,
             onlyComment:true
         }), {method: 'GET'}).then((response)=>{
@@ -117,12 +125,21 @@ class Product extends React.Component {
         // burası ne kadar sağlıklı oldu emin değilim
     }
     load() {
-        this.fetchProduct({
-            "productSlug":this.productSlug,
-            "sortBy":this.sortBy,
-            "pageNumber":this.pageNumber,
-            "onlyComment":false
-        });
+        if(this.pageType=="all") {
+            this.fetchProduct({
+                "productSlug":this.productSlug,
+                "type":this.sortBy,
+                "pageNumber":this.pageNumber,
+                "onlyComment":false
+            });
+        } else if(this.pageType=="unread") {
+            this.fetchProduct({
+                "productSlug":this.productSlug,
+                "type":"unread",
+                "pageNumber":1,
+                "onlyComment":false
+            });
+        }
     }
     reloadComment() {
         this.fetchComment();
@@ -133,7 +150,7 @@ class Product extends React.Component {
         });
         fetch(SITEURL + 'api/product?' + getUrlPar({
             productSlug:this.productSlug,
-            sortBy: this.sortBy,
+            type: this.sortBy,
             pageNumber:this.pageNumber,
             onlyComment:false
         }), {method: 'GET'}).then((response)=>{
@@ -181,7 +198,7 @@ class Product extends React.Component {
 	}
 	showAllComments() {
 		this.setState({
-			commentType:"all",
+			navigationType:"all",
 			sortBy:this.sortBy,
 			pageNumber:1
 		});
@@ -247,9 +264,17 @@ class Product extends React.Component {
             return(
                 <div>
                     <ProductInfo tags={this.state.tagsInfo} productName={this.state.productName} changeContent={this.props.changeContent} followToggle={this.followToggle} followed={this.state.followed} followButtonDisabled={this.state.followButtonDisabled}/>
-					{(this.state.commentType=="all")?
-                    	<PageNavigation sortBy={this.state.sortBy} form={this.state.commentsForm} handleChangeSortBy={this.changeSortBy} pageCount={this.state.pageCount} currentPage={this.state.pageNumber} handleChangePageNumber={this.changePageNumber} />
-					:<SpecialCommentHeader specialInfo={this.state.specialInfo} showAllComments={this.showAllComments}/>}
+
+                    <Navigation
+                        type={this.state.navigationType}
+                        sortBy={this.state.sortBy}
+                        form={this.state.commentsForm}
+                        handleChangeSortBy={this.changeSortBy}
+                        pageCount={this.state.pageCount}
+                        currentPage={this.state.pageNumber}
+                        handleChangePageNumber={this.changePageNumber}
+                        showAllComments={this.showAllComments}
+                    />
                     <Comments
                         comments={this.state.comments}
                         tags={this.state.tagsInfo}
@@ -258,10 +283,16 @@ class Product extends React.Component {
                         reloadFunc={this.reloadAllComment}
                         productID={this.state.productID}
                     />
-					{(this.state.commentType=="all")?
-                    	<PageNavigation sortBy={this.state.sortBy} form={this.state.commentsForm} handleChangeSortBy={this.changeSortBy} pageCount={this.state.pageCount} currentPage={this.state.pageNumber} handleChangePageNumber={this.changePageNumber} />
-					:""
-					}
+                    <Navigation
+                        type={this.state.navigationType}
+                        sortBy={this.state.sortBy}
+                        form={this.state.commentsForm}
+                        handleChangeSortBy={this.changeSortBy}
+                        pageCount={this.state.pageCount}
+                        currentPage={this.state.pageNumber}
+                        handleChangePageNumber={this.changePageNumber}
+                        showAllComments={this.showAllComments}
+                    />
                     <BottomComment
                         form={this.state.bottomCommentForm}
                         reloadFunc={this.reloadAllComment}
@@ -296,6 +327,29 @@ class Product extends React.Component {
                         </Center>
                     </Column>
                 </Row>
+            )
+        }
+    }
+}
+
+class Navigation extends React.Component {
+    render() {
+        if(this.props.type=="all") {
+            return (
+                <PageNavigation
+                    sortBy={this.props.sortBy}
+                    form={this.props.commentsForm}
+                    handleChangeSortBy={this.props.handleChangeSortBy}
+                    pageCount={this.props.pageCount}
+                    currentPage={this.props.pageNumber}
+                    handleChangePageNumber={this.props.handleChangePageNumber}
+                />
+            )
+        } else if(this.props.type=="unread") {
+            return (
+                <UnreadNavigation
+                    showAllComments={this.props.showAllComments}
+                />
             )
         }
     }
@@ -347,27 +401,28 @@ class ProductInfo extends React.Component {
     }
 }
 
-class SpecialCommentHeader extends React.Component {
-	render() {
-		return(
-			<Row size="one">
-				<Column>
-					<div className="ui big message">
-						<Row size="two">
-							<Column>
-								{this.props.specialInfo.first} - {this.props.specialInfo.last} arası gösteriliyor
-							</Column>
-							<Column>
-								<FloatRight>
-									<a onClick={(e)=>{e.preventDefault();this.props.showAllComments()}}>Tümünü Göster</a>
-								</FloatRight>
-							</Column>
-						</Row>
-					</div>
-				</Column>
-			</Row>
-		)
-	}
+class UnreadNavigation extends React.Component {
+    render() {
+        return(
+            <Row size="one">
+                <Column>
+                    <div className="ui big message">
+                        <Row size="two">
+                            <Column>
+                                Okunmamış 127 yorumunuzdan ilk 10'u gösteriliyor
+                            </Column>
+                            <Column>
+                                <FloatRight>
+                                    <button className="ui olive small button" onClick={this.props.showAllComments}>Sonraki</button>
+                                    <button className="ui olive small button" onClick={this.props.showAllComments}>Bütün Yorumları Göster</button>
+                                </FloatRight>
+                            </Column>
+                        </Row>
+                    </div>
+                </Column>
+            </Row>
+        )
+    }
 }
 
 class EditProductButton extends React.Component {

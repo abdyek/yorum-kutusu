@@ -2,11 +2,7 @@
 
 class Product extends Request {
     protected function get() {
-        $this->productInfo = Database::existCheck('SELECT * FROM product WHERE product_slug=? AND product_deleted=0', [$this->data['productSlug']]);
-        if(!$this->productInfo) {
-            $this->setHttpStatus(404);
-            exit();
-        }
+        $this->checkSortBy();
         $this->getProductInfo();
         if(!$this->data['onlyComment']) {
             $this->getTags();
@@ -21,18 +17,29 @@ class Product extends Request {
         $this->mergeAllInfo();
         $this->increaseProductFetchCount();
     }
+    private function checkSortBy() {
+        if(!in_array($this->data['type'], ['time', 'like', 'unread'])) {
+            $this->setHttpStatus(400);
+            exit();
+        }
+    }
     private function getFollowInfo() {
         $this->followed = false;
         if(WHO!="guest") {
-            $query = Database::getRow('SELECT product_follow_id FROM product_follow WHERE product_id=? AND member_id=?', [$this->productInfo['id'], USERID]);
-            $this->followed = ($query)?true:false;
+            $this->productFollowQuery = Database::getRow('SELECT product_follow_id, last_seen_date_time FROM product_follow WHERE product_id=? AND member_id=?', [$this->productInfo['id'], USERID]);
+            $this->followed = ($this->productFollowQuery)?true:false;
         }
     }
     private function getProductInfo() {
+        $product = Database::existCheck('SELECT * FROM product WHERE product_slug=? AND product_deleted=0', [$this->data['productSlug']]);
+        if(!$product) {
+            $this->setHttpStatus(404);
+            exit();
+        }
         $this->productInfo = [
-            'id'=>$this->productInfo['product_id'],
-            'title'=>$this->productInfo['product_name'],
-            'slug'=>$this->productInfo['product_slug']
+            'id'=>$product['product_id'],
+            'title'=>$product['product_name'],
+            'slug'=>$product['product_slug']
         ];
     }
     private function getTags() {
@@ -67,17 +74,7 @@ class Product extends Request {
         }
     }
     private function getCommentsWithRating() {
-        if($this->data['pageNumber']<1) {
-            $this->data['pageNumber'] = 1;
-        } elseif($this->data['pageNumber']>$this->pageCount) {
-            $this->data['pageNumber'] = $this->pageCount;
-        }
-        $index = ($this->data['pageNumber']-1)*10;
-        if($this->data['sortBy']=='like') {
-            $sql = 'SELECT * FROM comment c INNER JOIN member m ON m.member_id = c.member_id  WHERE c.product_id=? AND c.comment_deleted=0 ORDER BY c.comment_like_count DESC LIMIT '.$index.', 10';
-        } elseif($this->data['sortBy']=='time') {
-            $sql = 'SELECT * FROM comment c INNER JOIN member m ON m.member_id = c.member_id  WHERE c.product_id=? AND c.comment_deleted=0 ORDER BY c.comment_create_date_time LIMIT '.$index.', 10';
-        }
+        $sql = $this->getCommentSql($this->data['type']);
         $arr = [$this->productInfo['id']];
         $comments = Database::getRows($sql, $arr);
         $this->commentsInfo = [];
@@ -117,22 +114,47 @@ class Product extends Request {
             ];
         }
     }
+    private function getCommentSql($type) {
+        if(in_array($type, ['like', 'time'])) {
+            if($this->data['pageNumber']<1) {
+                $this->data['pageNumber'] = 1;
+            } elseif($this->data['pageNumber']>$this->pageCount) {
+                $this->data['pageNumber'] = $this->pageCount;
+            }
+            $index = ($this->data['pageNumber']-1)*10;
+            if($type=='like') {
+                return 'SELECT * FROM comment c INNER JOIN member m ON m.member_id = c.member_id  WHERE c.product_id=? AND c.comment_deleted=0 ORDER BY c.comment_like_count DESC LIMIT '.$index.', 10';
+            } elseif($type=='time') {
+                return 'SELECT * FROM comment c INNER JOIN member m ON m.member_id = c.member_id  WHERE c.product_id=? AND c.comment_deleted=0 ORDER BY c.comment_create_date_time LIMIT '.$index.', 10';
+            }
+        } else {
+            if(WHO=="member") {
+                if(!$this->followed) {
+                    $this->data['type']='time';
+                    return $this->getCommentSql('time');
+                }
+                $lastSeen = $this->productFollowQuery['last_seen_date_time'];
+                return 'SELECT * FROM comment c INNER JOIN member m ON m.member_id = c.member_id WHERE c.product_id=? AND c.comment_deleted=0 AND c.comment_create_date_time>"' . $lastSeen . '" LIMIT 10';
+            } else {
+                $this->data['type']='time';
+                return $this->getCommentSql('time');
+            }
+        }
+    }
     private function getPageCount() {
         $this->pageCount = intval(Database::getRow('SELECT count(*) as commentCount FROM comment c INNER JOIN product p ON p.product_id = c.product_id WHERE p.product_slug=? and c.comment_deleted=0', [$this->data['productSlug']])['commentCount'] / 10)+1;
     }
     private function updateLastSeen() {
-        if(defined('USERID') and $this->data['sortBy']=='time' and count($this->commentsInfo)){
-            // şuan için sadece kronolojik sırada okundu olarak işaretliyorum, diğer türlü yatlıyor
-            $lastComment = end($this->commentsInfo);
-            $check = (Database::getRow('SELECT last_seen_date_time FROM product_follow WHERE product_slug=? AND member_id=? AND ?>last_seen_date_time', [$this->data['productSlug'], USERID, $lastComment['commentCreateDateTime']]))?true:false;
-            if($check) {
-                $query = Database::execute('UPDATE product_follow SET last_seen_date_time=? WHERE member_id=? AND product_slug=?', [$lastComment['commentCreateDateTime'],USERID, $this->data['productSlug']]);
-            }
+        if(WHO=='member' and ($this->data['type']=='time' or $this->data['type']=='unread') and count($this->commentsInfo)){
+            $time = end($this->commentsInfo)['commentCreateDateTime'];
+            Database::executeWithErr('UPDATE product_follow SET new_comment_count=(new_comment_count-(SELECT count(*) FROM comment WHERE product_id=? AND comment_create_date_time>last_seen_date_time AND comment_create_date_time<=?)) WHERE member_id=?', [$this->productInfo['id'], $time, USERID]);
+            Database::execute('UPDATE product_follow SET last_seen_date_time=? WHERE member_id=? AND last_seen_date_time<?', [$time, USERID, $time]);
         }
     }
     private function mergeAllInfo() {
         if(!$this->data['onlyComment']) {
             $this->success([
+                'request'=>$this->data,
                 'product'=>$this->productInfo,
                 'followed'=>$this->followed,
                 'tags'=>array_values($this->tagsInfo),

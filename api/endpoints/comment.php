@@ -145,6 +145,7 @@ class Comment extends Request {
         }
         $this->removeRating();
         $this->removeHiddenComment();
+        $this->decreaseNewCommentCount();
     }
     private function deleteByAdmin() {
         $this->comment = Database::existCheck('SELECT comment_id, product_id FROM comment WHERE comment_deleted=0 AND comment_id=?', [$this->data['commentID']]);

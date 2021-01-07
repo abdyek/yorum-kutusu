@@ -157,9 +157,9 @@
                             'min'=>0,
                             'max'=>60
                         ],
-                        'sortBy'=>[
+                        'type'=>[
                             'min'=>4,
-                            'max'=>4
+                            'max'=>6
                         ],
                         'pageNumber'=>[
                             'min'=>1,

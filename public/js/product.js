@@ -17,13 +17,13 @@ var Product = function (_React$Component) {
         _this.state = {
             form: "loading",
             specialInfo: {},
-            commentType: "all",
+            navigationType: "all",
             sortBy: "time",
             followButtonDisabled: false,
             followed: false,
             bottomCommentForm: "normal"
         };
-        _this.manageOtherSlug = _this.manageOtherSlug.bind(_this);
+        _this.manageSlugs = _this.manageSlugs.bind(_this);
         _this.fetchProduct = _this.fetchProduct.bind(_this);
         _this.fetchComment = _this.fetchComment.bind(_this);
         _this.refreshUrl = _this.refreshUrl.bind(_this);
@@ -46,24 +46,32 @@ var Product = function (_React$Component) {
     _createClass(Product, [{
         key: "componentDidMount",
         value: function componentDidMount() {
-            this.manageOtherSlug();
+            this.manageSlugs();
             this.load();
         }
     }, {
-        key: "manageOtherSlug",
-        value: function manageOtherSlug() {
+        key: "manageSlugs",
+        value: function manageSlugs() {
             var pathNames = getPathNames();
             this.productSlug = pathNames[1];
-            this.sortBy = pathNames[2] ? pathNames[2] : "time";
-            this.pageNumber = pathNames[3] ? pathNames[3] : 1;
-            if (this.sortBy != "time" && this.sortBy != "like") {
-                this.sortBy = "time";
+            if (pathNames[2] == "unread") {
+                this.pageType = "unread";
+                this.setState({
+                    navigationType: "unread"
+                });
+            } else {
+                this.pageType = "all";
+                this.sortBy = pathNames[2] ? pathNames[2] : "time";
+                this.pageNumber = pathNames[3] ? pathNames[3] : 1;
+                if (this.sortBy != "time" && this.sortBy != "like") {
+                    this.sortBy = "time";
+                }
+                this.setState({
+                    sortBy: this.sortBy
+                });
+                this.refreshUrl();
             }
-            this.setState({
-                sortBy: this.sortBy
-            });
-            this.refreshUrl();
-            var commentType = "all"; // all, spacial
+            var navigationType = "all"; // all, spacial
             // not: buradaki değer atamalar ve değişkenlerin bir kısmı deneme amaçlı, setState içindeki hemen hemen hepsi api tarafından gelecek
         }
     }, {
@@ -119,7 +127,7 @@ var Product = function (_React$Component) {
 
             fetch(SITEURL + 'api/product?' + getUrlPar({
                 productSlug: this.productSlug,
-                sortBy: this.sortBy,
+                type: this.sortBy,
                 pageNumber: this.pageNumber,
                 onlyComment: true
             }), { method: 'GET' }).then(function (response) {
@@ -146,12 +154,21 @@ var Product = function (_React$Component) {
     }, {
         key: "load",
         value: function load() {
-            this.fetchProduct({
-                "productSlug": this.productSlug,
-                "sortBy": this.sortBy,
-                "pageNumber": this.pageNumber,
-                "onlyComment": false
-            });
+            if (this.pageType == "all") {
+                this.fetchProduct({
+                    "productSlug": this.productSlug,
+                    "type": this.sortBy,
+                    "pageNumber": this.pageNumber,
+                    "onlyComment": false
+                });
+            } else if (this.pageType == "unread") {
+                this.fetchProduct({
+                    "productSlug": this.productSlug,
+                    "type": "unread",
+                    "pageNumber": 1,
+                    "onlyComment": false
+                });
+            }
         }
     }, {
         key: "reloadComment",
@@ -168,7 +185,7 @@ var Product = function (_React$Component) {
             });
             fetch(SITEURL + 'api/product?' + getUrlPar({
                 productSlug: this.productSlug,
-                sortBy: this.sortBy,
+                type: this.sortBy,
                 pageNumber: this.pageNumber,
                 onlyComment: false
             }), { method: 'GET' }).then(function (response) {
@@ -223,7 +240,7 @@ var Product = function (_React$Component) {
         key: "showAllComments",
         value: function showAllComments() {
             this.setState({
-                commentType: "all",
+                navigationType: "all",
                 sortBy: this.sortBy,
                 pageNumber: 1
             });
@@ -304,7 +321,16 @@ var Product = function (_React$Component) {
                     "div",
                     null,
                     React.createElement(ProductInfo, { tags: this.state.tagsInfo, productName: this.state.productName, changeContent: this.props.changeContent, followToggle: this.followToggle, followed: this.state.followed, followButtonDisabled: this.state.followButtonDisabled }),
-                    this.state.commentType == "all" ? React.createElement(PageNavigation, { sortBy: this.state.sortBy, form: this.state.commentsForm, handleChangeSortBy: this.changeSortBy, pageCount: this.state.pageCount, currentPage: this.state.pageNumber, handleChangePageNumber: this.changePageNumber }) : React.createElement(SpecialCommentHeader, { specialInfo: this.state.specialInfo, showAllComments: this.showAllComments }),
+                    React.createElement(Navigation, {
+                        type: this.state.navigationType,
+                        sortBy: this.state.sortBy,
+                        form: this.state.commentsForm,
+                        handleChangeSortBy: this.changeSortBy,
+                        pageCount: this.state.pageCount,
+                        currentPage: this.state.pageNumber,
+                        handleChangePageNumber: this.changePageNumber,
+                        showAllComments: this.showAllComments
+                    }),
                     React.createElement(Comments, {
                         comments: this.state.comments,
                         tags: this.state.tagsInfo,
@@ -313,7 +339,16 @@ var Product = function (_React$Component) {
                         reloadFunc: this.reloadAllComment,
                         productID: this.state.productID
                     }),
-                    this.state.commentType == "all" ? React.createElement(PageNavigation, { sortBy: this.state.sortBy, form: this.state.commentsForm, handleChangeSortBy: this.changeSortBy, pageCount: this.state.pageCount, currentPage: this.state.pageNumber, handleChangePageNumber: this.changePageNumber }) : "",
+                    React.createElement(Navigation, {
+                        type: this.state.navigationType,
+                        sortBy: this.state.sortBy,
+                        form: this.state.commentsForm,
+                        handleChangeSortBy: this.changeSortBy,
+                        pageCount: this.state.pageCount,
+                        currentPage: this.state.pageNumber,
+                        handleChangePageNumber: this.changePageNumber,
+                        showAllComments: this.showAllComments
+                    }),
                     React.createElement(BottomComment, {
                         form: this.state.bottomCommentForm,
                         reloadFunc: this.reloadAllComment,
@@ -359,16 +394,48 @@ var Product = function (_React$Component) {
     return Product;
 }(React.Component);
 
-var ProductInfo = function (_React$Component2) {
-    _inherits(ProductInfo, _React$Component2);
+var Navigation = function (_React$Component2) {
+    _inherits(Navigation, _React$Component2);
+
+    function Navigation() {
+        _classCallCheck(this, Navigation);
+
+        return _possibleConstructorReturn(this, (Navigation.__proto__ || Object.getPrototypeOf(Navigation)).apply(this, arguments));
+    }
+
+    _createClass(Navigation, [{
+        key: "render",
+        value: function render() {
+            if (this.props.type == "all") {
+                return React.createElement(PageNavigation, {
+                    sortBy: this.props.sortBy,
+                    form: this.props.commentsForm,
+                    handleChangeSortBy: this.props.handleChangeSortBy,
+                    pageCount: this.props.pageCount,
+                    currentPage: this.props.pageNumber,
+                    handleChangePageNumber: this.props.handleChangePageNumber
+                });
+            } else if (this.props.type == "unread") {
+                return React.createElement(UnreadNavigation, {
+                    showAllComments: this.props.showAllComments
+                });
+            }
+        }
+    }]);
+
+    return Navigation;
+}(React.Component);
+
+var ProductInfo = function (_React$Component3) {
+    _inherits(ProductInfo, _React$Component3);
 
     function ProductInfo(props) {
         _classCallCheck(this, ProductInfo);
 
-        var _this6 = _possibleConstructorReturn(this, (ProductInfo.__proto__ || Object.getPrototypeOf(ProductInfo)).call(this, props));
+        var _this7 = _possibleConstructorReturn(this, (ProductInfo.__proto__ || Object.getPrototypeOf(ProductInfo)).call(this, props));
 
-        _this6.followButton = _this6.followButton.bind(_this6);
-        return _this6;
+        _this7.followButton = _this7.followButton.bind(_this7);
+        return _this7;
     }
 
     _createClass(ProductInfo, [{
@@ -435,20 +502,18 @@ var ProductInfo = function (_React$Component2) {
     return ProductInfo;
 }(React.Component);
 
-var SpecialCommentHeader = function (_React$Component3) {
-    _inherits(SpecialCommentHeader, _React$Component3);
+var UnreadNavigation = function (_React$Component4) {
+    _inherits(UnreadNavigation, _React$Component4);
 
-    function SpecialCommentHeader() {
-        _classCallCheck(this, SpecialCommentHeader);
+    function UnreadNavigation() {
+        _classCallCheck(this, UnreadNavigation);
 
-        return _possibleConstructorReturn(this, (SpecialCommentHeader.__proto__ || Object.getPrototypeOf(SpecialCommentHeader)).apply(this, arguments));
+        return _possibleConstructorReturn(this, (UnreadNavigation.__proto__ || Object.getPrototypeOf(UnreadNavigation)).apply(this, arguments));
     }
 
-    _createClass(SpecialCommentHeader, [{
+    _createClass(UnreadNavigation, [{
         key: "render",
         value: function render() {
-            var _this8 = this;
-
             return React.createElement(
                 Row,
                 { size: "one" },
@@ -464,10 +529,7 @@ var SpecialCommentHeader = function (_React$Component3) {
                             React.createElement(
                                 Column,
                                 null,
-                                this.props.specialInfo.first,
-                                " - ",
-                                this.props.specialInfo.last,
-                                " aras\u0131 g\xF6steriliyor"
+                                "Okunmam\u0131\u015F 127 yorumunuzdan ilk 10'u g\xF6steriliyor"
                             ),
                             React.createElement(
                                 Column,
@@ -476,11 +538,14 @@ var SpecialCommentHeader = function (_React$Component3) {
                                     FloatRight,
                                     null,
                                     React.createElement(
-                                        "a",
-                                        { onClick: function onClick(e) {
-                                                e.preventDefault();_this8.props.showAllComments();
-                                            } },
-                                        "T\xFCm\xFCn\xFC G\xF6ster"
+                                        "button",
+                                        { className: "ui olive small button", onClick: this.props.showAllComments },
+                                        "Sonraki"
+                                    ),
+                                    React.createElement(
+                                        "button",
+                                        { className: "ui olive small button", onClick: this.props.showAllComments },
+                                        "B\xFCt\xFCn Yorumlar\u0131 G\xF6ster"
                                     )
                                 )
                             )
@@ -491,11 +556,11 @@ var SpecialCommentHeader = function (_React$Component3) {
         }
     }]);
 
-    return SpecialCommentHeader;
+    return UnreadNavigation;
 }(React.Component);
 
-var EditProductButton = function (_React$Component4) {
-    _inherits(EditProductButton, _React$Component4);
+var EditProductButton = function (_React$Component5) {
+    _inherits(EditProductButton, _React$Component5);
 
     function EditProductButton(props) {
         _classCallCheck(this, EditProductButton);
