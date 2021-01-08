@@ -147,7 +147,7 @@ class Product extends Request {
     private function updateLastSeen() {
         if(WHO=='member' and ($this->data['type']=='time' or $this->data['type']=='unread') and count($this->commentsInfo)){
             $time = end($this->commentsInfo)['commentCreateDateTime'];
-            Database::executeWithErr('UPDATE product_follow SET new_comment_count=(new_comment_count-(SELECT count(*) FROM comment WHERE product_id=? AND comment_create_date_time>last_seen_date_time AND comment_create_date_time<=?)) WHERE member_id=?', [$this->productInfo['id'], $time, USERID]);
+            Database::executeWithErr('UPDATE product_follow SET new_comment_count=(new_comment_count-(SELECT count(*) FROM comment WHERE product_id=? AND comment_deleted=0 AND comment_create_date_time>last_seen_date_time AND comment_create_date_time<=?)) WHERE member_id=?', [$this->productInfo['id'], $time, USERID]);
             Database::execute('UPDATE product_follow SET last_seen_date_time=? WHERE member_id=? AND last_seen_date_time<?', [$time, USERID, $time]);
         }
     }
