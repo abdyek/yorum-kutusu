@@ -6,7 +6,8 @@ use YorumKutusu\Api\Config\Config;
 use Ahc\Jwt\JWT;
 
 abstract class Request {
-    public function __construct() {
+    public function __construct($test=null) {
+        $this->test = $test;
         $this->setConfig();
         $this->detectUser();
         $this->checkMethod();
@@ -16,8 +17,17 @@ abstract class Request {
         $this->checkKeys();
         ($this->run)();
     }
+    private function setConfig() {
+        $this->requestMethod = ($this->test)?$this->test['method']: $_SERVER['REQUEST_METHOD'];
+
+        $cls = explode('\\', get_class($this));
+        $this->className = lcfirst(end($cls));
+        $this->methods = Config::ENDPOINT[$this->className]['methods'];
+        $this->authorization = Config::ENDPOINT[$this->className]['authorization'];
+        $this->keys = Config::ENDPOINT[$this->className]['keys'];
+    }
     private function setData() {
-        switch($_SERVER['REQUEST_METHOD']) {
+        switch($this->requestMethod) {
             case 'POST':
                 $this->data = (empty($_POST))?json_decode(file_get_contents('php://input'), true):$_POST;
                 $this->run = function() { $this->post(); };
@@ -42,17 +52,6 @@ abstract class Request {
                 break;
         }
     }
-    private function setConfig() {
-        //$this->className = Config::ENDPOINT[lcfirst(get_class($this))];
-        //$this->className = lcfirst(get_class($this));
-        $cls = explode('\\', get_class($this));
-        $this->className = lcfirst(end($cls));
-        //echo $this->className;
-        //exit();
-        $this->methods = Config::ENDPOINT[$this->className]['methods'];
-        $this->authorization = Config::ENDPOINT[$this->className]['authorization'];
-        $this->keys = Config::ENDPOINT[$this->className]['keys'];
-    }
     private function detectUser() {
         if(isset($_COOKIE['jwt'])) {
             try {
@@ -76,13 +75,13 @@ abstract class Request {
         }
     }
     private function checkAuthorization() {
-        if(!in_array($this->who, $this->authorization[$_SERVER['REQUEST_METHOD']])) {
+        if(!in_array($this->who, $this->authorization[$this->requestMethod])) {
             http_response_code(403);
             exit();
         }
     }
     private function checkMethod() {
-        if(!in_array($_SERVER['REQUEST_METHOD'], $this->methods)) {
+        if(!in_array($this->requestMethod, $this->methods)) {
             http_response_code(405);
             exit();
         }
@@ -98,7 +97,7 @@ abstract class Request {
         }
     }
     private function checkKeys() {
-        $this->checkKey($this->keys[$_SERVER['REQUEST_METHOD']], $this->data);
+        $this->checkKey($this->keys[$this->requestMethod], $this->data);
     }
     private function checkKey($keys,$data) {
         if($data==null and $keys!=null) {

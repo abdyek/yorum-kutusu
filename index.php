@@ -53,4 +53,9 @@ $router->any('/api/:string', function($endpoint) {
     new $class;
 });
 
+// Test
+$router->get('/api/test', function() {
+    $main = new YorumKutusu\Test\Main();
+});
+
 $router->run();
