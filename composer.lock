@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "adhocore/jwt",
-            "version": "1.0.1",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/adhocore/php-jwt.git",
-                "reference": "a38fa26f83c6b5d8db3c2bae39838b890e325655"
+                "reference": "424a1d66b729a316dd074e6382167765b810cd3d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/adhocore/php-jwt/zipball/a38fa26f83c6b5d8db3c2bae39838b890e325655",
-                "reference": "a38fa26f83c6b5d8db3c2bae39838b890e325655",
+                "url": "https://api.github.com/repos/adhocore/php-jwt/zipball/424a1d66b729a316dd074e6382167765b810cd3d",
+                "reference": "424a1d66b729a316dd074e6382167765b810cd3d",
                 "shasum": ""
             },
             "require": {
@@ -51,7 +51,17 @@
                 "jwt-php",
                 "token"
             ],
-            "time": "2020-02-01T10:42:06+00:00"
+            "support": {
+                "issues": "https://github.com/adhocore/php-jwt/issues",
+                "source": "https://github.com/adhocore/php-jwt/tree/1.1.0"
+            },
+            "funding": [
+                {
+                    "url": "https://paypal.me/ji10",
+                    "type": "custom"
+                }
+            ],
+            "time": "2020-10-09T00:34:35+00:00"
         },
         {
             "name": "izniburak/router",
@@ -99,6 +109,10 @@
                 "route",
                 "router"
             ],
+            "support": {
+                "issues": "https://github.com/izniburak/php-router/issues",
+                "source": "https://github.com/izniburak/php-router/tree/master"
+            },
             "time": "2020-02-05T21:51:17+00:00"
         }
     ],
@@ -110,5 +124,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "1.1.0"
+    "plugin-api-version": "2.0.0"
 }

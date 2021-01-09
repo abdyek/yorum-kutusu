@@ -1,8 +1,13 @@
 <?php
 
-require 'config.php';
-require 'tool.php';
+//require 'config.php';
+//require 'tool.php';
 require 'vendor/autoload.php';
+
+use YorumKutusu\View\Php\Tool;
+
+date_default_timezone_set('Europe/Istanbul');
+// bunu nereye yerleştiricem bilmiyorum, şimdilik burada dursun
 
 $router = new Buki\Router();
 
@@ -44,16 +49,8 @@ $router->get('/urun-duzenle/:any?', function() {
 
 // API REQUEST
 $router->any('/api/:string', function($endpoint) {
-    require 'api/require.php';
-    require './api/endpoints/'.$endpoint.'.php';
-    $class = ucfirst($endpoint);
+    $class = 'YorumKutusu\Api\Endpoints\\' .ucfirst($endpoint);
     new $class;
 });
-
-// deneme
-$router->get('/deneme', function(){
-    require 'deneme.php';
-});
-
 
 $router->run();
