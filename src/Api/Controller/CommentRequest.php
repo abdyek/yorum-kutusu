@@ -1,10 +1,10 @@
 <?php
 
-namespace YorumKutusu\Api\Endpoints;
-use YorumKutusu\Api\Core\Request;
+namespace YorumKutusu\Api\Controller;
+use YorumKutusu\Api\Core\Controller;
 use YorumKutusu\Api\Core\Database;
 
-class CommentRequest extends Request {
+class Controller extends Request {
     protected function get() {
         $this->prepareRequest();
         $this->success(['request'=>$this->reqArr]);

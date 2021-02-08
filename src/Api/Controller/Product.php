@@ -1,10 +1,10 @@
 <?php
 
-namespace YorumKutusu\Api\Endpoints;
-use YorumKutusu\Api\Core\Request;
+namespace YorumKutusu\Api\Controller;
+use YorumKutusu\Api\Core\Controller;
 use YorumKutusu\Api\Core\Database;
 
-class Product extends Request {
+class Product extends Controller {
     protected function get() {
         $this->checkSortBy();
         $this->getProductInfo();

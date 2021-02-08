@@ -1,10 +1,10 @@
 <?php
 
-namespace YorumKutusu\Api\Endpoints;
-use YorumKutusu\Api\Core\Request;
+namespace YorumKutusu\Api\Controller;
+use YorumKutusu\Api\Core\Controller;
 use YorumKutusu\Api\Core\Database;
 
-class ProductCRUD extends Request {
+class ProductCRUD extends Controller {
     protected function post() {
         $product = Database::existCheck('SELECT product_id, product_name, product_slug FROM product WHERE product_name=? OR product_slug=?', [$this->data['productName'], $this->data['productSlug']]);
         if($product) {

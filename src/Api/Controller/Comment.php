@@ -1,11 +1,11 @@
 <?php
 
-namespace YorumKutusu\Api\Endpoints;
-use YorumKutusu\Api\Core\Request;
+namespace YorumKutusu\Api\Controller;
+use YorumKutusu\Api\Core\Controller;
 use YorumKutusu\Api\Core\Database;
 
 // bu isteğin adının comment olması yanıltmasın yorum çekme işlemlerini burada yapmıyorum
-class Comment extends Request {
+class Comment extends Controller {
     protected function post() {
         $this->productCheckWrapper();
         $this->tagCheckWrapper();

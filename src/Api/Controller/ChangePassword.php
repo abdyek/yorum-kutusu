@@ -1,10 +1,10 @@
 <?php
 
-namespace YorumKutusu\Api\Endpoints;
-use YorumKutusu\Api\Core\Request;
+namespace YorumKutusu\Api\Controller;
+use YorumKutusu\Api\Core\Controller;
 use YorumKutusu\Api\Core\Database;
 
-class ChangePassword extends Request {
+class ChangePassword extends Controller{
     protected function post() {
         if($this->who=='admin') {
             $this->selectSql = 'SELECT admin_password_hash FROM admin WHERE admin_id=?';

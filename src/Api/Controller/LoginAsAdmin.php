@@ -1,11 +1,11 @@
 <?php
 
-namespace YorumKutusu\Api\Endpoints;
-use YorumKutusu\Api\Core\Request;
+namespace YorumKutusu\Api\Controller;
+use YorumKutusu\Api\Core\Controller;
 use YorumKutusu\Api\Core\Database;
 use Ahc\Jwt\JWT;
 
-class LoginAsAdmin extends Request {
+class LoginAsAdmin extends Controller {
     protected function post() {
         $this->checkAdmin();
         http_response_code(401);

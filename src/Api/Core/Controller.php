@@ -5,7 +5,7 @@ use YorumKutusu\Api\Core\Session;
 use YorumKutusu\Api\Config\Config;
 use Ahc\Jwt\JWT;
 
-abstract class Request {
+abstract class Controller {
     public function __construct($test=null) {
         $this->test = $test;
         $this->setConfig();

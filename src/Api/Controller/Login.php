@@ -1,11 +1,12 @@
 <?php
 
-namespace YorumKutusu\Api\Endpoints;
-use YorumKutusu\Api\Core\Request;
+namespace YorumKutusu\Api\Controller;
+use YorumKutusu\Api\Core\Controller;
 use YorumKutusu\Api\Core\Database;
+use YorumKutusu\Api\Config\Config;
 use Ahc\Jwt\JWT;
 
-class Login extends Request {
+class Login extends Controller {
     protected function post() {
         $this->checkMember();
         http_response_code(401);

@@ -1,8 +1,9 @@
 <?php
 
-namespace YorumKutusu\Api\Endpoints;
+namespace YorumKutusu\Api\Controller;
 use YorumKutusu\Api\Core\Request;
 use YorumKutusu\Api\Core\Database;
+use YorumKutusu\Api\Core\Other as Other;
 
 class Signup extends Request {
     protected function post() {

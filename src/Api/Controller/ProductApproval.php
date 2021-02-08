@@ -1,10 +1,10 @@
 <?php
 
-namespace YorumKutusu\Api\Endpoints;
-use YorumKutusu\Api\Core\Request;
+namespace YorumKutusu\Api\Controller;
+use YorumKutusu\Api\Core\Controller;
 use YorumKutusu\Api\Core\Database;
 
-class ProductApproval extends Request {
+class ProductApproval extends Controller {
     protected function get() {
         $this->prepareRequest();
         $this->success(['productRequest'=> $this->reqArr]);

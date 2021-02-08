@@ -1,10 +1,10 @@
 <?php
 
-namespace YorumKutusu\Api\Endpoints;
-use YorumKutusu\Api\Core\Request;
+namespace YorumKutusu\Api\Controller;
+use YorumKutusu\Api\Core\Controller;
 use YorumKutusu\Api\Core\Database;
 
-class ForgotMyPassword extends Request {
+class ForgotMyPassword extends Controller {
     protected function post() {
         $this->memberCheck();
         if($this->member) {

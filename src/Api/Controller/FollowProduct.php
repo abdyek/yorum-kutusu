@@ -1,10 +1,10 @@
 <?php
 
-namespace YorumKutusu\Api\Endpoints;
-use YorumKutusu\Api\Core\Request;
+namespace YorumKutusu\Api\Controller;
+use YorumKutusu\Api\Core\Controller;
 use YorumKutusu\Api\Core\Database;
 
-class FollowProduct extends Request {
+class FollowProduct extends Controller {
     protected function post() {
         if(!$this->productCheck()) {
             $this->setHttpStatus(404);

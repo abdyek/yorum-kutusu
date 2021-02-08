@@ -1,10 +1,10 @@
 <?php
 
-namespace YorumKutusu\Api\Endpoints;
-use YorumKutusu\Api\Core\Request;
+namespace YorumKutusu\Api\Controller;
+use YorumKutusu\Api\Core\Controller;
 use YorumKutusu\Api\Core\Database;
 
-class ChangeEmail extends Request {
+class ChangeEmail extends Controller{
     protected function post() {
         if(!$this->checkPassword()) {
             http_response_code(401);

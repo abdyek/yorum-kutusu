@@ -1,10 +1,10 @@
 <?php
 
-namespace YorumKutusu\Api\Endpoints;
-use YorumKutusu\Api\Core\Request;
+namespace YorumKutusu\Api\Controller;
+use YorumKutusu\Api\Core\Controller;
 use YorumKutusu\Api\Core\Database;
 
-class Admin extends Request {
+class Admin extends Controller{
     protected function post() {
         if(!$this->checkRoot()) {
             $this->setHttpStatus(403);

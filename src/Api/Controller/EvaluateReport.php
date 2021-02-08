@@ -1,10 +1,10 @@
 <?php
 
-namespace YorumKutusu\Api\Endpoints;
-use YorumKutusu\Api\Core\Request;
+namespace YorumKutusu\Api\Controller;
+use YorumKutusu\Api\Core\Controller;
 use YorumKutusu\Api\Core\Database;
 
-class EvaluateReport extends Request {
+class EvaluateReport extends Controller {
     protected function post() {
         $reportRequest = Database::existCheck('SELECT comment_report_request_id FROM comment_report_request WHERE comment_report_request_id=?', [$this->data['reportID']]);
         if(!$reportRequest) {
