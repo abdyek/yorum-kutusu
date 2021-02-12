@@ -1,10 +1,10 @@
 <?php
 
 namespace YorumKutusu\Api\Controller;
-use YorumKutusu\Api\Core\Request;
+use YorumKutusu\Api\Core\Controller;
 use YorumKutusu\Api\Core\Database;
 
-class Search extends Request {
+class Search extends Controller {
     protected function get() {
         $results = Database::getRows('SELECT * FROM product WHERE product_name LIKE "%"?"%" AND product_deleted=0', [$this->data['text']]);
         $resultsArray = [];

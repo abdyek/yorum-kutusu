@@ -1,10 +1,10 @@
 <?php
 
 namespace YorumKutusu\Api\Controller;
-use YorumKutusu\Api\Core\Request;
+use YorumKutusu\Api\Core\Controller;
 use YorumKutusu\Api\Core\Database;
 
-class Report extends Request {
+class Report extends Controller {
     protected function post() {
         if(!Database::existCheck('SELECT * FROM comment WHERE comment_id=? AND comment_deleted=0', [$this->data['commentID']])){
             $this->setHttpStatus(404);

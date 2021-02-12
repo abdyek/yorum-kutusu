@@ -49,7 +49,7 @@ $router->get('/urun-duzenle/:any?', function() {
 
 // API REQUEST
 $router->any('/api/:string', function($endpoint) {
-    $class = 'YorumKutusu\Api\Endpoints\\' .ucfirst($endpoint);
+    $class = 'YorumKutusu\Api\Controller\\' .ucfirst($endpoint);
     new $class;
 });
 

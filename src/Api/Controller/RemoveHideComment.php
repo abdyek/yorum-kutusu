@@ -1,7 +1,7 @@
 <?php
 
 namespace YorumKutusu\Api\Controller;
-use YorumKutusu\Api\Core\Request;
+use YorumKutusu\Api\Core\Controller;
 use YorumKutusu\Api\Core\Database;
 
 class RemoveHideComment extends Request {

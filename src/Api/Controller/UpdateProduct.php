@@ -1,10 +1,10 @@
 <?php
 
 namespace YorumKutusu\Api\Controller;
-use YorumKutusu\Api\Core\Request;
+use YorumKutusu\Api\Core\Controller;
 use YorumKutusu\Api\Core\Database;
 
-class UpdateProduct extends Request {
+class UpdateProduct extends Controller {
     protected function post() {
         $this->checkTags();
         $this->checkProductExist();

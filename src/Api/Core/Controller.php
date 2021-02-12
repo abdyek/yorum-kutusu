@@ -6,27 +6,30 @@ use YorumKutusu\Api\Config\Config;
 use Ahc\Jwt\JWT;
 
 abstract class Controller {
-    public function __construct($test=null) {
-        $this->test = $test;
-        $this->setConfig();
-        $this->detectUser();
+    public function __construct($requestMethod=null, $who=null, $data=null) {
+        $this->setConfig($requestMethod);
+        $this->detectUser($who);
         $this->checkMethod();
         $this->checkAuthorization();
-        $this->setData();
+        $this->setData($data);
         $this->checkAdminActive();
         $this->checkKeys();
         ($this->run)();
     }
-    private function setConfig() {
-        $this->requestMethod = ($this->test)?$this->test['method']: $_SERVER['REQUEST_METHOD'];
-
+    private function setConfig($requestMethod) {
+        $this->requestMethod = ($requestMethod)?$requestMethod: $_SERVER['REQUEST_METHOD'];
         $cls = explode('\\', get_class($this));
         $this->className = lcfirst(end($cls));
         $this->methods = Config::ENDPOINT[$this->className]['methods'];
         $this->authorization = Config::ENDPOINT[$this->className]['authorization'];
         $this->keys = Config::ENDPOINT[$this->className]['keys'];
     }
-    private function setData() {
+    private function setData($data) {
+        if($data) {
+            $this->data = $data;
+            $this->run = function() {};
+            return true;
+        }
         switch($this->requestMethod) {
             case 'POST':
                 $this->data = (empty($_POST))?json_decode(file_get_contents('php://input'), true):$_POST;
@@ -52,7 +55,11 @@ abstract class Controller {
                 break;
         }
     }
-    private function detectUser() {
+    private function detectUser($who) {
+        if($who) {
+            $this->who = $who;
+            return true;
+        }
         if(isset($_COOKIE['jwt'])) {
             try {
                 $payload = (new JWT('secret', 'HS512',Config::JWT_EXP))->decode($_COOKIE['jwt']);
@@ -86,7 +93,7 @@ abstract class Controller {
             exit();
         }
     }
-    private function checkAdminActive() {
+    private function checkAdminActive($admin) {
         if($this->who=='admin' and Database::getRow('SELECT admin_inactive FROM admin WHERE admin_id=?', [$this->userId])['admin_inactive']) {
             $this->setHttpStatus(403);
             if(isset($_COOKIE['jwt'])){

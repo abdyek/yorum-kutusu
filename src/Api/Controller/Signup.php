@@ -1,11 +1,11 @@
 <?php
 
 namespace YorumKutusu\Api\Controller;
-use YorumKutusu\Api\Core\Request;
+use YorumKutusu\Api\Core\Controller;
 use YorumKutusu\Api\Core\Database;
 use YorumKutusu\Api\Core\Other as Other;
 
-class Signup extends Request {
+class Signup extends Controller {
     protected function post() {
         $this->formatToUsername();
         if(!Other::checkUsername($this->data['username'])) {

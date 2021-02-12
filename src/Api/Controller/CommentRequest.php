@@ -4,7 +4,7 @@ namespace YorumKutusu\Api\Controller;
 use YorumKutusu\Api\Core\Controller;
 use YorumKutusu\Api\Core\Database;
 
-class Controller extends Request {
+class CommentRequest extends Controller {
     protected function get() {
         $this->prepareRequest();
         $this->success(['request'=>$this->reqArr]);

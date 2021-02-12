@@ -1,10 +1,10 @@
 <?php
 
 namespace YorumKutusu\Api\Controller;
-use YorumKutusu\Api\Core\Request;
+use YorumKutusu\Api\Core\Controller;
 use YorumKutusu\Api\Core\Database;
 
-class ValidateEmail extends Request {
+class ValidateEmail extends Controller {
     protected function post(){
         $row = Database::getRow('SELECT member_email_history_id, code, member_confirmed_email FROM `member_email_history` WHERE member_id=? ORDER BY change_date_time DESC LIMIT 1', [$this->userId]);
         if($row['member_confirmed_email']) {

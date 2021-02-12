@@ -66,7 +66,7 @@ namespace YorumKutusu\Api\Config;
                 'methods'=>['POST', 'GET', 'PUT', 'PATCH', 'DELETE'],
                 'authorization'=>[
                     'POST'=>['admin', 'guest', 'member'],
-                    'GET'=>['guest'],
+                    'GET'=>['admin'],
                     'PUT'=>['admin', 'guest', 'member'],
                     'PATCH'=>['guest', 'member'],
                     'DELETE'=>['admin', 'guest'],
