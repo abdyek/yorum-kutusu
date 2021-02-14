@@ -12,7 +12,7 @@ abstract class Controller {
         $this->checkMethod();
         $this->checkAuthorization();
         $this->setData($data);
-        $this->checkAdminActive();
+        $this->checkAdminActive($who);
         $this->checkKeys();
         ($this->run)();
     }
@@ -93,7 +93,10 @@ abstract class Controller {
             exit();
         }
     }
-    private function checkAdminActive($admin) {
+    private function checkAdminActive($who) {
+        if($who=='admin') {
+            return true;
+        }
         if($this->who=='admin' and Database::getRow('SELECT admin_inactive FROM admin WHERE admin_id=?', [$this->userId])['admin_inactive']) {
             $this->setHttpStatus(403);
             if(isset($_COOKIE['jwt'])){
