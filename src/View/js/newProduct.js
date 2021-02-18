@@ -2,7 +2,7 @@ class NewProduct extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            bottomCommentForm:"normal"
+            bottomCommentForm:"normal",
             form:"input", // input, showInfo, loading
             topMessage: null,
             productName: "",

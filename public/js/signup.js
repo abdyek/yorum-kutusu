@@ -42,6 +42,13 @@ var Signup = function (_React$Component) {
     }
 
     _createClass(Signup, [{
+        key: "componentDidMount",
+        value: function componentDidMount() {
+            if (isMember()) {
+                this.props.changeContent(' ', true);
+            }
+        }
+    }, {
         key: "signUpClick",
         value: function signUpClick(e) {
             var _this2 = this;

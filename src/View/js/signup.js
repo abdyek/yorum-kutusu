@@ -26,6 +26,11 @@ class Signup extends React.Component {
         this.checkPasswordVerification = this.checkPasswordVerification.bind(this);
         this.setForm = this.setForm.bind(this);
     }
+    componentDidMount() {
+        if(isMember()) {
+            this.props.changeContent(' ', true);
+        }
+    }
     signUpClick(e) {
         e.preventDefault();
         this.setForm('loading');

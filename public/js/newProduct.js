@@ -15,8 +15,8 @@ var NewProduct = function (_React$Component) {
         var _this = _possibleConstructorReturn(this, (NewProduct.__proto__ || Object.getPrototypeOf(NewProduct)).call(this, props));
 
         _this.state = {
-            // input, showInfo, loading
-            form: "input",
+            bottomCommentForm: "normal",
+            form: "input", // input, showInfo, loading
             topMessage: null,
             productName: "",
             productUrl: "",
@@ -226,12 +226,6 @@ var NewProduct = function (_React$Component) {
                                 )
                             )
                         )
-                    ),
-                    React.createElement(
-                        Row,
-                        { size: "sixteen" },
-                        React.createElement(WideColumn, { size: "two" }),
-                        React.createElement(WideColumn, { size: "twelve" })
                     )
                 );
             }
