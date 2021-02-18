@@ -231,11 +231,7 @@ var NewProduct = function (_React$Component) {
                         Row,
                         { size: "sixteen" },
                         React.createElement(WideColumn, { size: "two" }),
-                        React.createElement(
-                            WideColumn,
-                            { size: "twelve" },
-                            React.createElement(WriteComment, { tags: this.state.selectedTags })
-                        )
+                        React.createElement(WideColumn, { size: "twelve" })
                     )
                 );
             }

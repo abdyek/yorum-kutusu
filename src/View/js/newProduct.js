@@ -2,8 +2,8 @@ class NewProduct extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            // input, showInfo, loading
-            form:"input",
+            bottomCommentForm:"normal"
+            form:"input", // input, showInfo, loading
             topMessage: null,
             productName: "",
             productUrl: "",
@@ -38,7 +38,7 @@ class NewProduct extends React.Component {
             },
             selectedTags: {},
             newTagIndex:0,
-            createProductButtonName: "Oluştur"
+            createProductButtonName: "Oluştur",
         };
         this.turkishChars = {
             "ğ": "g",
@@ -174,12 +174,6 @@ class NewProduct extends React.Component {
                                     {this.state.createProductButtonName}
                                 </button>
                             </FloatRight>
-                        </WideColumn>
-                    </Row>
-                    <Row size="sixteen">
-                        <WideColumn size="two"></WideColumn>
-                        <WideColumn size="twelve">
-                            <WriteComment tags={this.state.selectedTags}/>
                         </WideColumn>
                     </Row>
                 </div>
