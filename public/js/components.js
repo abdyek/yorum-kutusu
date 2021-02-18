@@ -612,3 +612,26 @@ var BasicMessage = function (_React$Component19) {
 
     return BasicMessage;
 }(React.Component);
+
+var BasicMessageWithColor = function (_React$Component20) {
+    _inherits(BasicMessageWithColor, _React$Component20);
+
+    function BasicMessageWithColor() {
+        _classCallCheck(this, BasicMessageWithColor);
+
+        return _possibleConstructorReturn(this, (BasicMessageWithColor.__proto__ || Object.getPrototypeOf(BasicMessageWithColor)).apply(this, arguments));
+    }
+
+    _createClass(BasicMessageWithColor, [{
+        key: "render",
+        value: function render() {
+            return React.createElement(
+                "div",
+                { className: "ui " + this.props.color + " message" },
+                this.props.message
+            );
+        }
+    }]);
+
+    return BasicMessageWithColor;
+}(React.Component);

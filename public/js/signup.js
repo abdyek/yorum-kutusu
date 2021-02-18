@@ -15,43 +15,73 @@ var Signup = function (_React$Component) {
         var _this = _possibleConstructorReturn(this, (Signup.__proto__ || Object.getPrototypeOf(Signup)).call(this, props));
 
         _this.state = {
-            form: "normal",
+            form: "normal", // normal, loading, success
             emailText: "",
             usernameText: "",
             passwordText: "",
             passwordVerificationText: "",
-            /*
-            error:[
-                "Kullanıcı adı hali hazırda kullanılmakta",
-                "E-mail hali hazırda kullanılmakta",
-                "Şifre çok kısa (en az 6 karakter)",
-                "Şifre en az 1 rakam ve 1 harf içermelidir"
-            ]
-            */
-            error: null
+            message: "",
+            messageColor: "",
+            emailPatternWarn: false,
+            usernamePatternWarn: false,
+            passwordPatternWarn: false,
+            passwordVerificationWarn: false
         };
         _this.signUpClick = _this.signUpClick.bind(_this);
         _this.changeEmail = _this.changeEmail.bind(_this);
         _this.changeUsername = _this.changeUsername.bind(_this);
         _this.changePassword = _this.changePassword.bind(_this);
         _this.changePasswordVerification = _this.changePasswordVerification.bind(_this);
+        _this.setMessage = _this.setMessage.bind(_this);
+        _this.checkEmailValidation = _this.checkEmailValidation.bind(_this);
+        _this.checkUsernamePattern = _this.checkUsernamePattern.bind(_this);
+        _this.checkPasswordPattern = _this.checkPasswordPattern.bind(_this);
+        _this.checkPasswordVerification = _this.checkPasswordVerification.bind(_this);
+        _this.setForm = _this.setForm.bind(_this);
         return _this;
     }
 
     _createClass(Signup, [{
         key: "signUpClick",
         value: function signUpClick(e) {
-            if (this.state.passwordText != this.state.passwordVerificationText) {
-                this.setState({
-                    error: ["Parola tekrarı ile uyumlu değil!"]
-                });
-            } else {
-                // API'ye gönderme işini buraya yapıyoruz
-                // this.state.error 'u null a eşitleyince hata mesajı görünmüyor,
-                // API'den gelen error'un valuesunu doğrudan this.state.error'a eşitle
-                // eğer başarılı bir şekilde hesap oluşturulmuşsa giriş sayfasına yönlendirip orada "üyelik işleminiz başarılı" diye bir mesaj verilebilir
-            }
+            var _this2 = this;
+
             e.preventDefault();
+            this.setForm('loading');
+            fetch(SITEURL + 'api/signup', {
+                method: 'POST',
+                header: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    eMail: this.state.emailText,
+                    username: this.state.usernameText,
+                    password: this.state.passwordText
+                })
+            }).then(function (response) {
+                if (!response.ok) throw new Error(response.status);else return response.json();
+            }).then(function (json) {
+                _this2.setForm('success');
+            }).catch(function (error) {
+                if (error.message == 422) {
+                    _this2.setState({
+                        form: "normal",
+                        message: "Bu e-posta ya da kullanıcı adı kullanılamıyor",
+                        messageColor: "red"
+                    });
+                } else if (error.message == 403) {
+                    _this2.setState({
+                        form: "normal",
+                        message: "Bu işlem için yetkiniz yok, halihazırda giriş yapmış olmadığınızdan emin olun",
+                        messageColor: "red"
+                    });
+                } else if (error.message == 500) {
+                    _this2.setState({
+                        form: "normal",
+                        message: "500 - Sunucu hatası"
+                    });
+                }
+            });
         }
     }, {
         key: "changeEmail",
@@ -59,6 +89,7 @@ var Signup = function (_React$Component) {
             this.setState({
                 emailText: e.target.value
             });
+            this.checkEmailValidation(e.target.value);
         }
     }, {
         key: "changeUsername",
@@ -66,6 +97,7 @@ var Signup = function (_React$Component) {
             this.setState({
                 usernameText: e.target.value
             });
+            this.checkUsernamePattern(e.target.value);
         }
     }, {
         key: "changePassword",
@@ -73,6 +105,8 @@ var Signup = function (_React$Component) {
             this.setState({
                 passwordText: e.target.value
             });
+            this.checkPasswordPattern(e.target.value);
+            this.checkPasswordVerification();
         }
     }, {
         key: "changePasswordVerification",
@@ -80,120 +114,196 @@ var Signup = function (_React$Component) {
             this.setState({
                 passwordVerificationText: e.target.value
             });
+            this.checkPasswordVerification();
+        }
+    }, {
+        key: "setMessage",
+        value: function setMessage(message, color) {
+            this.setState({
+                message: message,
+                messageColor: color
+            });
+        }
+    }, {
+        key: "checkEmailValidation",
+        value: function checkEmailValidation(value) {
+            var enabled = !validateEmail(value);
+            this.setState({
+                emailPatternWarn: enabled
+            });
+        }
+    }, {
+        key: "checkUsernamePattern",
+        value: function checkUsernamePattern(value) {
+            var len = value.length;
+            var enabled = void 0;
+            if (len > 60) {
+                enabled = true;
+            } else {
+                enabled = false;
+            }
+            this.setState({
+                usernamePatternWarn: enabled
+            });
+        }
+    }, {
+        key: "checkPasswordPattern",
+        value: function checkPasswordPattern(value) {
+            var len = value.length;
+            var enabled = void 0;
+            if (len < 10 || len > 40) {
+                enabled = true;
+            } else {
+                enabled = false;
+            }
+            this.setState({
+                passwordPatternWarn: enabled
+            });
+        }
+    }, {
+        key: "checkPasswordVerification",
+        value: function checkPasswordVerification() {
+            var _this3 = this;
+
+            setTimeout(function () {
+                var enabled = void 0;
+                if (_this3.state.passwordText != _this3.state.passwordVerificationText) {
+                    enabled = true;
+                } else {
+                    enabled = false;
+                }
+                _this3.setState({
+                    passwordVerificationWarn: enabled
+                });
+            }, 150);
+        }
+    }, {
+        key: "setForm",
+        value: function setForm(type) {
+            this.setState({
+                form: type
+            });
         }
     }, {
         key: "render",
         value: function render() {
             document.title = "Üye Ol";
-            if (this.state.error) {
-                this.errorMessageContent = [];
-                for (var i = 0; i < this.state.error.length; i++) {
-                    this.errorMessageContent.push(React.createElement(
-                        "li",
-                        { key: i },
-                        this.state.error[i]
-                    ));
-                }
-            }
-            return React.createElement(
-                "div",
-                null,
-                React.createElement(
-                    Row,
-                    { size: "sixteen" },
-                    React.createElement(WideColumn, { size: "four" }),
+            if (this.state.form == "normal") {
+                return React.createElement(
+                    "div",
+                    null,
                     React.createElement(
-                        WideColumn,
-                        { size: "eight" },
-                        React.createElement(H, { type: "1", textAlign: "center", text: "\xDCye Ol" }),
+                        Row,
+                        { size: "sixteen" },
+                        React.createElement(WideColumn, { size: "four" }),
                         React.createElement(
-                            "form",
-                            { className: "ui form" },
+                            WideColumn,
+                            { size: "eight" },
+                            React.createElement(H, { type: "1", text: "\xDCye Ol", id: "signupHeader", textAlign: "center" }),
                             React.createElement(
-                                "div",
-                                { className: "field" },
+                                "form",
+                                { className: "ui form" },
                                 React.createElement(
-                                    "label",
-                                    null,
-                                    "E-posta"
+                                    "div",
+                                    { className: "field signupInput" },
+                                    React.createElement(
+                                        "label",
+                                        null,
+                                        "E-posta"
+                                    ),
+                                    React.createElement("input", { type: "text", name: "id", placeholder: "e-posta", value: this.state.emailText, onChange: this.changeEmail })
                                 ),
-                                React.createElement("input", { type: "text", name: "id", placeholder: "e-posta", value: this.state.emailText, onChange: this.changeEmail })
-                            ),
+                                this.state.emailPatternWarn ? React.createElement(BasicMessageWithColor, { color: "yellow", message: "Geçersiz E-posta" }) : "",
+                                React.createElement(
+                                    "div",
+                                    { className: "field signupInput" },
+                                    React.createElement(
+                                        "label",
+                                        null,
+                                        "Kullan\u0131c\u0131 Ad\u0131"
+                                    ),
+                                    React.createElement("input", { type: "text", name: "id", placeholder: "kullan\u0131c\u0131 ad\u0131", value: this.state.usernameText, onChange: this.changeUsername })
+                                ),
+                                this.state.usernamePatternWarn ? React.createElement(BasicMessageWithColor, { color: "yellow", message: "Geçersiz Kullanıcı Adı" }) : "",
+                                React.createElement(
+                                    "div",
+                                    { className: "field signupInput" },
+                                    React.createElement(
+                                        "label",
+                                        null,
+                                        "Parola"
+                                    ),
+                                    React.createElement("input", { type: "password", name: "password", placeholder: "parola", value: this.state.passwordText, onChange: this.changePassword })
+                                ),
+                                this.state.passwordPatternWarn ? React.createElement(BasicMessageWithColor, { color: "yellow", message: "Geçersiz Parola" }) : "",
+                                React.createElement(
+                                    "div",
+                                    { className: "field signupInput" },
+                                    React.createElement(
+                                        "label",
+                                        null,
+                                        "Parola Tekrar"
+                                    ),
+                                    React.createElement("input", { type: "password", name: "password", placeholder: "parola tekrar", value: this.state.passwordVerificationText, onChange: this.changePasswordVerification })
+                                ),
+                                this.state.passwordVerificationWarn ? React.createElement(BasicMessageWithColor, { color: "yellow", message: "Parola Tekrarı İle Aynı Değil" }) : "",
+                                this.state.message ? React.createElement(BasicMessageWithColor, { color: this.state.messageColor, message: this.state.message }) : ""
+                            )
+                        )
+                    ),
+                    React.createElement(
+                        Row,
+                        { size: "sixteen" },
+                        React.createElement(WideColumn, { size: "four" }),
+                        React.createElement(
+                            WideColumn,
+                            { size: "eight" },
                             React.createElement(
-                                "div",
-                                { className: "field" },
+                                FloatRight,
+                                null,
                                 React.createElement(
-                                    "label",
-                                    null,
-                                    "Kullan\u0131c\u0131 Ad\u0131"
-                                ),
-                                React.createElement("input", { type: "text", name: "id", placeholder: "kullan\u0131c\u0131 ad\u0131", value: this.state.usernameText, onChange: this.changeUsername })
-                            ),
-                            React.createElement(
-                                "div",
-                                { className: "field" },
-                                React.createElement(
-                                    "label",
-                                    null,
-                                    "Parola"
-                                ),
-                                React.createElement("input", { type: "password", name: "password", placeholder: "parola", value: this.state.passwordText, onChange: this.changePassword })
-                            ),
-                            React.createElement(
-                                "div",
-                                { className: "field" },
-                                React.createElement(
-                                    "label",
-                                    null,
-                                    "Parola Tekrar"
-                                ),
-                                React.createElement("input", { type: "password", name: "password", placeholder: "parola tekrar", value: this.state.passwordVerificationText, onChange: this.changePasswordVerification })
+                                    "button",
+                                    { className: "ui primary button", type: "submit", onClick: this.signUpClick },
+                                    "\xDCye Ol"
+                                )
                             )
                         )
                     )
-                ),
-                React.createElement(
+                );
+            } else if (this.state.form == "loading") {
+                return React.createElement(
                     Row,
-                    { size: "sixteen" },
-                    React.createElement(WideColumn, { size: "four" }),
+                    { size: "one" },
                     React.createElement(
-                        WideColumn,
-                        { size: "eight" },
-                        this.state.error ? React.createElement(
+                        Column,
+                        null,
+                        React.createElement(RowLoadingSpin, { nonSegment: true })
+                    )
+                );
+            } else if (this.state.form == "success") {
+                return React.createElement(
+                    Row,
+                    { size: "one" },
+                    React.createElement(
+                        Column,
+                        null,
+                        React.createElement(
                             "div",
-                            { className: "ui error message" },
+                            { className: "ui positive message" },
                             React.createElement(
                                 "div",
                                 { className: "header" },
-                                "\xDCyelik i\xE7in bu ko\u015Fullar\u0131 sa\u011Flaman\u0131z gerekiyor"
+                                "Ba\u015Far\u0131l\u0131"
                             ),
                             React.createElement(
-                                "ul",
-                                { className: "list" },
-                                this.errorMessageContent
-                            )
-                        ) : ""
-                    )
-                ),
-                React.createElement(
-                    Row,
-                    { size: "sixteen" },
-                    React.createElement(WideColumn, { size: "four" }),
-                    React.createElement(
-                        WideColumn,
-                        { size: "eight" },
-                        React.createElement(
-                            FloatRight,
-                            null,
-                            React.createElement(
-                                "button",
-                                { className: "ui primary button", type: "submit", onClick: this.signUpClick },
-                                "\xDCye Ol"
+                                "p",
+                                null,
+                                "Ba\u015Far\u0131l\u0131 bir \u015Fekilde \xFCye oldunuz, giri\u015F yapabilirsiniz"
                             )
                         )
                     )
-                )
-            );
+                );
+            }
         }
     }]);
 

@@ -276,3 +276,11 @@ class BasicMessage extends React.Component {
         )
     } 
 }
+
+class BasicMessageWithColor extends React.Component {
+    render() {
+        return (
+            <div className={"ui "+this.props.color+" message"}>{this.props.message}</div>
+        )
+    }
+}

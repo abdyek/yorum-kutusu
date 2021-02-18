@@ -159,11 +159,7 @@ var LogIn = function (_React$Component) {
                         React.createElement(
                             WideColumn,
                             { size: "eight" },
-                            this.state.message ? React.createElement(
-                                "div",
-                                { "class": "ui " + this.state.messageColor + " message" },
-                                this.state.message
-                            ) : "",
+                            this.state.message ? React.createElement(BasicMessageWithColor, { color: this.state.messageColor, message: this.state.message }) : "",
                             React.createElement(
                                 "form",
                                 { className: "ui form" },

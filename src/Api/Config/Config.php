@@ -133,7 +133,7 @@ namespace YorumKutusu\Api\Config;
                     'POST'=>[
                         'eMail'=>[
                             'min'=>1,
-                            'max'=>60
+                            'max'=>256
                         ],
                         'username'=>[
                             'min'=>1,

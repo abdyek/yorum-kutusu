@@ -119,7 +119,7 @@ class LogIn extends React.Component {
                     <WideColumn size="four" />
                     <WideColumn size="eight">
                         {(this.state.message)?
-                            <div class={"ui "+this.state.messageColor+" message"}>{this.state.message}</div>
+                            <BasicMessageWithColor color={this.state.messageColor} message={this.state.message}/>
                         :""}
                         <form className="ui form">
                             <div className="field loginInput">
