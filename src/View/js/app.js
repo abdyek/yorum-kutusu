@@ -198,7 +198,7 @@ class Footer extends React.Component {
                         <div>
                             yorumkutusu.com
                             <FloatRight>
-                                © Tüm hakları saklıdır | 2020
+                                © Tüm hakları saklıdır | 2021
                             </FloatRight>
                         </div>
                     </div>
@@ -213,47 +213,47 @@ class Content extends React.Component {
         switch(this.props.content) {
             case "index":
                 return (
-                    <Index changeContent={this.props.changeContent} changeLoading={this.props.changeLoading} />
+                    <Index changeContent={this.props.changeContent} />
                 )
                 break;
             case "profile":
                 return (
-                    <Profile changeContent={this.props.changeContent} changeLoading={this.props.changeLoading} />
+                    <Profile changeContent={this.props.changeContent} />
                 )
                 break;
             case "product":
                 return (
-                    <Product  changeContent={this.props.changeContent} changeLoading={this.props.changeLoading} />
+                    <Product  changeContent={this.props.changeContent} />
                 )
                 break;
             case "newProduct":
                 return (
-                    <NewProduct changeContent={this.props.changeContent} changeLoading={this.props.changeLoading} />
+                    <NewProduct changeContent={this.props.changeContent} />
                 )
                 break;
             case "login":
                 return (
-                    <Login changeContent={this.props.changeContent} changeLoading={this.props.changeLoading} changeHeader={this.props.changeHeader} />
+                    <Login changeContent={this.props.changeContent} changeHeader={this.props.changeHeader} />
                 )
                 break;
             case "signup":
                 return (
-                    <Signup changeContent={this.props.changeContent}  changeLoading={this.props.changeLoading} />
+                    <Signup changeContent={this.props.changeContent} />
                 )
                 break;
             case "filter":
                 return (
-                    <Filter  changeContent={this.props.changeContent}  changeLoading={this.props.changeLoading} />
+                    <Filter  changeContent={this.props.changeContent} />
                 )
                 break;
             case "emailValidationPage":
                 return (
-                    <EmailValidationPage  changeContent={this.props.changeContent}  changeLoading={this.props.changeLoading} />
+                    <EmailValidationPage changeContent={this.props.changeContent} />
                 )
                 break;
             case "editProduct":
                 return (
-                    <EditProduct />
+                    <EditProduct changeContent={this.props.changeContent} />
                 )
             default:
                 return (
@@ -313,8 +313,9 @@ class App extends React.Component {
             "unreadCommentsCount":unread
         });
     }
-    changeContent(href, direct) {
+    changeContent(href, direct, slugs) {
         direct = direct || false;
+        slugs = slugs || [];
         if(direct) {
             const cont = this.contentFromSlug[href];
             window.history.pushState({content:cont}, "title", SITEURL + href);

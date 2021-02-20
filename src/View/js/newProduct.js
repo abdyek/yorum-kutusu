@@ -1,8 +1,114 @@
 class NewProduct extends React.Component {
+    render() {
+        return (
+            <div>
+                <ProductEditor changeContent={this.props.changeContent}/>
+            </div>
+        )
+    }
+}
+
+class ProductEditor extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            bottomCommentForm:"normal",
+            productName:"",
+            productSlug:"",
+            productInputLoading:"",
+            productAvailable: false
+        };
+        this.updateProductName = this.updateProductName.bind(this);
+        this.setProductInputLoading = this.setProductInputLoading.bind(this);
+        this.loadInfo = this.loadInfo.bind(this);
+        this.goProduct = this.goProduct.bind(this);
+    }
+    updateProductName(e) {
+        this.setState({
+            productName:e.target.value,
+            productSlug:generateProductSlug(e.target.value)
+        });
+        clearTimeout(this.setTime);
+        this.setTime = setTimeout(function() {
+            this.setProductInputLoading(true);
+            this.loadInfo();
+        }.bind(this), 1000);
+    }
+    setProductInputLoading(value) {
+        const str = (value)?"loading":"";
+        this.setState({
+            productInputLoading: str
+        });
+    }
+    loadInfo() {
+        fetch(SITEURL + 'api/newProductChecker?' + getUrlPar({
+            'productName':this.state.productName
+        }), {method: 'GET'}).then((response)=>{
+            if(!response.ok) throw new Error(response.status);
+            else return response.json();
+        }).then((json)=>{
+            let available;
+            if(json.available) {
+                available=true;
+            } else {
+                available=false;
+            }
+            this.setState({
+                productAvailable:available,
+                productSlug:json.slug,
+                productInputLoading:"",
+            });
+        }).catch((error) => {
+            if(error.message==404) {
+                
+            }
+        });
+    }
+    goProduct() {
+        console.log("urun" + this.state.productSlug + ' \'a gidilecek');
+    }
+    render() {
+        return(
+            <div>
+                <Row size="one">
+                    <Column>
+                        <H type="1" text="Yeni Ürün" id={"newProductHeader"} />
+                    </Column>
+                </Row>
+                <Row size="one">
+                    <Column>
+                        <div className={"ui form "+this.state.productInputLoading+" newProductForm"}>
+                            <div className="field">
+                                <label id="productSlugLabel">urun/{this.state.productSlug}</label>
+                                <input type="text" onChange={this.updateProductName} value={this.productName} placeholder="Ürün İsimi" />
+                            </div>
+                        </div>
+                    </Column>
+                </Row>
+                {(this.state.productAvailable)?
+                    <div>
+                        <Row size="one">
+                            <Column>
+                                <BasicMessageWithColor color={"yellow"} message="Bu ürün mevcut" />
+                            </Column>
+                        </Row>
+                        <Row size="one">
+                            <Column>
+                                <Center>
+                                    <Button type="huge green" name="Ürün Sayfasına Git" click={this.goProduct}/>
+                                </Center>
+                            </Column>
+                        </Row>
+                    </div>:""
+                }
+            </div>
+        )
+    }
+}
+
+class NewProduct2 extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
             form:"input", // input, showInfo, loading
             topMessage: null,
             productName: "",
@@ -55,6 +161,11 @@ class NewProduct extends React.Component {
         this.unselectTag = this.unselectTag.bind(this);
         this.refreshTagsInList = this.refreshTagsInList.bind(this);
         this.createProduct = this.createProduct.bind(this);
+    }
+    componentDidMount() {
+        if(!isMember()) {
+            this.props.changeContent('giris-yap', true);
+        }
     }
     onChangeProductName(e) {
         this.setState({

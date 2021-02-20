@@ -62,25 +62,25 @@ class NewProduct extends Controller {
     }
     private function addProductRequest(){
         Database::execute('INSERT INTO product_request (member_id, product_name, product_slug, request_id) VALUES(?,?,?,?)',[
-            USERID,
+            $this->userId,
             $this->data['productName'],
             $this->data['productSlug'],
             $this->member['request_pointer']
         ]);
-        $this->productRequest = Database::getRow('SELECT * FROM product_request WHERE member_id=? AND request_id=?', [USERID, $this->member['request_pointer']]);
+        $this->productRequest = Database::getRow('SELECT * FROM product_request WHERE member_id=? AND request_id=?', [$this->userId, $this->member['request_pointer']]);
     }
     private function addTWPRequest() {
         foreach($this->data['tags'] as $tag){
             if(isset($tag['id'])) {
                 Database::execute('INSERT INTO tag_with_product_request (member_id, product_request_id, tag_id, request_id ) VALUES(?,?,?,?)', [
-                    USERID,
+                    $this->userId,
                     $this->productRequest['product_request_id'],
                     $tag['id'],
                     $this->member['request_pointer']
                 ]);
             } else {
                 $q = Database::executeWithError('INSERT INTO tag_with_product_request (member_id, product_request_id, tag_name, tag_slug, request_id) VALUES(?,?,?,?,?)', [
-                    USERID,
+                    $this->userId,
                     $this->productRequest['product_request_id'],
                     $tag['name'],
                     $tag['slug'],
@@ -94,7 +94,7 @@ class NewProduct extends Controller {
         }
     }
     private function increaseRequestPointer() {
-        $q = Database::executeWithError('UPDATE member SET request_pointer=request_pointer+1 WHERE member_id=?', [USERID]);
+        $q = Database::executeWithError('UPDATE member SET request_pointer=request_pointer+1 WHERE member_id=?', [$this->userId]);
         if($q[0]==false) {
             print_r($q[1]);
             exit();

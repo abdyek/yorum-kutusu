@@ -105,3 +105,24 @@ header {
   color: #999 !important;
 }
 
+/* newProduct */
+
+#newProductHeader > a {
+    color:#eee !important;
+}
+.newProductForm label {
+    color:#eee !important;
+}
+.newProductForm input::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: #999 !important;
+  opacity: 1 !important; /* Firefox */
+}
+.newProductForm input:-ms-input-placeholder { /* Internet Explorer 10-11 */
+  color: #999 !important;
+}
+.newProductForm input::-ms-input-placeholder { /* Microsoft Edge */
+  color: #999 !important;
+}
+#productSlugLabel {
+    font-size:1.2rem;
+}

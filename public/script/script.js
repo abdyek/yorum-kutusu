@@ -1,6 +1,15 @@
 window.history.pushState({content: firstContent}, "", "");
 let firstLoading = true;
 
+const turkishChars = {
+    "ğ": "g",
+    "ü": "u",
+    "ş": "s",
+    "ı": "i",
+    "ö": "o",
+    "ç": "c"
+};
+
 function getRatingColor(value) {
     if(value=="-") {
         return "";
@@ -220,3 +229,19 @@ function objectFromBase64(encoded) {
 function isFloat(n){
     return Number(n) === n && n % 1 !== 0;
 }
+
+function generateProductSlug(productName) {
+    productName = productName.toLowerCase();
+    let slug = "";
+    for(let i=0;i<productName.length;i++) {
+        if(productName[i]==" ") {
+            slug += "-";
+        } else if(turkishChars[productName[i]]){
+            slug += turkishChars[productName[i]];
+        } else {
+            slug += productName[i];
+        }
+    }
+    return slug;
+}
+

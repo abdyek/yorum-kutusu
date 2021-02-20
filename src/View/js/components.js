@@ -170,8 +170,8 @@ class FloatRight extends React.Component {
 class Button extends React.Component {
     render() {
         return(
-            <button className={"ui "+this.props.type+" button"}>
-                {this.props.text}
+            <button className={"ui "+this.props.type+" button"} onClick={this.props.click}>
+                {this.props.name}
             </button>
         )
     }

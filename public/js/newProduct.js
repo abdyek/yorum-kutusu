@@ -9,13 +9,178 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var NewProduct = function (_React$Component) {
     _inherits(NewProduct, _React$Component);
 
-    function NewProduct(props) {
+    function NewProduct() {
         _classCallCheck(this, NewProduct);
 
-        var _this = _possibleConstructorReturn(this, (NewProduct.__proto__ || Object.getPrototypeOf(NewProduct)).call(this, props));
+        return _possibleConstructorReturn(this, (NewProduct.__proto__ || Object.getPrototypeOf(NewProduct)).apply(this, arguments));
+    }
 
-        _this.state = {
-            bottomCommentForm: "normal",
+    _createClass(NewProduct, [{
+        key: "render",
+        value: function render() {
+            return React.createElement(
+                "div",
+                null,
+                React.createElement(ProductEditor, { changeContent: this.props.changeContent })
+            );
+        }
+    }]);
+
+    return NewProduct;
+}(React.Component);
+
+var ProductEditor = function (_React$Component2) {
+    _inherits(ProductEditor, _React$Component2);
+
+    function ProductEditor(props) {
+        _classCallCheck(this, ProductEditor);
+
+        var _this2 = _possibleConstructorReturn(this, (ProductEditor.__proto__ || Object.getPrototypeOf(ProductEditor)).call(this, props));
+
+        _this2.state = {
+            productName: "",
+            productSlug: "",
+            productInputLoading: "",
+            productAvailable: false
+        };
+        _this2.updateProductName = _this2.updateProductName.bind(_this2);
+        _this2.setProductInputLoading = _this2.setProductInputLoading.bind(_this2);
+        _this2.loadInfo = _this2.loadInfo.bind(_this2);
+        _this2.goProduct = _this2.goProduct.bind(_this2);
+        return _this2;
+    }
+
+    _createClass(ProductEditor, [{
+        key: "updateProductName",
+        value: function updateProductName(e) {
+            this.setState({
+                productName: e.target.value,
+                productSlug: generateProductSlug(e.target.value)
+            });
+            clearTimeout(this.setTime);
+            this.setTime = setTimeout(function () {
+                this.setProductInputLoading(true);
+                this.loadInfo();
+            }.bind(this), 1000);
+        }
+    }, {
+        key: "setProductInputLoading",
+        value: function setProductInputLoading(value) {
+            var str = value ? "loading" : "";
+            this.setState({
+                productInputLoading: str
+            });
+        }
+    }, {
+        key: "loadInfo",
+        value: function loadInfo() {
+            var _this3 = this;
+
+            fetch(SITEURL + 'api/newProductChecker?' + getUrlPar({
+                'productName': this.state.productName
+            }), { method: 'GET' }).then(function (response) {
+                if (!response.ok) throw new Error(response.status);else return response.json();
+            }).then(function (json) {
+                var available = void 0;
+                if (json.available) {
+                    available = true;
+                } else {
+                    available = false;
+                }
+                _this3.setState({
+                    productAvailable: available,
+                    productSlug: json.slug,
+                    productInputLoading: ""
+                });
+            }).catch(function (error) {
+                if (error.message == 404) {}
+            });
+        }
+    }, {
+        key: "goProduct",
+        value: function goProduct() {
+            console.log("urun" + this.state.productSlug + ' \'a gidilecek');
+        }
+    }, {
+        key: "render",
+        value: function render() {
+            return React.createElement(
+                "div",
+                null,
+                React.createElement(
+                    Row,
+                    { size: "one" },
+                    React.createElement(
+                        Column,
+                        null,
+                        React.createElement(H, { type: "1", text: "Yeni \xDCr\xFCn", id: "newProductHeader" })
+                    )
+                ),
+                React.createElement(
+                    Row,
+                    { size: "one" },
+                    React.createElement(
+                        Column,
+                        null,
+                        React.createElement(
+                            "div",
+                            { className: "ui form " + this.state.productInputLoading + " newProductForm" },
+                            React.createElement(
+                                "div",
+                                { className: "field" },
+                                React.createElement(
+                                    "label",
+                                    { id: "productSlugLabel" },
+                                    "urun/",
+                                    this.state.productSlug
+                                ),
+                                React.createElement("input", { type: "text", onChange: this.updateProductName, value: this.productName, placeholder: "\xDCr\xFCn \u0130simi" })
+                            )
+                        )
+                    )
+                ),
+                this.state.productAvailable ? React.createElement(
+                    "div",
+                    null,
+                    React.createElement(
+                        Row,
+                        { size: "one" },
+                        React.createElement(
+                            Column,
+                            null,
+                            React.createElement(BasicMessageWithColor, { color: "yellow", message: "Bu \xFCr\xFCn mevcut" })
+                        )
+                    ),
+                    React.createElement(
+                        Row,
+                        { size: "one" },
+                        React.createElement(
+                            Column,
+                            null,
+                            React.createElement(
+                                Center,
+                                null,
+                                React.createElement(Button, { type: "huge green", name: "\xDCr\xFCn Sayfas\u0131na Git", click: this.goProduct })
+                            )
+                        )
+                    )
+                ) : ""
+            );
+        }
+    }]);
+
+    return ProductEditor;
+}(React.Component);
+
+var NewProduct2 = function (_React$Component3) {
+    _inherits(NewProduct2, _React$Component3);
+
+    function NewProduct2(props) {
+        _classCallCheck(this, NewProduct2);
+
+        var _this4 = _possibleConstructorReturn(this, (NewProduct2.__proto__ || Object.getPrototypeOf(NewProduct2)).call(this, props));
+
+        _this4.state = {
             form: "input", // input, showInfo, loading
             topMessage: null,
             productName: "",
@@ -53,7 +218,7 @@ var NewProduct = function (_React$Component) {
             newTagIndex: 0,
             createProductButtonName: "Oluştur"
         };
-        _this.turkishChars = {
+        _this4.turkishChars = {
             "ğ": "g",
             "ü": "u",
             "ş": "s",
@@ -61,17 +226,24 @@ var NewProduct = function (_React$Component) {
             "ö": "o",
             "ç": "c"
         };
-        _this.onChangeProductName = _this.onChangeProductName.bind(_this);
-        _this.generateProductUrl = _this.generateProductUrl.bind(_this);
-        _this.onChangeTagSearchInput = _this.onChangeTagSearchInput.bind(_this);
-        _this.selectTag = _this.selectTag.bind(_this);
-        _this.unselectTag = _this.unselectTag.bind(_this);
-        _this.refreshTagsInList = _this.refreshTagsInList.bind(_this);
-        _this.createProduct = _this.createProduct.bind(_this);
-        return _this;
+        _this4.onChangeProductName = _this4.onChangeProductName.bind(_this4);
+        _this4.generateProductUrl = _this4.generateProductUrl.bind(_this4);
+        _this4.onChangeTagSearchInput = _this4.onChangeTagSearchInput.bind(_this4);
+        _this4.selectTag = _this4.selectTag.bind(_this4);
+        _this4.unselectTag = _this4.unselectTag.bind(_this4);
+        _this4.refreshTagsInList = _this4.refreshTagsInList.bind(_this4);
+        _this4.createProduct = _this4.createProduct.bind(_this4);
+        return _this4;
     }
 
-    _createClass(NewProduct, [{
+    _createClass(NewProduct2, [{
+        key: "componentDidMount",
+        value: function componentDidMount() {
+            if (!isMember()) {
+                this.props.changeContent('giris-yap', true);
+            }
+        }
+    }, {
         key: "onChangeProductName",
         value: function onChangeProductName(e) {
             this.setState({
@@ -232,11 +404,11 @@ var NewProduct = function (_React$Component) {
         }
     }]);
 
-    return NewProduct;
+    return NewProduct2;
 }(React.Component);
 
-var SelectedTags = function (_React$Component2) {
-    _inherits(SelectedTags, _React$Component2);
+var SelectedTags = function (_React$Component4) {
+    _inherits(SelectedTags, _React$Component4);
 
     function SelectedTags() {
         _classCallCheck(this, SelectedTags);
@@ -272,22 +444,22 @@ var SelectedTags = function (_React$Component2) {
     return SelectedTags;
 }(React.Component);
 
-var TagList = function (_React$Component3) {
-    _inherits(TagList, _React$Component3);
+var TagList = function (_React$Component5) {
+    _inherits(TagList, _React$Component5);
 
     function TagList(props) {
         _classCallCheck(this, TagList);
 
-        var _this3 = _possibleConstructorReturn(this, (TagList.__proto__ || Object.getPrototypeOf(TagList)).call(this, props));
+        var _this6 = _possibleConstructorReturn(this, (TagList.__proto__ || Object.getPrototypeOf(TagList)).call(this, props));
 
-        _this3.state = {
+        _this6.state = {
             tableVisible: false
         };
-        _this3.onFocusInput = _this3.onFocusInput.bind(_this3);
-        _this3.onBlurInput = _this3.onBlurInput.bind(_this3);
-        _this3.selectTag = _this3.selectTag.bind(_this3);
-        _this3.onChangeInput = _this3.onChangeInput.bind(_this3);
-        return _this3;
+        _this6.onFocusInput = _this6.onFocusInput.bind(_this6);
+        _this6.onBlurInput = _this6.onBlurInput.bind(_this6);
+        _this6.selectTag = _this6.selectTag.bind(_this6);
+        _this6.onChangeInput = _this6.onChangeInput.bind(_this6);
+        return _this6;
     }
 
     _createClass(TagList, [{

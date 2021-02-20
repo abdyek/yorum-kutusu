@@ -347,7 +347,7 @@ var Footer = function (_React$Component5) {
                             React.createElement(
                                 FloatRight,
                                 null,
-                                "\xA9 T\xFCm haklar\u0131 sakl\u0131d\u0131r | 2020"
+                                "\xA9 T\xFCm haklar\u0131 sakl\u0131d\u0131r | 2021"
                             )
                         )
                     )
@@ -373,31 +373,31 @@ var Content = function (_React$Component6) {
         value: function render() {
             switch (this.props.content) {
                 case "index":
-                    return React.createElement(Index, { changeContent: this.props.changeContent, changeLoading: this.props.changeLoading });
+                    return React.createElement(Index, { changeContent: this.props.changeContent });
                     break;
                 case "profile":
-                    return React.createElement(Profile, { changeContent: this.props.changeContent, changeLoading: this.props.changeLoading });
+                    return React.createElement(Profile, { changeContent: this.props.changeContent });
                     break;
                 case "product":
-                    return React.createElement(Product, { changeContent: this.props.changeContent, changeLoading: this.props.changeLoading });
+                    return React.createElement(Product, { changeContent: this.props.changeContent });
                     break;
                 case "newProduct":
-                    return React.createElement(NewProduct, { changeContent: this.props.changeContent, changeLoading: this.props.changeLoading });
+                    return React.createElement(NewProduct, { changeContent: this.props.changeContent });
                     break;
                 case "login":
-                    return React.createElement(Login, { changeContent: this.props.changeContent, changeLoading: this.props.changeLoading, changeHeader: this.props.changeHeader });
+                    return React.createElement(Login, { changeContent: this.props.changeContent, changeHeader: this.props.changeHeader });
                     break;
                 case "signup":
-                    return React.createElement(Signup, { changeContent: this.props.changeContent, changeLoading: this.props.changeLoading });
+                    return React.createElement(Signup, { changeContent: this.props.changeContent });
                     break;
                 case "filter":
-                    return React.createElement(Filter, { changeContent: this.props.changeContent, changeLoading: this.props.changeLoading });
+                    return React.createElement(Filter, { changeContent: this.props.changeContent });
                     break;
                 case "emailValidationPage":
-                    return React.createElement(EmailValidationPage, { changeContent: this.props.changeContent, changeLoading: this.props.changeLoading });
+                    return React.createElement(EmailValidationPage, { changeContent: this.props.changeContent });
                     break;
                 case "editProduct":
-                    return React.createElement(EditProduct, null);
+                    return React.createElement(EditProduct, { changeContent: this.props.changeContent });
                 default:
                     return React.createElement(
                         "div",
@@ -473,8 +473,9 @@ var App = function (_React$Component7) {
         }
     }, {
         key: "changeContent",
-        value: function changeContent(href, direct) {
+        value: function changeContent(href, direct, slugs) {
             direct = direct || false;
+            slugs = slugs || [];
             if (direct) {
                 var cont = this.contentFromSlug[href];
                 window.history.pushState({ content: cont }, "title", SITEURL + href);

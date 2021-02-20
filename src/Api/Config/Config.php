@@ -741,6 +741,20 @@ namespace YorumKutusu\Api\Config;
                     ]
                 ]
             ],
+            'newProductChecker'=>[
+                'methods'=>['GET'],
+                'authorization'=>[
+                    'GET'=>['member', 'admin']
+                ],
+                'keys'=>[
+                    'GET'=>[
+                        'productName'=>[
+                            'min'=>1,
+                            'max'=>60
+                        ]
+                    ]
+                ]
+            ]
         ];
     }
 

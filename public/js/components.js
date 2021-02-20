@@ -403,8 +403,8 @@ var Button = function (_React$Component13) {
         value: function render() {
             return React.createElement(
                 "button",
-                { className: "ui " + this.props.type + " button" },
-                this.props.text
+                { className: "ui " + this.props.type + " button", onClick: this.props.click },
+                this.props.name
             );
         }
     }]);
