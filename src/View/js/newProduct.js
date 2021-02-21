@@ -17,6 +17,7 @@ class ProductEditor extends React.Component {
             productSlug:"",
             productInputLoading:"",
             productAvailable: false,
+            emptyProductNameWarn: false,
             tags:[
                 {
                     id:1,
@@ -92,10 +93,22 @@ class ProductEditor extends React.Component {
         this.props.changeContent(SITEURL+"urun/"+this.state.productSlug);
     }
     closeTag(id) {
-        console.log(id + ' will be closed');
+        const tags = this.state.tags.filter(function(tag) {
+            if(tag.id!=id) 
+                return tag
+        });
+        this.setState({
+            tags:tags
+        });
     }
     createProduct() {
         console.log("product will be created");
+        if(this.state.productName.length == 0) {
+            this.setState({
+                emptyProductNameWarn:true
+            });
+            return;
+        }
         this.setState({
             form:"loading"
         });
@@ -145,6 +158,15 @@ class ProductEditor extends React.Component {
                                         </Column>
                                     </Row>
                                     <TagSelector tags={this.state.tags} closeFunc={this.closeTag}/>
+                                    {(this.state.emptyProductNameWarn)?
+                                        <div>
+                                            <Row>
+                                                <Column>
+                                                    <BasicMessageWithColor color="yellow" message={"İsimsiz ürün oluşturamazsınız!"}/>
+                                                </Column>
+                                            </Row>
+                                        </div>:""
+                                    }
                                     <Row size="one">
                                         <Column>
                                             <FloatRight>

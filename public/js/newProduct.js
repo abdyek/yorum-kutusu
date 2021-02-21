@@ -43,6 +43,7 @@ var ProductEditor = function (_React$Component2) {
             productSlug: "",
             productInputLoading: "",
             productAvailable: false,
+            emptyProductNameWarn: false,
             tags: [{
                 id: 1,
                 slug: "ekran",
@@ -125,12 +126,23 @@ var ProductEditor = function (_React$Component2) {
     }, {
         key: "closeTag",
         value: function closeTag(id) {
-            console.log(id + ' will be closed');
+            var tags = this.state.tags.filter(function (tag) {
+                if (tag.id != id) return tag;
+            });
+            this.setState({
+                tags: tags
+            });
         }
     }, {
         key: "createProduct",
         value: function createProduct() {
             console.log("product will be created");
+            if (this.state.productName.length == 0) {
+                this.setState({
+                    emptyProductNameWarn: true
+                });
+                return;
+            }
             this.setState({
                 form: "loading"
             });
@@ -230,6 +242,19 @@ var ProductEditor = function (_React$Component2) {
                                     )
                                 ),
                                 React.createElement(TagSelector, { tags: this.state.tags, closeFunc: this.closeTag }),
+                                this.state.emptyProductNameWarn ? React.createElement(
+                                    "div",
+                                    null,
+                                    React.createElement(
+                                        Row,
+                                        null,
+                                        React.createElement(
+                                            Column,
+                                            null,
+                                            React.createElement(BasicMessageWithColor, { color: "yellow", message: "İsimsiz ürün oluşturamazsınız!" })
+                                        )
+                                    )
+                                ) : "",
                                 React.createElement(
                                     Row,
                                     { size: "one" },
