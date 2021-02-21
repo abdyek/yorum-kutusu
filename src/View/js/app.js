@@ -116,6 +116,9 @@ class SearchBar extends React.Component {
         this.changeInput = this.changeInput.bind(this);
         this.deleteResults = this.deleteResults.bind(this);
     }
+    componentDidMount() {
+        this.inputPlaceholder = this.props.inputPlaceholder || 'Ara..';
+    }
     refreshResults() {
         // burada sunucu ile konuşucaz gelen veriyi results'a atıyoruz ve işlem tamamdır
         this.setState({
@@ -154,7 +157,7 @@ class SearchBar extends React.Component {
         }
         return(
             <div id="search" className="ui search">
-                <input className="prompt" type="text" placeholder="Ara..." value={this.state.inputValue} onChange={this.changeInput} onBlur={this.deleteResults} />
+                <input className="prompt" type="text" placeholder={this.inputPlaceholder} value={this.state.inputValue} onChange={this.changeInput} onBlur={this.deleteResults} />
                 {(Object.keys(this.state.results).length)?
                     <div id="search-results" className="results transition visible">
                         {this.aTags}

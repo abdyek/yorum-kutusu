@@ -13,13 +13,14 @@ class Tag extends Controller {
         }
     }
     private function search() {
-        $tags = Database::getRows('SELECT tag_id, tag_slug, tag_name FROM tag WHERE tag_name LIKE "%"?"%" AND tag_deleted=0', [$this->data['searchText']]);
+        $tags = Database::getRows('SELECT tag_id, tag_slug, tag_name, tag_passive FROM tag WHERE tag_name LIKE "%"?"%" AND tag_deleted=0', [$this->data['searchText']]);
         $tagsInfo = [];
         foreach($tags as $tag) {
             $tagsInfo[] = [
-                'tagID'=>$tag['tag_id'],
+                'id'=>$tag['tag_id'],
                 'slug'=>$tag['tag_slug'],
-                'tagName'=>$tag['tag_name'],
+                'name'=>$tag['tag_name'],
+                'passive'=>($tag['tag_passive'])?true:false
             ];
         }
         $this->success([

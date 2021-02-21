@@ -207,6 +207,11 @@ var SearchBar = function (_React$Component3) {
     }
 
     _createClass(SearchBar, [{
+        key: "componentDidMount",
+        value: function componentDidMount() {
+            this.inputPlaceholder = this.props.inputPlaceholder || 'Ara..';
+        }
+    }, {
         key: "refreshResults",
         value: function refreshResults() {
             // burada sunucu ile konuşucaz gelen veriyi results'a atıyoruz ve işlem tamamdır
@@ -257,7 +262,7 @@ var SearchBar = function (_React$Component3) {
             return React.createElement(
                 "div",
                 { id: "search", className: "ui search" },
-                React.createElement("input", { className: "prompt", type: "text", placeholder: "Ara...", value: this.state.inputValue, onChange: this.changeInput, onBlur: this.deleteResults }),
+                React.createElement("input", { className: "prompt", type: "text", placeholder: this.inputPlaceholder, value: this.state.inputValue, onChange: this.changeInput, onBlur: this.deleteResults }),
                 Object.keys(this.state.results).length ? React.createElement(
                     "div",
                     { id: "search-results", className: "results transition visible" },

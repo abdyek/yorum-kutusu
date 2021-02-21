@@ -126,3 +126,12 @@ header {
 #productSlugLabel {
     font-size:1.2rem;
 }
+
+#newProductPreviewHeader {
+    color:#eee !important;
+}
+
+.tagWithClose {
+    color:#CCC !important;
+    cursor:pointer !important;
+}

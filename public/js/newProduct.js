@@ -38,15 +38,34 @@ var ProductEditor = function (_React$Component2) {
         var _this2 = _possibleConstructorReturn(this, (ProductEditor.__proto__ || Object.getPrototypeOf(ProductEditor)).call(this, props));
 
         _this2.state = {
+            form: "normal", // normal, created
             productName: "",
             productSlug: "",
             productInputLoading: "",
-            productAvailable: false
+            productAvailable: false,
+            tags: [{
+                id: 1,
+                slug: "ekran",
+                name: "Ekran",
+                passive: false
+            }, {
+                id: 2,
+                slug: "batarya",
+                name: "Batarya",
+                passive: false
+            }, {
+                id: 3,
+                slug: "motorola",
+                name: "Motorola",
+                passive: true
+            }]
         };
         _this2.updateProductName = _this2.updateProductName.bind(_this2);
         _this2.setProductInputLoading = _this2.setProductInputLoading.bind(_this2);
         _this2.loadInfo = _this2.loadInfo.bind(_this2);
         _this2.goProduct = _this2.goProduct.bind(_this2);
+        _this2.closeTag = _this2.closeTag.bind(_this2);
+        _this2.createProduct = _this2.createProduct.bind(_this2);
         return _this2;
     }
 
@@ -58,10 +77,12 @@ var ProductEditor = function (_React$Component2) {
                 productSlug: generateProductSlug(e.target.value)
             });
             clearTimeout(this.setTime);
-            this.setTime = setTimeout(function () {
-                this.setProductInputLoading(true);
-                this.loadInfo();
-            }.bind(this), 1000);
+            if (e.target.value.length) {
+                this.setTime = setTimeout(function () {
+                    this.setProductInputLoading(true);
+                    this.loadInfo();
+                }.bind(this), 1000);
+            }
         }
     }, {
         key: "setProductInputLoading",
@@ -99,11 +120,189 @@ var ProductEditor = function (_React$Component2) {
     }, {
         key: "goProduct",
         value: function goProduct() {
-            console.log("urun" + this.state.productSlug + ' \'a gidilecek');
+            this.props.changeContent(SITEURL + "urun/" + this.state.productSlug);
+        }
+    }, {
+        key: "closeTag",
+        value: function closeTag(id) {
+            console.log(id + ' will be closed');
+        }
+    }, {
+        key: "createProduct",
+        value: function createProduct() {
+            console.log("product will be created");
+            this.setState({
+                form: "loading"
+            });
         }
     }, {
         key: "render",
         value: function render() {
+            if (this.state.form == "normal") {
+                return React.createElement(
+                    "div",
+                    null,
+                    React.createElement(
+                        Row,
+                        { size: "sixteen" },
+                        React.createElement(WideColumn, { size: "one" }),
+                        React.createElement(
+                            WideColumn,
+                            { size: "fourteen" },
+                            React.createElement(
+                                Row,
+                                { size: "one" },
+                                React.createElement(
+                                    Column,
+                                    null,
+                                    React.createElement(H, { type: "1", text: "Yeni \xDCr\xFCn", id: "newProductHeader", textAlign: "center" })
+                                )
+                            ),
+                            React.createElement(
+                                Row,
+                                { size: "one" },
+                                React.createElement(
+                                    Column,
+                                    null,
+                                    React.createElement(
+                                        "h3",
+                                        { className: "hStandart" },
+                                        "\xDCr\xFCn Ad\u0131"
+                                    ),
+                                    React.createElement(
+                                        "div",
+                                        { className: "ui form " + this.state.productInputLoading + " newProductForm" },
+                                        React.createElement(
+                                            "div",
+                                            { className: "field" },
+                                            React.createElement(
+                                                "label",
+                                                { id: "productSlugLabel" },
+                                                "urun/",
+                                                this.state.productSlug
+                                            ),
+                                            React.createElement("input", { type: "text", onChange: this.updateProductName, value: this.state.productName, placeholder: "\xDCr\xFCn \u0130simi" })
+                                        )
+                                    )
+                                )
+                            ),
+                            this.state.productAvailable ? React.createElement(
+                                "div",
+                                null,
+                                React.createElement(
+                                    Row,
+                                    { size: "one" },
+                                    React.createElement(
+                                        Column,
+                                        null,
+                                        React.createElement(BasicMessageWithColor, { color: "yellow", message: "Bu \xFCr\xFCn mevcut" })
+                                    )
+                                ),
+                                React.createElement(
+                                    Row,
+                                    { size: "one" },
+                                    React.createElement(
+                                        Column,
+                                        null,
+                                        React.createElement(
+                                            Center,
+                                            null,
+                                            React.createElement(Button, { type: "huge green", name: "\xDCr\xFCn Sayfas\u0131na Git", click: this.goProduct })
+                                        )
+                                    )
+                                )
+                            ) : React.createElement(
+                                "div",
+                                null,
+                                React.createElement(
+                                    Row,
+                                    { size: "one" },
+                                    React.createElement(
+                                        Column,
+                                        null,
+                                        React.createElement(
+                                            "h1",
+                                            { id: "newProductPreviewHeader" },
+                                            " ",
+                                            this.state.productName,
+                                            " "
+                                        )
+                                    )
+                                ),
+                                React.createElement(TagSelector, { tags: this.state.tags, closeFunc: this.closeTag }),
+                                React.createElement(
+                                    Row,
+                                    { size: "one" },
+                                    React.createElement(
+                                        Column,
+                                        null,
+                                        React.createElement(
+                                            FloatRight,
+                                            null,
+                                            React.createElement(Button, { type: "large green", name: "Olu\u015Ftur", click: this.createProduct })
+                                        )
+                                    )
+                                )
+                            )
+                        ),
+                        React.createElement(WideColumn, { size: "/one" })
+                    )
+                );
+            } else if (this.state.form == "created") {
+                return React.createElement(
+                    Row,
+                    { size: "sixteen" },
+                    React.createElement(WideColumn, { size: "one" }),
+                    React.createElement(
+                        WideColumn,
+                        { size: "fourteen" },
+                        React.createElement(Message, { header: "Te\u015Fekk\xFCrler", message: "Ba\u015Far\u0131l\u0131 bir \u015Fekilde g\xF6nderildi. Y\xF6netici onay\u0131s\u0131ndan sonra \xFCr\xFCne yorum ekleyebilirsiniz" })
+                    ),
+                    React.createElement(WideColumn, { size: "one" })
+                );
+            } else if (this.state.form == "loading") {
+                return React.createElement(
+                    Row,
+                    { size: "one" },
+                    React.createElement(
+                        Column,
+                        null,
+                        React.createElement(RowLoadingSpin, { nonSegment: true })
+                    )
+                );
+            }
+        }
+    }]);
+
+    return ProductEditor;
+}(React.Component);
+
+var TagSelector = function (_React$Component3) {
+    _inherits(TagSelector, _React$Component3);
+
+    function TagSelector(props) {
+        _classCallCheck(this, TagSelector);
+
+        var _this4 = _possibleConstructorReturn(this, (TagSelector.__proto__ || Object.getPrototypeOf(TagSelector)).call(this, props));
+
+        _this4.prepareTags = _this4.prepareTags.bind(_this4);
+        return _this4;
+    }
+
+    _createClass(TagSelector, [{
+        key: "prepareTags",
+        value: function prepareTags() {
+            var color = void 0;
+            this.tags = [];
+            for (var i = 0; i < this.props.tags.length; i++) {
+                color = this.props.tags[i].passive ? "grey" : "orange";
+                this.tags.push(React.createElement(TagWithClose, { key: this.props.tags[i].id, id: this.props.tags[i].id, color: color, name: this.props.tags[i].name, closeFunc: this.props.closeFunc }));
+            }
+        }
+    }, {
+        key: "render",
+        value: function render() {
+            this.prepareTags();
             return React.createElement(
                 "div",
                 null,
@@ -113,7 +312,7 @@ var ProductEditor = function (_React$Component2) {
                     React.createElement(
                         Column,
                         null,
-                        React.createElement(H, { type: "1", text: "Yeni \xDCr\xFCn", id: "newProductHeader" })
+                        React.createElement(SearchBar, { inputPlaceholder: "Etiket Ara.." })
                     )
                 ),
                 React.createElement(
@@ -122,65 +321,66 @@ var ProductEditor = function (_React$Component2) {
                     React.createElement(
                         Column,
                         null,
-                        React.createElement(
-                            "div",
-                            { className: "ui form " + this.state.productInputLoading + " newProductForm" },
-                            React.createElement(
-                                "div",
-                                { className: "field" },
-                                React.createElement(
-                                    "label",
-                                    { id: "productSlugLabel" },
-                                    "urun/",
-                                    this.state.productSlug
-                                ),
-                                React.createElement("input", { type: "text", onChange: this.updateProductName, value: this.productName, placeholder: "\xDCr\xFCn \u0130simi" })
-                            )
-                        )
+                        this.tags
                     )
-                ),
-                this.state.productAvailable ? React.createElement(
-                    "div",
-                    null,
-                    React.createElement(
-                        Row,
-                        { size: "one" },
-                        React.createElement(
-                            Column,
-                            null,
-                            React.createElement(BasicMessageWithColor, { color: "yellow", message: "Bu \xFCr\xFCn mevcut" })
-                        )
-                    ),
-                    React.createElement(
-                        Row,
-                        { size: "one" },
-                        React.createElement(
-                            Column,
-                            null,
-                            React.createElement(
-                                Center,
-                                null,
-                                React.createElement(Button, { type: "huge green", name: "\xDCr\xFCn Sayfas\u0131na Git", click: this.goProduct })
-                            )
-                        )
-                    )
-                ) : ""
+                )
             );
         }
     }]);
 
-    return ProductEditor;
+    return TagSelector;
 }(React.Component);
 
-var NewProduct2 = function (_React$Component3) {
-    _inherits(NewProduct2, _React$Component3);
+var TagWithClose = function (_React$Component4) {
+    _inherits(TagWithClose, _React$Component4);
+
+    function TagWithClose(props) {
+        _classCallCheck(this, TagWithClose);
+
+        var _this5 = _possibleConstructorReturn(this, (TagWithClose.__proto__ || Object.getPrototypeOf(TagWithClose)).call(this, props));
+
+        _this5.close = _this5.close.bind(_this5);
+        return _this5;
+    }
+
+    _createClass(TagWithClose, [{
+        key: "close",
+        value: function close() {
+            this.props.closeFunc(this.props.id);
+        }
+    }, {
+        key: "render",
+        value: function render() {
+            this.color = this.props.color || "";
+            return React.createElement(
+                "div",
+                { className: "TagWithClose" },
+                React.createElement(
+                    "a",
+                    { className: "ui " + this.color + " large label" },
+                    this.props.name
+                ),
+                React.createElement(
+                    "i",
+                    { className: "icon", onClick: this.close },
+                    React.createElement("i", { className: "fa fa-times", "aria-hidden": "true" })
+                )
+            );
+        }
+    }]);
+
+    return TagWithClose;
+}(React.Component);
+
+var NewProduct2 = function (_React$Component5) {
+    _inherits(NewProduct2, _React$Component5);
 
     function NewProduct2(props) {
         _classCallCheck(this, NewProduct2);
 
-        var _this4 = _possibleConstructorReturn(this, (NewProduct2.__proto__ || Object.getPrototypeOf(NewProduct2)).call(this, props));
+        var _this6 = _possibleConstructorReturn(this, (NewProduct2.__proto__ || Object.getPrototypeOf(NewProduct2)).call(this, props));
 
-        _this4.state = {
+        _this6.state = {
             form: "input", // input, showInfo, loading
             topMessage: null,
             productName: "",
@@ -218,7 +418,7 @@ var NewProduct2 = function (_React$Component3) {
             newTagIndex: 0,
             createProductButtonName: "Oluştur"
         };
-        _this4.turkishChars = {
+        _this6.turkishChars = {
             "ğ": "g",
             "ü": "u",
             "ş": "s",
@@ -226,14 +426,14 @@ var NewProduct2 = function (_React$Component3) {
             "ö": "o",
             "ç": "c"
         };
-        _this4.onChangeProductName = _this4.onChangeProductName.bind(_this4);
-        _this4.generateProductUrl = _this4.generateProductUrl.bind(_this4);
-        _this4.onChangeTagSearchInput = _this4.onChangeTagSearchInput.bind(_this4);
-        _this4.selectTag = _this4.selectTag.bind(_this4);
-        _this4.unselectTag = _this4.unselectTag.bind(_this4);
-        _this4.refreshTagsInList = _this4.refreshTagsInList.bind(_this4);
-        _this4.createProduct = _this4.createProduct.bind(_this4);
-        return _this4;
+        _this6.onChangeProductName = _this6.onChangeProductName.bind(_this6);
+        _this6.generateProductUrl = _this6.generateProductUrl.bind(_this6);
+        _this6.onChangeTagSearchInput = _this6.onChangeTagSearchInput.bind(_this6);
+        _this6.selectTag = _this6.selectTag.bind(_this6);
+        _this6.unselectTag = _this6.unselectTag.bind(_this6);
+        _this6.refreshTagsInList = _this6.refreshTagsInList.bind(_this6);
+        _this6.createProduct = _this6.createProduct.bind(_this6);
+        return _this6;
     }
 
     _createClass(NewProduct2, [{
@@ -407,8 +607,8 @@ var NewProduct2 = function (_React$Component3) {
     return NewProduct2;
 }(React.Component);
 
-var SelectedTags = function (_React$Component4) {
-    _inherits(SelectedTags, _React$Component4);
+var SelectedTags = function (_React$Component6) {
+    _inherits(SelectedTags, _React$Component6);
 
     function SelectedTags() {
         _classCallCheck(this, SelectedTags);
@@ -444,22 +644,22 @@ var SelectedTags = function (_React$Component4) {
     return SelectedTags;
 }(React.Component);
 
-var TagList = function (_React$Component5) {
-    _inherits(TagList, _React$Component5);
+var TagList = function (_React$Component7) {
+    _inherits(TagList, _React$Component7);
 
     function TagList(props) {
         _classCallCheck(this, TagList);
 
-        var _this6 = _possibleConstructorReturn(this, (TagList.__proto__ || Object.getPrototypeOf(TagList)).call(this, props));
+        var _this8 = _possibleConstructorReturn(this, (TagList.__proto__ || Object.getPrototypeOf(TagList)).call(this, props));
 
-        _this6.state = {
+        _this8.state = {
             tableVisible: false
         };
-        _this6.onFocusInput = _this6.onFocusInput.bind(_this6);
-        _this6.onBlurInput = _this6.onBlurInput.bind(_this6);
-        _this6.selectTag = _this6.selectTag.bind(_this6);
-        _this6.onChangeInput = _this6.onChangeInput.bind(_this6);
-        return _this6;
+        _this8.onFocusInput = _this8.onFocusInput.bind(_this8);
+        _this8.onBlurInput = _this8.onBlurInput.bind(_this8);
+        _this8.selectTag = _this8.selectTag.bind(_this8);
+        _this8.onChangeInput = _this8.onChangeInput.bind(_this8);
+        return _this8;
     }
 
     _createClass(TagList, [{

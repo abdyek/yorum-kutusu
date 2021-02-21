@@ -265,3 +265,13 @@ label {
 .yorumkutusu-form-message {
     display:block !important;
 }
+
+/* newProduct */
+.tagWithClose {
+    float:left;
+}
+
+.hStandart {
+    color:#eee !important;
+}
+

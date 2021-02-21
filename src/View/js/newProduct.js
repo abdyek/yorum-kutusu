@@ -12,15 +12,38 @@ class ProductEditor extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            form:"normal", // normal, created
             productName:"",
             productSlug:"",
             productInputLoading:"",
-            productAvailable: false
+            productAvailable: false,
+            tags:[
+                {
+                    id:1,
+                    slug: "ekran",
+                    name: "Ekran",
+                    passive: false
+                },
+                {
+                    id:2,
+                    slug: "batarya",
+                    name: "Batarya",
+                    passive: false
+                },
+                {
+                    id:3,
+                    slug: "motorola",
+                    name: "Motorola",
+                    passive: true
+                },
+            ]
         };
         this.updateProductName = this.updateProductName.bind(this);
         this.setProductInputLoading = this.setProductInputLoading.bind(this);
         this.loadInfo = this.loadInfo.bind(this);
         this.goProduct = this.goProduct.bind(this);
+        this.closeTag = this.closeTag.bind(this);
+        this.createProduct = this.createProduct.bind(this);
     }
     updateProductName(e) {
         this.setState({
@@ -28,10 +51,12 @@ class ProductEditor extends React.Component {
             productSlug:generateProductSlug(e.target.value)
         });
         clearTimeout(this.setTime);
-        this.setTime = setTimeout(function() {
-            this.setProductInputLoading(true);
-            this.loadInfo();
-        }.bind(this), 1000);
+        if(e.target.value.length) {
+            this.setTime = setTimeout(function() {
+                this.setProductInputLoading(true);
+                this.loadInfo();
+            }.bind(this), 1000);
+        }
     }
     setProductInputLoading(value) {
         const str = (value)?"loading":"";
@@ -64,46 +89,158 @@ class ProductEditor extends React.Component {
         });
     }
     goProduct() {
-        console.log("urun" + this.state.productSlug + ' \'a gidilecek');
+        this.props.changeContent(SITEURL+"urun/"+this.state.productSlug);
+    }
+    closeTag(id) {
+        console.log(id + ' will be closed');
+    }
+    createProduct() {
+        console.log("product will be created");
+        this.setState({
+            form:"loading"
+        });
     }
     render() {
-        return(
+        if(this.state.form=="normal") {
+            return(
+                <div>
+                    <Row size="sixteen">
+                        <WideColumn size="one"></WideColumn>
+                        <WideColumn size="fourteen">
+                            <Row size="one">
+                                <Column>
+                                    <H type="1" text="Yeni Ürün" id={"newProductHeader"} textAlign={"center"}/>
+                                </Column>
+                            </Row>
+                            <Row size="one">
+                                <Column>
+                                    <h3 className="hStandart">Ürün Adı</h3>
+                                    <div className={"ui form "+this.state.productInputLoading+" newProductForm"}>
+                                        <div className="field">
+                                            <label id="productSlugLabel">urun/{this.state.productSlug}</label>
+                                            <input type="text" onChange={this.updateProductName} value={this.state.productName} placeholder="Ürün İsimi" />
+                                        </div>
+                                    </div>
+                                </Column>
+                            </Row>
+                            {(this.state.productAvailable)?
+                                <div>
+                                    <Row size="one">
+                                        <Column>
+                                            <BasicMessageWithColor color={"yellow"} message="Bu ürün mevcut" />
+                                        </Column>
+                                    </Row>
+                                    <Row size="one">
+                                        <Column>
+                                            <Center>
+                                                <Button type="huge green" name="Ürün Sayfasına Git" click={this.goProduct}/>
+                                            </Center>
+                                        </Column>
+                                    </Row>
+                                </div>:
+                                <div>
+                                    <Row size="one">
+                                        <Column>
+                                            <h1 id="newProductPreviewHeader"> {this.state.productName} </h1>
+                                        </Column>
+                                    </Row>
+                                    <TagSelector tags={this.state.tags} closeFunc={this.closeTag}/>
+                                    <Row size="one">
+                                        <Column>
+                                            <FloatRight>
+                                                <Button type="large green" name="Oluştur" click={this.createProduct}/>
+                                            </FloatRight>
+                                        </Column>
+                                    </Row>
+                                </div>
+                            }
+                        </WideColumn>
+                        <WideColumn size="/one"></WideColumn>
+                    </Row>
+                </div>
+            )
+        } else if(this.state.form=="created") {
+            return (
+                <Row size="sixteen">
+                    <WideColumn size="one"></WideColumn>
+                    <WideColumn size="fourteen">
+                        <Message header="Teşekkürler" message="Başarılı bir şekilde gönderildi. Yönetici onayısından sonra ürüne yorum ekleyebilirsiniz"/>
+                    </WideColumn>
+                    <WideColumn size="one"></WideColumn>
+                </Row>
+            )
+        } else if(this.state.form=="loading") {
+            return (
+                <Row size="one">
+                    <Column>
+                        <RowLoadingSpin nonSegment={true} />
+                    </Column>
+                </Row>
+            )
+        }
+    }
+}
+
+class TagSelector extends React.Component {
+    constructor(props) {
+        super(props);
+        this.prepareTags = this.prepareTags.bind(this);
+    }
+    prepareTags() {
+        let color;
+        this.tags = [];
+        for(let i=0;i<this.props.tags.length;i++) {
+            color = (this.props.tags[i].passive)?"grey":"orange";
+            this.tags.push(
+                <TagWithClose key={this.props.tags[i].id} id={this.props.tags[i].id} color={color} name={this.props.tags[i].name} closeFunc={this.props.closeFunc} />
+            )
+        }
+    }
+    render() {
+        this.prepareTags();
+        return (
             <div>
                 <Row size="one">
                     <Column>
-                        <H type="1" text="Yeni Ürün" id={"newProductHeader"} />
+                        <SearchBar inputPlaceholder={"Etiket Ara.."}/>
+                        {/*
+                        <div className="ui input">
+                            <input type="text" placeholder="Etiket" />
+                        </div>
+                        */}
                     </Column>
                 </Row>
                 <Row size="one">
                     <Column>
-                        <div className={"ui form "+this.state.productInputLoading+" newProductForm"}>
-                            <div className="field">
-                                <label id="productSlugLabel">urun/{this.state.productSlug}</label>
-                                <input type="text" onChange={this.updateProductName} value={this.productName} placeholder="Ürün İsimi" />
-                            </div>
-                        </div>
+                        {this.tags}
                     </Column>
                 </Row>
-                {(this.state.productAvailable)?
-                    <div>
-                        <Row size="one">
-                            <Column>
-                                <BasicMessageWithColor color={"yellow"} message="Bu ürün mevcut" />
-                            </Column>
-                        </Row>
-                        <Row size="one">
-                            <Column>
-                                <Center>
-                                    <Button type="huge green" name="Ürün Sayfasına Git" click={this.goProduct}/>
-                                </Center>
-                            </Column>
-                        </Row>
-                    </div>:""
-                }
             </div>
         )
     }
 }
+
+class TagWithClose extends React.Component {
+    constructor(props) {
+        super(props);
+        this.close = this.close.bind(this);
+    }
+    close() {
+        this.props.closeFunc(this.props.id);
+    }
+    render() {
+        this.color = this.props.color || "";
+        return (
+            <div className="TagWithClose">
+                <a className={"ui "+this.color+" large label"}>{this.props.name}</a>
+                <i className="icon" onClick={this.close} >
+                    <i className="fa fa-times" aria-hidden="true"></i>
+                </i>
+            </div>
+        )
+    }
+}
+
 
 class NewProduct2 extends React.Component {
     constructor(props) {

@@ -284,3 +284,19 @@ class BasicMessageWithColor extends React.Component {
         )
     }
 }
+
+class Message extends React.Component {
+    render() {
+        this.header = this.props.header || 'header';
+        this.message = this.props.message || 'message';
+        this.type = this.props.type || 'positive';
+        return (
+            <div className={"ui " + this.type + " message"}>
+                <div className="header">
+                    {this.header}
+                </div>
+                <p>{this.message}</p>
+            </div>
+        )
+    }
+}
