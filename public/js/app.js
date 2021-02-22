@@ -196,9 +196,9 @@ var SearchBar = function (_React$Component3) {
         var _this4 = _possibleConstructorReturn(this, (SearchBar.__proto__ || Object.getPrototypeOf(SearchBar)).call(this, props));
 
         _this4.state = {
-            inputValue: "",
             results: []
         };
+        _this4.checkAvailableTag = _this4.checkAvailableTag.bind(_this4);
         _this4.refreshResults = _this4.refreshResults.bind(_this4);
         _this4.prepareATags = _this4.prepareATags.bind(_this4);
         _this4.clickFunc = _this4.clickFunc.bind(_this4);
@@ -213,11 +213,21 @@ var SearchBar = function (_React$Component3) {
             this.inputPlaceholder = this.props.inputPlaceholder || 'Ara..';
         }
     }, {
+        key: "checkAvailableTag",
+        value: function checkAvailableTag(tags) {
+            for (var i = 0; i < tags.length; i++) {
+                if (this.props.tagSearchInput.toLowerCase() == tags[i].name.toLowerCase()) {
+                    this.props.checkAvailableTag(true);
+                    return;
+                }
+            }
+            this.props.checkAvailableTag(false);
+        }
+    }, {
         key: "refreshResults",
         value: function refreshResults() {
             var _this5 = this;
 
-            // burada sunucu ile konuşucaz gelen veriyi results'a atıyoruz ve işlem tamamdır
             this.setState({
                 results: [{
                     id: "loading",
@@ -225,13 +235,14 @@ var SearchBar = function (_React$Component3) {
                 }]
             });
             fetch(SITEURL + 'api/tag?' + getUrlPar({
-                searchText: this.state.inputValue
+                searchText: this.props.tagSearchInput
             }), { method: 'GET' }).then(function (response) {
                 if (!response.ok) throw new Error(response.status);else return response.json();
             }).then(function (json) {
                 _this5.setState({
                     results: json.other.tags
                 });
+                _this5.checkAvailableTag(json.other.tags);
             }).catch(function (error) {
                 console.log(error);
             });
@@ -240,27 +251,20 @@ var SearchBar = function (_React$Component3) {
         key: "prepareATags",
         value: function prepareATags() {
             this.aTags = [];
-            //let keys = Object.keys(this.state.results);
             for (var i = 0; i < this.state.results.length; i++) {
-                this.aTags.push(React.createElement(SearchResult, { key: this.state.results[i].id, id: this.state.results[i].id, slug: this.state.results[i].slug, name: this.state.results[i].name, passive: this.state.results[i].passive, href: 'urun', click: this.clickFunc })
-                /* <a key={this.state.results[i].id} className="result" href={"urun/" + this.state.results[i].productUrl} onClick={this.clickFunc}>{this.state.results[i].productName}</a> */
-                );
+                this.aTags.push(React.createElement(SearchResult, { key: this.state.results[i].id, id: this.state.results[i].id, slug: this.state.results[i].slug, name: this.state.results[i].name, passive: this.state.results[i].passive, href: 'urun', click: this.clickFunc }));
             }
         }
     }, {
         key: "clickFunc",
         value: function clickFunc(obj) {
-            this.setState({
-                inputValue: ""
-            });
             this.props.click(obj);
+            this.props.changeTagSearchInput("");
         }
     }, {
         key: "changeInput",
         value: function changeInput(e) {
-            this.setState({
-                inputValue: e.target.value
-            });
+            this.props.changeTagSearchInput(e.target.value);
             clearTimeout(this.setTime);
             if (e.target.value.length) {
                 this.setTime = setTimeout(function () {
@@ -288,7 +292,7 @@ var SearchBar = function (_React$Component3) {
             return React.createElement(
                 "div",
                 { id: "search", className: "ui search" },
-                React.createElement("input", { className: "prompt", type: "text", placeholder: this.inputPlaceholder, value: this.state.inputValue, onChange: this.changeInput, onBlur: this.deleteResults }),
+                React.createElement("input", { className: "prompt", type: "text", placeholder: this.inputPlaceholder, value: this.props.tagSearchInput, onChange: this.changeInput, onBlur: this.deleteResults }),
                 this.state.results.length ? React.createElement(
                     "div",
                     { id: "search-results", className: "results transition visible" },

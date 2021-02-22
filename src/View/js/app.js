@@ -108,9 +108,9 @@ class SearchBar extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            inputValue: "",
             results: []
         };
+        this.checkAvailableTag = this.checkAvailableTag.bind(this);
         this.refreshResults = this.refreshResults.bind(this);
         this.prepareATags = this.prepareATags.bind(this);
         this.clickFunc = this.clickFunc.bind(this);
@@ -120,8 +120,16 @@ class SearchBar extends React.Component {
     componentDidMount() {
         this.inputPlaceholder = this.props.inputPlaceholder || 'Ara..';
     }
+    checkAvailableTag(tags) {
+        for(let i=0;i<tags.length;i++) {
+            if(this.props.tagSearchInput.toLowerCase()==tags[i].name.toLowerCase()) {
+                this.props.checkAvailableTag(true);
+                return;
+            }
+        }
+        this.props.checkAvailableTag(false);
+    }
     refreshResults() {
-        // burada sunucu ile konuşucaz gelen veriyi results'a atıyoruz ve işlem tamamdır
         this.setState({
             results: [
                 {
@@ -131,7 +139,7 @@ class SearchBar extends React.Component {
             ]
         });
         fetch(SITEURL + 'api/tag?' + getUrlPar({
-            searchText: this.state.inputValue
+            searchText: this.props.tagSearchInput
         }), {method: 'GET'}).then((response)=>{
             if(!response.ok) throw new Error(response.status);
             else return response.json();
@@ -139,30 +147,25 @@ class SearchBar extends React.Component {
             this.setState({
                 results: json.other.tags
             });
+            this.checkAvailableTag(json.other.tags);
         }).catch((error) => {
             console.log(error);
         });
     }
     prepareATags() {
         this.aTags = [];
-        //let keys = Object.keys(this.state.results);
         for(let i=0;i<this.state.results.length;i++) {
             this.aTags.push(
                 <SearchResult key={this.state.results[i].id} id={this.state.results[i].id} slug={this.state.results[i].slug} name={this.state.results[i].name} passive={this.state.results[i].passive} href={'urun'} click={this.clickFunc} />
-                /* <a key={this.state.results[i].id} className="result" href={"urun/" + this.state.results[i].productUrl} onClick={this.clickFunc}>{this.state.results[i].productName}</a> */
             )
         }
     }
     clickFunc(obj) {
-        this.setState({
-            inputValue:""
-        });
         this.props.click(obj);
+        this.props.changeTagSearchInput("");
     }
     changeInput(e) {
-        this.setState({
-            inputValue:e.target.value
-        });
+        this.props.changeTagSearchInput(e.target.value);
         clearTimeout(this.setTime);
         if(e.target.value.length) {
             this.setTime = setTimeout(function() {
@@ -183,7 +186,7 @@ class SearchBar extends React.Component {
         }
         return(
             <div id="search" className="ui search">
-                <input className="prompt" type="text" placeholder={this.inputPlaceholder} value={this.state.inputValue} onChange={this.changeInput} onBlur={this.deleteResults} />
+                <input className="prompt" type="text" placeholder={this.inputPlaceholder} value={this.props.tagSearchInput} onChange={this.changeInput} onBlur={this.deleteResults} />
                 {(this.state.results.length)?
                     <div id="search-results" className="results transition visible">
                         {this.aTags}

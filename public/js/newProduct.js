@@ -270,7 +270,12 @@ var ProductEditor = function (_React$Component2) {
                                         )
                                     )
                                 ),
-                                React.createElement(TagSelector, { tags: this.state.tags, closeFunc: this.closeTag, clickSearchResult: this.clickSearchResult }),
+                                React.createElement(TagSelector, {
+                                    tags: this.state.tags,
+                                    closeFunc: this.closeTag,
+                                    tagSearchInput: this.state.tagSearchInput,
+                                    clickSearchResult: this.clickSearchResult
+                                }),
                                 this.state.emptyProductNameWarn ? React.createElement(
                                     "div",
                                     null,
@@ -339,11 +344,25 @@ var TagSelector = function (_React$Component3) {
 
         var _this4 = _possibleConstructorReturn(this, (TagSelector.__proto__ || Object.getPrototypeOf(TagSelector)).call(this, props));
 
+        _this4.state = {
+            tagSearchInput: "",
+            addNewTagButtonVisible: false
+        };
+        _this4.changeTagSearchInput = _this4.changeTagSearchInput.bind(_this4);
         _this4.prepareTags = _this4.prepareTags.bind(_this4);
+        _this4.checkAvailableTag = _this4.checkAvailableTag.bind(_this4);
         return _this4;
     }
 
     _createClass(TagSelector, [{
+        key: "changeTagSearchInput",
+        value: function changeTagSearchInput(value) {
+            this.setState({
+                tagSearchInput: value,
+                addNewTagButtonVisible: false
+            });
+        }
+    }, {
         key: "prepareTags",
         value: function prepareTags() {
             var color = void 0;
@@ -352,6 +371,14 @@ var TagSelector = function (_React$Component3) {
                 color = this.props.tags[i].passive ? "grey" : "orange";
                 this.tags.push(React.createElement(TagWithClose, { key: this.props.tags[i].id, id: this.props.tags[i].id, color: color, name: this.props.tags[i].name, closeFunc: this.props.closeFunc }));
             }
+        }
+    }, {
+        key: "checkAvailableTag",
+        value: function checkAvailableTag(available) {
+            var notAvailable = !available;
+            this.setState({
+                addNewTagButtonVisible: notAvailable
+            });
         }
     }, {
         key: "render",
@@ -366,7 +393,13 @@ var TagSelector = function (_React$Component3) {
                     React.createElement(
                         Column,
                         null,
-                        React.createElement(SearchBar, { inputPlaceholder: "Etiket Ara..", click: this.props.clickSearchResult })
+                        React.createElement(SearchBar, {
+                            tagSearchInput: this.state.tagSearchInput,
+                            changeTagSearchInput: this.changeTagSearchInput,
+                            inputPlaceholder: "Etiket Ara..",
+                            click: this.props.clickSearchResult,
+                            checkAvailableTag: this.checkAvailableTag
+                        })
                     )
                 ),
                 React.createElement(
@@ -377,7 +410,20 @@ var TagSelector = function (_React$Component3) {
                         null,
                         this.tags
                     )
-                )
+                ),
+                this.state.addNewTagButtonVisible ? React.createElement(
+                    Row,
+                    { size: "one" },
+                    React.createElement(
+                        Column,
+                        null,
+                        React.createElement(
+                            Center,
+                            null,
+                            React.createElement(Button, { name: "'" + this.state.tagSearchInput + "' İsminde Yeni Bir Etiket Ekle", type: "teal" })
+                        )
+                    )
+                ) : ""
             );
         }
     }]);

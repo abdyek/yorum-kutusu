@@ -177,7 +177,12 @@ class ProductEditor extends React.Component {
                                             <h1 id="newProductPreviewHeader"> {this.state.productName} </h1>
                                         </Column>
                                     </Row>
-                                    <TagSelector tags={this.state.tags} closeFunc={this.closeTag} clickSearchResult={this.clickSearchResult}/>
+                                    <TagSelector
+                                        tags={this.state.tags}
+                                        closeFunc={this.closeTag}
+                                        tagSearchInput={this.state.tagSearchInput}
+                                        clickSearchResult={this.clickSearchResult}
+                                    />
                                     {(this.state.emptyProductNameWarn)?
                                         <div>
                                             <Row>
@@ -226,7 +231,19 @@ class ProductEditor extends React.Component {
 class TagSelector extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            tagSearchInput:"",
+            addNewTagButtonVisible:false,
+        };
+        this.changeTagSearchInput = this.changeTagSearchInput.bind(this);
         this.prepareTags = this.prepareTags.bind(this);
+        this.checkAvailableTag = this.checkAvailableTag.bind(this);
+    }
+    changeTagSearchInput(value) {
+        this.setState({
+            tagSearchInput:value,
+            addNewTagButtonVisible:false
+        });
     }
     prepareTags() {
         let color;
@@ -238,13 +255,25 @@ class TagSelector extends React.Component {
             )
         }
     }
+    checkAvailableTag(available) {
+        const notAvailable = !available;
+        this.setState({
+            addNewTagButtonVisible:notAvailable
+        });
+    }
     render() {
         this.prepareTags();
         return (
             <div>
                 <Row size="one">
                     <Column>
-                        <SearchBar inputPlaceholder={"Etiket Ara.."} click={this.props.clickSearchResult} />
+                        <SearchBar
+                            tagSearchInput={this.state.tagSearchInput}
+                            changeTagSearchInput={this.changeTagSearchInput}
+                            inputPlaceholder={"Etiket Ara.."}
+                            click={this.props.clickSearchResult}
+                            checkAvailableTag={this.checkAvailableTag}
+                        />
                     </Column>
                 </Row>
                 <Row size="one">
@@ -252,6 +281,15 @@ class TagSelector extends React.Component {
                         {this.tags}
                     </Column>
                 </Row>
+                {(this.state.addNewTagButtonVisible)?
+                    <Row size="one">
+                        <Column>
+                            <Center>
+                                <Button name={"'"+this.state.tagSearchInput+"' İsminde Yeni Bir Etiket Ekle"} type="teal"/>
+                            </Center>
+                        </Column>
+                    </Row>:""
+                }
             </div>
         )
     }
