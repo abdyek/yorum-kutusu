@@ -18,7 +18,7 @@ class ProductEditor extends React.Component {
             productInputLoading:"",
             productAvailable: false,
             emptyProductNameWarn: false,
-            tags:[
+            tags:[/*
                 {
                     id:1,
                     slug: "ekran",
@@ -36,13 +36,15 @@ class ProductEditor extends React.Component {
                     slug: "motorola",
                     name: "Motorola",
                     passive: true
-                },
+                },*/
             ]
         };
         this.updateProductName = this.updateProductName.bind(this);
         this.setProductInputLoading = this.setProductInputLoading.bind(this);
         this.loadInfo = this.loadInfo.bind(this);
+        this.clickSearchResult = this.clickSearchResult.bind(this);
         this.goProduct = this.goProduct.bind(this);
+        this.addTag = this.addTag.bind(this);
         this.closeTag = this.closeTag.bind(this);
         this.createProduct = this.createProduct.bind(this);
     }
@@ -92,6 +94,25 @@ class ProductEditor extends React.Component {
     goProduct() {
         this.props.changeContent(SITEURL+"urun/"+this.state.productSlug);
     }
+    clickSearchResult(obj) {
+        this.addTag(obj);
+    }
+    addTag(obj) {
+        const tags = [...this.state.tags];
+        for(let i=0;i<tags.length;i++) {
+            if(obj.id==tags[i].id) 
+                return;
+        }
+        tags.push({
+            id:obj.id,
+            slug: obj.slug,
+            name: obj.name,
+            passive: obj.passive
+        });
+        this.setState({
+            tags:tags
+        });
+    }
     closeTag(id) {
         const tags = this.state.tags.filter(function(tag) {
             if(tag.id!=id) 
@@ -102,7 +123,6 @@ class ProductEditor extends React.Component {
         });
     }
     createProduct() {
-        console.log("product will be created");
         if(this.state.productName.length == 0) {
             this.setState({
                 emptyProductNameWarn:true
@@ -157,7 +177,7 @@ class ProductEditor extends React.Component {
                                             <h1 id="newProductPreviewHeader"> {this.state.productName} </h1>
                                         </Column>
                                     </Row>
-                                    <TagSelector tags={this.state.tags} closeFunc={this.closeTag}/>
+                                    <TagSelector tags={this.state.tags} closeFunc={this.closeTag} clickSearchResult={this.clickSearchResult}/>
                                     {(this.state.emptyProductNameWarn)?
                                         <div>
                                             <Row>
@@ -224,12 +244,7 @@ class TagSelector extends React.Component {
             <div>
                 <Row size="one">
                     <Column>
-                        <SearchBar inputPlaceholder={"Etiket Ara.."}/>
-                        {/*
-                        <div className="ui input">
-                            <input type="text" placeholder="Etiket" />
-                        </div>
-                        */}
+                        <SearchBar inputPlaceholder={"Etiket Ara.."} click={this.props.clickSearchResult} />
                     </Column>
                 </Row>
                 <Row size="one">

@@ -1,5 +1,7 @@
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -44,27 +46,33 @@ var ProductEditor = function (_React$Component2) {
             productInputLoading: "",
             productAvailable: false,
             emptyProductNameWarn: false,
-            tags: [{
-                id: 1,
-                slug: "ekran",
-                name: "Ekran",
-                passive: false
-            }, {
-                id: 2,
-                slug: "batarya",
-                name: "Batarya",
-                passive: false
-            }, {
-                id: 3,
-                slug: "motorola",
-                name: "Motorola",
-                passive: true
-            }]
+            tags: [/*
+                   {
+                     id:1,
+                     slug: "ekran",
+                     name: "Ekran",
+                     passive: false
+                   },
+                   {
+                     id:2,
+                     slug: "batarya",
+                     name: "Batarya",
+                     passive: false
+                   },
+                   {
+                     id:3,
+                     slug: "motorola",
+                     name: "Motorola",
+                     passive: true
+                   },*/
+            ]
         };
         _this2.updateProductName = _this2.updateProductName.bind(_this2);
         _this2.setProductInputLoading = _this2.setProductInputLoading.bind(_this2);
         _this2.loadInfo = _this2.loadInfo.bind(_this2);
+        _this2.clickSearchResult = _this2.clickSearchResult.bind(_this2);
         _this2.goProduct = _this2.goProduct.bind(_this2);
+        _this2.addTag = _this2.addTag.bind(_this2);
         _this2.closeTag = _this2.closeTag.bind(_this2);
         _this2.createProduct = _this2.createProduct.bind(_this2);
         return _this2;
@@ -124,6 +132,28 @@ var ProductEditor = function (_React$Component2) {
             this.props.changeContent(SITEURL + "urun/" + this.state.productSlug);
         }
     }, {
+        key: "clickSearchResult",
+        value: function clickSearchResult(obj) {
+            this.addTag(obj);
+        }
+    }, {
+        key: "addTag",
+        value: function addTag(obj) {
+            var tags = [].concat(_toConsumableArray(this.state.tags));
+            for (var i = 0; i < tags.length; i++) {
+                if (obj.id == tags[i].id) return;
+            }
+            tags.push({
+                id: obj.id,
+                slug: obj.slug,
+                name: obj.name,
+                passive: obj.passive
+            });
+            this.setState({
+                tags: tags
+            });
+        }
+    }, {
         key: "closeTag",
         value: function closeTag(id) {
             var tags = this.state.tags.filter(function (tag) {
@@ -136,7 +166,6 @@ var ProductEditor = function (_React$Component2) {
     }, {
         key: "createProduct",
         value: function createProduct() {
-            console.log("product will be created");
             if (this.state.productName.length == 0) {
                 this.setState({
                     emptyProductNameWarn: true
@@ -241,7 +270,7 @@ var ProductEditor = function (_React$Component2) {
                                         )
                                     )
                                 ),
-                                React.createElement(TagSelector, { tags: this.state.tags, closeFunc: this.closeTag }),
+                                React.createElement(TagSelector, { tags: this.state.tags, closeFunc: this.closeTag, clickSearchResult: this.clickSearchResult }),
                                 this.state.emptyProductNameWarn ? React.createElement(
                                     "div",
                                     null,
@@ -337,7 +366,7 @@ var TagSelector = function (_React$Component3) {
                     React.createElement(
                         Column,
                         null,
-                        React.createElement(SearchBar, { inputPlaceholder: "Etiket Ara.." })
+                        React.createElement(SearchBar, { inputPlaceholder: "Etiket Ara..", click: this.props.clickSearchResult })
                     )
                 ),
                 React.createElement(

@@ -109,10 +109,11 @@ class SearchBar extends React.Component {
         super(props);
         this.state = {
             inputValue: "",
-            results: { }
+            results: []
         };
         this.refreshResults = this.refreshResults.bind(this);
         this.prepareATags = this.prepareATags.bind(this);
+        this.clickFunc = this.clickFunc.bind(this);
         this.changeInput = this.changeInput.bind(this);
         this.deleteResults = this.deleteResults.bind(this);
     }
@@ -122,48 +123,96 @@ class SearchBar extends React.Component {
     refreshResults() {
         // burada sunucu ile konuşucaz gelen veriyi results'a atıyoruz ve işlem tamamdır
         this.setState({
-            results: {
-                88: {
-                    productName: "Le-Cola",
-                    productUrl: "le-cola"
+            results: [
+                {
+                    id:"loading",
+                    name:"Yükleniyor.."
                 }
-            }
+            ]
+        });
+        fetch(SITEURL + 'api/tag?' + getUrlPar({
+            searchText: this.state.inputValue
+        }), {method: 'GET'}).then((response)=>{
+            if(!response.ok) throw new Error(response.status);
+            else return response.json();
+        }).then((json)=> {
+            this.setState({
+                results: json.other.tags
+            });
+        }).catch((error) => {
+            console.log(error);
         });
     }
     prepareATags() {
         this.aTags = [];
-        let keys = Object.keys(this.state.results);
-        for(let i=0;i<keys.length;i++) {
+        //let keys = Object.keys(this.state.results);
+        for(let i=0;i<this.state.results.length;i++) {
             this.aTags.push(
-                <a key={keys[i]} className="result" href={"urun/" + this.state.results[keys[i]].productUrl}>{this.state.results[keys[i]].productName}</a>
+                <SearchResult key={this.state.results[i].id} id={this.state.results[i].id} slug={this.state.results[i].slug} name={this.state.results[i].name} passive={this.state.results[i].passive} href={'urun'} click={this.clickFunc} />
+                /* <a key={this.state.results[i].id} className="result" href={"urun/" + this.state.results[i].productUrl} onClick={this.clickFunc}>{this.state.results[i].productName}</a> */
             )
         }
+    }
+    clickFunc(obj) {
+        this.setState({
+            inputValue:""
+        });
+        this.props.click(obj);
     }
     changeInput(e) {
         this.setState({
             inputValue:e.target.value
         });
-        // bu kısımda bir delay'a ihtiyacım olabilir çünkü her harfte yenileme yaparsam back-end sıkıntı çekebilir
-        this.refreshResults();
+        clearTimeout(this.setTime);
+        if(e.target.value.length) {
+            this.setTime = setTimeout(function() {
+                this.refreshResults();
+            }.bind(this), 1000);
+        }
     }
     deleteResults() {
-        this.setState({
-            results: {}
-        })
+        setTimeout(()=>{
+            this.setState({
+                results: [] 
+            })
+        }, 200);
     }
     render() {
-        if(Object.keys(this.state.results).length) {
+        if(this.state.results.length) {
             this.prepareATags();
         }
         return(
             <div id="search" className="ui search">
                 <input className="prompt" type="text" placeholder={this.inputPlaceholder} value={this.state.inputValue} onChange={this.changeInput} onBlur={this.deleteResults} />
-                {(Object.keys(this.state.results).length)?
+                {(this.state.results.length)?
                     <div id="search-results" className="results transition visible">
                         {this.aTags}
-                    </div>
-                :""}
+                    </div>:""
+                }
             </div>
+        )
+    }
+}
+
+class SearchResult extends React.Component {
+    constructor(props) {
+        super(props);
+        this.click = this.click.bind(this);
+    }
+    click(e) {
+        e.preventDefault();
+        if(this.props.id=="loading") 
+            return;
+        this.props.click({
+            id:this.props.id,
+            slug:this.props.slug,
+            name:this.props.name,
+            passive:this.props.passive
+        });
+    }
+    render() {
+        return(
+            <a key={this.props.id} className="result" href={this.props.href} onClick={this.click}>{this.props.name}</a>
         )
     }
 }

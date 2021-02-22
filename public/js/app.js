@@ -197,10 +197,11 @@ var SearchBar = function (_React$Component3) {
 
         _this4.state = {
             inputValue: "",
-            results: {}
+            results: []
         };
         _this4.refreshResults = _this4.refreshResults.bind(_this4);
         _this4.prepareATags = _this4.prepareATags.bind(_this4);
+        _this4.clickFunc = _this4.clickFunc.bind(_this4);
         _this4.changeInput = _this4.changeInput.bind(_this4);
         _this4.deleteResults = _this4.deleteResults.bind(_this4);
         return _this4;
@@ -214,28 +215,45 @@ var SearchBar = function (_React$Component3) {
     }, {
         key: "refreshResults",
         value: function refreshResults() {
+            var _this5 = this;
+
             // burada sunucu ile konuşucaz gelen veriyi results'a atıyoruz ve işlem tamamdır
             this.setState({
-                results: {
-                    88: {
-                        productName: "Le-Cola",
-                        productUrl: "le-cola"
-                    }
-                }
+                results: [{
+                    id: "loading",
+                    name: "Yükleniyor.."
+                }]
+            });
+            fetch(SITEURL + 'api/tag?' + getUrlPar({
+                searchText: this.state.inputValue
+            }), { method: 'GET' }).then(function (response) {
+                if (!response.ok) throw new Error(response.status);else return response.json();
+            }).then(function (json) {
+                _this5.setState({
+                    results: json.other.tags
+                });
+            }).catch(function (error) {
+                console.log(error);
             });
         }
     }, {
         key: "prepareATags",
         value: function prepareATags() {
             this.aTags = [];
-            var keys = Object.keys(this.state.results);
-            for (var i = 0; i < keys.length; i++) {
-                this.aTags.push(React.createElement(
-                    "a",
-                    { key: keys[i], className: "result", href: "urun/" + this.state.results[keys[i]].productUrl },
-                    this.state.results[keys[i]].productName
-                ));
+            //let keys = Object.keys(this.state.results);
+            for (var i = 0; i < this.state.results.length; i++) {
+                this.aTags.push(React.createElement(SearchResult, { key: this.state.results[i].id, id: this.state.results[i].id, slug: this.state.results[i].slug, name: this.state.results[i].name, passive: this.state.results[i].passive, href: 'urun', click: this.clickFunc })
+                /* <a key={this.state.results[i].id} className="result" href={"urun/" + this.state.results[i].productUrl} onClick={this.clickFunc}>{this.state.results[i].productName}</a> */
+                );
             }
+        }
+    }, {
+        key: "clickFunc",
+        value: function clickFunc(obj) {
+            this.setState({
+                inputValue: ""
+            });
+            this.props.click(obj);
         }
     }, {
         key: "changeInput",
@@ -243,27 +261,35 @@ var SearchBar = function (_React$Component3) {
             this.setState({
                 inputValue: e.target.value
             });
-            // bu kısımda bir delay'a ihtiyacım olabilir çünkü her harfte yenileme yaparsam back-end sıkıntı çekebilir
-            this.refreshResults();
+            clearTimeout(this.setTime);
+            if (e.target.value.length) {
+                this.setTime = setTimeout(function () {
+                    this.refreshResults();
+                }.bind(this), 1000);
+            }
         }
     }, {
         key: "deleteResults",
         value: function deleteResults() {
-            this.setState({
-                results: {}
-            });
+            var _this6 = this;
+
+            setTimeout(function () {
+                _this6.setState({
+                    results: []
+                });
+            }, 200);
         }
     }, {
         key: "render",
         value: function render() {
-            if (Object.keys(this.state.results).length) {
+            if (this.state.results.length) {
                 this.prepareATags();
             }
             return React.createElement(
                 "div",
                 { id: "search", className: "ui search" },
                 React.createElement("input", { className: "prompt", type: "text", placeholder: this.inputPlaceholder, value: this.state.inputValue, onChange: this.changeInput, onBlur: this.deleteResults }),
-                Object.keys(this.state.results).length ? React.createElement(
+                this.state.results.length ? React.createElement(
                     "div",
                     { id: "search-results", className: "results transition visible" },
                     this.aTags
@@ -275,8 +301,46 @@ var SearchBar = function (_React$Component3) {
     return SearchBar;
 }(React.Component);
 
-var Header = function (_React$Component4) {
-    _inherits(Header, _React$Component4);
+var SearchResult = function (_React$Component4) {
+    _inherits(SearchResult, _React$Component4);
+
+    function SearchResult(props) {
+        _classCallCheck(this, SearchResult);
+
+        var _this7 = _possibleConstructorReturn(this, (SearchResult.__proto__ || Object.getPrototypeOf(SearchResult)).call(this, props));
+
+        _this7.click = _this7.click.bind(_this7);
+        return _this7;
+    }
+
+    _createClass(SearchResult, [{
+        key: "click",
+        value: function click(e) {
+            e.preventDefault();
+            if (this.props.id == "loading") return;
+            this.props.click({
+                id: this.props.id,
+                slug: this.props.slug,
+                name: this.props.name,
+                passive: this.props.passive
+            });
+        }
+    }, {
+        key: "render",
+        value: function render() {
+            return React.createElement(
+                "a",
+                { key: this.props.id, className: "result", href: this.props.href, onClick: this.click },
+                this.props.name
+            );
+        }
+    }]);
+
+    return SearchResult;
+}(React.Component);
+
+var Header = function (_React$Component5) {
+    _inherits(Header, _React$Component5);
 
     function Header() {
         _classCallCheck(this, Header);
@@ -324,8 +388,8 @@ var Header = function (_React$Component4) {
     return Header;
 }(React.Component);
 
-var Footer = function (_React$Component5) {
-    _inherits(Footer, _React$Component5);
+var Footer = function (_React$Component6) {
+    _inherits(Footer, _React$Component6);
 
     function Footer() {
         _classCallCheck(this, Footer);
@@ -364,8 +428,8 @@ var Footer = function (_React$Component5) {
     return Footer;
 }(React.Component);
 
-var Content = function (_React$Component6) {
-    _inherits(Content, _React$Component6);
+var Content = function (_React$Component7) {
+    _inherits(Content, _React$Component7);
 
     function Content() {
         _classCallCheck(this, Content);
@@ -417,21 +481,21 @@ var Content = function (_React$Component6) {
     return Content;
 }(React.Component);
 
-var App = function (_React$Component7) {
-    _inherits(App, _React$Component7);
+var App = function (_React$Component8) {
+    _inherits(App, _React$Component8);
 
     function App(props) {
         _classCallCheck(this, App);
 
-        var _this8 = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
+        var _this11 = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
 
-        _this8.state = {
-            content: _this8.props.content,
+        _this11.state = {
+            content: _this11.props.content,
             form: "login", // user-empty-unread, user-has-unread, login
             userSlug: "yunus-emre",
             unreadCommentsCount: 115
         };
-        _this8.contentFromSlug = {
+        _this11.contentFromSlug = {
             " ": "index",
             "urun": "product",
             "profil": "profile",
@@ -448,12 +512,12 @@ var App = function (_React$Component7) {
             this.setState({
                 "content": this.contentFromSlug[page]
             });
-        }.bind(_this8);
+        }.bind(_this11);
 
-        _this8.changeContent = _this8.changeContent.bind(_this8);
-        _this8.logout = _this8.logout.bind(_this8);
-        _this8.changeHeader = _this8.changeHeader.bind(_this8);
-        return _this8;
+        _this11.changeContent = _this11.changeContent.bind(_this11);
+        _this11.logout = _this11.logout.bind(_this11);
+        _this11.changeHeader = _this11.changeHeader.bind(_this11);
+        return _this11;
     }
 
     _createClass(App, [{
@@ -501,7 +565,7 @@ var App = function (_React$Component7) {
     }, {
         key: "logout",
         value: function logout() {
-            var _this9 = this;
+            var _this12 = this;
 
             fetch(SITEURL + 'api/logout', {
                 method: 'POST',
@@ -511,11 +575,11 @@ var App = function (_React$Component7) {
             }).then(function (response) {
                 if (!response.ok) throw new Error(response.status);else return response.json();
             }).then(function (json) {
-                _this9.setState({
+                _this12.setState({
                     form: "login"
                 });
                 setCookie('user', null);
-                _this9.changeContent(' ', true);
+                _this12.changeContent(' ', true);
             }).catch(function (error) {});
         }
     }, {
