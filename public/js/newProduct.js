@@ -73,6 +73,8 @@ var ProductEditor = function (_React$Component2) {
         _this2.clickSearchResult = _this2.clickSearchResult.bind(_this2);
         _this2.goProduct = _this2.goProduct.bind(_this2);
         _this2.addTag = _this2.addTag.bind(_this2);
+        _this2.addNewTag = _this2.addNewTag.bind(_this2);
+        _this2.sortTags = _this2.sortTags.bind(_this2);
         _this2.closeTag = _this2.closeTag.bind(_this2);
         _this2.createProduct = _this2.createProduct.bind(_this2);
         return _this2;
@@ -147,11 +149,45 @@ var ProductEditor = function (_React$Component2) {
                 id: obj.id,
                 slug: obj.slug,
                 name: obj.name,
-                passive: obj.passive
+                passive: obj.passive,
+                newTag: obj.newTag == undefined ? false : true
             });
             this.setState({
-                tags: tags
+                tags: this.sortTags(tags)
             });
+        }
+    }, {
+        key: "addNewTag",
+        value: function addNewTag(name, index) {
+            this.addTag({
+                id: "n" + index,
+                slug: generateProductSlug(name),
+                name: name,
+                newTag: true
+            });
+        }
+    }, {
+        key: "sortTags",
+        value: function sortTags(tags) {
+            var sortedTags = [];
+            for (var type = 0; type < 3; type++) {
+                for (var i = 0; i < tags.length; i++) {
+                    if (type == 0) {
+                        if (tags[i].passive == true) {
+                            sortedTags.push(tags[i]);
+                        }
+                    } else if (type == 1) {
+                        if (tags[i].passive == false) {
+                            sortedTags.push(tags[i]);
+                        }
+                    } else if (type == 2) {
+                        if (tags[i].passive == undefined) {
+                            sortedTags.push(tags[i]);
+                        }
+                    }
+                }
+            }
+            return sortedTags;
         }
     }, {
         key: "closeTag",
@@ -274,7 +310,8 @@ var ProductEditor = function (_React$Component2) {
                                     tags: this.state.tags,
                                     closeFunc: this.closeTag,
                                     tagSearchInput: this.state.tagSearchInput,
-                                    clickSearchResult: this.clickSearchResult
+                                    clickSearchResult: this.clickSearchResult,
+                                    addNewTag: this.addNewTag
                                 }),
                                 this.state.emptyProductNameWarn ? React.createElement(
                                     "div",
@@ -348,9 +385,11 @@ var TagSelector = function (_React$Component3) {
             tagSearchInput: "",
             addNewTagButtonVisible: false
         };
+        _this4.newTagIndex = 0;
         _this4.changeTagSearchInput = _this4.changeTagSearchInput.bind(_this4);
         _this4.prepareTags = _this4.prepareTags.bind(_this4);
         _this4.checkAvailableTag = _this4.checkAvailableTag.bind(_this4);
+        _this4.addNewTag = _this4.addNewTag.bind(_this4);
         return _this4;
     }
 
@@ -369,6 +408,9 @@ var TagSelector = function (_React$Component3) {
             this.tags = [];
             for (var i = 0; i < this.props.tags.length; i++) {
                 color = this.props.tags[i].passive ? "grey" : "orange";
+                if (this.props.tags[i].newTag) {
+                    color = "teal";
+                }
                 this.tags.push(React.createElement(TagWithClose, { key: this.props.tags[i].id, id: this.props.tags[i].id, color: color, name: this.props.tags[i].name, closeFunc: this.props.closeFunc }));
             }
         }
@@ -376,8 +418,29 @@ var TagSelector = function (_React$Component3) {
         key: "checkAvailableTag",
         value: function checkAvailableTag(available) {
             var notAvailable = !available;
+            var visible = true;
+            if (available) {
+                visible = false;
+            } else {
+                for (var i = 0; i < this.props.tags.length; i++) {
+                    if (this.props.tags[i].name.toLowerCase() == this.state.tagSearchInput.toLowerCase()) {
+                        visible = false;
+                        break;
+                    }
+                }
+            }
             this.setState({
-                addNewTagButtonVisible: notAvailable
+                addNewTagButtonVisible: visible
+            });
+        }
+    }, {
+        key: "addNewTag",
+        value: function addNewTag() {
+            this.props.addNewTag(this.state.tagSearchInput, this.newTagIndex);
+            this.newTagIndex++;
+            this.setState({
+                addNewTagButtonVisible: false,
+                tagSearchInput: ""
             });
         }
     }, {
@@ -412,15 +475,28 @@ var TagSelector = function (_React$Component3) {
                     )
                 ),
                 this.state.addNewTagButtonVisible ? React.createElement(
-                    Row,
-                    { size: "one" },
+                    "div",
+                    null,
                     React.createElement(
-                        Column,
-                        null,
+                        Row,
+                        { size: "one" },
                         React.createElement(
-                            Center,
+                            Column,
                             null,
-                            React.createElement(Button, { name: "'" + this.state.tagSearchInput + "' İsminde Yeni Bir Etiket Ekle", type: "teal" })
+                            React.createElement(BasicMessageWithColor, { message: "B\xF6yle bir etiket yok", color: "yellow" })
+                        )
+                    ),
+                    React.createElement(
+                        Row,
+                        { size: "one" },
+                        React.createElement(
+                            Column,
+                            null,
+                            React.createElement(
+                                Center,
+                                null,
+                                React.createElement(Button, { name: "Yeni Etiket Olarak Ekle", type: "teal", click: this.addNewTag })
+                            )
                         )
                     )
                 ) : ""

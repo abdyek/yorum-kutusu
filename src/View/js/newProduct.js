@@ -45,6 +45,8 @@ class ProductEditor extends React.Component {
         this.clickSearchResult = this.clickSearchResult.bind(this);
         this.goProduct = this.goProduct.bind(this);
         this.addTag = this.addTag.bind(this);
+        this.addNewTag = this.addNewTag.bind(this);
+        this.sortTags = this.sortTags.bind(this);
         this.closeTag = this.closeTag.bind(this);
         this.createProduct = this.createProduct.bind(this);
     }
@@ -107,11 +109,41 @@ class ProductEditor extends React.Component {
             id:obj.id,
             slug: obj.slug,
             name: obj.name,
-            passive: obj.passive
+            passive: obj.passive,
+            newTag:(obj.newTag==undefined)?false:true
         });
         this.setState({
-            tags:tags
+            tags:this.sortTags(tags)
         });
+    }
+    addNewTag(name, index) {
+        this.addTag({
+            id:"n"+index,
+            slug:generateProductSlug(name),
+            name:name,
+            newTag:true
+        });
+    }
+    sortTags(tags) {
+        const sortedTags = [];
+        for(let type=0;type<3;type++) {
+            for(let i=0;i<tags.length;i++) {
+                if(type==0) {
+                    if(tags[i].passive==true) {
+                        sortedTags.push(tags[i]);
+                    }
+                } else if(type==1) {
+                    if(tags[i].passive==false) {
+                        sortedTags.push(tags[i]);
+                    }
+                } else if(type==2) {
+                    if(tags[i].passive==undefined) {
+                        sortedTags.push(tags[i]);
+                    }
+                }
+            }
+        }
+        return sortedTags;
     }
     closeTag(id) {
         const tags = this.state.tags.filter(function(tag) {
@@ -182,6 +214,7 @@ class ProductEditor extends React.Component {
                                         closeFunc={this.closeTag}
                                         tagSearchInput={this.state.tagSearchInput}
                                         clickSearchResult={this.clickSearchResult}
+                                        addNewTag={this.addNewTag}
                                     />
                                     {(this.state.emptyProductNameWarn)?
                                         <div>
@@ -235,9 +268,11 @@ class TagSelector extends React.Component {
             tagSearchInput:"",
             addNewTagButtonVisible:false,
         };
+        this.newTagIndex = 0;
         this.changeTagSearchInput = this.changeTagSearchInput.bind(this);
         this.prepareTags = this.prepareTags.bind(this);
         this.checkAvailableTag = this.checkAvailableTag.bind(this);
+        this.addNewTag = this.addNewTag.bind(this);
     }
     changeTagSearchInput(value) {
         this.setState({
@@ -250,6 +285,9 @@ class TagSelector extends React.Component {
         this.tags = [];
         for(let i=0;i<this.props.tags.length;i++) {
             color = (this.props.tags[i].passive)?"grey":"orange";
+            if(this.props.tags[i].newTag) {
+                color = "teal";
+            }
             this.tags.push(
                 <TagWithClose key={this.props.tags[i].id} id={this.props.tags[i].id} color={color} name={this.props.tags[i].name} closeFunc={this.props.closeFunc} />
             )
@@ -257,8 +295,27 @@ class TagSelector extends React.Component {
     }
     checkAvailableTag(available) {
         const notAvailable = !available;
+        let visible = true;
+        if(available) {
+            visible = false;
+        } else {
+            for(let i=0;i<this.props.tags.length;i++) {
+                if(this.props.tags[i].name.toLowerCase()==this.state.tagSearchInput.toLowerCase()) {
+                    visible = false;
+                    break;
+                }
+            }
+        }
         this.setState({
-            addNewTagButtonVisible:notAvailable
+            addNewTagButtonVisible:visible
+        });
+    }
+    addNewTag() {
+        this.props.addNewTag(this.state.tagSearchInput, this.newTagIndex);
+        this.newTagIndex++;
+        this.setState({
+            addNewTagButtonVisible: false,
+            tagSearchInput:""
         });
     }
     render() {
@@ -282,13 +339,21 @@ class TagSelector extends React.Component {
                     </Column>
                 </Row>
                 {(this.state.addNewTagButtonVisible)?
-                    <Row size="one">
-                        <Column>
-                            <Center>
-                                <Button name={"'"+this.state.tagSearchInput+"' İsminde Yeni Bir Etiket Ekle"} type="teal"/>
-                            </Center>
-                        </Column>
-                    </Row>:""
+                    <div>
+                        <Row size="one">
+                            <Column>
+                                <BasicMessageWithColor message="Böyle bir etiket yok" color="yellow" />
+                            </Column>
+                        </Row>
+                        <Row size="one">
+                            <Column>
+                                <Center>
+                                    <Button name="Yeni Etiket Olarak Ekle" type="teal" click={this.addNewTag}/>
+                                </Center>
+                            </Column>
+                        </Row>
+                    </div>
+                    :""
                 }
             </div>
         )
@@ -307,7 +372,9 @@ class TagWithClose extends React.Component {
         this.color = this.props.color || "";
         return (
             <div className="TagWithClose">
-                <a className={"ui "+this.color+" large label"}>{this.props.name}</a>
+                <a className={"ui "+this.color+" large label"}>
+                    {this.props.name}
+                </a>
                 <i className="icon" onClick={this.close} >
                     <i className="fa fa-times" aria-hidden="true"></i>
                 </i>
