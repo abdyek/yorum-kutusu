@@ -12,32 +12,17 @@ class ProductEditor extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            form:"normal", // normal, created
+            form:"normal", // normal, created, loading
             productName:"",
             productSlug:"",
             productInputLoading:"",
             productAvailable: false,
             emptyProductNameWarn: false,
-            tags:[/*
-                {
-                    id:1,
-                    slug: "ekran",
-                    name: "Ekran",
-                    passive: false
-                },
-                {
-                    id:2,
-                    slug: "batarya",
-                    name: "Batarya",
-                    passive: false
-                },
-                {
-                    id:3,
-                    slug: "motorola",
-                    name: "Motorola",
-                    passive: true
-                },*/
-            ]
+            tags:[],
+            reponseVisible:false,
+            responseHeader:"",
+            responseMessage:"",
+            responseType:""
         };
         this.updateProductName = this.updateProductName.bind(this);
         this.setProductInputLoading = this.setProductInputLoading.bind(this);
@@ -164,6 +149,49 @@ class ProductEditor extends React.Component {
         this.setState({
             form:"loading"
         });
+        fetch(SITEURL + 'api/newProduct', {
+            method: 'POST',
+            header: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                productName:this.state.productName,
+                tags:normalizer('tags-for-product-changing', this.state.tags)
+            })
+        }).then((response)=>{
+            if(!response.ok) throw new Error(response.status);
+            else return response.json();
+        }).then((json)=>{
+            this.setState({
+                form:"created"
+            });
+        }).catch((error)=>{
+            if(error.message==400) {
+                this.setState({
+                    form:"normal",
+                    responseVisible:true,
+                    responseHeader:error.message,
+                    responseMessage:"Geçersiz istek..",
+                    responseType:"negative"
+                });
+            } else if(error.message==422) {
+                this.setState({
+                    form:"normal",
+                    responseVisible:true,
+                    responseHeader:error.message,
+                    responseMessage:"Böyle bir ürün ya da etiket zaten mevcut",
+                    responseType:"negative"
+                });
+            } else if(error.message==404) {
+                this.setState({
+                    form:"normal",
+                    responseVisible:true,
+                    responseHeader:error.message,
+                    responseMessage:"Eklemeye çalıştığınız etiket mevcut değil",
+                    responseType:"negative"
+                });
+            }
+        });
     }
     render() {
         if(this.state.form=="normal") {
@@ -225,6 +253,15 @@ class ProductEditor extends React.Component {
                                             </Row>
                                         </div>:""
                                     }
+                                    {(this.state.responseVisible)?
+                                        <div>
+                                            <Row>
+                                                <Column>
+                                                    <Message header={this.state.responseHeader} message={this.state.responseMessage} type={this.state.responseType}/>
+                                                </Column>
+                                            </Row>
+                                        </div>:""
+                                    }
                                     <Row size="one">
                                         <Column>
                                             <FloatRight>
@@ -241,12 +278,10 @@ class ProductEditor extends React.Component {
             )
         } else if(this.state.form=="created") {
             return (
-                <Row size="sixteen">
-                    <WideColumn size="one"></WideColumn>
-                    <WideColumn size="fourteen">
-                        <Message header="Teşekkürler" message="Başarılı bir şekilde gönderildi. Yönetici onayısından sonra ürüne yorum ekleyebilirsiniz"/>
-                    </WideColumn>
-                    <WideColumn size="one"></WideColumn>
+                <Row size="one">
+                    <Column>
+                        <Message header="Katkı Sağladığınız İçin Teşekkürler" message="Başarılı bir şekilde gönderildi. Yönetici onayından sonra ürün görüntülenebilir olacak."/>
+                    </Column>
                 </Row>
             )
         } else if(this.state.form=="loading") {

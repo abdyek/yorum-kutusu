@@ -3,10 +3,12 @@
 namespace YorumKutusu\Api\Controller;
 use YorumKutusu\Api\Core\Controller;
 use YorumKutusu\Api\Core\Database;
+use YorumKutusu\Api\Core\Other;
 
 class NewProduct extends Controller {
     protected function post() {
         $this->checkTags();
+        $this->productSlug = Other::generateSlug($this->data['productName']);
         $this->checkProduct();
         $this->member = Database::getRow('SELECT * FROM member WHERE member_id=?', [$this->userId]);
         $this->checkAvailable();
@@ -17,14 +19,14 @@ class NewProduct extends Controller {
     }
     private function checkTags() {
         foreach($this->data['tags'] as $tag) {
-            if(isset($tag['id']) and !isset($tag['name']) and !isset($tag['slug'])) {
+            if(isset($tag['id'])) {
                 $tag = Database::existCheck('SELECT * FROM tag WHERE tag_id=? AND tag_deleted=0', [$tag['id']]);
                 if(!$tag) {
                     $this->setHttpStatus(404);
                     exit();
                 }
-            } elseif(!isset($tag['id']) and isset($tag['name']) and isset($tag['slug'])) {
-                $tag = Database::existCheck('SELECT * FROM tag WHERE tag_name=? OR tag_slug=? AND tag_deleted=0', [$tag['name'], $tag['slug']]);
+            } elseif(isset($tag['newTag']) and $tag['newTag']==true) {
+                $tag = Database::existCheck('SELECT * FROM tag WHERE tag_name=? AND tag_deleted=0', [$tag['name']]);
                 if($tag) {
                     $this->setHttpStatus(422);
                     exit();
@@ -36,7 +38,7 @@ class NewProduct extends Controller {
         }
     }
     private function checkProduct() {
-        $product = Database::existCheck('SELECT * FROM product WHERE product_deleted=0 AND product_name=? OR product_slug=?', [$this->data['productName'], $this->data['productSlug']]);
+        $product = Database::existCheck('SELECT * FROM product WHERE product_deleted=0 AND (product_name=? OR product_slug=?)', [$this->data['productName'], $this->productSlug]);
         if($product){
             $this->setHttpStatus(422);
             $this->responseWithMessage(7);
@@ -47,12 +49,12 @@ class NewProduct extends Controller {
         $productRequest = Database::existCheck('SELECT * FROM product_request WHERE member_id=? AND product_name=? AND product_slug=? AND product_request_answered=0 AND cancelled=0',[
             $this->userId,
             $this->data['productName'],
-            $this->data['productSlug']
+            $this->productSlug
         ]);
         if($productRequest) {
             Database::execute('UPDATE product_request SET cancelled=1 WHERE product_name=? AND product_slug=?', [
                 $this->data['productName'],
-                $this->data['productSlug']
+                $this->productSlug
             ]);
             Database::execute('UPDATE tag_with_product_request SET cancelled=1 WHERE member_id=? AND request_id=?', [
                 $this->userId,
@@ -64,7 +66,7 @@ class NewProduct extends Controller {
         Database::execute('INSERT INTO product_request (member_id, product_name, product_slug, request_id) VALUES(?,?,?,?)',[
             $this->userId,
             $this->data['productName'],
-            $this->data['productSlug'],
+            $this->productSlug,
             $this->member['request_pointer']
         ]);
         $this->productRequest = Database::getRow('SELECT * FROM product_request WHERE member_id=? AND request_id=?', [$this->userId, $this->member['request_pointer']]);
@@ -83,7 +85,7 @@ class NewProduct extends Controller {
                     $this->userId,
                     $this->productRequest['product_request_id'],
                     $tag['name'],
-                    $tag['slug'],
+                    Other::generateSlug($tag['name']),
                     $this->member['request_pointer']
                 ]);
                 if($q[0]==false) {

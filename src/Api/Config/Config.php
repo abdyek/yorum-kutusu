@@ -683,10 +683,6 @@ namespace YorumKutusu\Api\Config;
                             'min'=>1,
                             'max'=>60
                         ],
-                        'productSlug'=>[
-                            'min'=>1,
-                            'max'=>60
-                        ],
                         'tags'=>[
                             'min'=>0,
                             'max'=>10

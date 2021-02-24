@@ -25,6 +25,6 @@ class NewProductChecker extends Controller {
         $this->response($response);
     }
     private function checkProductSlug() {
-        $this->product = Database::existCheck('SELECT * FROM product WHERE product_slug=?', [$this->slug]);
+        $this->product = Database::existCheck('SELECT * FROM product WHERE product_deleted=0 AND product_slug=?', [$this->slug]);
     }
 }

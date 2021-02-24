@@ -40,32 +40,17 @@ var ProductEditor = function (_React$Component2) {
         var _this2 = _possibleConstructorReturn(this, (ProductEditor.__proto__ || Object.getPrototypeOf(ProductEditor)).call(this, props));
 
         _this2.state = {
-            form: "normal", // normal, created
+            form: "normal", // normal, created, loading
             productName: "",
             productSlug: "",
             productInputLoading: "",
             productAvailable: false,
             emptyProductNameWarn: false,
-            tags: [/*
-                   {
-                     id:1,
-                     slug: "ekran",
-                     name: "Ekran",
-                     passive: false
-                   },
-                   {
-                     id:2,
-                     slug: "batarya",
-                     name: "Batarya",
-                     passive: false
-                   },
-                   {
-                     id:3,
-                     slug: "motorola",
-                     name: "Motorola",
-                     passive: true
-                   },*/
-            ]
+            tags: [],
+            reponseVisible: false,
+            responseHeader: "",
+            responseMessage: "",
+            responseType: ""
         };
         _this2.updateProductName = _this2.updateProductName.bind(_this2);
         _this2.setProductInputLoading = _this2.setProductInputLoading.bind(_this2);
@@ -202,6 +187,8 @@ var ProductEditor = function (_React$Component2) {
     }, {
         key: "createProduct",
         value: function createProduct() {
+            var _this4 = this;
+
             if (this.state.productName.length == 0) {
                 this.setState({
                     emptyProductNameWarn: true
@@ -210,6 +197,48 @@ var ProductEditor = function (_React$Component2) {
             }
             this.setState({
                 form: "loading"
+            });
+            fetch(SITEURL + 'api/newProduct', {
+                method: 'POST',
+                header: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    productName: this.state.productName,
+                    tags: normalizer('tags-for-product-changing', this.state.tags)
+                })
+            }).then(function (response) {
+                if (!response.ok) throw new Error(response.status);else return response.json();
+            }).then(function (json) {
+                _this4.setState({
+                    form: "created"
+                });
+            }).catch(function (error) {
+                if (error.message == 400) {
+                    _this4.setState({
+                        form: "normal",
+                        responseVisible: true,
+                        responseHeader: error.message,
+                        responseMessage: "Geçersiz istek..",
+                        responseType: "negative"
+                    });
+                } else if (error.message == 422) {
+                    _this4.setState({
+                        form: "normal",
+                        responseVisible: true,
+                        responseHeader: error.message,
+                        responseMessage: "Böyle bir ürün ya da etiket zaten mevcut",
+                        responseType: "negative"
+                    });
+                } else if (error.message == 404) {
+                    _this4.setState({
+                        form: "normal",
+                        responseVisible: true,
+                        responseHeader: error.message,
+                        responseMessage: "Eklemeye çalıştığınız etiket mevcut değil",
+                        responseType: "negative"
+                    });
+                }
             });
         }
     }, {
@@ -326,6 +355,19 @@ var ProductEditor = function (_React$Component2) {
                                         )
                                     )
                                 ) : "",
+                                this.state.responseVisible ? React.createElement(
+                                    "div",
+                                    null,
+                                    React.createElement(
+                                        Row,
+                                        null,
+                                        React.createElement(
+                                            Column,
+                                            null,
+                                            React.createElement(Message, { header: this.state.responseHeader, message: this.state.responseMessage, type: this.state.responseType })
+                                        )
+                                    )
+                                ) : "",
                                 React.createElement(
                                     Row,
                                     { size: "one" },
@@ -347,14 +389,12 @@ var ProductEditor = function (_React$Component2) {
             } else if (this.state.form == "created") {
                 return React.createElement(
                     Row,
-                    { size: "sixteen" },
-                    React.createElement(WideColumn, { size: "one" }),
+                    { size: "one" },
                     React.createElement(
-                        WideColumn,
-                        { size: "fourteen" },
-                        React.createElement(Message, { header: "Te\u015Fekk\xFCrler", message: "Ba\u015Far\u0131l\u0131 bir \u015Fekilde g\xF6nderildi. Y\xF6netici onay\u0131s\u0131ndan sonra \xFCr\xFCne yorum ekleyebilirsiniz" })
-                    ),
-                    React.createElement(WideColumn, { size: "one" })
+                        Column,
+                        null,
+                        React.createElement(Message, { header: "Katk\u0131 Sa\u011Flad\u0131\u011F\u0131n\u0131z \u0130\xE7in Te\u015Fekk\xFCrler", message: "Ba\u015Far\u0131l\u0131 bir \u015Fekilde g\xF6nderildi. Y\xF6netici onay\u0131ndan sonra \xFCr\xFCn g\xF6r\xFCnt\xFClenebilir olacak." })
+                    )
                 );
             } else if (this.state.form == "loading") {
                 return React.createElement(
@@ -379,18 +419,18 @@ var TagSelector = function (_React$Component3) {
     function TagSelector(props) {
         _classCallCheck(this, TagSelector);
 
-        var _this4 = _possibleConstructorReturn(this, (TagSelector.__proto__ || Object.getPrototypeOf(TagSelector)).call(this, props));
+        var _this5 = _possibleConstructorReturn(this, (TagSelector.__proto__ || Object.getPrototypeOf(TagSelector)).call(this, props));
 
-        _this4.state = {
+        _this5.state = {
             tagSearchInput: "",
             addNewTagButtonVisible: false
         };
-        _this4.newTagIndex = 0;
-        _this4.changeTagSearchInput = _this4.changeTagSearchInput.bind(_this4);
-        _this4.prepareTags = _this4.prepareTags.bind(_this4);
-        _this4.checkAvailableTag = _this4.checkAvailableTag.bind(_this4);
-        _this4.addNewTag = _this4.addNewTag.bind(_this4);
-        return _this4;
+        _this5.newTagIndex = 0;
+        _this5.changeTagSearchInput = _this5.changeTagSearchInput.bind(_this5);
+        _this5.prepareTags = _this5.prepareTags.bind(_this5);
+        _this5.checkAvailableTag = _this5.checkAvailableTag.bind(_this5);
+        _this5.addNewTag = _this5.addNewTag.bind(_this5);
+        return _this5;
     }
 
     _createClass(TagSelector, [{
@@ -513,10 +553,10 @@ var TagWithClose = function (_React$Component4) {
     function TagWithClose(props) {
         _classCallCheck(this, TagWithClose);
 
-        var _this5 = _possibleConstructorReturn(this, (TagWithClose.__proto__ || Object.getPrototypeOf(TagWithClose)).call(this, props));
+        var _this6 = _possibleConstructorReturn(this, (TagWithClose.__proto__ || Object.getPrototypeOf(TagWithClose)).call(this, props));
 
-        _this5.close = _this5.close.bind(_this5);
-        return _this5;
+        _this6.close = _this6.close.bind(_this6);
+        return _this6;
     }
 
     _createClass(TagWithClose, [{
@@ -554,9 +594,9 @@ var NewProduct2 = function (_React$Component5) {
     function NewProduct2(props) {
         _classCallCheck(this, NewProduct2);
 
-        var _this6 = _possibleConstructorReturn(this, (NewProduct2.__proto__ || Object.getPrototypeOf(NewProduct2)).call(this, props));
+        var _this7 = _possibleConstructorReturn(this, (NewProduct2.__proto__ || Object.getPrototypeOf(NewProduct2)).call(this, props));
 
-        _this6.state = {
+        _this7.state = {
             form: "input", // input, showInfo, loading
             topMessage: null,
             productName: "",
@@ -594,7 +634,7 @@ var NewProduct2 = function (_React$Component5) {
             newTagIndex: 0,
             createProductButtonName: "Oluştur"
         };
-        _this6.turkishChars = {
+        _this7.turkishChars = {
             "ğ": "g",
             "ü": "u",
             "ş": "s",
@@ -602,14 +642,14 @@ var NewProduct2 = function (_React$Component5) {
             "ö": "o",
             "ç": "c"
         };
-        _this6.onChangeProductName = _this6.onChangeProductName.bind(_this6);
-        _this6.generateProductUrl = _this6.generateProductUrl.bind(_this6);
-        _this6.onChangeTagSearchInput = _this6.onChangeTagSearchInput.bind(_this6);
-        _this6.selectTag = _this6.selectTag.bind(_this6);
-        _this6.unselectTag = _this6.unselectTag.bind(_this6);
-        _this6.refreshTagsInList = _this6.refreshTagsInList.bind(_this6);
-        _this6.createProduct = _this6.createProduct.bind(_this6);
-        return _this6;
+        _this7.onChangeProductName = _this7.onChangeProductName.bind(_this7);
+        _this7.generateProductUrl = _this7.generateProductUrl.bind(_this7);
+        _this7.onChangeTagSearchInput = _this7.onChangeTagSearchInput.bind(_this7);
+        _this7.selectTag = _this7.selectTag.bind(_this7);
+        _this7.unselectTag = _this7.unselectTag.bind(_this7);
+        _this7.refreshTagsInList = _this7.refreshTagsInList.bind(_this7);
+        _this7.createProduct = _this7.createProduct.bind(_this7);
+        return _this7;
     }
 
     _createClass(NewProduct2, [{
@@ -826,16 +866,16 @@ var TagList = function (_React$Component7) {
     function TagList(props) {
         _classCallCheck(this, TagList);
 
-        var _this8 = _possibleConstructorReturn(this, (TagList.__proto__ || Object.getPrototypeOf(TagList)).call(this, props));
+        var _this9 = _possibleConstructorReturn(this, (TagList.__proto__ || Object.getPrototypeOf(TagList)).call(this, props));
 
-        _this8.state = {
+        _this9.state = {
             tableVisible: false
         };
-        _this8.onFocusInput = _this8.onFocusInput.bind(_this8);
-        _this8.onBlurInput = _this8.onBlurInput.bind(_this8);
-        _this8.selectTag = _this8.selectTag.bind(_this8);
-        _this8.onChangeInput = _this8.onChangeInput.bind(_this8);
-        return _this8;
+        _this9.onFocusInput = _this9.onFocusInput.bind(_this9);
+        _this9.onBlurInput = _this9.onBlurInput.bind(_this9);
+        _this9.selectTag = _this9.selectTag.bind(_this9);
+        _this9.onChangeInput = _this9.onChangeInput.bind(_this9);
+        return _this9;
     }
 
     _createClass(TagList, [{

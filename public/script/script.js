@@ -195,6 +195,21 @@ function normalizer(key, data) {
             rating[values[i].slug] = values[i].value
         }
         return rating;
+    } else if(key=="tags-for-product-changing") {
+        let tags = [];
+        for(let i=0;i<data.length;i++) {
+            if(data[i].newTag==false) {
+                tags.push({
+                    id:data[i].id,
+                });
+            } else if(data[i].newTag) {
+                tags.push({
+                    newTag:true,
+                    name:data[i].name
+                });
+            }
+        }
+        return tags;
     }
 
 }
