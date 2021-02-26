@@ -75,6 +75,7 @@ class Product extends React.Component {
             this.setState({
                 form:"normal",
                 productName:json['other']['product']['title'],
+                productSlug:json.other.product.slug,
                 productID:json['other']['product']['id'],
                 comments: normalizer('comments', json['other']['comments']),
                 ownComment:ownComment,
@@ -306,27 +307,17 @@ class Product extends React.Component {
                         hide={this.hideBottomComment}
                         openLoadingSpin={this.openLoadingSpinOfBottomComment}
                     />
-                    <EditProductButton changeContent={this.props.changeContent} />
+                    <EditProductButton changeContent={this.props.changeContent} productSlug={this.state.productSlug} />
                 </div>
             )
         } else if(this.state.form=="loading") {
-			document.title = "Ürün";
+	    document.title = "Ürün";
             return(
                 <RowLoadingSpin nonSegment={true}/>
             )
         } else if(this.state.form=="notFound") {
-			document.title = "Ürün Bulunamadı";
-            return(
-                <Row size="one">
-                    <Column>
-                        <BasicMessage type="warning" text="Böyle bir ürün yok" />
-                        <Center>
-                            <a href="urun-olustur">
-                                Yeni Bir Ürün Oluştur
-                            </a>
-                        </Center>
-                    </Column>
-                </Row>
+            return (
+                <ProductNotFound changeContent={this.props.changeContent}/>
             )
         }
     }
@@ -432,7 +423,7 @@ class EditProductButton extends React.Component {
     }
     goEditProduct() {
         if(isMember()) {
-            this.props.changeContent('urun-duzenle', true);
+            this.props.changeContent(SITEURL+'urun-duzenle/'+this.props.productSlug);
         } else {
             this.props.changeContent('giris-yap', true);
         }

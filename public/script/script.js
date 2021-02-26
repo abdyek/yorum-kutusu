@@ -210,6 +210,18 @@ function normalizer(key, data) {
             }
         }
         return tags;
+    } else if(key=="tags-for-product-changing-from-api") {
+        let tags = [];
+        for(let i=0;i<data.length;i++) {
+            tags.push({
+                id:data[i].id,
+                slug:data[i].slug,
+                name:data[i].tagName,
+                passive:(data[i].tagPassive=="0")?false:true,
+                newTag:false
+            })
+        }
+        return tags;
     }
 
 }

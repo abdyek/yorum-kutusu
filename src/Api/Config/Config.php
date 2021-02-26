@@ -471,20 +471,6 @@ namespace YorumKutusu\Api\Config;
                     ],
                 ]
             ],
-            'checkProductSlug'=>[
-                'methods'=>['GET'],
-                'authorization'=>[
-                    'GET'=>['member'],
-                ],
-                'keys'=>[
-                    'GET'=>[
-                        'slug'=>[
-                            'min'=>1,
-                            'max'=>60
-                        ],
-                    ],
-                ]
-            ],
             'forgotMyPassword'=>[
                 'methods'=>['POST', 'PUT'],
                 'authorization'=>[
@@ -691,21 +677,17 @@ namespace YorumKutusu\Api\Config;
                 ]
             ],
             'updateProduct'=>[
-                'methods'=>['POST'],
+                'methods'=>['PATCH'],
                 'authorization'=>[
-                    'POST'=>['member']
+                    'PATCH'=>['member']
                 ],
                 'keys'=>[
-                    'POST'=>[
+                    'PATCH'=>[
                         'productID'=>[
                             'min'=>1,
                             'max'=>11
                         ],
                         'productNewName'=>[
-                            'min'=>1,
-                            'max'=>60
-                        ],
-                        'productNewSlug'=>[
                             'min'=>1,
                             'max'=>60
                         ],

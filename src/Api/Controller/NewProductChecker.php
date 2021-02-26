@@ -25,6 +25,12 @@ class NewProductChecker extends Controller {
         $this->response($response);
     }
     private function checkProductSlug() {
-        $this->product = Database::existCheck('SELECT * FROM product WHERE product_deleted=0 AND product_slug=?', [$this->slug]);
+        $sql = 'SELECT * FROM product WHERE product_deleted=0 AND product_slug=?';
+        $parameters = [$this->slug];
+        if(isset($this->data['exception'])) {
+            $sql = 'SELECT * FROM product WHERE product_deleted=0 AND product_slug=? AND product_slug!=?';
+            $parameters = [$this->slug, Other::generateSlug($this->data['exception'])];
+        }
+        $this->product = Database::existCheck($sql, $parameters);
     }
 }

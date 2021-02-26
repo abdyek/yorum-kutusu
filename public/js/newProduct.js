@@ -18,11 +18,28 @@ var NewProduct = function (_React$Component) {
     }
 
     _createClass(NewProduct, [{
+        key: "componentDidMount",
+        value: function componentDidMount() {
+            if (!isMember()) {
+                this.props.changeContent('giris-yap', true);
+            }
+        }
+    }, {
         key: "render",
         value: function render() {
+            document.title = "Yeni Ürün Oluştur";
             return React.createElement(
                 "div",
                 null,
+                React.createElement(
+                    Row,
+                    { size: "one" },
+                    React.createElement(
+                        Column,
+                        null,
+                        React.createElement(H, { type: "1", text: "Yeni \xDCr\xFCn Olu\u015Ftur", id: "newProductHeader", textAlign: "center" })
+                    )
+                ),
                 React.createElement(ProductEditor, { changeContent: this.props.changeContent })
             );
         }
@@ -39,14 +56,17 @@ var ProductEditor = function (_React$Component2) {
 
         var _this2 = _possibleConstructorReturn(this, (ProductEditor.__proto__ || Object.getPrototypeOf(ProductEditor)).call(this, props));
 
+        var productName = _this2.props.productName || "";
+        var productSlug = _this2.constProductSlug = generateProductSlug(productName) || "";
+        var tags = _this2.props.tags || [];
         _this2.state = {
-            form: "normal", // normal, created, loading
-            productName: "",
-            productSlug: "",
+            form: "normal", // normal, created, loading, updated
+            productName: productName,
+            productSlug: productSlug,
             productInputLoading: "",
             productAvailable: false,
             emptyProductNameWarn: false,
-            tags: [],
+            tags: tags,
             reponseVisible: false,
             responseHeader: "",
             responseMessage: "",
@@ -61,7 +81,9 @@ var ProductEditor = function (_React$Component2) {
         _this2.addNewTag = _this2.addNewTag.bind(_this2);
         _this2.sortTags = _this2.sortTags.bind(_this2);
         _this2.closeTag = _this2.closeTag.bind(_this2);
+        _this2.createEditButton = _this2.createEditButton.bind(_this2);
         _this2.createProduct = _this2.createProduct.bind(_this2);
+        _this2.editProduct = _this2.editProduct.bind(_this2);
         return _this2;
     }
 
@@ -93,9 +115,17 @@ var ProductEditor = function (_React$Component2) {
         value: function loadInfo() {
             var _this3 = this;
 
-            fetch(SITEURL + 'api/newProductChecker?' + getUrlPar({
-                'productName': this.state.productName
-            }), { method: 'GET' }).then(function (response) {
+            if (this.props.editMode === true) {
+                this.apiPar = {
+                    'productName': this.state.productName,
+                    'exception': this.constProductSlug
+                };
+            } else {
+                this.apiPar = {
+                    'productName': this.state.productName
+                };
+            }
+            fetch(SITEURL + 'api/newProductChecker?' + getUrlPar(this.apiPar), { method: 'GET' }).then(function (response) {
                 if (!response.ok) throw new Error(response.status);else return response.json();
             }).then(function (json) {
                 var available = void 0;
@@ -185,16 +215,25 @@ var ProductEditor = function (_React$Component2) {
             });
         }
     }, {
-        key: "createProduct",
-        value: function createProduct() {
-            var _this4 = this;
-
+        key: "createEditButton",
+        value: function createEditButton() {
             if (this.state.productName.length == 0) {
                 this.setState({
                     emptyProductNameWarn: true
                 });
                 return;
             }
+            if (this.props.editMode === true) {
+                this.editProduct();
+            } else {
+                this.createProduct();
+            }
+        }
+    }, {
+        key: "createProduct",
+        value: function createProduct() {
+            var _this4 = this;
+
             this.setState({
                 form: "loading"
             });
@@ -238,6 +277,74 @@ var ProductEditor = function (_React$Component2) {
                         responseMessage: "Eklemeye çalıştığınız etiket mevcut değil",
                         responseType: "negative"
                     });
+                } else if (error.message == 403) {
+                    _this4.setState({
+                        form: "normal",
+                        responseVisible: true,
+                        responseHeader: error.message,
+                        responseMessage: "Yetkiniz yok! Başka bir sekmede çıkış yapmış olabilirsiniz. Lütfen giriş yapmayı deneyin.",
+                        responseType: "negative"
+                    });
+                }
+            });
+        }
+    }, {
+        key: "editProduct",
+        value: function editProduct() {
+            var _this5 = this;
+
+            this.setState({
+                form: "loading"
+            });
+            fetch(SITEURL + 'api/updateProduct', {
+                method: 'PATCH',
+                header: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    productID: this.props.productID,
+                    productNewName: this.state.productName,
+                    tags: normalizer('tags-for-product-changing', this.state.tags)
+                })
+            }).then(function (response) {
+                if (!response.ok) throw new Error(response.status);else return response.json();
+            }).then(function (json) {
+                _this5.setState({
+                    form: "updated"
+                });
+            }).catch(function (error) {
+                if (error.message == 400) {
+                    _this5.setState({
+                        form: "normal",
+                        responseVisible: true,
+                        responseHeader: error.message,
+                        responseMessage: "Geçersiz istek..",
+                        responseType: "negative"
+                    });
+                } else if (error.message == 422) {
+                    _this5.setState({
+                        form: "normal",
+                        responseVisible: true,
+                        responseHeader: error.message,
+                        responseMessage: "Böyle bir ürün ya da etiket zaten mevcut",
+                        responseType: "negative"
+                    });
+                } else if (error.message == 404) {
+                    _this5.setState({
+                        form: "normal",
+                        responseVisible: true,
+                        responseHeader: error.message,
+                        responseMessage: "Eklemeye çalıştığınız etiket ya da ürün mevcut değil",
+                        responseType: "negative"
+                    });
+                } else if (error.message == 403) {
+                    _this5.setState({
+                        form: "normal",
+                        responseVisible: true,
+                        responseHeader: error.message,
+                        responseMessage: "Yetkiniz yok! Başka bir sekmede çıkış yapmış olabilirsiniz. Lütfen giriş yapmayı deneyin.",
+                        responseType: "negative"
+                    });
                 }
             });
         }
@@ -255,15 +362,6 @@ var ProductEditor = function (_React$Component2) {
                         React.createElement(
                             WideColumn,
                             { size: "fourteen" },
-                            React.createElement(
-                                Row,
-                                { size: "one" },
-                                React.createElement(
-                                    Column,
-                                    null,
-                                    React.createElement(H, { type: "1", text: "Yeni \xDCr\xFCn", id: "newProductHeader", textAlign: "center" })
-                                )
-                            ),
                             React.createElement(
                                 Row,
                                 { size: "one" },
@@ -377,7 +475,7 @@ var ProductEditor = function (_React$Component2) {
                                         React.createElement(
                                             FloatRight,
                                             null,
-                                            React.createElement(Button, { type: "large green", name: "Olu\u015Ftur", click: this.createProduct })
+                                            React.createElement(Button, { type: "large green", name: this.props.editMode === true ? "Düzenle" : "Oluştur", click: this.createEditButton })
                                         )
                                     )
                                 )
@@ -397,6 +495,7 @@ var ProductEditor = function (_React$Component2) {
                     )
                 );
             } else if (this.state.form == "loading") {
+                document.title = "Teşekkürler";
                 return React.createElement(
                     Row,
                     { size: "one" },
@@ -404,6 +503,17 @@ var ProductEditor = function (_React$Component2) {
                         Column,
                         null,
                         React.createElement(RowLoadingSpin, { nonSegment: true })
+                    )
+                );
+            } else if (this.state.form == "updated") {
+                document.title = "Teşekkürler";
+                return React.createElement(
+                    Row,
+                    { size: "one" },
+                    React.createElement(
+                        Column,
+                        null,
+                        React.createElement(Message, { header: "D\xFCzenleme Yaparak Katk\u0131 Sa\u011Flad\u0131\u011F\u0131n\u0131z \u0130\xE7in Te\u015Fekk\xFCrler", message: "Ba\u015Far\u0131l\u0131 bir \u015Fekilde g\xF6nderildi. Y\xF6netici onay\u0131ndan sonra \xFCr\xFCn g\xFCncellenecektir." })
                     )
                 );
             }
@@ -419,18 +529,18 @@ var TagSelector = function (_React$Component3) {
     function TagSelector(props) {
         _classCallCheck(this, TagSelector);
 
-        var _this5 = _possibleConstructorReturn(this, (TagSelector.__proto__ || Object.getPrototypeOf(TagSelector)).call(this, props));
+        var _this6 = _possibleConstructorReturn(this, (TagSelector.__proto__ || Object.getPrototypeOf(TagSelector)).call(this, props));
 
-        _this5.state = {
+        _this6.state = {
             tagSearchInput: "",
             addNewTagButtonVisible: false
         };
-        _this5.newTagIndex = 0;
-        _this5.changeTagSearchInput = _this5.changeTagSearchInput.bind(_this5);
-        _this5.prepareTags = _this5.prepareTags.bind(_this5);
-        _this5.checkAvailableTag = _this5.checkAvailableTag.bind(_this5);
-        _this5.addNewTag = _this5.addNewTag.bind(_this5);
-        return _this5;
+        _this6.newTagIndex = 0;
+        _this6.changeTagSearchInput = _this6.changeTagSearchInput.bind(_this6);
+        _this6.prepareTags = _this6.prepareTags.bind(_this6);
+        _this6.checkAvailableTag = _this6.checkAvailableTag.bind(_this6);
+        _this6.addNewTag = _this6.addNewTag.bind(_this6);
+        return _this6;
     }
 
     _createClass(TagSelector, [{
@@ -553,10 +663,10 @@ var TagWithClose = function (_React$Component4) {
     function TagWithClose(props) {
         _classCallCheck(this, TagWithClose);
 
-        var _this6 = _possibleConstructorReturn(this, (TagWithClose.__proto__ || Object.getPrototypeOf(TagWithClose)).call(this, props));
+        var _this7 = _possibleConstructorReturn(this, (TagWithClose.__proto__ || Object.getPrototypeOf(TagWithClose)).call(this, props));
 
-        _this6.close = _this6.close.bind(_this6);
-        return _this6;
+        _this7.close = _this7.close.bind(_this7);
+        return _this7;
     }
 
     _createClass(TagWithClose, [{
@@ -586,383 +696,4 @@ var TagWithClose = function (_React$Component4) {
     }]);
 
     return TagWithClose;
-}(React.Component);
-
-var NewProduct2 = function (_React$Component5) {
-    _inherits(NewProduct2, _React$Component5);
-
-    function NewProduct2(props) {
-        _classCallCheck(this, NewProduct2);
-
-        var _this7 = _possibleConstructorReturn(this, (NewProduct2.__proto__ || Object.getPrototypeOf(NewProduct2)).call(this, props));
-
-        _this7.state = {
-            form: "input", // input, showInfo, loading
-            topMessage: null,
-            productName: "",
-            productUrl: "",
-            tagSearchInput: "",
-            tagsInList: {
-                /*
-                3:{
-                    passive:false,
-                    text:"Batarya",
-                    color:"yellow",
-                    rateValue: "-"
-                },
-                4:{
-                    passive:false,
-                    text:"Kamera",
-                    color:"orange",
-                    rateValue: "-"
-                },
-                5:{
-                    passive:false,
-                    text:"Tasarım",
-                    color:"",
-                    rateValue: "-"
-                },
-                99:{
-                    passive:true,
-                    text:"Pasif Etiket",
-                    color:"",
-                    rateValue: "-"
-                }
-                */
-            },
-            selectedTags: {},
-            newTagIndex: 0,
-            createProductButtonName: "Oluştur"
-        };
-        _this7.turkishChars = {
-            "ğ": "g",
-            "ü": "u",
-            "ş": "s",
-            "ı": "i",
-            "ö": "o",
-            "ç": "c"
-        };
-        _this7.onChangeProductName = _this7.onChangeProductName.bind(_this7);
-        _this7.generateProductUrl = _this7.generateProductUrl.bind(_this7);
-        _this7.onChangeTagSearchInput = _this7.onChangeTagSearchInput.bind(_this7);
-        _this7.selectTag = _this7.selectTag.bind(_this7);
-        _this7.unselectTag = _this7.unselectTag.bind(_this7);
-        _this7.refreshTagsInList = _this7.refreshTagsInList.bind(_this7);
-        _this7.createProduct = _this7.createProduct.bind(_this7);
-        return _this7;
-    }
-
-    _createClass(NewProduct2, [{
-        key: "componentDidMount",
-        value: function componentDidMount() {
-            if (!isMember()) {
-                this.props.changeContent('giris-yap', true);
-            }
-        }
-    }, {
-        key: "onChangeProductName",
-        value: function onChangeProductName(e) {
-            this.setState({
-                productName: e.target.value,
-                productUrl: this.generateProductUrl(e.target.value)
-            });
-            this.refreshTagsInList();
-        }
-    }, {
-        key: "generateProductUrl",
-        value: function generateProductUrl(productName) {
-            productName = productName.toLowerCase();
-            var url = "";
-            for (var i = 0; i < productName.length; i++) {
-                if (productName[i] == " ") {
-                    url += "-";
-                } else if (this.turkishChars[productName[i]]) {
-                    url += this.turkishChars[productName[i]];
-                } else {
-                    url += productName[i];
-                }
-            }
-            return url;
-        }
-    }, {
-        key: "onChangeTagSearchInput",
-        value: function onChangeTagSearchInput(e) {
-            this.setState({
-                tagSearchInput: e.target.value
-            });
-        }
-    }, {
-        key: "selectTag",
-        value: function selectTag(id) {
-            var selectedTag = this.state.selectedTags;
-            if (id == "new") {
-                var newTagName = this.state.tagSearchInput;
-                var newTag = {
-                    passive: false,
-                    text: newTagName,
-                    color: "",
-                    rateValue: "?"
-                };
-                selectedTag[newTagName] = newTag;
-            } else {
-                selectedTag[id] = this.state.tagsInList[id];
-            }
-            this.setState({
-                selectedTags: selectedTag,
-                tagSearchInput: ""
-            });
-        }
-    }, {
-        key: "unselectTag",
-        value: function unselectTag(e) {
-            if (this.state.form == "input") {
-                var selectedTag = this.state.selectedTags;
-                delete selectedTag[e.target.attributes.name.value];
-                this.setState({
-                    selectedTags: selectedTag
-                });
-            }
-        }
-    }, {
-        key: "refreshTagsInList",
-        value: function refreshTagsInList() {
-            // gidip etiket çekecek gelen veriyi tagsInList olarak güncelleyeceksin böylelikle tag listesi değişmiş olacak
-        }
-    }, {
-        key: "createProduct",
-        value: function createProduct() {
-            if (this.state.form == "input") {
-                this.setState({
-                    form: "showInfo",
-                    createProductButtonName: "Düzenle",
-                    topMessage: {
-                        type: "success",
-                        text: "Başarılı bir şekilde gönderildi, yönetici onaylaması durumunda bu ürün eklenecek"
-                    }
-                });
-            } else {
-                this.setState({
-                    form: "input",
-                    createProductButtonName: "Oluştur"
-                });
-            }
-        }
-    }, {
-        key: "render",
-        value: function render() {
-            document.title = "Yeni Ürün Oluştur";
-            if (this.state.form == "loading") {
-                return React.createElement(RowLoadingSpin, { nonSegment: true });
-            } else {
-                return React.createElement(
-                    "div",
-                    null,
-                    React.createElement(
-                        Row,
-                        { size: "one" },
-                        React.createElement(
-                            Column,
-                            null,
-                            React.createElement(
-                                Row,
-                                { size: "sixteen" },
-                                React.createElement(WideColumn, { size: "two" }),
-                                React.createElement(
-                                    WideColumn,
-                                    { size: "twelve" },
-                                    this.state.topMessage ? React.createElement(BasicMessage, { type: this.state.topMessage.type, text: this.state.topMessage.text }) : "",
-                                    React.createElement(H, { type: "1", text: "Yeni \xDCr\xFCn" }),
-                                    React.createElement(
-                                        "div",
-                                        { className: "ui form" },
-                                        React.createElement(
-                                            "div",
-                                            { className: "field" },
-                                            React.createElement(
-                                                "label",
-                                                null,
-                                                "yorumkutusu.com/urun/",
-                                                this.state.productUrl
-                                            ),
-                                            this.state.form == "input" ? React.createElement("input", { type: "text", placeholder: "\xDCr\xFCn \u0130smi", onChange: this.onChangeProductName, value: this.state.productName }) : React.createElement(H, { type: "3", text: this.state.productName })
-                                        )
-                                    ),
-                                    React.createElement(SelectedTags, { tags: this.state.selectedTags, handleOnClick: this.unselectTag, form: this.state.form }),
-                                    this.state.form == "input" ? React.createElement(TagList, { labelText: "Etiket Ekle", placeholderText: "Etiket \u0130smi", tags: this.state.tagsInList, handleSelectTag: this.selectTag, tagSearchInput: this.state.tagSearchInput, handleChangeTagSearchInput: this.onChangeTagSearchInput }) : ""
-                                )
-                            )
-                        )
-                    ),
-                    React.createElement(
-                        Row,
-                        { size: "sixteen" },
-                        React.createElement(
-                            WideColumn,
-                            { size: "two" },
-                            " "
-                        ),
-                        React.createElement(
-                            WideColumn,
-                            { size: "twelve" },
-                            React.createElement(
-                                FloatRight,
-                                null,
-                                React.createElement(
-                                    "button",
-                                    { "class": this.state.productName.length ? "ui green button" : "ui green disabled button", onClick: this.createProduct },
-                                    this.state.createProductButtonName
-                                )
-                            )
-                        )
-                    )
-                );
-            }
-        }
-    }]);
-
-    return NewProduct2;
-}(React.Component);
-
-var SelectedTags = function (_React$Component6) {
-    _inherits(SelectedTags, _React$Component6);
-
-    function SelectedTags() {
-        _classCallCheck(this, SelectedTags);
-
-        return _possibleConstructorReturn(this, (SelectedTags.__proto__ || Object.getPrototypeOf(SelectedTags)).apply(this, arguments));
-    }
-
-    _createClass(SelectedTags, [{
-        key: "render",
-        value: function render() {
-            if (Object.keys(this.props.tags).length) {
-                return React.createElement(
-                    "div",
-                    null,
-                    React.createElement(
-                        "div",
-                        { id: "selected-tags" },
-                        this.props.form == "input" ? React.createElement(H, { type: "3", text: "Etiketler" }) : ""
-                    ),
-                    React.createElement(Tags, { tags: this.props.tags, activeOnly: false, handleOnClick: this.props.handleOnClick, noParameter: true }),
-                    this.props.form == "input" ? React.createElement(
-                        "span",
-                        { className: "info-span" },
-                        "[se\xE7imi iptal etmek i\xE7in etikete dokunun]"
-                    ) : ""
-                );
-            } else {
-                return React.createElement("div", null);
-            }
-        }
-    }]);
-
-    return SelectedTags;
-}(React.Component);
-
-var TagList = function (_React$Component7) {
-    _inherits(TagList, _React$Component7);
-
-    function TagList(props) {
-        _classCallCheck(this, TagList);
-
-        var _this9 = _possibleConstructorReturn(this, (TagList.__proto__ || Object.getPrototypeOf(TagList)).call(this, props));
-
-        _this9.state = {
-            tableVisible: false
-        };
-        _this9.onFocusInput = _this9.onFocusInput.bind(_this9);
-        _this9.onBlurInput = _this9.onBlurInput.bind(_this9);
-        _this9.selectTag = _this9.selectTag.bind(_this9);
-        _this9.onChangeInput = _this9.onChangeInput.bind(_this9);
-        return _this9;
-    }
-
-    _createClass(TagList, [{
-        key: "onFocusInput",
-        value: function onFocusInput() {
-            this.setState({
-                tableVisible: true
-            });
-        }
-    }, {
-        key: "onBlurInput",
-        value: function onBlurInput() {
-            setTimeout(function () {
-                this.setState({
-                    tableVisible: false
-                });
-            }.bind(this), 30);
-            // bu delay'i blur olurken etiket seçimini geçmemesi için koydum
-        }
-    }, {
-        key: "selectTag",
-        value: function selectTag(e) {
-            this.props.handleSelectTag(e.target.attributes.name.value);
-            this.onBlurInput();
-        }
-    }, {
-        key: "onChangeInput",
-        value: function onChangeInput(e) {
-            this.props.handleChangeTagSearchInput(e);
-        }
-    }, {
-        key: "render",
-        value: function render() {
-            this.tags = [];
-            var keyArr = Object.keys(this.props.tags);
-            for (var i = 0; i < keyArr.length; i++) {
-                this.tags.push(React.createElement(
-                    "div",
-                    { className: "item", key: keyArr[i], name: keyArr[i], onMouseDown: this.selectTag },
-                    this.props.tags[keyArr[i]].text
-                ));
-            }
-            if (this.tags.length == 0 && this.props.tagSearchInput.length != 0) {
-                this.tags = React.createElement(
-                    "div",
-                    null,
-                    React.createElement(
-                        "span",
-                        null,
-                        "B\xF6yle bir etiket yok "
-                    ),
-                    React.createElement(
-                        "a",
-                        { name: "new", onMouseDown: this.selectTag },
-                        "yine de ekle"
-                    )
-                );
-            }
-            return React.createElement(
-                "div",
-                null,
-                React.createElement(
-                    "div",
-                    { className: "ui form" },
-                    React.createElement(
-                        "div",
-                        { className: "field" },
-                        React.createElement(
-                            "label",
-                            null,
-                            this.props.labelText
-                        ),
-                        React.createElement("input", { type: "text", placeholder: this.props.placeholderText, onFocus: this.onFocusInput, onBlur: this.onBlurInput, value: this.props.tagSearchInput, onChange: this.onChangeInput })
-                    )
-                ),
-                this.state.tableVisible ? React.createElement(
-                    "div",
-                    { className: "tags-in-list" },
-                    React.createElement(
-                        "div",
-                        { className: "ui list" },
-                        this.tags
-                    )
-                ) : ""
-            );
-        }
-    }]);
-
-    return TagList;
 }(React.Component);

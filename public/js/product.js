@@ -99,6 +99,7 @@ var Product = function (_React$Component) {
                 _this2.setState({
                     form: "normal",
                     productName: json['other']['product']['title'],
+                    productSlug: json.other.product.slug,
                     productID: json['other']['product']['id'],
                     comments: normalizer('comments', json['other']['comments']),
                     ownComment: ownComment,
@@ -362,31 +363,13 @@ var Product = function (_React$Component) {
                         hide: this.hideBottomComment,
                         openLoadingSpin: this.openLoadingSpinOfBottomComment
                     }),
-                    React.createElement(EditProductButton, { changeContent: this.props.changeContent })
+                    React.createElement(EditProductButton, { changeContent: this.props.changeContent, productSlug: this.state.productSlug })
                 );
             } else if (this.state.form == "loading") {
                 document.title = "Ürün";
                 return React.createElement(RowLoadingSpin, { nonSegment: true });
             } else if (this.state.form == "notFound") {
-                document.title = "Ürün Bulunamadı";
-                return React.createElement(
-                    Row,
-                    { size: "one" },
-                    React.createElement(
-                        Column,
-                        null,
-                        React.createElement(BasicMessage, { type: "warning", text: "B\xF6yle bir \xFCr\xFCn yok" }),
-                        React.createElement(
-                            Center,
-                            null,
-                            React.createElement(
-                                "a",
-                                { href: "urun-olustur" },
-                                "Yeni Bir \xDCr\xFCn Olu\u015Ftur"
-                            )
-                        )
-                    )
-                );
+                return React.createElement(ProductNotFound, { changeContent: this.props.changeContent });
             }
         }
     }]);
@@ -575,7 +558,7 @@ var EditProductButton = function (_React$Component5) {
         key: "goEditProduct",
         value: function goEditProduct() {
             if (isMember()) {
-                this.props.changeContent('urun-duzenle', true);
+                this.props.changeContent(SITEURL + 'urun-duzenle/' + this.props.productSlug);
             } else {
                 this.props.changeContent('giris-yap', true);
             }

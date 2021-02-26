@@ -43,7 +43,7 @@ $router->get('/filtrele/:any?', function() {
     Tool::generatePage('filtrele');
 });
 
-$router->get('/urun-duzenle/:any?', function() {
+$router->get('/urun-duzenle/:slug', function() {
     Tool::generatePage('urun-duzenle');
 });
 

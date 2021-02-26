@@ -3,9 +3,10 @@
 namespace YorumKutusu\Api\Controller;
 use YorumKutusu\Api\Core\Controller;
 use YorumKutusu\Api\Core\Database;
+use YorumKutusu\Api\Core\Other;
 
 class UpdateProduct extends Controller {
-    protected function post() {
+    protected function patch() {
         $this->checkTags();
         $this->checkProductExist();
         $this->member = Database::getRow('SELECT * FROM member WHERE member_id=?', [$this->userId]);
@@ -18,14 +19,14 @@ class UpdateProduct extends Controller {
 
     private function checkTags() {
         foreach($this->data['tags'] as $tag) {
-            if(isset($tag['id']) and !isset($tag['name']) and !isset($tag['slug'])) {
+            if(isset($tag['id'])) {
                 $tag = Database::existCheck('SELECT * FROM tag WHERE tag_id=? AND tag_deleted=0', [$tag['id']]);
                 if(!$tag) {
                     $this->setHttpStatus(404);
                     exit();
                 }
-            } elseif(!isset($tag['id']) and isset($tag['name']) and isset($tag['slug'])) {
-                $tag = Database::existCheck('SELECT * FROM tag WHERE tag_name=? OR tag_slug=? AND tag_deleted=0', [$tag['name'], $tag['slug']]);
+            } elseif(isset($tag['newTag']) and $tag['newTag']==true) {
+                $tag = Database::existCheck('SELECT * FROM tag WHERE tag_name=? AND tag_deleted=0', [$tag['name']]);
                 if($tag) {
                     $this->setHttpStatus(422);
                     exit();
@@ -66,7 +67,7 @@ class UpdateProduct extends Controller {
             $this->data['productID'],
             $this->userId,
             $this->data['productNewName'],
-            $this->data['productNewSlug'],
+            Other::generateSlug($this->data['productNewName']),
             $this->member['request_pointer']
         ]);
         $this->productRequest = Database::getRow('SELECT * FROM product_request WHERE member_id=? AND request_id=?', [$this->userId, $this->member['request_pointer']]);
@@ -88,7 +89,7 @@ class UpdateProduct extends Controller {
                     $this->productRequest['product_request_id'],
                     $this->product['product_id'],
                     $tag['name'],
-                    $tag['slug'],
+                    Other::generateSlug($tag['name']),
                     $this->member['request_pointer']
                 ]);
                 if($q[0]==false) {
