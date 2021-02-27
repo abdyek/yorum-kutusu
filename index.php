@@ -48,8 +48,14 @@ $router->get('/urun-duzenle/:slug', function() {
 });
 
 // API REQUEST
-$router->any('/api/:string', function($endpoint) {
-    $class = 'YorumKutusu\Api\Controller\\' .ucfirst($endpoint);
+$router->any('/api/:string', function($controller) {
+    $controllerClassName = ucfirst($controller);
+    $path = __DIR__ . '/src/Api/Controller/'.$controllerClassName.'.php';
+    if(!file_exists($path)) {
+        http_response_code(404);
+        exit();
+    }
+    $class = 'YorumKutusu\Api\Controller\\' .$controllerClassName;
     new $class;
 });
 
