@@ -3,6 +3,7 @@
 namespace YorumKutusu\Api\Controller;
 use YorumKutusu\Api\Core\Controller;
 use YorumKutusu\Api\Core\Database;
+use YorumKutusu\Api\Core\Other;
 
 // bu isteğin adının comment olması yanıltmasın yorum çekme işlemlerini burada yapmıyorum
 class Comment extends Controller {
