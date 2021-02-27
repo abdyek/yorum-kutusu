@@ -606,10 +606,9 @@ var TagSelector = function (_React$Component3) {
                     React.createElement(
                         Column,
                         null,
-                        React.createElement(SearchBar, {
+                        React.createElement(SearchBarForTag, {
                             tagSearchInput: this.state.tagSearchInput,
                             changeTagSearchInput: this.changeTagSearchInput,
-                            inputPlaceholder: "Etiket Ara..",
                             click: this.props.clickSearchResult,
                             checkAvailableTag: this.checkAvailableTag
                         })

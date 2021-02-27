@@ -104,7 +104,95 @@ class Logo extends React.Component {
     }
 }
 
-class SearchBar extends React.Component {
+class SearchBarForProduct extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            results: []
+        };
+        this.refreshResults = this.refreshResults.bind(this);
+        this.prepareATags = this.prepareATags.bind(this);
+        this.clickFunc = this.clickFunc.bind(this);
+        this.changeInput = this.changeInput.bind(this);
+        this.deleteResults = this.deleteResults.bind(this);
+    }
+    refreshResults() {
+        this.setState({
+            results: [
+                {
+                    id:"loading",
+                    name:"Yükleniyor.."
+                }
+            ]
+        });
+        fetch(SITEURL + 'api/search?' + getUrlPar({
+            name: this.props.tagSearchInput
+        }), {method: 'GET'}).then((response)=>{
+            if(!response.ok) throw new Error(response.status);
+            else return response.json();
+        }).then((json)=> {
+            if(json.other.products.length==0) {
+                this.setState({
+                    results: [{
+                        id:"yeni-urun",
+                        name:"Ürün bulunamadı. Yeni ürün oluştur"
+                    }]
+                });
+            } else {
+                this.setState({
+                    results: json.other.products
+                });
+            }
+        }).catch((error) => {
+            console.log(error);
+        });
+    }
+    prepareATags() {
+        this.aTags = [];
+        for(let i=0;i<this.state.results.length;i++) {
+            this.aTags.push(
+                <SearchResult key={this.state.results[i].id} id={this.state.results[i].id} slug={this.state.results[i].slug} name={this.state.results[i].name} click={this.clickFunc} changeContent={this.props.changeContent}/>
+            )
+        }
+    }
+    clickFunc(obj) {
+        this.props.click(obj);
+        this.props.changeTagSearchInput("");
+    }
+    changeInput(e) {
+        this.props.changeTagSearchInput(e.target.value);
+        clearTimeout(this.setTime);
+        if(e.target.value.length) {
+            this.setTime = setTimeout(function() {
+                this.refreshResults();
+            }.bind(this), 1000);
+        }
+    }
+    deleteResults() {
+        setTimeout(()=>{
+            this.setState({
+                results: [] 
+            })
+        }, 200);
+    }
+    render() {
+        if(this.state.results.length) {
+            this.prepareATags();
+        }
+        return(
+            <div id="search" className="ui search">
+                <input className="prompt" type="text" placeholder="Ürün Ara.." value={this.props.tagSearchInput} onChange={this.changeInput} onBlur={this.deleteResults} />
+                {(this.state.results.length)?
+                    <div id="search-results" className="results transition visible">
+                        {this.aTags}
+                    </div>:""
+                }
+            </div>
+        )
+    }
+}
+
+class SearchBarForTag extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -116,9 +204,6 @@ class SearchBar extends React.Component {
         this.clickFunc = this.clickFunc.bind(this);
         this.changeInput = this.changeInput.bind(this);
         this.deleteResults = this.deleteResults.bind(this);
-    }
-    componentDidMount() {
-        this.inputPlaceholder = this.props.inputPlaceholder || 'Ara..';
     }
     checkAvailableTag(tags) {
         for(let i=0;i<tags.length;i++) {
@@ -186,7 +271,7 @@ class SearchBar extends React.Component {
         }
         return(
             <div id="search" className="ui search">
-                <input className="prompt" type="text" placeholder={this.inputPlaceholder} value={this.props.tagSearchInput} onChange={this.changeInput} onBlur={this.deleteResults} />
+                <input className="prompt" type="text" placeholder="Etiket Ara.." value={this.props.tagSearchInput} onChange={this.changeInput} onBlur={this.deleteResults} />
                 {(this.state.results.length)?
                     <div id="search-results" className="results transition visible">
                         {this.aTags}
@@ -204,8 +289,12 @@ class SearchResult extends React.Component {
     }
     click(e) {
         e.preventDefault();
-        if(this.props.id=="loading") 
+        if(this.props.id=="loading")
             return;
+        else if(this.props.id=="yeni-urun") {
+            this.props.changeContent('yeni-urun', true)
+            return;
+        }
         this.props.click({
             id:this.props.id,
             slug:this.props.slug,
@@ -221,6 +310,22 @@ class SearchResult extends React.Component {
 }
 
 class Header extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            productSearchInput:""
+        }
+        this.changeProductSearchInput = this.changeProductSearchInput.bind(this);
+        this.goProduct = this.goProduct.bind(this);
+    }
+    changeProductSearchInput(value) {
+        this.setState({
+            productSearchInput:value
+        });
+    }
+    goProduct(obj) {
+        this.props.changeContent(SITEURL + '/urun/' + obj.slug);
+    }
     render() {
         return(
             <header>
@@ -231,7 +336,12 @@ class Header extends React.Component {
                                 <Logo changeContent={this.props.changeContent} />
                             </WideColumn>
                             <WideColumn size="eight">
-                                <SearchBar />
+                                <SearchBarForProduct
+                                    tagSearchInput={this.state.productSearchInput}
+                                    changeTagSearchInput={this.changeProductSearchInput}
+                                    click={this.goProduct}
+                                    changeContent={this.props.changeContent}
+                                />
                             </WideColumn>
                             <WideColumn size="four">
                                 <Menu changeContent={this.props.changeContent} form={this.props.form} unreadCommentsCount={this.props.unreadCommentsCount} userSlug={this.props.userSlug} logout={this.props.logout}/>
@@ -382,7 +492,6 @@ class App extends React.Component {
             const page = pathNames[0];
             const cont = this.contentFromSlug[page];
             window.history.pushState({content:cont}, "title", href);
-            console.log(cont);
             this.setState({
                 "content":cont
             });

@@ -187,18 +187,17 @@ var Logo = function (_React$Component2) {
     return Logo;
 }(React.Component);
 
-var SearchBar = function (_React$Component3) {
-    _inherits(SearchBar, _React$Component3);
+var SearchBarForProduct = function (_React$Component3) {
+    _inherits(SearchBarForProduct, _React$Component3);
 
-    function SearchBar(props) {
-        _classCallCheck(this, SearchBar);
+    function SearchBarForProduct(props) {
+        _classCallCheck(this, SearchBarForProduct);
 
-        var _this4 = _possibleConstructorReturn(this, (SearchBar.__proto__ || Object.getPrototypeOf(SearchBar)).call(this, props));
+        var _this4 = _possibleConstructorReturn(this, (SearchBarForProduct.__proto__ || Object.getPrototypeOf(SearchBarForProduct)).call(this, props));
 
         _this4.state = {
             results: []
         };
-        _this4.checkAvailableTag = _this4.checkAvailableTag.bind(_this4);
         _this4.refreshResults = _this4.refreshResults.bind(_this4);
         _this4.prepareATags = _this4.prepareATags.bind(_this4);
         _this4.clickFunc = _this4.clickFunc.bind(_this4);
@@ -207,23 +206,7 @@ var SearchBar = function (_React$Component3) {
         return _this4;
     }
 
-    _createClass(SearchBar, [{
-        key: "componentDidMount",
-        value: function componentDidMount() {
-            this.inputPlaceholder = this.props.inputPlaceholder || 'Ara..';
-        }
-    }, {
-        key: "checkAvailableTag",
-        value: function checkAvailableTag(tags) {
-            for (var i = 0; i < tags.length; i++) {
-                if (this.props.tagSearchInput.toLowerCase() == tags[i].name.toLowerCase()) {
-                    this.props.checkAvailableTag(true);
-                    return;
-                }
-            }
-            this.props.checkAvailableTag(false);
-        }
-    }, {
+    _createClass(SearchBarForProduct, [{
         key: "refreshResults",
         value: function refreshResults() {
             var _this5 = this;
@@ -234,15 +217,23 @@ var SearchBar = function (_React$Component3) {
                     name: "Yükleniyor.."
                 }]
             });
-            fetch(SITEURL + 'api/tag?' + getUrlPar({
-                searchText: this.props.tagSearchInput
+            fetch(SITEURL + 'api/search?' + getUrlPar({
+                name: this.props.tagSearchInput
             }), { method: 'GET' }).then(function (response) {
                 if (!response.ok) throw new Error(response.status);else return response.json();
             }).then(function (json) {
-                _this5.setState({
-                    results: json.other.tags
-                });
-                _this5.checkAvailableTag(json.other.tags);
+                if (json.other.products.length == 0) {
+                    _this5.setState({
+                        results: [{
+                            id: "yeni-urun",
+                            name: "Ürün bulunamadı. Yeni ürün oluştur"
+                        }]
+                    });
+                } else {
+                    _this5.setState({
+                        results: json.other.products
+                    });
+                }
             }).catch(function (error) {
                 console.log(error);
             });
@@ -252,7 +243,7 @@ var SearchBar = function (_React$Component3) {
         value: function prepareATags() {
             this.aTags = [];
             for (var i = 0; i < this.state.results.length; i++) {
-                this.aTags.push(React.createElement(SearchResult, { key: this.state.results[i].id, id: this.state.results[i].id, slug: this.state.results[i].slug, name: this.state.results[i].name, passive: this.state.results[i].passive, href: 'urun', click: this.clickFunc }));
+                this.aTags.push(React.createElement(SearchResult, { key: this.state.results[i].id, id: this.state.results[i].id, slug: this.state.results[i].slug, name: this.state.results[i].name, click: this.clickFunc, changeContent: this.props.changeContent }));
             }
         }
     }, {
@@ -292,7 +283,7 @@ var SearchBar = function (_React$Component3) {
             return React.createElement(
                 "div",
                 { id: "search", className: "ui search" },
-                React.createElement("input", { className: "prompt", type: "text", placeholder: this.inputPlaceholder, value: this.props.tagSearchInput, onChange: this.changeInput, onBlur: this.deleteResults }),
+                React.createElement("input", { className: "prompt", type: "text", placeholder: "\xDCr\xFCn Ara..", value: this.props.tagSearchInput, onChange: this.changeInput, onBlur: this.deleteResults }),
                 this.state.results.length ? React.createElement(
                     "div",
                     { id: "search-results", className: "results transition visible" },
@@ -302,26 +293,142 @@ var SearchBar = function (_React$Component3) {
         }
     }]);
 
-    return SearchBar;
+    return SearchBarForProduct;
 }(React.Component);
 
-var SearchResult = function (_React$Component4) {
-    _inherits(SearchResult, _React$Component4);
+var SearchBarForTag = function (_React$Component4) {
+    _inherits(SearchBarForTag, _React$Component4);
+
+    function SearchBarForTag(props) {
+        _classCallCheck(this, SearchBarForTag);
+
+        var _this7 = _possibleConstructorReturn(this, (SearchBarForTag.__proto__ || Object.getPrototypeOf(SearchBarForTag)).call(this, props));
+
+        _this7.state = {
+            results: []
+        };
+        _this7.checkAvailableTag = _this7.checkAvailableTag.bind(_this7);
+        _this7.refreshResults = _this7.refreshResults.bind(_this7);
+        _this7.prepareATags = _this7.prepareATags.bind(_this7);
+        _this7.clickFunc = _this7.clickFunc.bind(_this7);
+        _this7.changeInput = _this7.changeInput.bind(_this7);
+        _this7.deleteResults = _this7.deleteResults.bind(_this7);
+        return _this7;
+    }
+
+    _createClass(SearchBarForTag, [{
+        key: "checkAvailableTag",
+        value: function checkAvailableTag(tags) {
+            for (var i = 0; i < tags.length; i++) {
+                if (this.props.tagSearchInput.toLowerCase() == tags[i].name.toLowerCase()) {
+                    this.props.checkAvailableTag(true);
+                    return;
+                }
+            }
+            this.props.checkAvailableTag(false);
+        }
+    }, {
+        key: "refreshResults",
+        value: function refreshResults() {
+            var _this8 = this;
+
+            this.setState({
+                results: [{
+                    id: "loading",
+                    name: "Yükleniyor.."
+                }]
+            });
+            fetch(SITEURL + 'api/tag?' + getUrlPar({
+                searchText: this.props.tagSearchInput
+            }), { method: 'GET' }).then(function (response) {
+                if (!response.ok) throw new Error(response.status);else return response.json();
+            }).then(function (json) {
+                _this8.setState({
+                    results: json.other.tags
+                });
+                _this8.checkAvailableTag(json.other.tags);
+            }).catch(function (error) {
+                console.log(error);
+            });
+        }
+    }, {
+        key: "prepareATags",
+        value: function prepareATags() {
+            this.aTags = [];
+            for (var i = 0; i < this.state.results.length; i++) {
+                this.aTags.push(React.createElement(SearchResult, { key: this.state.results[i].id, id: this.state.results[i].id, slug: this.state.results[i].slug, name: this.state.results[i].name, passive: this.state.results[i].passive, href: 'urun', click: this.clickFunc }));
+            }
+        }
+    }, {
+        key: "clickFunc",
+        value: function clickFunc(obj) {
+            this.props.click(obj);
+            this.props.changeTagSearchInput("");
+        }
+    }, {
+        key: "changeInput",
+        value: function changeInput(e) {
+            this.props.changeTagSearchInput(e.target.value);
+            clearTimeout(this.setTime);
+            if (e.target.value.length) {
+                this.setTime = setTimeout(function () {
+                    this.refreshResults();
+                }.bind(this), 1000);
+            }
+        }
+    }, {
+        key: "deleteResults",
+        value: function deleteResults() {
+            var _this9 = this;
+
+            setTimeout(function () {
+                _this9.setState({
+                    results: []
+                });
+            }, 200);
+        }
+    }, {
+        key: "render",
+        value: function render() {
+            if (this.state.results.length) {
+                this.prepareATags();
+            }
+            return React.createElement(
+                "div",
+                { id: "search", className: "ui search" },
+                React.createElement("input", { className: "prompt", type: "text", placeholder: "Etiket Ara..", value: this.props.tagSearchInput, onChange: this.changeInput, onBlur: this.deleteResults }),
+                this.state.results.length ? React.createElement(
+                    "div",
+                    { id: "search-results", className: "results transition visible" },
+                    this.aTags
+                ) : ""
+            );
+        }
+    }]);
+
+    return SearchBarForTag;
+}(React.Component);
+
+var SearchResult = function (_React$Component5) {
+    _inherits(SearchResult, _React$Component5);
 
     function SearchResult(props) {
         _classCallCheck(this, SearchResult);
 
-        var _this7 = _possibleConstructorReturn(this, (SearchResult.__proto__ || Object.getPrototypeOf(SearchResult)).call(this, props));
+        var _this10 = _possibleConstructorReturn(this, (SearchResult.__proto__ || Object.getPrototypeOf(SearchResult)).call(this, props));
 
-        _this7.click = _this7.click.bind(_this7);
-        return _this7;
+        _this10.click = _this10.click.bind(_this10);
+        return _this10;
     }
 
     _createClass(SearchResult, [{
         key: "click",
         value: function click(e) {
             e.preventDefault();
-            if (this.props.id == "loading") return;
+            if (this.props.id == "loading") return;else if (this.props.id == "yeni-urun") {
+                this.props.changeContent('yeni-urun', true);
+                return;
+            }
             this.props.click({
                 id: this.props.id,
                 slug: this.props.slug,
@@ -343,16 +450,35 @@ var SearchResult = function (_React$Component4) {
     return SearchResult;
 }(React.Component);
 
-var Header = function (_React$Component5) {
-    _inherits(Header, _React$Component5);
+var Header = function (_React$Component6) {
+    _inherits(Header, _React$Component6);
 
-    function Header() {
+    function Header(props) {
         _classCallCheck(this, Header);
 
-        return _possibleConstructorReturn(this, (Header.__proto__ || Object.getPrototypeOf(Header)).apply(this, arguments));
+        var _this11 = _possibleConstructorReturn(this, (Header.__proto__ || Object.getPrototypeOf(Header)).call(this, props));
+
+        _this11.state = {
+            productSearchInput: ""
+        };
+        _this11.changeProductSearchInput = _this11.changeProductSearchInput.bind(_this11);
+        _this11.goProduct = _this11.goProduct.bind(_this11);
+        return _this11;
     }
 
     _createClass(Header, [{
+        key: "changeProductSearchInput",
+        value: function changeProductSearchInput(value) {
+            this.setState({
+                productSearchInput: value
+            });
+        }
+    }, {
+        key: "goProduct",
+        value: function goProduct(obj) {
+            this.props.changeContent(SITEURL + '/urun/' + obj.slug);
+        }
+    }, {
         key: "render",
         value: function render() {
             return React.createElement(
@@ -375,7 +501,12 @@ var Header = function (_React$Component5) {
                             React.createElement(
                                 WideColumn,
                                 { size: "eight" },
-                                React.createElement(SearchBar, null)
+                                React.createElement(SearchBarForProduct, {
+                                    tagSearchInput: this.state.productSearchInput,
+                                    changeTagSearchInput: this.changeProductSearchInput,
+                                    click: this.goProduct,
+                                    changeContent: this.props.changeContent
+                                })
                             ),
                             React.createElement(
                                 WideColumn,
@@ -392,8 +523,8 @@ var Header = function (_React$Component5) {
     return Header;
 }(React.Component);
 
-var Footer = function (_React$Component6) {
-    _inherits(Footer, _React$Component6);
+var Footer = function (_React$Component7) {
+    _inherits(Footer, _React$Component7);
 
     function Footer() {
         _classCallCheck(this, Footer);
@@ -432,8 +563,8 @@ var Footer = function (_React$Component6) {
     return Footer;
 }(React.Component);
 
-var Content = function (_React$Component7) {
-    _inherits(Content, _React$Component7);
+var Content = function (_React$Component8) {
+    _inherits(Content, _React$Component8);
 
     function Content() {
         _classCallCheck(this, Content);
@@ -485,21 +616,21 @@ var Content = function (_React$Component7) {
     return Content;
 }(React.Component);
 
-var App = function (_React$Component8) {
-    _inherits(App, _React$Component8);
+var App = function (_React$Component9) {
+    _inherits(App, _React$Component9);
 
     function App(props) {
         _classCallCheck(this, App);
 
-        var _this11 = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
+        var _this14 = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
 
-        _this11.state = {
-            content: _this11.props.content,
+        _this14.state = {
+            content: _this14.props.content,
             form: "login", // user-empty-unread, user-has-unread, login
             userSlug: "yunus-emre",
             unreadCommentsCount: 115
         };
-        _this11.contentFromSlug = {
+        _this14.contentFromSlug = {
             " ": "index",
             "urun": "product",
             "profil": "profile",
@@ -516,12 +647,12 @@ var App = function (_React$Component8) {
             this.setState({
                 "content": this.contentFromSlug[page]
             });
-        }.bind(_this11);
+        }.bind(_this14);
 
-        _this11.changeContent = _this11.changeContent.bind(_this11);
-        _this11.logout = _this11.logout.bind(_this11);
-        _this11.changeHeader = _this11.changeHeader.bind(_this11);
-        return _this11;
+        _this14.changeContent = _this14.changeContent.bind(_this14);
+        _this14.logout = _this14.logout.bind(_this14);
+        _this14.changeHeader = _this14.changeHeader.bind(_this14);
+        return _this14;
     }
 
     _createClass(App, [{
@@ -560,7 +691,6 @@ var App = function (_React$Component8) {
                 var page = pathNames[0];
                 var _cont = this.contentFromSlug[page];
                 window.history.pushState({ content: _cont }, "title", href);
-                console.log(_cont);
                 this.setState({
                     "content": _cont
                 });
@@ -569,7 +699,7 @@ var App = function (_React$Component8) {
     }, {
         key: "logout",
         value: function logout() {
-            var _this12 = this;
+            var _this15 = this;
 
             fetch(SITEURL + 'api/logout', {
                 method: 'POST',
@@ -579,11 +709,11 @@ var App = function (_React$Component8) {
             }).then(function (response) {
                 if (!response.ok) throw new Error(response.status);else return response.json();
             }).then(function (json) {
-                _this12.setState({
+                _this15.setState({
                     form: "login"
                 });
                 setCookie('user', null);
-                _this12.changeContent(' ', true);
+                _this15.changeContent(' ', true);
             }).catch(function (error) {});
         }
     }, {

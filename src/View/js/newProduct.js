@@ -460,10 +460,9 @@ class TagSelector extends React.Component {
             <div>
                 <Row size="one">
                     <Column>
-                        <SearchBar
+                        <SearchBarForTag
                             tagSearchInput={this.state.tagSearchInput}
                             changeTagSearchInput={this.changeTagSearchInput}
-                            inputPlaceholder={"Etiket Ara.."}
                             click={this.props.clickSearchResult}
                             checkAvailableTag={this.checkAvailableTag}
                         />

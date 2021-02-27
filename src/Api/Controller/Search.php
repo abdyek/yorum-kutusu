@@ -6,17 +6,17 @@ use YorumKutusu\Api\Core\Database;
 
 class Search extends Controller {
     protected function get() {
-        $results = Database::getRows('SELECT * FROM product WHERE product_name LIKE "%"?"%" AND product_deleted=0', [$this->data['text']]);
+        $results = Database::getRows('SELECT * FROM product WHERE product_name LIKE "%"?"%" AND product_deleted=0 LIMIT 10', [$this->data['name']]);
         $resultsArray = [];
         foreach($results as $r) {
             $resultsArray[] = [
-                'productID'=>$r['product_id'],
-                'productSlug'=>$r['product_slug'],
-                'productName'=>$r['product_name']
+                'id'=>$r['product_id'],
+                'slug'=>$r['product_slug'],
+                'name'=>$r['product_name']
             ];
         }
         $this->success([
-            'results'=>$resultsArray
+            'products'=>$resultsArray
         ]);
     }
 }

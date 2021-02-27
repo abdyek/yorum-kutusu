@@ -411,7 +411,7 @@ namespace YorumKutusu\Api\Config;
                 ],
                 'keys'=>[
                     'GET'=>[
-                        'text'=>[
+                        'name'=>[
                             'min'=>1,
                             'max'=>50
                         ]
