@@ -249,9 +249,10 @@ var H = function (_React$Component9) {
         /* if(!this.props.optional) { this.optional = ""; } else { this.optional = this.props.optional; } */
         _this9.optional = _this9.props.optional ? _this9.props.optional : "";
         _this9.id = _this9.props.id ? _this9.props.id : "";
+        _this9.aOptional = _this9.props.aOptional ? _this9.props.aOptional : "";
         _this9.a = React.createElement(
             "a",
-            { href: _this9.props.href, onClick: _this9.props.handleOnClick },
+            { href: _this9.props.href, onClick: _this9.props.handleOnClick, className: _this9.aOptional },
             _this9.props.text
         );
         if (_this9.props.type == "1") {
@@ -565,7 +566,7 @@ var RowLoadingSpin = function (_React$Component18) {
                         null,
                         React.createElement(
                             RaisedSegment,
-                            null,
+                            { otherClass: "comment" },
                             React.createElement(
                                 Center,
                                 null,

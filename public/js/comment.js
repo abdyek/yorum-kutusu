@@ -1154,7 +1154,6 @@ var EditArea = function (_React$Component11) {
         value: function sendComment() {
             var _this17 = this;
 
-            console.log(this.props.productID);
             if (this.props.newComment) {
                 // new comment
                 fetch(SITEURL + 'api/comment', {
@@ -1238,14 +1237,14 @@ var EditArea = function (_React$Component11) {
                     ) : "",
                     React.createElement(
                         RaisedSegment,
-                        null,
+                        { otherClass: "comment" },
                         React.createElement(
                             Row,
                             { size: "two", nonStackable: true },
                             React.createElement(
                                 Column,
                                 null,
-                                React.createElement(H, { type: "4", text: this.title })
+                                React.createElement(H, { type: "4", text: this.title, aOptional: "commentTitles" })
                             ),
                             React.createElement(
                                 Column,
@@ -1271,10 +1270,10 @@ var EditArea = function (_React$Component11) {
                                         { className: "field" },
                                         React.createElement(
                                             "label",
-                                            null,
+                                            { className: "commentTitles" },
                                             "Yorumunuz"
                                         ),
-                                        React.createElement("textarea", { value: this.state.commentText, onChange: this.changeComment })
+                                        React.createElement("textarea", { value: this.state.commentText, onChange: this.changeComment, className: "editAreaTextarea" })
                                     )
                                 )
                             )
@@ -1369,7 +1368,7 @@ var DeleteArea = function (_React$Component12) {
                     null,
                     React.createElement(
                         RaisedSegment,
-                        null,
+                        { otherClass: "comment" },
                         React.createElement(
                             Row,
                             { size: "one" },
@@ -1425,8 +1424,8 @@ var BottomComment = function (_React$Component13) {
         _this20.state = {
             topMessage: null,
             likeButtonDisabled: false,
-            likeCount: _this20.props.ownComment.commentLikeCount,
-            liked: _this20.props.ownComment.liked
+            likeCount: _this20.props.ownComment ? _this20.props.ownComment.commentLikeCount : 0,
+            liked: _this20.props.ownComment ? _this20.props.ownComment.liked : false
         };
         _this20.likeToggle = _this20.likeToggle.bind(_this20);
         return _this20;

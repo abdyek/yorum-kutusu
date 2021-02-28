@@ -740,7 +740,6 @@ class EditArea extends React.Component {
         });
     }
     sendComment() {
-        console.log(this.props.productID);
         if(this.props.newComment) {
             // new comment
             fetch(SITEURL + 'api/comment', {
@@ -815,10 +814,10 @@ class EditArea extends React.Component {
                             </Column>
                         </Row>
                     :""}
-                    <RaisedSegment>
+                    <RaisedSegment otherClass="comment">
                         <Row size="two" nonStackable={true}>
                             <Column>
-                                <H type="4" text={this.title} />
+                                <H type="4" text={this.title} aOptional="commentTitles" />
                             </Column>
                             <Column>
                                 {
@@ -834,8 +833,8 @@ class EditArea extends React.Component {
                             <Column>
                             <div className="ui form">
                                 <div className="field">
-                                    <label>Yorumunuz</label>
-                                    <textarea value={this.state.commentText} onChange={this.changeComment}></textarea>
+                                    <label className="commentTitles">Yorumunuz</label>
+                                    <textarea value={this.state.commentText} onChange={this.changeComment} className="editAreaTextarea"></textarea>
                                 </div>
                             </div>
                             </Column>
@@ -898,7 +897,7 @@ class DeleteArea extends React.Component {
         return(
             <Row size="one">
                 <Column>
-                    <RaisedSegment>
+                    <RaisedSegment otherClass="comment">
                         <Row size="one">
                             <Column>
                                 <BasicMessage type="danger" text="Bu yorumu kalıcı olarak silmek istediğinizden emin misiniz?" />
@@ -931,8 +930,8 @@ class BottomComment extends React.Component {
         this.state = {
             topMessage: null,
             likeButtonDisabled: false,
-            likeCount: this.props.ownComment.commentLikeCount,
-            liked:this.props.ownComment.liked
+            likeCount: (this.props.ownComment)?this.props.ownComment.commentLikeCount:0,
+            liked: (this.props.ownComment)?this.props.ownComment.liked:false
         }
         this.likeToggle = this.likeToggle.bind(this);
     }

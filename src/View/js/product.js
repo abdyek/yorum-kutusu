@@ -8,7 +8,7 @@ class Product extends React.Component {
             sortBy:"time",
             followButtonDisabled:false,
             followed:false,
-            bottomCommentForm:"normal"
+            bottomCommentForm:"newComment"
         }
         this.manageSlugs = this.manageSlugs.bind(this);
         this.fetchProduct = this.fetchProduct.bind(this);

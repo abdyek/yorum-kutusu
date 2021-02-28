@@ -21,7 +21,7 @@ var Product = function (_React$Component) {
             sortBy: "time",
             followButtonDisabled: false,
             followed: false,
-            bottomCommentForm: "normal"
+            bottomCommentForm: "newComment"
         };
         _this.manageSlugs = _this.manageSlugs.bind(_this);
         _this.fetchProduct = _this.fetchProduct.bind(_this);

@@ -67,7 +67,7 @@ class Signup extends Controller {
         return (Database::getRow('SELECT * FROM member WHERE member_slug=?', [$this->memberSlug]))?false:true;
     }
     private function create() {
-        $query = Database::executeWithError('INSERT INTO member (member_username, member_slug, member_first_email, member_email, member_password_hash) VALUES (?,?,?,?,?)', [
+        $query = Database::executeWithError('INSERT INTO member (member_username, member_slug, member_first_email, member_email, member_password_hash, member_restricted) VALUES (?,?,?,?,?,1)', [
             $this->data['username'],
             $this->memberSlug,
             $this->data['eMail'],

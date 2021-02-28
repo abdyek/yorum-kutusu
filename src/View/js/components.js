@@ -112,7 +112,8 @@ class H extends React.Component {
         /* if(!this.props.optional) { this.optional = ""; } else { this.optional = this.props.optional; } */
         this.optional = (this.props.optional)?this.props.optional:"";
         this.id = (this.props.id)?this.props.id:"";
-        this.a = <a href={this.props.href} onClick={this.props.handleOnClick}>{this.props.text}</a>
+        this.aOptional = (this.props.aOptional)?this.props.aOptional:"";
+        this.a = <a href={this.props.href} onClick={this.props.handleOnClick} className={this.aOptional}>{this.props.text}</a>
         if(this.props.type=="1") {
             this.h = <h1 id={this.id} className={"ui "+this.textAlign+" header h-title " + this.optional}>{this.a}</h1>
         } else if(this.props.type=="2") {
@@ -247,7 +248,7 @@ class RowLoadingSpin extends React.Component {
             return(
                 <Row size="one">
                     <Column>
-                        <RaisedSegment>
+                        <RaisedSegment otherClass="comment">
                             <Center>
                                 <LoadingSpin />
                             </Center>

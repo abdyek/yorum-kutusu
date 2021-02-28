@@ -135,3 +135,12 @@ header {
     color:#CCC !important;
     cursor:pointer !important;
 }
+
+.commentTitles {
+    color:#eee !important;
+}
+
+.editAreaTextarea {
+    background-color:#3b555d !important;
+    color:#eee !important;
+}
