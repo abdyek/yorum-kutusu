@@ -1424,12 +1424,47 @@ var BottomComment = function (_React$Component13) {
 
         _this20.state = {
             topMessage: null,
-            likeButtonDisabled: false
+            likeButtonDisabled: false,
+            likeCount: _this20.props.ownComment.commentLikeCount,
+            liked: _this20.props.ownComment.liked
         };
+        _this20.likeToggle = _this20.likeToggle.bind(_this20);
         return _this20;
     }
 
     _createClass(BottomComment, [{
+        key: "likeToggle",
+        value: function likeToggle() {
+            var _this21 = this;
+
+            if (isMember()) {
+                this.make = this.state.liked ? false : true;
+                this.setState({
+                    likeButtonDisabled: true
+                });
+                fetch(SITEURL + 'api/likeComment', {
+                    method: 'POST',
+                    header: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        commentID: this.props.ownComment.commentID,
+                        like: this.make
+                    })
+                }).then(function (response) {
+                    if (!response.ok) throw new Error(response.status);else return response.json();
+                }).then(function (json) {
+                    _this21.setState({
+                        likeButtonDisabled: false,
+                        liked: _this21.make,
+                        likeCount: json['other']['count']
+                    });
+                }).catch(function (error) {});
+            } else {
+                this.props.changeContent('giris-yap', true);
+            }
+        }
+    }, {
         key: "render",
         value: function render() {
             if (this.props.form == "normal") {
@@ -1465,8 +1500,8 @@ var BottomComment = function (_React$Component13) {
                                     type: "profile"
                                 }),
                                 React.createElement(BottomOfComment, {
-                                    likeCount: this.props.ownComment.commentLikeCount,
-                                    liked: this.props.ownComment.liked,
+                                    likeCount: this.state.likeCount,
+                                    liked: this.state.liked,
                                     likeButtonDisabled: this.state.likeButtonDisabled,
                                     likeToggle: this.likeToggle,
                                     date: this.props.ownComment.commentCreateDateTime,

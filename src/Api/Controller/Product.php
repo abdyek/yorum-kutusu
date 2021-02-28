@@ -84,7 +84,7 @@ class Product extends Controller {
         $this->commentsInfo = [];
         foreach($comments as $key=>$com) {
             $rating = Database::getRows('SELECT t.tag_slug, t.tag_name, tr.tag_rating_value FROM tag_rating tr INNER JOIN tag_with_product twp ON twp.tag_with_product_id=tr.tag_with_product_id INNER JOIN tag t ON t.tag_id=twp.tag_id WHERE tr.member_id=? AND twp.product_id=?', [$com['member_id'], $this->productInfo['id']]);
-            $liked = (defined('$this->userId') and Database::getRow('SELECT * FROM comment_like WHERE member_id=? and comment_id=?', [$this->userId, $com['comment_id']]))?true:false;
+            $liked = (isset($this->userId) and Database::getRow('SELECT * FROM comment_like WHERE member_id=? and comment_id=?', [$this->userId, $com['comment_id']]))?true:false;
             $ratingInfo = [];
             foreach($rating as $rate) {
                 $ratingInfo[] = [

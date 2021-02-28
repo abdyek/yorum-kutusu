@@ -930,7 +930,40 @@ class BottomComment extends React.Component {
         super(props);
         this.state = {
             topMessage: null,
-            likeButtonDisabled: false
+            likeButtonDisabled: false,
+            likeCount: this.props.ownComment.commentLikeCount,
+            liked:this.props.ownComment.liked
+        }
+        this.likeToggle = this.likeToggle.bind(this);
+    }
+    likeToggle() {
+        if(isMember()) {
+            this.make = (this.state.liked)?false:true;
+            this.setState({
+                likeButtonDisabled:true
+            });
+            fetch(SITEURL + 'api/likeComment', {
+                method: 'POST',
+                header: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    commentID: this.props.ownComment.commentID,
+                    like: this.make
+                })
+            }).then((response)=>{
+                if(!response.ok) throw new Error(response.status);
+                else return response.json();
+            }).then((json)=>{
+                this.setState({
+                    likeButtonDisabled:false,
+                    liked:this.make,
+                    likeCount: json['other']['count']
+                });
+            }).catch((error)=>{
+            });
+        } else {
+            this.props.changeContent('giris-yap', true);
         }
     }
     render() {
@@ -958,8 +991,8 @@ class BottomComment extends React.Component {
                                     type={"profile"}
                                 />
                                 <BottomOfComment
-                                    likeCount={this.props.ownComment.commentLikeCount}
-                                    liked={this.props.ownComment.liked}
+                                    likeCount={this.state.likeCount}
+                                    liked={this.state.liked}
                                     likeButtonDisabled={this.state.likeButtonDisabled}
                                     likeToggle={this.likeToggle}
                                     date={this.props.ownComment.commentCreateDateTime}
