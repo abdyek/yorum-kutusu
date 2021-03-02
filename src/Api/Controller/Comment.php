@@ -11,7 +11,7 @@ class Comment extends Controller {
         $this->productCheckWrapper();
         $this->tagCheckWrapper();
         if(Database::existCheck('SELECT comment_id FROM comment WHERE comment_deleted=0 AND member_id=? AND product_id=?', [$this->userId, $this->data['productID']]) or
-        Database::existCheck('SELECT comment_request_id FROM comment_request WHERE cancelled=0 AND member_id=? AND product_id=?', [$this->userId, $this->data['productID']])){
+        Database::existCheck('SELECT comment_request_id FROM comment_request WHERE cancelled=0 AND comment_request_answered=0 AND member_id=? AND product_id=?', [$this->userId, $this->data['productID']])){
             // ^ her kullanıcı her ürün için sadece bir tane yorum yapabilir
             $this->setHttpStatus(422);
             exit();
@@ -76,38 +76,41 @@ class Comment extends Controller {
     protected function put() {
         $this->productCheckWrapper();
         $this->tagCheckWrapper();
-        $this->request = Database::existCheck('SELECT comment_request_id FROM comment_request WHERE cancelled=0 AND member_id=? AND product_id=?', [$this->userId, $this->data['productID']]);
-        $this->comment = Database::existCheck('SELECT comment_id, admin_id, comment_text FROM comment WHERE comment_deleted=0 AND member_id=? AND product_id=?',[$this->userId, $this->data['productID']]);
-        $this->restricted = Database::existCheck('SELECT member_restricted FROM member WHERE member_id=?', [$this->userId])['member_restricted'];
-        if($this->request and $this->restricted) {
-            $this->updateRequest();
-        } else if($this->comment and !$this->restricted) {
-            $this->updateComment();
+        $this->request = Database::existCheck('SELECT * FROM comment_request WHERE comment_request_answered=0 AND cancelled=0 AND member_id=? AND product_id=?', [$this->userId, $this->data['productID']]);
+        $this->comment = Database::existCheck('SELECT * FROM comment WHERE member_id=? AND product_id=?', [$this->userId, $this->data['productID']]);
+        $memberRestricted = Database::existCheck('SELECT member_restricted FROM member WHERE member_id=?', [$this->userId])['member_restricted'];
+        if($memberRestricted) {
+            if($this->comment) {
+                $this->addRequestToUpdateComment();
+            } else if($this->request) {
+                $this->updateRequest();
+            } else {
+                $this->setHttpStatus(404);
+                exit();
+            }
         } else {
-            $this->setHttpStatus(404);
-            exit();
+            $this->updateComment();
         }
         $this->commitRating();
     }
-    private function updateRequest() {
-        $query = Database::execute('UPDATE comment_request SET cancelled=1 WHERE member_id=?', [$this->userId]);
-        if(!$query) {
-            $this->responseWithMessage(5);
-            exit();
+    private function addRequestToUpdateComment() {
+        if(($this->comment['comment_text']!=$this->data['commentText'])) {
+            Database::executeWithErr('UPDATE comment_request SET cancelled=1 WHERE member_id=? AND product_id=?', [$this->userId, $this->data['productID']]);
+            Database::executeWithErr('INSERT INTO comment_request (member_id, product_id, comment_id, comment_text) VALUES(?,?,?,?)', [$this->userId, $this->data['productID'], $this->comment['comment_id'], $this->data['commentText']]);
         }
-        $query = Database::execute('INSERT INTO comment_request (member_id, product_id, comment_text) VALUES(?,?,?)', [$this->userId, $this->data['productID'], $this->data['commentText']]);
-        if(!$query) {
-            $this->responseWithMessage(5);
-            exit();
+        $this->success();
+    }
+    private function updateRequest() {
+        if($this->request['comment_text']!=$this->data['commentText']) {
+            $query = Database::execute('UPDATE comment_request SET cancelled=1 WHERE member_id=? AND product_id=?', [$this->userId, $this->data['productID']]);
+            $query = Database::execute('INSERT INTO comment_request (member_id, product_id, comment_text) VALUES(?,?,?)', [$this->userId, $this->data['productID'], $this->data['commentText']]);
         }
         $this->success();
     }
     private function updateComment() {
-        $this->writeHistory();
-        $query = Database::execute('UPDATE comment SET comment_text=?, comment_edited=1, comment_last_edit_date_time=? WHERE comment_id=?', [$this->data['commentText'], Other::getCurrentDateTime(), $this->comment['comment_id']]);
-        if(!$query) {
-            $this->responseWithMessage(5);
-            exit();
+        if($this->comment['comment_text']!=$this->data['commentText']) {
+            $this->writeHistory();
+            $query = Database::execute('UPDATE comment SET comment_text=?, comment_edited=1, comment_last_edit_date_time=? WHERE comment_id=?', [$this->data['commentText'], Other::getCurrentDateTime(), $this->comment['comment_id']]);
         }
         $this->success();
     }

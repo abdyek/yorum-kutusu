@@ -3,6 +3,7 @@
 namespace YorumKutusu\Api\Controller;
 use YorumKutusu\Api\Core\Controller;
 use YorumKutusu\Api\Core\Database;
+use YorumKutusu\Api\Config\Config;
 use Ahc\Jwt\JWT;
 
 class LoginAsAdmin extends Controller {

@@ -30,8 +30,8 @@ class CommentRequest extends Controller {
         }
     }
     protected function post() {
-        $comReq = Database::existCheck('SELECT comment_request_id FROM comment_request WHERE comment_request_answered=0 and comment_request_id=?', [$this->data['commentRequestID']]);
-        if(!$comReq) {
+        $this->commentRequest = Database::existCheck('SELECT * FROM comment_request WHERE comment_request_answered=0 and cancelled=0 and comment_request_id=?', [$this->data['commentRequestID']]);
+        if(!$this->commentRequest) {
             $this->setHttpStatus(404);
             exit();
         }
@@ -42,6 +42,15 @@ class CommentRequest extends Controller {
             ($this->data['allow'])?1:0,
             $this->data['adminNote']
         ]);
+        if($this->data['allow']) {
+            Database::executeWithErr('INSERT INTO comment (member_id, product_id, admin_id, comment_text, comment_create_date_time) VALUES(?,?,?,?,?)', [
+                $this->commentRequest['member_id'],
+                $this->commentRequest['product_id'],
+                $this->userId,
+                $this->commentRequest['comment_text'],
+                $this->commentRequest['comment_request_date_time']
+            ]);
+        }
         $this->success();
     }
 }
