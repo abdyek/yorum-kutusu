@@ -277,7 +277,7 @@ namespace YorumKutusu\Api\Config;
                 'authorization'=>[
                     'POST'=>['member'],
                     'PUT'=>['member'],
-                    'DELETE'=>['member', 'admin']
+                    'DELETE'=>['member']
                 ],
                 'keys'=>[
                     'POST'=>[
@@ -301,7 +301,7 @@ namespace YorumKutusu\Api\Config;
                         ]
                     ],
                     'DELETE'=>[
-                        'commentID'=>[
+                        'productID'=>[
                             'min'=>1,
                             'max'=>11
                         ]

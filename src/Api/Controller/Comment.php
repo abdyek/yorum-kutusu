@@ -146,15 +146,39 @@ class Comment extends Controller {
         // burada hesaplanacak
     }
     protected function delete() {
-        if($this->who=='admin') {
-            $this->deleteByAdmin();
-        } elseif($this->who=='member') {
-            $this->deleteByMember();
-        }
+        $this->productCheckWrapper();
+        Database::executeWithErr('UPDATE comment_request SET cancelled=1 WHERE member_id=? AND product_id=?', [$this->userId, $this->data['productID']]);
         $this->removeRating();
-        $this->removeHiddenComment();
-        $this->decreaseNewCommentCount();
+        $this->comment = Database::existCheck('SELECT * FROM comment WHERE comment_deleted=0 AND member_id=? AND product_id=?', [$this->userId, $this->data['productID']]);
+        if($this->comment) {
+            Database::executeWithErr('UPDATE comment SET comment_deleted=1 WHERE member_id=? AND product_id=?', [$this->userId, $this->data['productID']]);
+            $this->addHistory();
+            $this->removeHiddenComment();
+            $this->decreaseNewCommentCount();
+        }
+        $this->success();
     }
+    private function removeRating() {
+        $twps = Database::getRows('SELECT * FROM tag_with_product twp INNER JOIN tag_rating tr ON tr.tag_with_product_id=twp.tag_with_product_id WHERE twp.product_id=1 and tr.member_id=1', [$this->data['productID'],$this->userId]);
+        foreach($twps as $twp) {
+            Database::execute('DELETE FROM tag_rating WHERE tag_with_product_id=? AND member_id=?', [$twp['tag_with_product_id'],$this->userId]);
+            $this->updateRateValue($twp['tag_with_product_id'], $twp['tag_rating_value'], false, true);
+        }
+    }
+    private function addHistory() {
+        Database::executeWithErr('INSERT INTO comment_delete_history (comment_id) VALUES(?)', [$this->comment['comment_id']]);
+    }
+    private function removeHiddenComment() {
+        Database::executeWithErr('DELETE FROM hidden_comment WHERE comment_id=?', [$this->comment['comment_id']]);
+    }
+    private function decreaseNewCommentCount() {
+        Database::executeWithErr('UPDATE product_follow SET new_comment_count = new_comment_count - 1 WHERE product_id=? and new_comment_count>0 and ?>last_seen_date_time', [$this->comment['product_id'], $this->comment['comment_create_date_time']]);
+    }
+
+}
+
+    /*
+      I will move under CommentCRUD to use for admin
     private function deleteByAdmin() {
         $this->comment = Database::existCheck('SELECT comment_id, product_id FROM comment WHERE comment_deleted=0 AND comment_id=?', [$this->data['commentID']]);
         if(!$this->comment) {
@@ -175,36 +199,4 @@ class Comment extends Controller {
         }
         $this->success();
     }
-    private function deleteByMember() {
-        $this->comment = Database::existCheck('SELECT comment_id, product_id, comment_create_date_time FROM comment WHERE comment_deleted=0 AND member_id=? AND comment_id=?', [$this->userId, $this->data['commentID']]);
-        if(!$this->comment) {
-            $this->setHttpStatus(404);
-            exit();
-        }
-        Database::execute('UPDATE comment SET comment_deleted=1 WHERE comment_id=?', [$this->data['commentID']]);
-        Database::execute('UPDATE comment_request SET cancelled=1 WHERE member_id=? AND product_id=?', [$this->userId, $this->comment['product_id']]);
-        // history
-        $query = Database::execute('INSERT INTO comment_delete_history (comment_id) VALUES(?)', [$this->data['commentID']]);
-        if(!$query) {
-            $this->setHttpStatus(500);
-            $this->responseWithMessage(5);
-            exit();
-        }
-        $this->success();
-    }
-    private function removeRating() {
-        $twps = Database::getRows('SELECT * FROM tag_with_product twp INNER JOIN tag_rating tr ON tr.tag_with_product_id=twp.tag_with_product_id WHERE twp.product_id=1 and tr.member_id=1', [$this->comment['product_id'],$this->userId]);
-        $val = Database::getRow('SELECT tag_rating');
-        foreach($twps as $twp) {
-            Database::execute('DELETE FROM tag_rating WHERE tag_with_product_id=? AND member_id=?', [$twp['tag_with_product_id'],$this->userId]);
-            $this->updateRateValue($twp['tag_with_product_id'], $twp['tag_rating_value'], false, true);
-        }
-    }
-    private function removeHiddenComment() {
-        Database::execute('DELETE FROM hidden_comment WHERE comment_id=?', [$this->data['commentID']]);
-    }
-    private function decreaseNewCommentCount() {
-        Database::execute('UPDATE product_follow SET new_comment_count = new_comment_count - 1 WHERE product_id=? and new_comment_count>0 and ?>last_seen_date_time', [$this->comment['product_id'], $this->comment['comment_create_date_time']]);
-    }
-
-}
+    */

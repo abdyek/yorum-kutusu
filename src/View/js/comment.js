@@ -165,7 +165,7 @@ class Comment extends React.Component {
             )
         } else if(this.state.form=="delete") {
             return(
-                <DeleteArea handleCancelButton={this.closeDeleteArea} runBeforeDelete={this.openLoadingSpin} runAfterDelete={this.makeNone} reloadFunc={this.props.reloadFunc} id={this.props.id}/>
+                <DeleteArea handleCancelButton={this.closeDeleteArea} runBeforeDelete={this.openLoadingSpin} runAfterDelete={this.makeNone} reloadFunc={this.props.reloadFunc} id={this.props.productID}/>
             )
         } else if(this.state.form=="message") {
             return(
@@ -875,7 +875,7 @@ class DeleteArea extends React.Component {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                commentID: this.props.id
+                productID: this.props.id
             })
         }).then((response)=>{
             if(!response.ok) throw new Error(response.status);
@@ -1040,7 +1040,7 @@ class BottomComment extends React.Component {
             )
         } else if(this.props.form=="delete") {
             return(
-                <DeleteArea handleCancelButton={this.props.openNormal} runBeforeDelete={this.props.openLoadingSpin} runAfterDelete={this.props.hide} reloadFunc={this.props.reloadFunc} id={this.props.ownComment.commentID}/>
+                <DeleteArea handleCancelButton={this.props.openNormal} runBeforeDelete={this.props.openLoadingSpin} runAfterDelete={this.props.hide} reloadFunc={this.props.reloadFunc} id={this.props.productID}/>
             )
         } else if(this.props.form=="loading") {
             return(

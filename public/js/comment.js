@@ -207,7 +207,7 @@ var Comment = function (_React$Component) {
             } else if (this.state.form == "edit") {
                 return React.createElement(EditArea, _defineProperty({ rating: this.props.rating, tags: this.props.tags, handleCancelButton: this.closeEditArea, commentText: this.props.text, owner: this.props.owner, reloadFunc: this.props.reloadFunc, setForm: this.setForm, productID: this.props.productID }, "setForm", this.setForm));
             } else if (this.state.form == "delete") {
-                return React.createElement(DeleteArea, { handleCancelButton: this.closeDeleteArea, runBeforeDelete: this.openLoadingSpin, runAfterDelete: this.makeNone, reloadFunc: this.props.reloadFunc, id: this.props.id });
+                return React.createElement(DeleteArea, { handleCancelButton: this.closeDeleteArea, runBeforeDelete: this.openLoadingSpin, runAfterDelete: this.makeNone, reloadFunc: this.props.reloadFunc, id: this.props.productID });
             } else if (this.state.form == "message") {
                 return React.createElement(
                     Row,
@@ -1340,7 +1340,7 @@ var DeleteArea = function (_React$Component12) {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    commentID: this.props.id
+                    productID: this.props.id
                 })
             }).then(function (response) {
                 if (!response.ok) throw new Error(response.status);else return response.json();
@@ -1541,7 +1541,7 @@ var BottomComment = function (_React$Component13) {
             } else if (this.props.form == "hidden") {
                 return "";
             } else if (this.props.form == "delete") {
-                return React.createElement(DeleteArea, { handleCancelButton: this.props.openNormal, runBeforeDelete: this.props.openLoadingSpin, runAfterDelete: this.props.hide, reloadFunc: this.props.reloadFunc, id: this.props.ownComment.commentID });
+                return React.createElement(DeleteArea, { handleCancelButton: this.props.openNormal, runBeforeDelete: this.props.openLoadingSpin, runAfterDelete: this.props.hide, reloadFunc: this.props.reloadFunc, id: this.props.productID });
             } else if (this.props.form == "loading") {
                 return React.createElement(RowLoadingSpin, null);
             }

@@ -35,7 +35,7 @@ class CommentRequest extends Controller {
             $this->setHttpStatus(404);
             exit();
         }
-        Database::execute('UPDATE comment_request SET comment_request_answered=1, admin_note=? WHERE comment_request_id=?', [$this->data['adminNote'], $this->data['commentRequestID']]);
+        Database::execute('UPDATE comment_request SET comment_request_answered=1, cancelled=?, admin_note=? WHERE comment_request_id=?', [($this->data['allow'])?0:1, $this->data['adminNote'], $this->data['commentRequestID']]);
         Database::execute('INSERT INTO comment_request_response (comment_request_id, admin_id, allowed_or_denied, admin_note) VALUES(?,?,?,?)', [
             $this->data['commentRequestID'],
             $this->userId,
