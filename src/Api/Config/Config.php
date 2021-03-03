@@ -732,6 +732,20 @@ namespace YorumKutusu\Api\Config;
                         ]
                     ]
                 ]
+            ],
+            'commentCRUD'=>[
+                'methods'=>['DELETE'],
+                'authorization'=>[
+                    'DELETE'=>['admin']
+                ],
+                'keys'=>[
+                    'DELETE'=>[
+                        'commentID'=>[
+                            'min'=>1,
+                            'max'=>11
+                        ],
+                    ]
+                ]
             ]
         ];
     }
