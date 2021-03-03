@@ -91,7 +91,7 @@ class Comment extends Controller {
         } else {
             $this->updateComment();
         }
-        $this->commitRating();
+        $this->commitRating(true);
     }
     private function addRequestToUpdateComment() {
         if(($this->comment['comment_text']!=$this->data['commentText'])) {
@@ -118,7 +118,7 @@ class Comment extends Controller {
         $query = Database::execute('INSERT INTO comment_history (comment_id, admin_id, comment_old_text) VALUES(?,?,?)', [$this->comment['comment_id'], $this->comment['admin_id'], $this->comment['comment_text']]);
     }
     // post ve put'un orta metodu
-    private function commitRating() {
+    private function commitRating($forPut=false) {
         $tags = isset($this->data['rating'])?$this->data['rating']:[];
         foreach($tags as $key=>$val) {
             $twpID = Database::getRow('SELECT tag_with_product_id FROM tag_with_product twp INNER JOIN tag t ON t.tag_id=twp.tag_id WHERE t.tag_name=? AND twp.product_id=?', [$key, $this->data['productID']])['tag_with_product_id'];
@@ -128,6 +128,9 @@ class Comment extends Controller {
             }
             Database::execute('DELETE FROM tag_rating WHERE tag_with_product_id=? AND member_id=?', [$twpID,$this->userId]);
             if($val=='-') {
+                if($forPut and $check) {
+                    Database::executeWithErr('UPDATE tag_with_product SET tag_avarage_rating=((tag_avarage_rating * rating_count)-?)/(rating_count-1), rating_count=rating_count-1 WHERE tag_with_product_id=?', [$check['tag_rating_value'], $twpID]);
+                }
                 continue;
             }
             Database::execute('INSERT INTO tag_rating_history (tag_with_product_id, member_id, tag_rating_value) VAlUES(?,?,?)', [$twpID,$this->userId, $val]);
