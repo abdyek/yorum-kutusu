@@ -77,12 +77,12 @@ class Comment extends Controller {
         $this->productCheckWrapper();
         $this->tagCheckWrapper();
         $this->request = Database::existCheck('SELECT * FROM comment_request WHERE comment_request_answered=0 AND cancelled=0 AND member_id=? AND product_id=?', [$this->userId, $this->data['productID']]);
-        $this->comment = Database::existCheck('SELECT * FROM comment WHERE member_id=? AND product_id=?', [$this->userId, $this->data['productID']]);
+        $this->comment = Database::existCheck('SELECT * FROM comment WHERE member_id=? AND product_id=? AND comment_deleted=0', [$this->userId, $this->data['productID']]);
         $memberRestricted = Database::existCheck('SELECT member_restricted FROM member WHERE member_id=?', [$this->userId])['member_restricted'];
         if($memberRestricted) {
             if($this->comment) {
                 $this->addRequestToUpdateComment();
-            } else if($this->request) {
+            } elseif($this->request) {
                 $this->updateRequest();
             } else {
                 $this->setHttpStatus(404);
@@ -181,12 +181,8 @@ class Comment extends Controller {
             $this->setHttpStatus(404);
             exit();
         }
-        $query = Database::execute('UPDATE comment SET comment_deleted=1 WHERE comment_id=?', [$this->data['commentID']]);
-        if(!$query) {
-            $this->setHttpStatus(500);
-            $this->responseWithMessage(5);
-            exit();
-        }
+        Database::execute('UPDATE comment SET comment_deleted=1 WHERE comment_id=?', [$this->data['commentID']]);
+        Database::execute('UPDATE comment_request SET cancelled=1 WHERE member_id=? AND product_id=?', [$this->userId, $this->comment['product_id']]);
         // history
         $query = Database::execute('INSERT INTO comment_delete_history (comment_id) VALUES(?)', [$this->data['commentID']]);
         if(!$query) {

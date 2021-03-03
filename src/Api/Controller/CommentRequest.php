@@ -43,13 +43,17 @@ class CommentRequest extends Controller {
             $this->data['adminNote']
         ]);
         if($this->data['allow']) {
-            Database::executeWithErr('INSERT INTO comment (member_id, product_id, admin_id, comment_text, comment_create_date_time) VALUES(?,?,?,?,?)', [
-                $this->commentRequest['member_id'],
-                $this->commentRequest['product_id'],
-                $this->userId,
-                $this->commentRequest['comment_text'],
-                $this->commentRequest['comment_request_date_time']
-            ]);
+            if($this->commentRequest['comment_id']==null){
+                Database::executeWithErr('INSERT INTO comment (member_id, product_id, admin_id, comment_text, comment_create_date_time) VALUES(?,?,?,?,?)', [
+                    $this->commentRequest['member_id'],
+                    $this->commentRequest['product_id'],
+                    $this->userId,
+                    $this->commentRequest['comment_text'],
+                    $this->commentRequest['comment_request_date_time']
+                ]);
+            } else {
+                Database::executeWithErr('UPDATE comment SET comment_text=?, comment_edited=1, comment_last_edit_date_time=? WHERE comment_id=?', [$this->commentRequest['comment_text'], $this->commentRequest['comment_request_date_time'],$this->commentRequest['comment_id']]);
+            }
         }
         $this->success();
     }
