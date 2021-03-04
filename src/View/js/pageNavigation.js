@@ -6,9 +6,6 @@ class PageNavigation extends React.Component {
         this.selectOption = this.selectOption.bind(this);
         this.nextPage = this.nextPage.bind(this);
         this.prevPage = this.prevPage.bind(this);
-        this.state = {
-            currentPage:this.props.currentPage
-        };
     }
     sortByLike() {
             this.props.handleChangeSortBy("like");
@@ -19,9 +16,6 @@ class PageNavigation extends React.Component {
     selectOption(e) {
         let value = (typeof e=="object")? e.target.value: e;
         this.props.handleChangePageNumber(value);
-        this.setState({
-            currentPage:value
-        });
     }
     nextPage() {
         if(this.props.currentPage<this.props.pageCount) {

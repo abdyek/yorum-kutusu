@@ -21,9 +21,6 @@ var PageNavigation = function (_React$Component) {
         _this.selectOption = _this.selectOption.bind(_this);
         _this.nextPage = _this.nextPage.bind(_this);
         _this.prevPage = _this.prevPage.bind(_this);
-        _this.state = {
-            currentPage: _this.props.currentPage
-        };
         return _this;
     }
 
@@ -42,9 +39,6 @@ var PageNavigation = function (_React$Component) {
         value: function selectOption(e) {
             var value = (typeof e === "undefined" ? "undefined" : _typeof(e)) == "object" ? e.target.value : e;
             this.props.handleChangePageNumber(value);
-            this.setState({
-                currentPage: value
-            });
         }
     }, {
         key: "nextPage",

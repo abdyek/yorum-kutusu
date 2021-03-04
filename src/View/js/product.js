@@ -5,6 +5,7 @@ class Product extends React.Component {
             form:"loading",
             specialInfo:{},
             navigationType:"all",
+            navigationOptions: [],
             sortBy:"time",
             followButtonDisabled:false,
             followed:false,
@@ -117,6 +118,8 @@ class Product extends React.Component {
                 comments: normalizer('comments', json['other']['comments']),
                 ownComment:ownComment,
                 ownCommentPublished:json.other.ownCommentPublished,
+                pageNumber: json['other']['pageNumber'],
+                pageCount:json['other']['pageCount']
             });
             this.refreshUrl();
         }).catch((error) => {
@@ -168,7 +171,9 @@ class Product extends React.Component {
                 ownComment:ownComment,
                 ownCommentPublished:json.other.ownCommentPublished,
                 bottomCommentForm: this.detectBottomCommentForm(json['other']['ownComment']),
-                tagsInfo: normalizer('tags', json['other']['tags'])
+                tagsInfo: normalizer('tags', json['other']['tags']),
+                pageNumber: json['other']['pageNumber'],
+                pageCount:json['other']['pageCount']
             });
             this.refreshUrl();
         }).catch((error) => {
@@ -273,6 +278,7 @@ class Product extends React.Component {
                     <Navigation
                         type={this.state.navigationType}
                         sortBy={this.state.sortBy}
+                        navigationOptions={this.state.navigationOptions}
                         form={this.state.commentsForm}
                         handleChangeSortBy={this.changeSortBy}
                         pageCount={this.state.pageCount}
@@ -291,6 +297,7 @@ class Product extends React.Component {
                     <Navigation
                         type={this.state.navigationType}
                         sortBy={this.state.sortBy}
+                        navigationOptions={this.state.navigationOptions}
                         form={this.state.commentsForm}
                         handleChangeSortBy={this.changeSortBy}
                         pageCount={this.state.pageCount}
@@ -334,10 +341,11 @@ class Navigation extends React.Component {
             return (
                 <PageNavigation
                     sortBy={this.props.sortBy}
-                    form={this.props.commentsForm}
+                    options={this.props.navigationOptions}
+                    form={this.props.form}
                     handleChangeSortBy={this.props.handleChangeSortBy}
                     pageCount={this.props.pageCount}
-                    currentPage={this.props.pageNumber}
+                    currentPage={this.props.currentPage}
                     handleChangePageNumber={this.props.handleChangePageNumber}
                 />
             )

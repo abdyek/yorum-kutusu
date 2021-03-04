@@ -18,6 +18,7 @@ var Product = function (_React$Component) {
             form: "loading",
             specialInfo: {},
             navigationType: "all",
+            navigationOptions: [],
             sortBy: "time",
             followButtonDisabled: false,
             followed: false,
@@ -141,7 +142,9 @@ var Product = function (_React$Component) {
                     commentsForm: "normal",
                     comments: normalizer('comments', json['other']['comments']),
                     ownComment: ownComment,
-                    ownCommentPublished: json.other.ownCommentPublished
+                    ownCommentPublished: json.other.ownCommentPublished,
+                    pageNumber: json['other']['pageNumber'],
+                    pageCount: json['other']['pageCount']
                 });
                 _this3.refreshUrl();
             }).catch(function (error) {
@@ -202,7 +205,9 @@ var Product = function (_React$Component) {
                     ownComment: ownComment,
                     ownCommentPublished: json.other.ownCommentPublished,
                     bottomCommentForm: _this4.detectBottomCommentForm(json['other']['ownComment']),
-                    tagsInfo: normalizer('tags', json['other']['tags'])
+                    tagsInfo: normalizer('tags', json['other']['tags']),
+                    pageNumber: json['other']['pageNumber'],
+                    pageCount: json['other']['pageCount']
                 });
                 _this4.refreshUrl();
             }).catch(function (error) {
@@ -329,6 +334,7 @@ var Product = function (_React$Component) {
                     React.createElement(Navigation, {
                         type: this.state.navigationType,
                         sortBy: this.state.sortBy,
+                        navigationOptions: this.state.navigationOptions,
                         form: this.state.commentsForm,
                         handleChangeSortBy: this.changeSortBy,
                         pageCount: this.state.pageCount,
@@ -347,6 +353,7 @@ var Product = function (_React$Component) {
                     React.createElement(Navigation, {
                         type: this.state.navigationType,
                         sortBy: this.state.sortBy,
+                        navigationOptions: this.state.navigationOptions,
                         form: this.state.commentsForm,
                         handleChangeSortBy: this.changeSortBy,
                         pageCount: this.state.pageCount,
@@ -397,10 +404,11 @@ var Navigation = function (_React$Component2) {
             if (this.props.type == "all") {
                 return React.createElement(PageNavigation, {
                     sortBy: this.props.sortBy,
-                    form: this.props.commentsForm,
+                    options: this.props.navigationOptions,
+                    form: this.props.form,
                     handleChangeSortBy: this.props.handleChangeSortBy,
                     pageCount: this.props.pageCount,
-                    currentPage: this.props.pageNumber,
+                    currentPage: this.props.currentPage,
                     handleChangePageNumber: this.props.handleChangePageNumber
                 });
             } else if (this.props.type == "unread") {
