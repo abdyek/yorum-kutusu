@@ -434,8 +434,8 @@ class App extends React.Component {
         this.state = {
             content:this.props.content,
             form:"login", // user-empty-unread, user-has-unread, login
-            userSlug:"yunus-emre",
-            unreadCommentsCount: 115
+            userSlug:"",
+            unreadCommentsCount: 0
         };
         this.contentFromSlug = {
             " ":"index",
@@ -463,19 +463,22 @@ class App extends React.Component {
     componentDidMount() {
         let form = "login";
         let unread = 0;
-        if(getCookie('user') && getCookie('user')!="null") {
-            const json = atob(getCookie('user'));
-            if(json['unreadComments']>0) {
+        let userSlug = "";
+        const userInfo = getUserInfo();
+        if(userInfo) {
+            if(userInfo['unreadComments']>0) {
                 form = "user-has-unread";
-                unread = json['unreadComments'];
+                unread = userInfo['unreadComments'];
             } else {
                 form = "user-empty-unread";
                 unread = 0;
             }
+            userSlug = userInfo['slug'];
         }
         this.setState({
             "form": form,
-            "unreadCommentsCount":unread
+            "unreadCommentsCount":unread,
+            "userSlug":userSlug
         });
     }
     changeContent(href, direct, slugs) {

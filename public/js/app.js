@@ -627,8 +627,8 @@ var App = function (_React$Component9) {
         _this14.state = {
             content: _this14.props.content,
             form: "login", // user-empty-unread, user-has-unread, login
-            userSlug: "yunus-emre",
-            unreadCommentsCount: 115
+            userSlug: "",
+            unreadCommentsCount: 0
         };
         _this14.contentFromSlug = {
             " ": "index",
@@ -660,19 +660,22 @@ var App = function (_React$Component9) {
         value: function componentDidMount() {
             var form = "login";
             var unread = 0;
-            if (getCookie('user') && getCookie('user') != "null") {
-                var json = atob(getCookie('user'));
-                if (json['unreadComments'] > 0) {
+            var userSlug = "";
+            var userInfo = getUserInfo();
+            if (userInfo) {
+                if (userInfo['unreadComments'] > 0) {
                     form = "user-has-unread";
-                    unread = json['unreadComments'];
+                    unread = userInfo['unreadComments'];
                 } else {
                     form = "user-empty-unread";
                     unread = 0;
                 }
+                userSlug = userInfo['slug'];
             }
             this.setState({
                 "form": form,
-                "unreadCommentsCount": unread
+                "unreadCommentsCount": unread,
+                "userSlug": userSlug
             });
         }
     }, {
