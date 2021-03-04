@@ -21,7 +21,8 @@ var Product = function (_React$Component) {
             sortBy: "time",
             followButtonDisabled: false,
             followed: false,
-            bottomCommentForm: "newComment"
+            bottomCommentForm: "newComment",
+            ownCommentPublished: true
         };
         _this.manageSlugs = _this.manageSlugs.bind(_this);
         _this.fetchProduct = _this.fetchProduct.bind(_this);
@@ -103,6 +104,7 @@ var Product = function (_React$Component) {
                     productID: json['other']['product']['id'],
                     comments: normalizer('comments', json['other']['comments']),
                     ownComment: ownComment,
+                    ownCommentPublished: json.other.ownCommentPublished,
                     bottomCommentForm: _this2.detectBottomCommentForm(json['other']['ownComment']),
                     commentsForm: json['other']['comments'].length ? 'normal' : 'noComment',
                     pageNumber: json['other']['pageNumber'],
@@ -138,7 +140,8 @@ var Product = function (_React$Component) {
                 _this3.setState({
                     commentsForm: "normal",
                     comments: normalizer('comments', json['other']['comments']),
-                    ownComment: ownComment
+                    ownComment: ownComment,
+                    ownCommentPublished: json.other.ownCommentPublished
                 });
                 _this3.refreshUrl();
             }).catch(function (error) {
@@ -197,6 +200,7 @@ var Product = function (_React$Component) {
                     commentsForm: json['other']['comments'].length ? 'normal' : 'noComment',
                     comments: normalizer('comments', json['other']['comments']),
                     ownComment: ownComment,
+                    ownCommentPublished: json.other.ownCommentPublished,
                     bottomCommentForm: _this4.detectBottomCommentForm(json['other']['ownComment']),
                     tagsInfo: normalizer('tags', json['other']['tags'])
                 });
@@ -356,6 +360,7 @@ var Product = function (_React$Component) {
                         productID: this.state.productID,
                         tags: this.state.tagsInfo,
                         ownComment: this.state.ownComment,
+                        ownCommentPublished: this.state.ownCommentPublished,
                         changeContent: this.props.changeContent,
                         openEdit: this.openEditOfBottomComment,
                         openDelete: this.openDeleteOfBottomComment,

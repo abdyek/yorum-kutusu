@@ -202,7 +202,8 @@ class Product extends Controller {
     private function fetchOwnCommentRequest() {
         $comment = Database::existCheck('SELECT * FROM comment_request WHERE member_id=? and product_id=? AND cancelled=0', [$this->userId, $this->productInfo['id']]);
         if($comment) {
-            $this->ownCommentPublished = false;
+            $publishedComment = Database::existCheck('SELECT comment_text FROM comment WHERE comment_deleted=0 AND member_id=? AND product_id=?', [$this->userId, $this->productInfo['id']]);
+            $this->ownCommentPublished = ($publishedComment and $publishedComment['comment_text']==$comment['comment_text'])?true:false;
             $rating = Database::getRows('SELECT t.tag_slug, t.tag_name, tr.tag_rating_value FROM tag_rating tr INNER JOIN tag_with_product twp ON twp.tag_with_product_id=tr.tag_with_product_id INNER JOIN tag t ON t.tag_id=twp.tag_id WHERE tr.member_id=? AND twp.product_id=?', [$this->userId, $this->productInfo['id']]);
             $ratingInfo = [];
             foreach($rating as $rate) {

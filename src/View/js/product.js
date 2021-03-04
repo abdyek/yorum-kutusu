@@ -8,7 +8,8 @@ class Product extends React.Component {
             sortBy:"time",
             followButtonDisabled:false,
             followed:false,
-            bottomCommentForm:"newComment"
+            bottomCommentForm:"newComment",
+            ownCommentPublished:true
         }
         this.manageSlugs = this.manageSlugs.bind(this);
         this.fetchProduct = this.fetchProduct.bind(this);
@@ -79,6 +80,7 @@ class Product extends React.Component {
                 productID:json['other']['product']['id'],
                 comments: normalizer('comments', json['other']['comments']),
                 ownComment:ownComment,
+                ownCommentPublished:json.other.ownCommentPublished,
                 bottomCommentForm: this.detectBottomCommentForm(json['other']['ownComment']),
                 commentsForm: (json['other']['comments'].length)?'normal':'noComment',
                 pageNumber: json['other']['pageNumber'],
@@ -113,7 +115,8 @@ class Product extends React.Component {
             this.setState({
                 commentsForm:"normal",
                 comments: normalizer('comments', json['other']['comments']),
-                ownComment:ownComment
+                ownComment:ownComment,
+                ownCommentPublished:json.other.ownCommentPublished,
             });
             this.refreshUrl();
         }).catch((error) => {
@@ -163,6 +166,7 @@ class Product extends React.Component {
                 commentsForm: (json['other']['comments'].length)?'normal':'noComment',
                 comments: normalizer('comments', json['other']['comments']),
                 ownComment:ownComment,
+                ownCommentPublished:json.other.ownCommentPublished,
                 bottomCommentForm: this.detectBottomCommentForm(json['other']['ownComment']),
                 tagsInfo: normalizer('tags', json['other']['tags'])
             });
@@ -300,6 +304,7 @@ class Product extends React.Component {
                         productID={this.state.productID}
                         tags={this.state.tagsInfo}
                         ownComment={this.state.ownComment}
+                        ownCommentPublished={this.state.ownCommentPublished}
                         changeContent={this.props.changeContent}
                         openEdit={this.openEditOfBottomComment}
                         openDelete={this.openDeleteOfBottomComment}

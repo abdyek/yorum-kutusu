@@ -355,6 +355,7 @@ var TopOfComment = function (_React$Component3) {
         value: function render() {
             var _this5 = this;
 
+            this.bottomComment = this.props.bottomComment || false;
             return React.createElement(
                 "div",
                 null,
@@ -405,6 +406,15 @@ var TopOfComment = function (_React$Component3) {
                         )
                     )
                 ),
+                this.bottomComment && this.props.ownCommentPublished == false ? React.createElement(
+                    Row,
+                    { size: "one" },
+                    React.createElement(
+                        Column,
+                        null,
+                        React.createElement(Message, { header: "Yorum Henüz Görünür Değil", type: "teal", message: "Y\xF6netici onay\u0131ndan sonra g\xF6r\xFCn\xFCr olacak" })
+                    )
+                ) : "",
                 React.createElement(
                     Row,
                     { size: "one" },
@@ -1496,7 +1506,9 @@ var BottomComment = function (_React$Component13) {
                                     handleOpenEditArea: this.props.openEdit,
                                     handleOpenDeleteArea: this.props.openDelete,
                                     changeContent: this.props.changeContent,
-                                    type: "profile"
+                                    type: "profile",
+                                    bottomComment: true,
+                                    ownCommentPublished: this.props.ownCommentPublished
                                 }),
                                 React.createElement(BottomOfComment, {
                                     likeCount: this.state.likeCount,
@@ -1505,9 +1517,8 @@ var BottomComment = function (_React$Component13) {
                                     likeToggle: this.likeToggle,
                                     date: this.props.ownComment.commentCreateDateTime,
                                     handleOpenReportArea: this.openReportArea,
-                                    handleCloseReportArea: this.closeReportArea
-                                    //tags={[]}
-                                    , tags: normalizer('comment-rating', this.props.ownComment.rating),
+                                    handleCloseReportArea: this.closeReportArea,
+                                    tags: normalizer('comment-rating', this.props.ownComment.rating),
                                     owner: true,
                                     changeContent: this.props.changeContent,
                                     id: this.props.ownComment.id

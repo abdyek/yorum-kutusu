@@ -257,6 +257,7 @@ class TopOfComment extends React.Component{
         return minifiedText;
     }
     render() {
+        this.bottomComment = this.props.bottomComment || false;
         return (
             <div>
                 <Row size="two" nonStackable={true}>
@@ -287,6 +288,13 @@ class TopOfComment extends React.Component{
                         </FloatRight>
                     </Column>
                 </Row>
+                {(this.bottomComment && this.props.ownCommentPublished==false)?
+                    <Row size="one">
+                        <Column>
+                            <Message header={"Yorum Henüz Görünür Değil"} type="teal" message="Yönetici onayından sonra görünür olacak"/>
+                        </Column>
+                    </Row>:""
+                }
                 <Row size="one">
                     <Column>
                         <div className="comment-text">
@@ -988,6 +996,8 @@ class BottomComment extends React.Component {
                                     handleOpenDeleteArea={this.props.openDelete}
                                     changeContent={this.props.changeContent}
                                     type={"profile"}
+                                    bottomComment={true}
+                                    ownCommentPublished={this.props.ownCommentPublished}
                                 />
                                 <BottomOfComment
                                     likeCount={this.state.likeCount}
@@ -997,7 +1007,6 @@ class BottomComment extends React.Component {
                                     date={this.props.ownComment.commentCreateDateTime}
                                     handleOpenReportArea={this.openReportArea}
                                     handleCloseReportArea={this.closeReportArea}
-                                    //tags={[]}
                                     tags={normalizer('comment-rating', this.props.ownComment.rating)}
                                     owner={true}
                                     changeContent={this.props.changeContent}
