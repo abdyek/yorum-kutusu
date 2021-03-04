@@ -715,12 +715,26 @@ class EditArea extends React.Component {
             commentText:this.props.commentText,
             rating:this.props.rating,
             tags:this.mergeTagAndRating(),
-            sendButtonState: (this.props.commentText.length)?"":"disabled"
+            sendButtonState: (this.props.commentText.length)?"":"disabled",
+            commentLimitWarning: false,
+            messageVisible:false,
+            messageType:"",
+            messageHeader:"header",
+            messageText:""
         }
+        this.showResponseMessage = this.showResponseMessage.bind(this);
         this.mergeTagAndRating = this.mergeTagAndRating.bind(this);
         this.changeComment = this.changeComment.bind(this);
         this.sendComment = this.sendComment.bind(this);
         this.selectOption = this.selectOption.bind(this);
+    }
+    showResponseMessage(type, header, text) {
+        this.setState({
+            messageVisible:true,
+            messageType:type,
+            messageHeader:header,
+            messageText:text
+        });
     }
     mergeTagAndRating() {
         let tags = {};
@@ -742,9 +756,11 @@ class EditArea extends React.Component {
         return tags;
     }
     changeComment(e) {
+        const len = e.target.value.length;
         this.setState({
             commentText:e.target.value,
-            sendButtonState: (e.target.value.length)?"":"disabled"
+            sendButtonState: (len>0 && len<=10000)?"":"disabled",
+            commentLimitWarning: (len>10000)?true:false
         });
     }
     sendComment() {
@@ -767,7 +783,11 @@ class EditArea extends React.Component {
                 this.props.reloadFunc();
             }).catch((error)=>{
                 if(error.message==422) {
-                    this.showTopMessage("warning", "Her ürüne sadece bir kere yorum yapabilirsiniz");
+                    this.showResponseMessage("yellow", "422" ,"Her ürüne sadece bir kere yorum yapabilirsiniz");
+                } else if(error.message==400) {
+                    this.showResponseMessage("red", "400", "Geçersiz istek");
+                } else if(error.message=403) {
+                    this.showResponseMessage("red", "403", "Bu işlem için yetkiniz yok");
                 }
             });
         } else {
@@ -795,7 +815,11 @@ class EditArea extends React.Component {
                 this.props.reloadFunc();
             }).catch((error)=>{
                 if(error.message==422) {
-                    this.showTopMessage("warning", "Her ürüne sadece bir kere yorum yapabilirsiniz");
+                    this.showResponseMessage("yellow", "422" ,"Her ürüne sadece bir kere yorum yapabilirsiniz");
+                } else if(error.message==400) {
+                    this.showResponseMessage("red", "400", "Geçersiz istek");
+                } else if(error.message=403) {
+                    this.showResponseMessage("red", "403", "Bu işlem için yetkiniz yok");
                 }
             });
         }
@@ -847,6 +871,20 @@ class EditArea extends React.Component {
                             </div>
                             </Column>
                         </Row>
+                        {(this.state.commentLimitWarning)?
+                            <Row size="one">
+                                <Column>
+                                    <BasicMessageWithColor color="yellow" message="Yorum bu kadar uzun olamaz" />
+                                </Column>
+                            </Row>:""
+                        }
+                        {(this.state.messageVisible)?
+                            <Row size="one">
+                                <Column>
+                                    <Message header={this.state.messageHeader} type={this.state.messageType} message={this.state.messageText} />
+                                </Column>
+                            </Row>:""
+                        }
                         <Row size="one">
                             <Column>
                                 <Rating tags={this.state.tags} selectOption={this.selectOption}/>
@@ -908,7 +946,7 @@ class DeleteArea extends React.Component {
                     <RaisedSegment otherClass="comment">
                         <Row size="one">
                             <Column>
-                                <BasicMessage type="danger" text="Bu yorumu kalıcı olarak silmek istediğinizden emin misiniz?" />
+                                <BasicMessage type="danger" text="Yorumu kalıcı olarak silmek istediğinizden emin misiniz?" />
                             </Column>
                         </Row>
                         <Row size="two" nonStackable={true}>

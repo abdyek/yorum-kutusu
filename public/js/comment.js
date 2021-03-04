@@ -1121,8 +1121,14 @@ var EditArea = function (_React$Component11) {
             commentText: _this16.props.commentText,
             rating: _this16.props.rating,
             tags: _this16.mergeTagAndRating(),
-            sendButtonState: _this16.props.commentText.length ? "" : "disabled"
+            sendButtonState: _this16.props.commentText.length ? "" : "disabled",
+            commentLimitWarning: false,
+            messageVisible: false,
+            messageType: "",
+            messageHeader: "header",
+            messageText: ""
         };
+        _this16.showResponseMessage = _this16.showResponseMessage.bind(_this16);
         _this16.mergeTagAndRating = _this16.mergeTagAndRating.bind(_this16);
         _this16.changeComment = _this16.changeComment.bind(_this16);
         _this16.sendComment = _this16.sendComment.bind(_this16);
@@ -1131,6 +1137,16 @@ var EditArea = function (_React$Component11) {
     }
 
     _createClass(EditArea, [{
+        key: "showResponseMessage",
+        value: function showResponseMessage(type, header, text) {
+            this.setState({
+                messageVisible: true,
+                messageType: type,
+                messageHeader: header,
+                messageText: text
+            });
+        }
+    }, {
         key: "mergeTagAndRating",
         value: function mergeTagAndRating() {
             var tags = {};
@@ -1154,9 +1170,11 @@ var EditArea = function (_React$Component11) {
     }, {
         key: "changeComment",
         value: function changeComment(e) {
+            var len = e.target.value.length;
             this.setState({
                 commentText: e.target.value,
-                sendButtonState: e.target.value.length ? "" : "disabled"
+                sendButtonState: len > 0 && len <= 10000 ? "" : "disabled",
+                commentLimitWarning: len > 10000 ? true : false
             });
         }
     }, {
@@ -1182,7 +1200,11 @@ var EditArea = function (_React$Component11) {
                     _this17.props.reloadFunc();
                 }).catch(function (error) {
                     if (error.message == 422) {
-                        _this17.showTopMessage("warning", "Her ürüne sadece bir kere yorum yapabilirsiniz");
+                        _this17.showResponseMessage("yellow", "422", "Her ürüne sadece bir kere yorum yapabilirsiniz");
+                    } else if (error.message == 400) {
+                        _this17.showResponseMessage("red", "400", "Geçersiz istek");
+                    } else if (error.message = 403) {
+                        _this17.showResponseMessage("red", "403", "Bu işlem için yetkiniz yok");
                     }
                 });
             } else {
@@ -1209,7 +1231,11 @@ var EditArea = function (_React$Component11) {
                     _this17.props.reloadFunc();
                 }).catch(function (error) {
                     if (error.message == 422) {
-                        _this17.showTopMessage("warning", "Her ürüne sadece bir kere yorum yapabilirsiniz");
+                        _this17.showResponseMessage("yellow", "422", "Her ürüne sadece bir kere yorum yapabilirsiniz");
+                    } else if (error.message == 400) {
+                        _this17.showResponseMessage("red", "400", "Geçersiz istek");
+                    } else if (error.message = 403) {
+                        _this17.showResponseMessage("red", "403", "Bu işlem için yetkiniz yok");
                     }
                 });
             }
@@ -1288,6 +1314,24 @@ var EditArea = function (_React$Component11) {
                                 )
                             )
                         ),
+                        this.state.commentLimitWarning ? React.createElement(
+                            Row,
+                            { size: "one" },
+                            React.createElement(
+                                Column,
+                                null,
+                                React.createElement(BasicMessageWithColor, { color: "yellow", message: "Yorum bu kadar uzun olamaz" })
+                            )
+                        ) : "",
+                        this.state.messageVisible ? React.createElement(
+                            Row,
+                            { size: "one" },
+                            React.createElement(
+                                Column,
+                                null,
+                                React.createElement(Message, { header: this.state.messageHeader, type: this.state.messageType, message: this.state.messageText })
+                            )
+                        ) : "",
                         React.createElement(
                             Row,
                             { size: "one" },
@@ -1385,7 +1429,7 @@ var DeleteArea = function (_React$Component12) {
                             React.createElement(
                                 Column,
                                 null,
-                                React.createElement(BasicMessage, { type: "danger", text: "Bu yorumu kal\u0131c\u0131 olarak silmek istedi\u011Finizden emin misiniz?" })
+                                React.createElement(BasicMessage, { type: "danger", text: "Yorumu kal\u0131c\u0131 olarak silmek istedi\u011Finizden emin misiniz?" })
                             )
                         ),
                         React.createElement(

@@ -189,7 +189,7 @@ CREATE TABLE `comment` (
   `member_id` int(11) NOT NULL,
   `product_id` int(11) NOT NULL,
   `admin_id` int(11) DEFAULT NULL,
-  `comment_text` varchar(500) NOT NULL,
+  `comment_text` varchar(10000) NOT NULL,
   `comment_create_date_time` datetime NOT NULL DEFAULT current_timestamp(),
   `comment_edited` tinyint(1) NOT NULL DEFAULT 0,
   `comment_deleted` tinyint(1) NOT NULL DEFAULT 0,
@@ -224,7 +224,7 @@ CREATE TABLE `comment_history` (
   `comment_history_id` int(11) NOT NULL,
   `comment_id` int(11) NOT NULL,
   `admin_id` int(11) DEFAULT NULL,
-  `comment_old_text` varchar(500) NOT NULL,
+  `comment_old_text` varchar(10000) NOT NULL,
   `comment_change_date_time` datetime NOT NULL DEFAULT current_timestamp(),
   `history_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
