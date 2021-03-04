@@ -36,6 +36,7 @@ CREATE TABLE `product` (
   `product_deleted` tinyint(1) NOT NULL DEFAULT 0,
   `product_created_by_member` tinyint(1) NOT NULL DEFAULT 0,
   `product_create_date_time` datetime NOT NULL DEFAULT current_timestamp(),
+  `product_comment_count` int(11) NOT NULL DEFAULT 0,
   `product_follow_count` int(11) NOT NULL DEFAULT 0,
   `history_pointer` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

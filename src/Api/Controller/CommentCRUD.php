@@ -3,6 +3,7 @@
 namespace YorumKutusu\Api\Controller;
 use YorumKutusu\Api\Core\Controller;
 use YorumKutusu\Api\Core\Database;
+use YorumKutusu\Api\Model\Product;
 
 class CommentCRUD extends Controller {
     protected function delete() {
@@ -18,6 +19,7 @@ class CommentCRUD extends Controller {
         $this->removeRating();
         $this->removeHiddenComment();
         $this->decreaseNewCommentCount();
+        Product::decreaseCommentCount($this->comment['product_id']);
         $this->success();
     }
     private function deleteComment() {

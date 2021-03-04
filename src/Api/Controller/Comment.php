@@ -4,6 +4,7 @@ namespace YorumKutusu\Api\Controller;
 use YorumKutusu\Api\Core\Controller;
 use YorumKutusu\Api\Core\Database;
 use YorumKutusu\Api\Core\Other;
+use YorumKutusu\Api\Model\Product;
 
 // bu isteğin adının comment olması yanıltmasın yorum çekme işlemlerini burada yapmıyorum
 class Comment extends Controller {
@@ -53,20 +54,11 @@ class Comment extends Controller {
     private function writeToDB() {
         $memberRestricted = Database::existCheck('SELECT member_restricted FROM member WHERE member_id=?', [$this->userId])['member_restricted'];
         if($memberRestricted) {
-            $query = Database::executeWithError('INSERT INTO comment_request (member_id, product_id, comment_text) VALUES(?,?,?)', [$this->userId, $this->data['productID'], $this->data['commentText']]);
-            if(!$query[0]) {
-                $this->setHttpStatus(500);
-                $this->responseWithMessage(5);
-                exit();
-            }
+            $query = Database::executeWithErr('INSERT INTO comment_request (member_id, product_id, comment_text) VALUES(?,?,?)', [$this->userId, $this->data['productID'], $this->data['commentText']]);
             $this->success();
         } else {
-            $query = Database::executeWithError('INSERT INTO comment (member_id, product_id, comment_text) VALUES(?,?,?)', [$this->userId, $this->data['productID'], $this->data['commentText']]);
-            if(!$query[0]) {
-                $this->setHttpStatus(500);
-                $this->responseWithMessage(5);
-                exit();
-            }
+            $query = Database::executeWithErr('INSERT INTO comment (member_id, product_id, comment_text) VALUES(?,?,?)', [$this->userId, $this->data['productID'], $this->data['commentText']]);
+            Product::increaseCommentCount($this->data['productID']);
             $this->success();
         }
     }
@@ -155,6 +147,7 @@ class Comment extends Controller {
         $this->comment = Database::existCheck('SELECT * FROM comment WHERE comment_deleted=0 AND member_id=? AND product_id=?', [$this->userId, $this->data['productID']]);
         if($this->comment) {
             Database::executeWithErr('UPDATE comment SET comment_deleted=1 WHERE member_id=? AND product_id=?', [$this->userId, $this->data['productID']]);
+            Product::decreaseCommentCount($this->data['productID']);
             $this->addHistory();
             $this->removeHiddenComment();
             $this->decreaseNewCommentCount();

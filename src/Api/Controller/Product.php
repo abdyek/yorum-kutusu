@@ -28,26 +28,28 @@ class Product extends Controller {
         }
     }
     private function getProductInfo() {
-        $product = Database::existCheck('SELECT * FROM product WHERE product_slug=? AND product_deleted=0', [$this->data['productSlug']]);
-        if(!$product) {
+        $this->product = Database::existCheck('SELECT * FROM product WHERE product_slug=? AND product_deleted=0', [$this->data['productSlug']]);
+        if(!$this->product) {
             $this->setHttpStatus(404);
             exit();
         }
         $this->productInfo = [
-            'id'=>$product['product_id'],
-            'title'=>$product['product_name'],
-            'slug'=>$product['product_slug']
+            'id'=>$this->product['product_id'],
+            'title'=>$this->product['product_name'],
+            'slug'=>$this->product['product_slug']
         ];
     }
     private function getFollowInfo() {
         $this->followed = false;
-        if($this->who!="guest") {
+        if($this->who=="member") {
             $this->productFollowQuery = Database::getRow('SELECT product_follow_id, last_seen_date_time FROM product_follow WHERE product_id=? AND member_id=?', [$this->productInfo['id'],$this->userId]);
             $this->followed = ($this->productFollowQuery)?true:false;
         }
     }
     private function getPageCount() {
-        $this->pageCount = intval(Database::getRow('SELECT count(*) as commentCount FROM comment c INNER JOIN product p ON p.product_id = c.product_id WHERE p.product_slug=? and c.comment_deleted=0', [$this->data['productSlug']])['commentCount'] / 10)+1;
+        $commentCount = $this->product['product_comment_count'];
+        $additional = ($commentCount%10==0)?0:1;
+        $this->pageCount = intval($this->product['product_comment_count']/10)+$additional;
     }
     private function getTags() {
         $tags = Database::getRows('SELECT * FROM tag_with_product twp INNER JOIN tag t ON t.tag_id=twp.tag_id WHERE twp.product_id=?', [$this->productInfo['id']]);
