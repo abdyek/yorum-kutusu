@@ -190,6 +190,8 @@ var Comment = function (_React$Component) {
                                     likeButtonDisabled: this.state.likeButtonDisabled,
                                     likeToggle: this.likeToggle,
                                     date: this.props.date,
+                                    lastEditDate: this.props.lastEditDate,
+                                    edited: this.props.edited,
                                     handleOpenReportArea: this.openReportArea,
                                     handleCloseReportArea: this.closeReportArea,
                                     tags: this.props.rating,
@@ -485,7 +487,14 @@ var BottomOfComment = function (_React$Component4) {
                         React.createElement(
                             "div",
                             { className: "comment-date" },
-                            this.props.date
+                            this.props.edited ? React.createElement(
+                                "span",
+                                null,
+                                React.createElement("i", { className: "fa fa-pencil-square-o", "aria-hidden": "true" })
+                            ) : "",
+                            this.props.edited ? formatDate(this.props.lastEditDate) : "",
+                            this.props.edited ? React.createElement("br", null) : "",
+                            formatDate(this.props.date)
                         )
                     ),
                     React.createElement(
@@ -1560,6 +1569,8 @@ var BottomComment = function (_React$Component13) {
                                     likeButtonDisabled: this.state.likeButtonDisabled,
                                     likeToggle: this.likeToggle,
                                     date: this.props.ownComment.commentCreateDateTime,
+                                    lastEditDate: this.props.ownComment.commentLastEditDateTime,
+                                    edited: this.props.ownComment.commentEdited,
                                     handleOpenReportArea: this.openReportArea,
                                     handleCloseReportArea: this.closeReportArea,
                                     tags: normalizer('comment-rating', this.props.ownComment.rating),
@@ -1636,6 +1647,8 @@ var Comments = function (_React$Component14) {
                         liked: com.liked,
                         title: com.title,
                         date: com.date,
+                        lastEditDate: com.lastEditDate,
+                        edited: com.edited,
                         rating: com.rating,
                         owner: com.owner,
                         reported: com.reported,

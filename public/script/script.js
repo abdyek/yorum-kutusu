@@ -1,6 +1,7 @@
 window.history.pushState({content: firstContent}, "", "");
 let firstLoading = true;
 
+const currentYear = "21";
 const turkishChars = {
     "ğ": "g",
     "ü": "u",
@@ -130,6 +131,8 @@ function normalizer(key, data) {
                 type:"profile",
                 slug:com.owner.slug,
                 date:com.commentCreateDateTime,
+                lastEditDate: com.commentLastEditDateTime,
+                edited:com.commentEdited,
                 rating:normalizer('comment-rating', com.rating),
                 // tag 'dı rating yaptım
                 /*
@@ -270,5 +273,26 @@ function generateProductSlug(productName) {
         }
     }
     return slug;
+}
+
+const formatDate = function(dateString) {
+    if(dateString==null) {
+        return;
+    }
+    const dateTime = dateString.split(" ");
+    const date = dateTime[0];
+    const time = dateTime[1];
+    const yearMonthDay = date.split("-");
+    const year = yearMonthDay[0].substr(2,2);
+    const month = yearMonthDay[1];
+    const day = yearMonthDay[2];
+    const hourMinute = time.split(":");
+    const hour = hourMinute[0];
+    const minute = hourMinute[1];
+    if(year===currentYear) {
+        return day+"/"+month+" "+hour+":"+minute;
+    } else {
+        return day+"/"+month+"/"+year+" "+hour+":"+minute;
+    }
 }
 

@@ -142,6 +142,8 @@ class Comment extends React.Component {
                                     likeButtonDisabled={this.state.likeButtonDisabled}
                                     likeToggle={this.likeToggle}
                                     date={this.props.date}
+                                    lastEditDate={this.props.lastEditDate}
+                                    edited={this.props.edited}
                                     handleOpenReportArea={this.openReportArea}
                                     handleCloseReportArea={this.closeReportArea}
                                     tags={this.props.rating}
@@ -328,7 +330,10 @@ class BottomOfComment extends React.Component {
                 <Row size="two" nonStackable={true}>
                     <Column>
                         <div className="comment-date">
-                            {this.props.date}
+                            {(this.props.edited)?<span><i className="fa fa-pencil-square-o" aria-hidden="true"></i></span>:""}
+                            {(this.props.edited)?formatDate(this.props.lastEditDate):""}
+                            {(this.props.edited)?<br/>:""}
+                            {formatDate(this.props.date)}
                         </div>
                     </Column>
                     <Column>
@@ -1043,6 +1048,8 @@ class BottomComment extends React.Component {
                                     likeButtonDisabled={this.state.likeButtonDisabled}
                                     likeToggle={this.likeToggle}
                                     date={this.props.ownComment.commentCreateDateTime}
+                                    lastEditDate={this.props.ownComment.commentLastEditDateTime}
+                                    edited={this.props.ownComment.commentEdited}
                                     handleOpenReportArea={this.openReportArea}
                                     handleCloseReportArea={this.closeReportArea}
                                     tags={normalizer('comment-rating', this.props.ownComment.rating)}
@@ -1121,6 +1128,8 @@ class Comments extends React.Component {
                                         liked={com.liked}
                                         title={com.title}
                                         date={com.date}
+                                        lastEditDate={com.lastEditDate}
+                                        edited={com.edited}
                                         rating={com.rating}
                                         owner={com.owner}
                                         reported={com.reported}
