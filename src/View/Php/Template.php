@@ -51,6 +51,7 @@
     <script src="http://localhost/yorum-kutusu/public/js/signup.js"></script>
     <script src="http://localhost/yorum-kutusu/public/js/tag.js"></script>
     <script src="http://localhost/yorum-kutusu/public/js/editProduct.js"></script>
+    <script src="http://localhost/yorum-kutusu/public/js/forgotMyPassword.js"></script>
     <script src="http://localhost/yorum-kutusu/public/js/app.js"></script>
 
 </body>

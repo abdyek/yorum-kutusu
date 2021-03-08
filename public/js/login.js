@@ -184,12 +184,33 @@ var LogIn = function (_React$Component) {
                                     React.createElement("input", { type: "password", name: "password", value: this.state.password, onChange: this.passwordChange, placeholder: "Parola" })
                                 ),
                                 React.createElement(
-                                    FloatRight,
-                                    null,
+                                    Row,
+                                    { size: "two", nonStackable: true },
                                     React.createElement(
-                                        "button",
-                                        { className: "ui teal button", type: "submit", onClick: this.logInClick },
-                                        "Giri\u015F Yap"
+                                        Column,
+                                        null,
+                                        React.createElement(
+                                            "div",
+                                            null,
+                                            React.createElement(
+                                                "a",
+                                                { href: "parolami-unuttum", onClick: this.changeContent },
+                                                "Parolam\u0131 Unuttum"
+                                            )
+                                        )
+                                    ),
+                                    React.createElement(
+                                        Column,
+                                        null,
+                                        React.createElement(
+                                            FloatRight,
+                                            null,
+                                            React.createElement(
+                                                "button",
+                                                { className: "ui teal button", type: "submit", onClick: this.logInClick },
+                                                "Giri\u015F Yap"
+                                            )
+                                        )
                                     )
                                 )
                             )

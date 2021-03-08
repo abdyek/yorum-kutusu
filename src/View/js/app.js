@@ -420,6 +420,10 @@ class Content extends React.Component {
                 return (
                     <EditProduct changeContent={this.props.changeContent} />
                 )
+            case "forgotMyPassword":
+                return (
+                    <ForgotMyPassword changeContent={this.props.changeContent} />
+                )
             default:
                 return (
                     <div>{"Böyle bir sayfa yok" + this.state.content} </div>
@@ -446,7 +450,8 @@ class App extends React.Component {
             "giris-yap":"login",
             "e-posta-dogrula":"emailValidationPage",
             "filtrele":"filter",
-            "urun-duzenle":"editProduct"
+            "urun-duzenle":"editProduct",
+            "parolami-unuttum":"forgotMyPassword"
         }
         window.onpopstate = function(event) {
             const pathNames = getPathNames();

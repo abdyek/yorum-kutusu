@@ -79,49 +79,10 @@ header {
     color:#eee !important;
 }
 
-/* signup */
-.signupInput label {
-    color:#eee !important;
-}
-.signupInput input::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-  color: #999 !important;
-  opacity: 1 !important; /* Firefox */
-}
-.signupInput input:-ms-input-placeholder { /* Internet Explorer 10-11 */
-  color: #999 !important;
-}
-.signupInput input::-ms-input-placeholder { /* Microsoft Edge */
-  color: #999 !important;
-}
-
-.loginInput input::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-  color: #999 !important;
-  opacity: 1 !important; /* Firefox */
-}
-.loginInput input:-ms-input-placeholder { /* Internet Explorer 10-11 */
-  color: #999 !important;
-}
-.loginInput input::-ms-input-placeholder { /* Microsoft Edge */
-  color: #999 !important;
-}
-
 /* newProduct */
 
 #newProductHeader > a {
     color:#eee !important;
-}
-.newProductForm label {
-    color:#eee !important;
-}
-.newProductForm input::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-  color: #999 !important;
-  opacity: 1 !important; /* Firefox */
-}
-.newProductForm input:-ms-input-placeholder { /* Internet Explorer 10-11 */
-  color: #999 !important;
-}
-.newProductForm input::-ms-input-placeholder { /* Microsoft Edge */
-  color: #999 !important;
 }
 #productSlugLabel {
     font-size:1.2rem;
@@ -142,5 +103,29 @@ header {
 
 .editAreaTextarea {
     background-color:#3b555d !important;
+    color:#eee !important;
+}
+
+/* forgotMyPassword */
+#forgotMyPasswordHeader > a {
+    color:#eee !important;
+}
+
+.field label {
+    color:#eee !important;
+}
+
+.field input::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: #999 !important;
+  opacity: 1 !important; /* Firefox */
+}
+.field input:-ms-input-placeholder { /* Internet Explorer 10-11 */
+  color: #999 !important;
+}
+.field input::-ms-input-placeholder { /* Microsoft Edge */
+  color: #999 !important;
+}
+
+.form a {
     color:#eee !important;
 }

@@ -47,6 +47,10 @@ $router->get('/urun-duzenle/:slug', function() {
     Tool::generatePage('urun-duzenle');
 });
 
+$router->get('/parolami-unuttum', function() {
+    Tool::generatePage('parolami-unuttum');
+});
+
 // API REQUEST
 $router->any('/api/:string', function($controller) {
     $controllerClassName = ucfirst($controller);

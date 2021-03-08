@@ -602,6 +602,8 @@ var Content = function (_React$Component8) {
                     break;
                 case "editProduct":
                     return React.createElement(EditProduct, { changeContent: this.props.changeContent });
+                case "forgotMyPassword":
+                    return React.createElement(ForgotMyPassword, { changeContent: this.props.changeContent });
                 default:
                     return React.createElement(
                         "div",
@@ -639,7 +641,8 @@ var App = function (_React$Component9) {
             "giris-yap": "login",
             "e-posta-dogrula": "emailValidationPage",
             "filtrele": "filter",
-            "urun-duzenle": "editProduct"
+            "urun-duzenle": "editProduct",
+            "parolami-unuttum": "forgotMyPassword"
         };
         window.onpopstate = function (event) {
             var pathNames = getPathNames();

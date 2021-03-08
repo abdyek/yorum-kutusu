@@ -130,9 +130,20 @@ class LogIn extends React.Component {
                                 <label>Parola</label>
                                 <input type="password" name="password" value={this.state.password} onChange={this.passwordChange} placeholder="Parola" />
                             </div>
-                            <FloatRight>
-                                <button className="ui teal button" type="submit" onClick={this.logInClick}>Giriş Yap</button>
-                            </FloatRight>
+                            <Row size="two" nonStackable={true}>
+                                <Column>
+                                    <div>
+                                        <a href="parolami-unuttum" onClick={this.changeContent}>
+                                            Parolamı Unuttum
+                                        </a>
+                                    </div>
+                                </Column>
+                                <Column>
+                                    <FloatRight>
+                                        <button className="ui teal button" type="submit" onClick={this.logInClick}>Giriş Yap</button>
+                                    </FloatRight>
+                                </Column>
+                            </Row>
                         </form>
                     </WideColumn>
                 </Row>

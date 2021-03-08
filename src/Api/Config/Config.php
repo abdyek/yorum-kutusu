@@ -43,6 +43,10 @@ namespace YorumKutusu\Api\Config;
             'urun-duzenle'=>[
                 'title'=>'Ürün Düzenle',
                 'content'=>'editProduct'
+            ],
+            'parolami-unuttum'=>[
+                'title'=>'Parolami Unuttum',
+                'content'=>'forgotMyPassword'
             ]
         ];
         const MESSAGE = [
