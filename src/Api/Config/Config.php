@@ -502,8 +502,8 @@ namespace YorumKutusu\Api\Config;
                             'max'=>60
                         ],
                         'recoveryCode'=>[
-                            'min'=>30,
-                            'max'=>30
+                            'min'=>0,
+                            'max'=>20
                         ],
                         'newPassword'=>[
                             'min'=>10,

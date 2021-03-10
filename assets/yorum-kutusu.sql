@@ -180,8 +180,10 @@ CREATE TABLE `member_password_change_history` (
 CREATE TABLE `reset_password` (
   `reset_password_id` int(11) NOT NULL,
   `member_id` int(11) NOT NULL,
-  `recovery_code` varchar(30) NOT NULL,
-  `reset_password_date_time` datetime NOT NULL DEFAULT current_timestamp()
+  `recovery_code` varchar(10) NOT NULL,
+  `reset_password_date_time` datetime NOT NULL DEFAULT current_timestamp(),
+  `trial` int(2) NOT NULL DEFAULT 0,
+  `deleted` int(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 

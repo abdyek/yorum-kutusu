@@ -3,6 +3,7 @@
 namespace YorumKutusu\Api\Controller;
 use YorumKutusu\Api\Core\Controller;
 use YorumKutusu\Api\Core\Database;
+use YorumKutusu\Api\Core\Other;
 
 class ForgotMyPassword extends Controller {
     protected function post() {
@@ -16,23 +17,38 @@ class ForgotMyPassword extends Controller {
         $this->member = Database::existCheck('SELECT member_id FROM member WHERE member_deleted=0 AND member_email=? AND member_username=?', [$this->data['eMail'], $this->data['username']]);
     }
     private function saveAccount() {
-        $randStr = Other::generateRandomString(30);
-        Database::execute('DELETE FROM reset_password WHERE member_id=?', [$this->member['member_id']]);
+        $randStr = Other::generateRandomString(10);
+        $this->deleteRecovery();
         Database::execute('INSERT INTO reset_password (member_id, recovery_code) VALUES(?,?)', [$this->member['member_id'], $randStr]);
         Other::sendMail();
     }
     protected function put() {
         $this->memberCheck();
         if(!$this->member or !$this->checkCode()){
+            $this->increaseTrial();
             $this->setHttpStatus(404);
             exit();
         }
         $hash = Other::getHash($this->data['newPassword']);
         Database::execute('UPDATE member SET member_password_hash=? WHERE member_id=?', [$hash ,$this->member['member_id']]);
-        Database::execute('DELETE FROM reset_password WHERE member_id=?', [$this->member['member_id']]);
+        $this->deleteRecovery();
         $this->success();
     }
     private function checkCode() {
-        return Database::existCheck('SELECT * FROM reset_password WHERE member_id=? AND recovery_code=?', [$this->member['member_id'], $this->data['recoveryCode']]);
+        return Database::existCheck('SELECT * FROM reset_password WHERE deleted=0 AND member_id=? AND recovery_code=?', [$this->member['member_id'], $this->data['recoveryCode']]);
+    }
+    private function increaseTrial() {
+        $resetPassword = Database::existCheck('SELECT * FROM reset_password WHERE deleted=0 AND member_id=?', [$this->member['member_id']]);
+        if($resetPassword) {
+            if($resetPassword['trial']==2) {
+                $this->setHttpStatus(401);
+                $this->deleteRecovery();
+                exit();
+            }
+            Database::execute('UPDATE reset_password SET trial=trial+1 WHERE deleted=0 AND member_id=?', [$this->member['member_id']]);
+        }
+    }
+    private function deleteRecovery() {
+        Database::execute('UPDATE reset_password SET deleted=1 WHERE member_id=?', [$this->member['member_id']]);
     }
 }
