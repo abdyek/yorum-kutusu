@@ -296,3 +296,8 @@ const formatDate = function(dateString) {
     }
 }
 
+const fetchUrlParValue = function(par,href) {
+    const hrf = href || window.location.href;
+    const url = new URL(hrf);
+    return url.searchParams.get(par);
+}

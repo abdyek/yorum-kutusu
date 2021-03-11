@@ -1,11 +1,20 @@
 class ForgotMyPassword extends React.Component {
     constructor(props){
         super(props);
+        let email = fetchUrlParValue('email');
+        let username = fetchUrlParValue('username');
+        let recoveryCode = fetchUrlParValue('recoveryCode');
+        let form = "sendEmailButton";
+        this.fromUrl = false;
+        if(email!=null && username!=null && recoveryCode!=null){
+            form = "normal";
+            this.fromUrl = true;
+        }
         this.state = {
-            form:"sendEmailButton", // sendEmailButton, normal, loading, success
-            email:"",
-            username:"",
-            recoveryCode:"",
+            form:form, // sendEmailButton, normal, loading, success
+            email:(email)?email:"",
+            username:(username)?username:"",
+            recoveryCode:(recoveryCode)?recoveryCode:"",
             password:"",
             passwordAgain:"",
             emailPatternWarn:false,
@@ -13,8 +22,7 @@ class ForgotMyPassword extends React.Component {
             passwordAgainWarn:false,
             responseVisible:false,
             responseColor:"",
-            responseMessage:"",
-            infoMessage:true
+            responseMessage:""
         }
         this.sendEmail = this.sendEmail.bind(this);
         this.send = this.send.bind(this);
@@ -101,7 +109,7 @@ class ForgotMyPassword extends React.Component {
                 form = "normal";
             } else if(error.message==401) {
                 this.setResponseMessage("red", "3 defa hatalı kod girişi yaptınız. Yeni bir kurtarma e-postası isteyin");
-                form = "sendEmailButton";
+                form = (this.fromUrl)?"normal":"sendEmailButton";
             }
             this.setState({
                 form:form
@@ -218,12 +226,12 @@ class ForgotMyPassword extends React.Component {
                                         <label>Kullanıcı Adı</label>
                                         <input type="text" name="kullanici-adi" placeholder="Kullanıcı Adı" value={this.state.username} disabled/>
                                     </div>
-                                    {(this.state.infoMessage)?
+                                    {(this.fromUrl===false)?
                                         <Message header="E-posta kutunuzu kontrol edin" message="E-posta ve kullanıcı adınızı eksiksiz yazdıysanız kurtarma e-postası sorunsuz bir şekilde ulaşacaktır" />:""
                                     }
                                     <div className="field">
                                         <label>Kurtarma Kodu</label>
-                                        <input type="text" name="kurtarma-kodu" placeholder="Kurtarma Kodu" value={this.state.recoveryCode} onChange={this.changeRecoveryCode}/>
+                                        <input type="text" name="kurtarma-kodu" placeholder="Kurtarma Kodu" value={this.state.recoveryCode} onChange={this.changeRecoveryCode} disabled={this.fromUrl}/>
                                     </div>
                                     <div className="field">
                                         <label>Yeni Parola</label>
@@ -239,7 +247,7 @@ class ForgotMyPassword extends React.Component {
                                         <BasicMessageWithColor color="yellow" message="Parola tekrarı ile aynı değil"/>:""}
                                 </form>
                                 {(this.state.responseVisible)?
-                                    <Row size="one">
+                                   <Row size="one">
                                         <Column>
                                             <BasicMessageWithColor color={this.state.responseColor} message={this.state.responseMessage} />
                                         </Column>
@@ -247,7 +255,9 @@ class ForgotMyPassword extends React.Component {
                                 }
                                 <Row size="two">
                                     <Column>
-                                        <Button type="teal" name="Düzenle" click={this.goBack} />
+                                    {(this.fromUrl===false)?
+                                        <Button type="teal" name="Düzenle" click={this.goBack} />:""
+                                    }
                                     </Column>
                                     <Column>
                                         <FloatRight>

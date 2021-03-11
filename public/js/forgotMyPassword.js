@@ -14,11 +14,20 @@ var ForgotMyPassword = function (_React$Component) {
 
         var _this = _possibleConstructorReturn(this, (ForgotMyPassword.__proto__ || Object.getPrototypeOf(ForgotMyPassword)).call(this, props));
 
+        var email = fetchUrlParValue('email');
+        var username = fetchUrlParValue('username');
+        var recoveryCode = fetchUrlParValue('recoveryCode');
+        var form = "sendEmailButton";
+        _this.fromUrl = false;
+        if (email != null && username != null && recoveryCode != null) {
+            form = "normal";
+            _this.fromUrl = true;
+        }
         _this.state = {
-            form: "sendEmailButton", // sendEmailButton, normal, loading, success
-            email: "",
-            username: "",
-            recoveryCode: "",
+            form: form, // sendEmailButton, normal, loading, success
+            email: email ? email : "",
+            username: username ? username : "",
+            recoveryCode: recoveryCode ? recoveryCode : "",
             password: "",
             passwordAgain: "",
             emailPatternWarn: false,
@@ -26,8 +35,7 @@ var ForgotMyPassword = function (_React$Component) {
             passwordAgainWarn: false,
             responseVisible: false,
             responseColor: "",
-            responseMessage: "",
-            infoMessage: true
+            responseMessage: ""
         };
         _this.sendEmail = _this.sendEmail.bind(_this);
         _this.send = _this.send.bind(_this);
@@ -43,7 +51,7 @@ var ForgotMyPassword = function (_React$Component) {
     }
 
     _createClass(ForgotMyPassword, [{
-        key: "sendEmail",
+        key: 'sendEmail',
         value: function sendEmail() {
             var _this2 = this;
 
@@ -82,7 +90,7 @@ var ForgotMyPassword = function (_React$Component) {
             });
         }
     }, {
-        key: "send",
+        key: 'send',
         value: function send() {
             var _this3 = this;
 
@@ -122,7 +130,7 @@ var ForgotMyPassword = function (_React$Component) {
                     form = "normal";
                 } else if (error.message == 401) {
                     _this3.setResponseMessage("red", "3 defa hatalı kod girişi yaptınız. Yeni bir kurtarma e-postası isteyin");
-                    form = "sendEmailButton";
+                    form = _this3.fromUrl ? "normal" : "sendEmailButton";
                 }
                 _this3.setState({
                     form: form
@@ -130,13 +138,13 @@ var ForgotMyPassword = function (_React$Component) {
             });
         }
     }, {
-        key: "goLogin",
+        key: 'goLogin',
         value: function goLogin(e) {
             e.preventDefault();
             this.props.changeContent('giris-yap', true);
         }
     }, {
-        key: "changeEmail",
+        key: 'changeEmail',
         value: function changeEmail(e) {
             this.setState({
                 email: e.target.value,
@@ -144,21 +152,21 @@ var ForgotMyPassword = function (_React$Component) {
             });
         }
     }, {
-        key: "changeUsername",
+        key: 'changeUsername',
         value: function changeUsername(e) {
             this.setState({
                 username: e.target.value
             });
         }
     }, {
-        key: "changeRecoveryCode",
+        key: 'changeRecoveryCode',
         value: function changeRecoveryCode(e) {
             this.setState({
                 recoveryCode: e.target.value
             });
         }
     }, {
-        key: "changePassword",
+        key: 'changePassword',
         value: function changePassword(e) {
             var len = e.target.value.length;
             var showWarn = false;
@@ -171,7 +179,7 @@ var ForgotMyPassword = function (_React$Component) {
             });
         }
     }, {
-        key: "changePasswordAgain",
+        key: 'changePasswordAgain',
         value: function changePasswordAgain(e) {
             var password = this.state.password;
             this.setState({
@@ -180,7 +188,7 @@ var ForgotMyPassword = function (_React$Component) {
             });
         }
     }, {
-        key: "setResponseMessage",
+        key: 'setResponseMessage',
         value: function setResponseMessage(color, message) {
             this.setState({
                 responseVisible: true,
@@ -189,7 +197,7 @@ var ForgotMyPassword = function (_React$Component) {
             });
         }
     }, {
-        key: "goBack",
+        key: 'goBack',
         value: function goBack() {
             this.setState({
                 responseVisible: false,
@@ -197,54 +205,54 @@ var ForgotMyPassword = function (_React$Component) {
             });
         }
     }, {
-        key: "render",
+        key: 'render',
         value: function render() {
             document.title = "Parolami Unuttum";
             if (this.state.form == "sendEmailButton") {
                 return React.createElement(
                     Row,
-                    { size: "sixteen" },
-                    React.createElement(WideColumn, { size: "four" }),
+                    { size: 'sixteen' },
+                    React.createElement(WideColumn, { size: 'four' }),
                     React.createElement(
                         WideColumn,
-                        { size: "eight" },
+                        { size: 'eight' },
                         React.createElement(ForgotMyPasswordHeader, null),
                         React.createElement(
                             Row,
-                            { size: "one" },
+                            { size: 'one' },
                             React.createElement(
                                 Column,
                                 null,
                                 React.createElement(
-                                    "form",
-                                    { className: "ui form" },
+                                    'form',
+                                    { className: 'ui form' },
                                     React.createElement(
-                                        "div",
-                                        { className: "field" },
+                                        'div',
+                                        { className: 'field' },
                                         React.createElement(
-                                            "label",
+                                            'label',
                                             null,
-                                            "E-posta"
+                                            'E-posta'
                                         ),
-                                        React.createElement("input", { type: "email", name: "e-posta", placeholder: "E-posta", value: this.state.email, onChange: this.changeEmail })
+                                        React.createElement('input', { type: 'email', name: 'e-posta', placeholder: 'E-posta', value: this.state.email, onChange: this.changeEmail })
                                     ),
-                                    this.state.emailPatternWarn ? React.createElement(BasicMessageWithColor, { color: "yellow", message: "Ge\xE7ersiz E-posta" }) : "",
+                                    this.state.emailPatternWarn ? React.createElement(BasicMessageWithColor, { color: 'yellow', message: 'Ge\xE7ersiz E-posta' }) : "",
                                     React.createElement(
-                                        "div",
-                                        { className: "field" },
+                                        'div',
+                                        { className: 'field' },
                                         React.createElement(
-                                            "label",
+                                            'label',
                                             null,
-                                            "Kullan\u0131c\u0131 Ad\u0131"
+                                            'Kullan\u0131c\u0131 Ad\u0131'
                                         ),
-                                        React.createElement("input", { type: "text", name: "kullanici-adi", placeholder: "Kullan\u0131c\u0131 Ad\u0131", value: this.state.username, onChange: this.changeUsername })
+                                        React.createElement('input', { type: 'text', name: 'kullanici-adi', placeholder: 'Kullan\u0131c\u0131 Ad\u0131', value: this.state.username, onChange: this.changeUsername })
                                     )
                                 )
                             )
                         ),
                         this.state.responseVisible ? React.createElement(
                             Row,
-                            { size: "one" },
+                            { size: 'one' },
                             React.createElement(
                                 Column,
                                 null,
@@ -253,95 +261,95 @@ var ForgotMyPassword = function (_React$Component) {
                         ) : "",
                         React.createElement(
                             Row,
-                            { size: "one" },
+                            { size: 'one' },
                             React.createElement(
                                 Column,
                                 null,
                                 React.createElement(
                                     Center,
                                     null,
-                                    React.createElement(Button, { type: "green big", name: "Kurtarma E-postas\u0131 G\xF6nder", click: this.sendEmail })
+                                    React.createElement(Button, { type: 'green big', name: 'Kurtarma E-postas\u0131 G\xF6nder', click: this.sendEmail })
                                 )
                             )
                         )
                     ),
-                    React.createElement(WideColumn, { size: "four" })
+                    React.createElement(WideColumn, { size: 'four' })
                 );
             } else if (this.state.form == "normal") {
                 return React.createElement(
                     Row,
-                    { size: "sixteen" },
-                    React.createElement(WideColumn, { size: "four" }),
+                    { size: 'sixteen' },
+                    React.createElement(WideColumn, { size: 'four' }),
                     React.createElement(
                         WideColumn,
-                        { size: "eight" },
+                        { size: 'eight' },
                         React.createElement(ForgotMyPasswordHeader, null),
                         React.createElement(
                             Row,
-                            { size: "one" },
+                            { size: 'one' },
                             React.createElement(
                                 Column,
                                 null,
                                 React.createElement(
-                                    "form",
-                                    { className: "ui form" },
+                                    'form',
+                                    { className: 'ui form' },
                                     React.createElement(
-                                        "div",
-                                        { className: "field" },
+                                        'div',
+                                        { className: 'field' },
                                         React.createElement(
-                                            "label",
+                                            'label',
                                             null,
-                                            "E-posta"
+                                            'E-posta'
                                         ),
-                                        React.createElement("input", { type: "email", name: "e-posta", placeholder: "E-posta", value: this.state.email, disabled: true })
+                                        React.createElement('input', { type: 'email', name: 'e-posta', placeholder: 'E-posta', value: this.state.email, disabled: true })
                                     ),
                                     React.createElement(
-                                        "div",
-                                        { className: "field" },
+                                        'div',
+                                        { className: 'field' },
                                         React.createElement(
-                                            "label",
+                                            'label',
                                             null,
-                                            "Kullan\u0131c\u0131 Ad\u0131"
+                                            'Kullan\u0131c\u0131 Ad\u0131'
                                         ),
-                                        React.createElement("input", { type: "text", name: "kullanici-adi", placeholder: "Kullan\u0131c\u0131 Ad\u0131", value: this.state.username, disabled: true })
+                                        React.createElement('input', { type: 'text', name: 'kullanici-adi', placeholder: 'Kullan\u0131c\u0131 Ad\u0131', value: this.state.username, disabled: true })
                                     ),
-                                    this.state.infoMessage ? React.createElement(Message, { header: "E-posta kutunuzu kontrol edin", message: "E-posta ve kullan\u0131c\u0131 ad\u0131n\u0131z\u0131 eksiksiz yazd\u0131ysan\u0131z kurtarma e-postas\u0131 sorunsuz bir \u015Fekilde ula\u015Facakt\u0131r" }) : "",
+                                    this.fromUrl === false ? React.createElement(Message, { header: 'E-posta kutunuzu kontrol edin', message: 'E-posta ve kullan\u0131c\u0131 ad\u0131n\u0131z\u0131 eksiksiz yazd\u0131ysan\u0131z kurtarma e-postas\u0131 sorunsuz bir \u015Fekilde ula\u015Facakt\u0131r' }) : "",
                                     React.createElement(
-                                        "div",
-                                        { className: "field" },
+                                        'div',
+                                        { className: 'field' },
                                         React.createElement(
-                                            "label",
+                                            'label',
                                             null,
-                                            "Kurtarma Kodu"
+                                            'Kurtarma Kodu'
                                         ),
-                                        React.createElement("input", { type: "text", name: "kurtarma-kodu", placeholder: "Kurtarma Kodu", value: this.state.recoveryCode, onChange: this.changeRecoveryCode })
+                                        React.createElement('input', { type: 'text', name: 'kurtarma-kodu', placeholder: 'Kurtarma Kodu', value: this.state.recoveryCode, onChange: this.changeRecoveryCode, disabled: this.fromUrl })
                                     ),
                                     React.createElement(
-                                        "div",
-                                        { className: "field" },
+                                        'div',
+                                        { className: 'field' },
                                         React.createElement(
-                                            "label",
+                                            'label',
                                             null,
-                                            "Yeni Parola"
+                                            'Yeni Parola'
                                         ),
-                                        React.createElement("input", { type: "password", name: "parola", placeholder: "Parola", value: this.state.password, onChange: this.changePassword })
+                                        React.createElement('input', { type: 'password', name: 'parola', placeholder: 'Parola', value: this.state.password, onChange: this.changePassword })
                                     ),
-                                    this.state.passwordWarn ? React.createElement(BasicMessageWithColor, { color: "yellow", message: "Parola uzunlu\u011Fu [10-40] karakter olmal\u0131" }) : "",
+                                    this.state.passwordWarn ? React.createElement(BasicMessageWithColor, { color: 'yellow', message: 'Parola uzunlu\u011Fu [10-40] karakter olmal\u0131' }) : "",
                                     React.createElement(
-                                        "div",
-                                        { className: "field" },
+                                        'div',
+                                        { className: 'field' },
                                         React.createElement(
-                                            "label",
+                                            'label',
                                             null,
-                                            "Yeni Parola Tekrar"
+                                            'Yeni Parola Tekrar'
                                         ),
-                                        React.createElement("input", { type: "password", name: "parola-tekrar", placeholder: "Parola Tekrar", value: this.state.passwordAgain, onChange: this.changePasswordAgain })
+                                        React.createElement('input', { type: 'password', name: 'parola-tekrar', placeholder: 'Parola Tekrar', value: this.state.passwordAgain, onChange: this.changePasswordAgain })
                                     ),
-                                    this.state.passwordAgainWarn ? React.createElement(BasicMessageWithColor, { color: "yellow", message: "Parola tekrar\u0131 ile ayn\u0131 de\u011Fil" }) : ""
+                                    this.state.passwordAgainWarn ? React.createElement(BasicMessageWithColor, { color: 'yellow', message: 'Parola tekrar\u0131 ile ayn\u0131 de\u011Fil' }) : ""
                                 ),
                                 this.state.responseVisible ? React.createElement(
                                     Row,
-                                    { size: "one" },
+                                    { size: 'one' },
                                     React.createElement(
                                         Column,
                                         null,
@@ -350,11 +358,11 @@ var ForgotMyPassword = function (_React$Component) {
                                 ) : "",
                                 React.createElement(
                                     Row,
-                                    { size: "two" },
+                                    { size: 'two' },
                                     React.createElement(
                                         Column,
                                         null,
-                                        React.createElement(Button, { type: "teal", name: "D\xFCzenle", click: this.goBack })
+                                        this.fromUrl === false ? React.createElement(Button, { type: 'teal', name: 'D\xFCzenle', click: this.goBack }) : ""
                                     ),
                                     React.createElement(
                                         Column,
@@ -362,49 +370,49 @@ var ForgotMyPassword = function (_React$Component) {
                                         React.createElement(
                                             FloatRight,
                                             null,
-                                            React.createElement(Button, { type: "green", name: "De\u011Fi\u015Ftir", click: this.send })
+                                            React.createElement(Button, { type: 'green', name: 'De\u011Fi\u015Ftir', click: this.send })
                                         )
                                     )
                                 )
                             )
                         )
                     ),
-                    React.createElement(WideColumn, { size: "four" })
+                    React.createElement(WideColumn, { size: 'four' })
                 );
             } else if (this.state.form == "loading") {
                 return React.createElement(RowLoadingSpin, { nonSegment: true });
             } else if (this.state.form == "success") {
                 return React.createElement(
                     Row,
-                    { size: "sixteen" },
-                    React.createElement(WideColumn, { size: "four" }),
+                    { size: 'sixteen' },
+                    React.createElement(WideColumn, { size: 'four' }),
                     React.createElement(
                         WideColumn,
-                        { size: "eight" },
+                        { size: 'eight' },
                         React.createElement(
                             Row,
-                            { size: "one" },
+                            { size: 'one' },
                             React.createElement(
                                 Column,
                                 null,
-                                React.createElement(Message, { header: "Ba\u015Far\u0131l\u0131", message: "Ba\u015Far\u0131l\u0131 bir \u015Fekilde parola s\u0131f\u0131rland\u0131. Giri\u015F yapabilirsiniz" })
+                                React.createElement(Message, { header: 'Ba\u015Far\u0131l\u0131', message: 'Ba\u015Far\u0131l\u0131 bir \u015Fekilde parola s\u0131f\u0131rland\u0131. Giri\u015F yapabilirsiniz' })
                             )
                         ),
                         React.createElement(
                             Row,
-                            { size: "one" },
+                            { size: 'one' },
                             React.createElement(
                                 Column,
                                 null,
                                 React.createElement(
                                     Center,
                                     null,
-                                    React.createElement(Button, { type: "green", name: "Giri\u015F Yap", click: this.goLogin })
+                                    React.createElement(Button, { type: 'green', name: 'Giri\u015F Yap', click: this.goLogin })
                                 )
                             )
                         )
                     ),
-                    React.createElement(WideColumn, { size: "four" })
+                    React.createElement(WideColumn, { size: 'four' })
                 );
             }
         }
@@ -423,15 +431,15 @@ var ForgotMyPasswordHeader = function (_React$Component2) {
     }
 
     _createClass(ForgotMyPasswordHeader, [{
-        key: "render",
+        key: 'render',
         value: function render() {
             return React.createElement(
                 Row,
-                { size: "one" },
+                { size: 'one' },
                 React.createElement(
                     Column,
                     null,
-                    React.createElement(H, { type: "1", text: "Parolam\u0131 Unuttum", id: "forgotMyPasswordHeader", textAlign: "center" })
+                    React.createElement(H, { type: '1', text: 'Parolam\u0131 Unuttum', id: "forgotMyPasswordHeader", textAlign: "center" })
                 )
             );
         }

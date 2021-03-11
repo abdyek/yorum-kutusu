@@ -21,6 +21,8 @@ class ForgotMyPassword extends Controller {
         $this->deleteRecovery();
         Database::execute('INSERT INTO reset_password (member_id, recovery_code) VALUES(?,?)', [$this->member['member_id'], $randStr]);
         Other::sendMail();
+        // here is an example to send url from user http://localhost/yorum-kutusu/parolami-unuttum?email=yunusemrebulut123@gmail.com&recoveryCode=123212121&username=mahmut
+        // all is completed for front-end, only send url as this
     }
     protected function put() {
         $this->memberCheck();
