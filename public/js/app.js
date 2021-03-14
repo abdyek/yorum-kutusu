@@ -14,7 +14,6 @@ var Menu = function (_React$Component) {
 
         var _this = _possibleConstructorReturn(this, (Menu.__proto__ || Object.getPrototypeOf(Menu)).call(this, props));
 
-        _this.refreshUnreadComments = _this.refreshUnreadComments.bind(_this);
         _this.logout = _this.logout.bind(_this);
         _this.openUnreadComments = _this.openUnreadComments.bind(_this);
         _this.openProfile = _this.openProfile.bind(_this);
@@ -22,11 +21,6 @@ var Menu = function (_React$Component) {
     }
 
     _createClass(Menu, [{
-        key: "refreshUnreadComments",
-        value: function refreshUnreadComments() {
-            // burada istekle yeni okunmamış mesajları çekicez
-        }
-    }, {
         key: "logout",
         value: function logout(e) {
             e.preventDefault();
@@ -50,106 +44,114 @@ var Menu = function (_React$Component) {
         value: function render() {
             var _this2 = this;
 
-            var core = void 0;
-            if (this.props.form == "user-has-unread") {
-                core = React.createElement(
-                    FloatRight,
-                    null,
+            if (this.props.form === "login") {
+                return React.createElement(
+                    "div",
+                    { id: "menu" },
                     React.createElement(
-                        "a",
-                        { onClick: this.openUnreadComments },
+                        FloatRight,
+                        null,
                         React.createElement(
-                            "button",
-                            { className: "ui blue button" },
+                            "a",
+                            { href: "giris-yap", onClick: function onClick(e) {
+                                    e.preventDefault();_this2.props.changeContent("giris-yap", true);
+                                } },
                             React.createElement(
-                                "i",
-                                { className: "icon" },
-                                React.createElement("i", { id: "unread-comments", className: "fa fa-comments", "aria-hidden": "true" })
-                            ),
-                            this.props.unreadCommentsCount
-                        )
-                    ),
-                    React.createElement(
-                        "a",
-                        { onClick: this.logout },
-                        React.createElement(
-                            "button",
-                            { "class": "ui icon blue button" },
-                            React.createElement(
-                                "i",
-                                { "class": "icon" },
-                                React.createElement("i", { id: "logout-button", "class": "fa fa-sign-out", "aria-hidden": "true" })
+                                "button",
+                                { className: "ui blue button" },
+                                React.createElement(
+                                    "i",
+                                    { className: "icon" },
+                                    React.createElement("i", { className: "fa fa-user", "aria-hidden": "true" })
+                                ),
+                                React.createElement(
+                                    "span",
+                                    null,
+                                    "Giri\u015F Yap"
+                                )
                             )
                         )
                     )
                 );
-            } else if (this.props.form == "user-empty-unread") {
-                core = React.createElement(
-                    FloatRight,
-                    null,
-                    React.createElement(
-                        "a",
-                        { onClick: this.openProfile },
+            } else if (this.props.form === "account") {
+                if (this.props.unreadCommentsCount) {
+                    return React.createElement(
+                        "div",
+                        { id: "menu" },
                         React.createElement(
-                            "button",
-                            { "class": "ui blue button" },
+                            FloatRight,
+                            null,
                             React.createElement(
-                                "i",
-                                { "class": "icon" },
-                                React.createElement("i", { "class": "fa fa-user", "aria-hidden": "true" })
+                                "a",
+                                { onClick: this.openUnreadComments },
+                                React.createElement(
+                                    "button",
+                                    { className: "ui blue button" },
+                                    React.createElement(
+                                        "i",
+                                        { className: "icon" },
+                                        React.createElement("i", { id: "unread-comments", className: "fa fa-comments", "aria-hidden": "true" })
+                                    ),
+                                    this.props.unreadCommentsCount
+                                )
                             ),
                             React.createElement(
-                                "span",
-                                null,
-                                "Hesap"
+                                "a",
+                                { onClick: this.logout },
+                                React.createElement(
+                                    "button",
+                                    { className: "ui icon blue button" },
+                                    React.createElement(
+                                        "i",
+                                        { className: "icon" },
+                                        React.createElement("i", { id: "logout-button", className: "fa fa-sign-out", "aria-hidden": "true" })
+                                    )
+                                )
                             )
                         )
-                    ),
-                    React.createElement(
-                        "a",
-                        { onClick: this.logout },
+                    );
+                } else {
+                    return React.createElement(
+                        "div",
+                        { id: "menu" },
                         React.createElement(
-                            "button",
-                            { "class": "ui icon blue button" },
+                            FloatRight,
+                            null,
                             React.createElement(
-                                "i",
-                                { "class": "icon" },
-                                React.createElement("i", { id: "logout-button", "class": "fa fa-sign-out", "aria-hidden": "true" })
-                            )
-                        )
-                    )
-                );
-            } else if (this.props.form == "login") {
-                core = React.createElement(
-                    FloatRight,
-                    null,
-                    React.createElement(
-                        "a",
-                        { href: "giris-yap", onClick: function onClick(e) {
-                                e.preventDefault();_this2.props.changeContent("giris-yap", true);
-                            } },
-                        React.createElement(
-                            "button",
-                            { "class": "ui blue button" },
-                            React.createElement(
-                                "i",
-                                { "class": "icon" },
-                                React.createElement("i", { "class": "fa fa-user", "aria-hidden": "true" })
+                                "a",
+                                { onClick: this.openProfile },
+                                React.createElement(
+                                    "button",
+                                    { className: "ui blue button" },
+                                    React.createElement(
+                                        "i",
+                                        { className: "icon" },
+                                        React.createElement("i", { className: "fa fa-user", "aria-hidden": "true" })
+                                    ),
+                                    React.createElement(
+                                        "span",
+                                        null,
+                                        "Hesap"
+                                    )
+                                )
                             ),
                             React.createElement(
-                                "span",
-                                null,
-                                "Giri\u015F Yap"
+                                "a",
+                                { onClick: this.logout },
+                                React.createElement(
+                                    "button",
+                                    { className: "ui icon blue button" },
+                                    React.createElement(
+                                        "i",
+                                        { className: "icon" },
+                                        React.createElement("i", { id: "logout-button", className: "fa fa-sign-out", "aria-hidden": "true" })
+                                    )
+                                )
                             )
                         )
-                    )
-                );
+                    );
+                }
             }
-            return React.createElement(
-                "div",
-                { id: "menu" },
-                core
-            );
         }
     }]);
 
@@ -589,7 +591,7 @@ var Content = function (_React$Component8) {
                     return React.createElement(NewProduct, { changeContent: this.props.changeContent });
                     break;
                 case "login":
-                    return React.createElement(Login, { changeContent: this.props.changeContent, changeHeader: this.props.changeHeader });
+                    return React.createElement(Login, { changeContent: this.props.changeContent, updateMenu: this.props.updateMenu });
                     break;
                 case "signup":
                     return React.createElement(Signup, { changeContent: this.props.changeContent });
@@ -626,11 +628,12 @@ var App = function (_React$Component9) {
 
         var _this14 = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
 
+        var userInfo = getUserInfo();
         _this14.state = {
             content: _this14.props.content,
-            form: "login", // user-empty-unread, user-has-unread, login
-            userSlug: "",
-            unreadCommentsCount: 0
+            form: userInfo ? "account" : "login", // login, account
+            userSlug: userInfo ? userInfo['slug'] : "",
+            unreadCommentsCount: userInfo ? userInfo["unreadComments"] : 0
         };
         _this14.contentFromSlug = {
             " ": "index",
@@ -651,35 +654,48 @@ var App = function (_React$Component9) {
                 "content": this.contentFromSlug[page]
             });
         }.bind(_this14);
-
+        _this14.updateMenu = _this14.updateMenu.bind(_this14);
+        _this14.updateUnreadComments = _this14.updateUnreadComments.bind(_this14);
         _this14.changeContent = _this14.changeContent.bind(_this14);
         _this14.logout = _this14.logout.bind(_this14);
         _this14.changeHeader = _this14.changeHeader.bind(_this14);
+        if (isMember()) {
+            setInterval(function () {
+                this.updateUnreadComments();
+            }.bind(_this14), 60000);
+        }
         return _this14;
     }
 
     _createClass(App, [{
-        key: "componentDidMount",
-        value: function componentDidMount() {
-            var form = "login";
-            var unread = 0;
-            var userSlug = "";
-            var userInfo = getUserInfo();
-            if (userInfo) {
-                if (userInfo['unreadComments'] > 0) {
-                    form = "user-has-unread";
-                    unread = userInfo['unreadComments'];
-                } else {
-                    form = "user-empty-unread";
-                    unread = 0;
-                }
-                userSlug = userInfo['slug'];
-            }
+        key: "updateMenu",
+        value: function updateMenu(slug) {
             this.setState({
-                "form": form,
-                "unreadCommentsCount": unread,
-                "userSlug": userSlug
+                form: "account",
+                userSlug: slug
             });
+            this.updateUnreadComments();
+        }
+    }, {
+        key: "updateUnreadComments",
+        value: function updateUnreadComments() {
+            var _this15 = this;
+
+            fetch(SITEURL + 'api/followProduct?' + getUrlPar({
+                pageNumber: 1
+            }), { method: 'GET' }).then(function (response) {
+                if (!response.ok) throw new Error(response.status);else return response.json();
+            }).then(function (json) {
+                _this15.setState({
+                    unreadCommentsCount: json.allCommentCount
+                });
+                var userInfo = getUserInfo();
+                if (userInfo) {
+                    userInfo["unreadComments"] = json.allCommentCount;
+                    var hash = base64FromObject(userInfo);
+                    setCookie("user", hash);
+                }
+            }).catch(function (error) {});
         }
     }, {
         key: "changeContent",
@@ -705,7 +721,7 @@ var App = function (_React$Component9) {
     }, {
         key: "logout",
         value: function logout() {
-            var _this15 = this;
+            var _this16 = this;
 
             fetch(SITEURL + 'api/logout', {
                 method: 'POST',
@@ -715,11 +731,11 @@ var App = function (_React$Component9) {
             }).then(function (response) {
                 if (!response.ok) throw new Error(response.status);else return response.json();
             }).then(function (json) {
-                _this15.setState({
+                _this16.setState({
                     form: "login"
                 });
                 setCookie('user', null);
-                _this15.changeContent(' ', true);
+                _this16.changeContent(' ', true);
             }).catch(function (error) {});
         }
     }, {
@@ -735,8 +751,18 @@ var App = function (_React$Component9) {
             return React.createElement(
                 "div",
                 { id: "app" },
-                React.createElement(Header, { changeContent: this.changeContent, form: this.state.form, userSlug: this.state.userSlug, unreadCommentsCount: this.state.unreadCommentsCount, logout: this.logout }),
-                React.createElement(Content, { content: this.state.content, changeContent: this.changeContent, changeHeader: this.changeHeader }),
+                React.createElement(Header, {
+                    changeContent: this.changeContent,
+                    form: this.state.form,
+                    userSlug: this.state.userSlug,
+                    unreadCommentsCount: this.state.unreadCommentsCount,
+                    logout: this.logout
+                }),
+                React.createElement(Content, {
+                    content: this.state.content,
+                    changeContent: this.changeContent,
+                    updateMenu: this.updateMenu
+                }),
                 React.createElement(Footer, null)
             );
         }

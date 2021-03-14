@@ -74,7 +74,7 @@ var LogIn = function (_React$Component) {
                     'unreadComments': 0
                 });
                 setCookie('user', hash);
-                _this2.props.changeHeader("user-empty-unread");
+                _this2.props.updateMenu(json.slug);
                 setTimeout(function () {
                     _this2.props.changeContent(' ', true);
                 }, 2000);
@@ -402,7 +402,7 @@ var Login = function (_React$Component6) {
                 "div",
                 null,
                 React.createElement(Head, null),
-                React.createElement(LogIn, { changeContent: this.props.changeContent, changeHeader: this.props.changeHeader })
+                React.createElement(LogIn, { changeContent: this.props.changeContent, changeHeader: this.props.changeHeader, updateMenu: this.props.updateMenu })
             );
         }
     }]);

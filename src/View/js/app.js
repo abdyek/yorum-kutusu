@@ -1,13 +1,9 @@
 class Menu extends React.Component {
     constructor(props) {
         super(props);
-        this.refreshUnreadComments = this.refreshUnreadComments.bind(this);
         this.logout = this.logout.bind(this);
         this.openUnreadComments = this.openUnreadComments.bind(this);
         this.openProfile = this.openProfile.bind(this);
-    }
-    refreshUnreadComments() {
-        // burada istekle yeni okunmamış mesajları çekicez
     }
     logout(e) {
         e.preventDefault();
@@ -23,67 +19,68 @@ class Menu extends React.Component {
         this.props.changeContent(SITEURL+"profil/"+this.props.userSlug);
     }
     render() {
-        let core;
-        if(this.props.form=="user-has-unread") {
-            core = (
-                <FloatRight>
-                    <a onClick={this.openUnreadComments}>
-                        <button className="ui blue button">
-                            <i className="icon">
-                                <i id="unread-comments" className="fa fa-comments" aria-hidden="true"></i>
-                            </i>
-                            {this.props.unreadCommentsCount}
-                        </button> 
-                    </a>
-                    <a onClick={this.logout}>
-                        <button class="ui icon blue button">
-                            <i class="icon">
-                                <i id="logout-button" class="fa fa-sign-out" aria-hidden="true"></i>
-                            </i>
-                        </button>
-                    </a>
-                </FloatRight>
+        if(this.props.form==="login") {
+            return ( 
+                <div id="menu">
+                    <FloatRight>
+                        <a href="giris-yap" onClick={(e)=>{e.preventDefault();this.props.changeContent("giris-yap", true)}}>
+                            <button className="ui blue button">
+                                <i className="icon">
+                                    <i className="fa fa-user" aria-hidden="true"></i>
+                                </i>
+                                <span>Giriş Yap</span>
+                            </button>
+                        </a>
+                    </FloatRight>
+                </div>
             )
-        } else if(this.props.form=="user-empty-unread") {
-            core = (
-                <FloatRight>
-                    <a onClick={this.openProfile}>
-                        <button class="ui blue button">
-                            <i class="icon">
-                                <i class="fa fa-user" aria-hidden="true"></i>
-                            </i>
-                            <span>Hesap</span>
-                        </button>
-                    </a>
-                    <a onClick={this.logout}>
-                        <button class="ui icon blue button">
-                            <i class="icon">
-                                <i id="logout-button" class="fa fa-sign-out" aria-hidden="true"></i>
-                            </i>
-                        </button>
-                    </a>
-                </FloatRight>
-            )
-
-        } else if(this.props.form=="login") {
-            core = (
-                <FloatRight>
-                    <a href="giris-yap" onClick={(e)=>{e.preventDefault();this.props.changeContent("giris-yap", true)}}>
-                        <button class="ui blue button">
-                            <i class="icon">
-                                <i class="fa fa-user" aria-hidden="true"></i>
-                            </i>
-                            <span>Giriş Yap</span>
-                        </button>
-                    </a>
-                </FloatRight>
-            )
+        } else if(this.props.form==="account") {
+            if(this.props.unreadCommentsCount) {
+                return (
+                    <div id="menu">
+                        <FloatRight>
+                            <a onClick={this.openUnreadComments}>
+                                <button className="ui blue button">
+                                    <i className="icon">
+                                        <i id="unread-comments" className="fa fa-comments" aria-hidden="true"></i>
+                                    </i>
+                                    {this.props.unreadCommentsCount}
+                                </button> 
+                            </a>
+                            <a onClick={this.logout}>
+                                <button className="ui icon blue button">
+                                    <i className="icon">
+                                        <i id="logout-button" className="fa fa-sign-out" aria-hidden="true"></i>
+                                    </i>
+                                </button>
+                            </a>
+                        </FloatRight>
+                    </div>
+                )
+            } else {
+                return (
+                    <div id="menu">
+                        <FloatRight>
+                            <a onClick={this.openProfile}>
+                                <button className="ui blue button">
+                                    <i className="icon">
+                                        <i className="fa fa-user" aria-hidden="true"></i>
+                                    </i>
+                                    <span>Hesap</span>
+                                </button>
+                            </a>
+                            <a onClick={this.logout}>
+                                <button className="ui icon blue button">
+                                    <i className="icon">
+                                        <i id="logout-button" className="fa fa-sign-out" aria-hidden="true"></i>
+                                    </i>
+                                </button>
+                            </a>
+                        </FloatRight>
+                    </div>
+                )
+            } 
         }
-        return(
-            <div id="menu">
-                {core}
-            </div>
-        )
     }
 }
 
@@ -398,7 +395,7 @@ class Content extends React.Component {
                 break;
             case "login":
                 return (
-                    <Login changeContent={this.props.changeContent} changeHeader={this.props.changeHeader} />
+                    <Login changeContent={this.props.changeContent} updateMenu={this.props.updateMenu} />
                 )
                 break;
             case "signup":
@@ -435,11 +432,12 @@ class Content extends React.Component {
 class App extends React.Component {
     constructor(props) {
         super(props);
+        let userInfo = getUserInfo();
         this.state = {
             content:this.props.content,
-            form:"login", // user-empty-unread, user-has-unread, login
-            userSlug:"",
-            unreadCommentsCount: 0
+            form:(userInfo)?"account":"login", // login, account
+            userSlug:(userInfo)?userInfo['slug']:"",
+            unreadCommentsCount: (userInfo)?userInfo["unreadComments"]:0
         };
         this.contentFromSlug = {
             " ":"index",
@@ -460,30 +458,41 @@ class App extends React.Component {
                 "content":this.contentFromSlug[page]
             });
         }.bind(this);
-
+        this.updateMenu = this.updateMenu.bind(this);
+        this.updateUnreadComments = this.updateUnreadComments.bind(this);
         this.changeContent = this.changeContent.bind(this);
         this.logout = this.logout.bind(this);
         this.changeHeader = this.changeHeader.bind(this);
-    }
-    componentDidMount() {
-        let form = "login";
-        let unread = 0;
-        let userSlug = "";
-        const userInfo = getUserInfo();
-        if(userInfo) {
-            if(userInfo['unreadComments']>0) {
-                form = "user-has-unread";
-                unread = userInfo['unreadComments'];
-            } else {
-                form = "user-empty-unread";
-                unread = 0;
-            }
-            userSlug = userInfo['slug'];
+        if(isMember()) {
+            setInterval(function() {
+                this.updateUnreadComments();
+            }.bind(this), 60000);
         }
+    }
+    updateMenu(slug) {
         this.setState({
-            "form": form,
-            "unreadCommentsCount":unread,
-            "userSlug":userSlug
+            form:"account",
+            userSlug:slug
+        });
+        this.updateUnreadComments();
+    }
+    updateUnreadComments() {
+        fetch(SITEURL + 'api/followProduct?' + getUrlPar({
+            pageNumber:1
+        }), {method: 'GET'}).then((response)=>{
+            if(!response.ok) throw new Error(response.status);
+            else return response.json();
+        }).then((json)=>{
+            this.setState({
+                unreadCommentsCount: json.allCommentCount
+            });
+            let userInfo = getUserInfo();
+            if(userInfo) {
+                userInfo["unreadComments"] = json.allCommentCount;
+                let hash = base64FromObject(userInfo);
+                setCookie("user", hash);
+            }
+        }).catch((error) => {
         });
     }
     changeContent(href, direct, slugs) {
@@ -532,8 +541,18 @@ class App extends React.Component {
     render() {
         return (
             <div id="app">
-                <Header changeContent={this.changeContent} form={this.state.form} userSlug={this.state.userSlug} unreadCommentsCount={this.state.unreadCommentsCount} logout={this.logout}/>
-                <Content content={this.state.content} changeContent={this.changeContent} changeHeader={this.changeHeader}/>
+                <Header
+                    changeContent={this.changeContent}
+                    form={this.state.form}
+                    userSlug={this.state.userSlug}
+                    unreadCommentsCount={this.state.unreadCommentsCount}
+                    logout={this.logout}
+                />
+                <Content
+                    content={this.state.content}
+                    changeContent={this.changeContent}
+                    updateMenu = {this.updateMenu}
+                />
                 <Footer />
             </div>
         )

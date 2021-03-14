@@ -52,7 +52,7 @@ class LogIn extends React.Component {
                 'unreadComments':0,
             });
             setCookie('user', hash);
-            this.props.changeHeader("user-empty-unread");
+            this.props.updateMenu(json.slug);
             setTimeout(()=>{
                 this.props.changeContent(' ', true);
             }, 2000);
@@ -236,7 +236,7 @@ class Login extends React.Component {
         return(
             <div>
                 <Head />
-                <LogIn changeContent={this.props.changeContent} changeHeader={this.props.changeHeader}/>
+                <LogIn changeContent={this.props.changeContent} changeHeader={this.props.changeHeader} updateMenu={this.props.updateMenu} />
             </div>
         )
     }
