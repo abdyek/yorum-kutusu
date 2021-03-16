@@ -11,7 +11,7 @@ class Menu extends React.Component {
     }
     openUnreadComments(e) {
         e.preventDefault();
-        this.props.changeContent("profil/"+this.props.userSlug+"/takipteki-urunler");
+        this.props.changeContent(SITEURL+"profil/"+this.props.userSlug+"/takipteki-urunler");
         // ek olarak okunmamış yorumları açacak bir mekanizma
     }
     openProfile(e) {
@@ -35,7 +35,7 @@ class Menu extends React.Component {
                 </div>
             )
         } else if(this.props.form==="account") {
-            if(this.props.unreadCommentsCount) {
+            if(this.props.unreadCommentsCount!==0) {
                 return (
                     <div id="menu">
                         <FloatRight>
@@ -484,11 +484,11 @@ class App extends React.Component {
             else return response.json();
         }).then((json)=>{
             this.setState({
-                unreadCommentsCount: json.allCommentCount
+                unreadCommentsCount: json.other.allCommentCount
             });
             let userInfo = getUserInfo();
             if(userInfo) {
-                userInfo["unreadComments"] = json.allCommentCount;
+                userInfo["unreadComments"] = json.other.allCommentCount;
                 let hash = base64FromObject(userInfo);
                 setCookie("user", hash);
             }

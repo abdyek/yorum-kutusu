@@ -4,7 +4,8 @@ namespace YorumKutusu\Api\Controller;
 use YorumKutusu\Api\Core\Controller;
 use YorumKutusu\Api\Core\Database;
 use YorumKutusu\Api\Core\Other;
-use YorumKutusu\Api\Model\Product;
+use YorumKutusu\Api\Model\Product as ProductModel;
+use YorumKutusu\Api\Model\Comment as CommentModel;
 
 // bu isteğin adının comment olması yanıltmasın yorum çekme işlemlerini burada yapmıyorum
 class Comment extends Controller {
@@ -18,7 +19,9 @@ class Comment extends Controller {
             exit();
         }
         $this->writeToDB();
-        $this->increaseNewCommentCount();
+        if(!$this->memberRestricted) {
+            CommentModel::increaseNewCommentCount($this->data['productID']);
+        }
         $this->commitRating();
     }
     // post ve put'un ortak methodu
@@ -52,18 +55,15 @@ class Comment extends Controller {
         return true;
     }
     private function writeToDB() {
-        $memberRestricted = Database::existCheck('SELECT member_restricted FROM member WHERE member_id=?', [$this->userId])['member_restricted'];
-        if($memberRestricted) {
+        $this->memberRestricted = Database::existCheck('SELECT member_restricted FROM member WHERE member_id=?', [$this->userId])['member_restricted'];
+        if($this->memberRestricted) {
             $query = Database::executeWithErr('INSERT INTO comment_request (member_id, product_id, comment_text) VALUES(?,?,?)', [$this->userId, $this->data['productID'], $this->data['commentText']]);
             $this->success();
         } else {
             $query = Database::executeWithErr('INSERT INTO comment (member_id, product_id, comment_text) VALUES(?,?,?)', [$this->userId, $this->data['productID'], $this->data['commentText']]);
-            Product::increaseCommentCount($this->data['productID']);
+            ProductModel::increaseCommentCount($this->data['productID']);
             $this->success();
         }
-    }
-    private function increaseNewCommentCount() {
-        Database::execute('UPDATE product_follow SET new_comment_count = new_comment_count + 1 WHERE product_id=?', [$this->data['productID']]);
     }
     protected function put() {
         $this->productCheckWrapper();
@@ -147,10 +147,11 @@ class Comment extends Controller {
         $this->comment = Database::existCheck('SELECT * FROM comment WHERE comment_deleted=0 AND member_id=? AND product_id=?', [$this->userId, $this->data['productID']]);
         if($this->comment) {
             Database::executeWithErr('UPDATE comment SET comment_deleted=1 WHERE member_id=? AND product_id=?', [$this->userId, $this->data['productID']]);
-            Product::decreaseCommentCount($this->data['productID']);
+            ProductModel::decreaseCommentCount($this->data['productID']);
             $this->addHistory();
             $this->removeHiddenComment();
             $this->decreaseNewCommentCount();
+            Comment::decreaseNewCommentCount($this->comment['product_id'], $this->comment['comment_create_date_time']);
         }
         $this->success();
     }
@@ -166,9 +167,6 @@ class Comment extends Controller {
     }
     private function removeHiddenComment() {
         Database::executeWithErr('DELETE FROM hidden_comment WHERE comment_id=?', [$this->comment['comment_id']]);
-    }
-    private function decreaseNewCommentCount() {
-        Database::executeWithErr('UPDATE product_follow SET new_comment_count = new_comment_count - 1 WHERE product_id=? and new_comment_count>0 and ?>last_seen_date_time', [$this->comment['product_id'], $this->comment['comment_create_date_time']]);
     }
 
 }

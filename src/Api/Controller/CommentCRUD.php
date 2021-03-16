@@ -3,12 +3,13 @@
 namespace YorumKutusu\Api\Controller;
 use YorumKutusu\Api\Core\Controller;
 use YorumKutusu\Api\Core\Database;
-use YorumKutusu\Api\Model\Product;
+use YorumKutusu\Api\Model\Product as ProductModel;
+use YorumKutusu\Api\Model\Comment as CommentModel;
 
 class CommentCRUD extends Controller {
     protected function delete() {
         // ^ NOT COMPLETED
-        $this->comment = Database::existCheck('SELECT comment_id, product_id, member_id FROM comment WHERE comment_deleted=0 AND comment_id=?', [$this->data['commentID']]);
+        $this->comment = Database::existCheck('SELECT * FROM comment WHERE comment_deleted=0 AND comment_id=?', [$this->data['commentID']]);
         if(!$this->comment) {
             $this->setHttpStatus(404);
             exit();
@@ -20,6 +21,7 @@ class CommentCRUD extends Controller {
         $this->removeHiddenComment();
         $this->decreaseNewCommentCount();
         Product::decreaseCommentCount($this->comment['product_id']);
+        Comment::decreaseNewCommentCount($this->comment['product_id'], $this->comment['comment_last_edit_date_time']);
         $this->success();
     }
     private function deleteComment() {

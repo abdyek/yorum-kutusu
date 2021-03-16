@@ -3,7 +3,8 @@
 namespace YorumKutusu\Api\Controller;
 use YorumKutusu\Api\Core\Controller;
 use YorumKutusu\Api\Core\Database;
-use YorumKutusu\Api\Model\Product;
+use YorumKutusu\Api\Model\Product as ProductModel;
+use YorumKutusu\Api\Model\Comment as CommentModel;
 
 class CommentRequest extends Controller {
     protected function get() {
@@ -52,7 +53,8 @@ class CommentRequest extends Controller {
                     $this->commentRequest['comment_text'],
                     $this->commentRequest['comment_request_date_time']
                 ]);
-                Product::increaseCommentCount($this->commentRequest['product_id']);
+                ProductModel::increaseCommentCount($this->commentRequest['product_id']);
+                CommentModel::increaseNewCommentCount($this->commentRequest['product_id']);
             } else {
                 Database::executeWithErr('UPDATE comment SET comment_text=?, comment_edited=1, comment_last_edit_date_time=? WHERE comment_id=?', [$this->commentRequest['comment_text'], $this->commentRequest['comment_request_date_time'],$this->commentRequest['comment_id']]);
             }

@@ -30,7 +30,7 @@ var Menu = function (_React$Component) {
         key: "openUnreadComments",
         value: function openUnreadComments(e) {
             e.preventDefault();
-            this.props.changeContent("profil/" + this.props.userSlug + "/takipteki-urunler");
+            this.props.changeContent(SITEURL + "profil/" + this.props.userSlug + "/takipteki-urunler");
             // ek olarak okunmamış yorumları açacak bir mekanizma
         }
     }, {
@@ -74,7 +74,7 @@ var Menu = function (_React$Component) {
                     )
                 );
             } else if (this.props.form === "account") {
-                if (this.props.unreadCommentsCount) {
+                if (this.props.unreadCommentsCount !== 0) {
                     return React.createElement(
                         "div",
                         { id: "menu" },
@@ -687,11 +687,11 @@ var App = function (_React$Component9) {
                 if (!response.ok) throw new Error(response.status);else return response.json();
             }).then(function (json) {
                 _this15.setState({
-                    unreadCommentsCount: json.allCommentCount
+                    unreadCommentsCount: json.other.allCommentCount
                 });
                 var userInfo = getUserInfo();
                 if (userInfo) {
-                    userInfo["unreadComments"] = json.allCommentCount;
+                    userInfo["unreadComments"] = json.other.allCommentCount;
                     var hash = base64FromObject(userInfo);
                     setCookie("user", hash);
                 }
