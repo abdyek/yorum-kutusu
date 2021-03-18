@@ -513,7 +513,13 @@ var Header = function (_React$Component6) {
                             React.createElement(
                                 WideColumn,
                                 { size: "four" },
-                                React.createElement(Menu, { changeContent: this.props.changeContent, form: this.props.form, unreadCommentsCount: this.props.unreadCommentsCount, userSlug: this.props.userSlug, logout: this.props.logout })
+                                React.createElement(Menu, {
+                                    changeContent: this.props.changeContent,
+                                    form: this.props.form,
+                                    unreadCommentsCount: this.props.unreadCommentsCount,
+                                    userSlug: this.props.userSlug,
+                                    logout: this.props.logout
+                                })
                             )
                         )
                     )
@@ -659,11 +665,6 @@ var App = function (_React$Component9) {
         _this14.changeContent = _this14.changeContent.bind(_this14);
         _this14.logout = _this14.logout.bind(_this14);
         _this14.changeHeader = _this14.changeHeader.bind(_this14);
-        if (isMember()) {
-            setInterval(function () {
-                this.updateUnreadComments();
-            }.bind(_this14), 60000);
-        }
         return _this14;
     }
 
@@ -681,21 +682,23 @@ var App = function (_React$Component9) {
         value: function updateUnreadComments() {
             var _this15 = this;
 
-            fetch(SITEURL + 'api/followProduct?' + getUrlPar({
-                pageNumber: 1
-            }), { method: 'GET' }).then(function (response) {
-                if (!response.ok) throw new Error(response.status);else return response.json();
-            }).then(function (json) {
-                _this15.setState({
-                    unreadCommentsCount: json.other.allCommentCount
-                });
-                var userInfo = getUserInfo();
-                if (userInfo) {
-                    userInfo["unreadComments"] = json.other.allCommentCount;
-                    var hash = base64FromObject(userInfo);
-                    setCookie("user", hash);
-                }
-            }).catch(function (error) {});
+            if (isMember()) {
+                fetch(SITEURL + 'api/followProduct?' + getUrlPar({
+                    pageNumber: -1
+                }), { method: 'GET' }).then(function (response) {
+                    if (!response.ok) throw new Error(response.status);else return response.json();
+                }).then(function (json) {
+                    _this15.setState({
+                        unreadCommentsCount: json.other.allCommentCount
+                    });
+                    var userInfo = getUserInfo();
+                    if (userInfo) {
+                        userInfo["unreadComments"] = json.other.allCommentCount;
+                        var hash = base64FromObject(userInfo);
+                        setCookie("user", hash);
+                    }
+                }).catch(function (error) {});
+            }
         }
     }, {
         key: "changeContent",
@@ -717,6 +720,7 @@ var App = function (_React$Component9) {
                     "content": _cont
                 });
             }
+            this.updateUnreadComments();
         }
     }, {
         key: "logout",

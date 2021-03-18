@@ -52,24 +52,32 @@ class FollowProduct extends Controller {
             $this->setHttpStatus(400);
             exit();
         }
-        $lineCount = $this->data['pageNumber'] * 10;
-        $followingProduct = Database::getRows('SELECT p.product_id, p.product_slug, p.product_name, pw.last_seen_date_time, pw.new_comment_count FROM product_follow pw INNER JOIN product p ON pw.product_id = p.product_id WHERE p.product_deleted=0 AND pw.member_id=? ORDER BY pw.new_comment_count DESC LIMIT '.$lineCount, [$this->userId]);
-        $more = (Database::getRow('SELECT count(*) as c FROM product_follow WHERE member_id=?', [$this->userId])['c']>$lineCount)?true:false;
-        $arr = [];
-        $this->allNewCom = 0;
-        foreach($followingProduct as $fp) {
-            $arr[] = [
-                'productID'=>$fp['product_id'],
-                'productSlug'=>$fp['product_slug'],
-                'productName'=>$fp['product_name'],
-                'newComment'=>$fp['new_comment_count']
-            ];
-            $this->allNewCom += $fp['new_comment_count'];
+        $this->fetchAllCommentCount();
+        if($this->data['pageNumber']=="-1") {
+            $this->success([
+                'allCommentCount'=>$this->allCommentCount
+            ]);
+        } else {
+            $lineCount = $this->data['pageNumber'] * 10;
+            $followingProduct = Database::getRows('SELECT p.product_id, p.product_slug, p.product_name, pw.last_seen_date_time, pw.new_comment_count FROM product_follow pw INNER JOIN product p ON pw.product_id = p.product_id WHERE p.product_deleted=0 AND pw.member_id=? ORDER BY pw.new_comment_count DESC LIMIT '.$lineCount, [$this->userId]);
+            $more = (Database::getRow('SELECT count(*) as c FROM product_follow WHERE member_id=?', [$this->userId])['c']>$lineCount)?true:false;
+            $arr = [];
+            foreach($followingProduct as $fp) {
+                $arr[] = [
+                    'productID'=>$fp['product_id'],
+                    'productSlug'=>$fp['product_slug'],
+                    'productName'=>$fp['product_name'],
+                    'newComment'=>$fp['new_comment_count']
+                ];
+            }
+            $this->success([
+                'allCommentCount'=>$this->allCommentCount,
+                'followProduct'=>$arr,
+                'more'=>$more
+            ]);
         }
-        $this->success([
-            'allCommentCount'=>$this->allNewCom,
-            'followProduct'=>$arr,
-            'more'=>$more
-        ]);
+    }
+    private function fetchAllCommentCount() {
+        $this->allCommentCount = Database::getRow('SELECT sum(new_comment_count) as c FROM product_follow WHERE member_id=?', [$this->userId])['c'];
     }
 }

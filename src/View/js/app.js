@@ -341,7 +341,13 @@ class Header extends React.Component {
                                 />
                             </WideColumn>
                             <WideColumn size="four">
-                                <Menu changeContent={this.props.changeContent} form={this.props.form} unreadCommentsCount={this.props.unreadCommentsCount} userSlug={this.props.userSlug} logout={this.props.logout}/>
+                                <Menu
+                                    changeContent={this.props.changeContent}
+                                    form={this.props.form}
+                                    unreadCommentsCount={this.props.unreadCommentsCount}
+                                    userSlug={this.props.userSlug}
+                                    logout={this.props.logout}
+                                />
                             </WideColumn>
                         </Row>
                     </Column>
@@ -463,11 +469,6 @@ class App extends React.Component {
         this.changeContent = this.changeContent.bind(this);
         this.logout = this.logout.bind(this);
         this.changeHeader = this.changeHeader.bind(this);
-        if(isMember()) {
-            setInterval(function() {
-                this.updateUnreadComments();
-            }.bind(this), 60000);
-        }
     }
     updateMenu(slug) {
         this.setState({
@@ -477,23 +478,24 @@ class App extends React.Component {
         this.updateUnreadComments();
     }
     updateUnreadComments() {
-        fetch(SITEURL + 'api/followProduct?' + getUrlPar({
-            pageNumber:1
-        }), {method: 'GET'}).then((response)=>{
-            if(!response.ok) throw new Error(response.status);
-            else return response.json();
-        }).then((json)=>{
-            this.setState({
-                unreadCommentsCount: json.other.allCommentCount
-            });
-            let userInfo = getUserInfo();
-            if(userInfo) {
-                userInfo["unreadComments"] = json.other.allCommentCount;
-                let hash = base64FromObject(userInfo);
-                setCookie("user", hash);
-            }
-        }).catch((error) => {
-        });
+        if(isMember()) {
+            fetch(SITEURL + 'api/followProduct?' + getUrlPar({
+                pageNumber:-1
+            }), {method: 'GET'}).then((response)=>{
+                if(!response.ok) throw new Error(response.status);
+                else return response.json();
+            }).then((json)=>{
+                this.setState({
+                    unreadCommentsCount: json.other.allCommentCount
+                });
+                let userInfo = getUserInfo();
+                if(userInfo) {
+                    userInfo["unreadComments"] = json.other.allCommentCount;
+                    let hash = base64FromObject(userInfo);
+                    setCookie("user", hash);
+                }
+            }).catch((error) => {});
+        }
     }
     changeContent(href, direct, slugs) {
         direct = direct || false;
@@ -513,6 +515,7 @@ class App extends React.Component {
                 "content":cont
             });
         }
+        this.updateUnreadComments();
     }
     logout() {
         fetch(SITEURL + 'api/logout', {
