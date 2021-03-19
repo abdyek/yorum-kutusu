@@ -23,17 +23,16 @@ var Profile = function (_React$Component) {
             owner: false,
             email: "",
             comments: []
-            // setting elementary funcs
-        };_this.openSetting = _this.openSetting.bind(_this);
+        };
+        _this.load = _this.load.bind(_this);
+        // setting elementary funcs
+        _this.openSetting = _this.openSetting.bind(_this);
         _this.closeSetting = _this.closeSetting.bind(_this);
         _this.toggleSetting = _this.toggleSetting.bind(_this);
         // followedProducts elementary funcs
         _this.openFollowedProducts = _this.openFollowedProducts.bind(_this);
         _this.closeFollowedProducts = _this.closeFollowedProducts.bind(_this);
         _this.toggleFollowedProducts = _this.toggleFollowedProducts.bind(_this);
-        // set form loading / normal
-        _this.setFormLoading = _this.setFormLoading.bind(_this);
-        _this.setFormNormal = _this.setFormNormal.bind(_this);
         _this.reloadFunc = _this.reloadFunc.bind(_this);
         return _this;
     }
@@ -41,12 +40,16 @@ var Profile = function (_React$Component) {
     _createClass(Profile, [{
         key: "componentDidMount",
         value: function componentDidMount() {
-            var _this2 = this;
-
-            //this.setFormLoading();
             this.setState({
                 form: "loading"
             });
+            this.load();
+        }
+    }, {
+        key: "load",
+        value: function load() {
+            var _this2 = this;
+
             var userslug = getPathNames()[1];
             fetch(SITEURL + 'api/member?' + getUrlPar({
                 slug: userslug,
@@ -63,7 +66,6 @@ var Profile = function (_React$Component) {
                     email: json.other.member.email,
                     comments: normalizer('comment-in-profile', json['other']['comments'])
                 });
-                //this.setFormNormal();
             }).catch(function (error) {
                 if (error.message == 404) {
                     _this2.setState({ form: "notFound" });
@@ -103,19 +105,9 @@ var Profile = function (_React$Component) {
             if (this.state.followedProductsVisible) this.closeFollowedProducts();else this.openFollowedProducts();
         }
     }, {
-        key: "setFormLoading",
-        value: function setFormLoading() {
-            this.setState({ form: "loading" });
-        }
-    }, {
-        key: "setFormNormal",
-        value: function setFormNormal() {
-            this.setState({ form: "normal" });
-        }
-    }, {
         key: "reloadFunc",
         value: function reloadFunc() {
-            console.log("reloading");
+            this.load();
         }
     }, {
         key: "render",
@@ -598,9 +590,27 @@ var ProfileComments = function (_React$Component8) {
                     hidden: com.hidden
                 }));
             }
+            this.comments = this.comments.length ? this.comments : React.createElement(
+                Row,
+                { size: "one" },
+                React.createElement(
+                    Column,
+                    null,
+                    React.createElement(BasicMessageWithColor, { color: "yellow", message: "Yorum yok" })
+                )
+            );
             return React.createElement(
                 "div",
                 null,
+                React.createElement(
+                    Row,
+                    { size: "one" },
+                    React.createElement(
+                        Column,
+                        null,
+                        React.createElement(H, { type: "1", text: "Yorumlar" })
+                    )
+                ),
                 this.comments
             );
         }

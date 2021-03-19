@@ -11,6 +11,7 @@ class Profile extends React.Component {
             email:"",
             comments:[]
         }
+        this.load = this.load.bind(this);
         // setting elementary funcs
         this.openSetting = this.openSetting.bind(this);
         this.closeSetting = this.closeSetting.bind(this);
@@ -19,16 +20,15 @@ class Profile extends React.Component {
         this.openFollowedProducts = this.openFollowedProducts.bind(this);
         this.closeFollowedProducts = this.closeFollowedProducts.bind(this);
         this.toggleFollowedProducts = this.toggleFollowedProducts.bind(this);
-        // set form loading / normal
-        this.setFormLoading = this.setFormLoading.bind(this);
-        this.setFormNormal = this.setFormNormal.bind(this);
         this.reloadFunc = this.reloadFunc.bind(this);
     }
     componentDidMount() {
-        //this.setFormLoading();
         this.setState({
             form:"loading"
         });
+        this.load();
+    }
+    load() {
         const userslug = getPathNames()[1];
         fetch(SITEURL + 'api/member?' + getUrlPar({
             slug:userslug,
@@ -46,7 +46,6 @@ class Profile extends React.Component {
                 email:json.other.member.email,
                 comments: normalizer('comment-in-profile', json['other']['comments']),
             });
-            //this.setFormNormal();
         }).catch((error) => {
             if(error.message==404) {
                 this.setState({form:"notFound"});
@@ -79,14 +78,8 @@ class Profile extends React.Component {
         else
             this.openFollowedProducts();
     }
-    setFormLoading() {
-        this.setState({ form:"loading" });
-    }
-    setFormNormal() {
-        this.setState({ form:"normal" });
-    }
     reloadFunc() {
-        console.log("reloading");
+        this.load();
     }
     render() {
         if(this.state.form=="normal") {
@@ -356,35 +349,46 @@ class ProfileComments extends React.Component {
     render() {
         this.comments = [];
         for(let i=0;i<this.props.comments.length;i++) {
-                let com = this.props.comments[i];
-                this.comments.push(
-                    <Comment
-                        productID={com.productID}
-                        changeContent={this.props.changeContent}
-                        reloadFunc={this.props.reloadFunc}
-                        tags={com.tags}
-                        key={com.id}
-                        id={com.id}
-                        text={com.text}
-                        type="product"
-                        slug={com.slug}
-                        likeCount={com.likeCount}
-                        liked={com.liked}
-                        title={com.title}
-                        date={com.date}
-                        lastEditDate={com.lastEditDate}
-                        edited={com.edited}
-                        rating={com.rating}
-                        owner={com.owner}
-                        reported={com.reported}
-                        hidden={com.hidden}
-                    />
-                )
+            let com = this.props.comments[i];
+            this.comments.push(
+                <Comment
+                    productID={com.productID}
+                    changeContent={this.props.changeContent}
+                    reloadFunc={this.props.reloadFunc}
+                    tags={com.tags}
+                    key={com.id}
+                    id={com.id}
+                    text={com.text}
+                    type="product"
+                    slug={com.slug}
+                    likeCount={com.likeCount}
+                    liked={com.liked}
+                    title={com.title}
+                    date={com.date}
+                    lastEditDate={com.lastEditDate}
+                    edited={com.edited}
+                    rating={com.rating}
+                    owner={com.owner}
+                    reported={com.reported}
+                    hidden={com.hidden}
+                />
+            )
         }
+        this.comments = (this.comments.length)?this.comments:
+            <Row size="one">
+                <Column>
+                    <BasicMessageWithColor color="yellow" message="Yorum yok" />
+                </Column>
+            </Row>;
         return (
-                <div>
-                        {this.comments}
-                </div>
+            <div>
+                <Row size="one">
+                    <Column>
+                        <H type="1" text="Yorumlar" />
+                    </Column>
+                </Row>
+                {this.comments}
+            </div>
         )
     }
 }
