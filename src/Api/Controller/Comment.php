@@ -150,7 +150,6 @@ class Comment extends Controller {
             ProductModel::decreaseCommentCount($this->data['productID']);
             $this->addHistory();
             $this->removeHiddenComment();
-            $this->decreaseNewCommentCount();
             Comment::decreaseNewCommentCount($this->comment['product_id'], $this->comment['comment_create_date_time']);
         }
         $this->success();

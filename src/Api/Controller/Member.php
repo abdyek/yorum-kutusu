@@ -3,6 +3,7 @@
 namespace YorumKutusu\Api\Controller;
 use YorumKutusu\Api\Core\Controller;
 use YorumKutusu\Api\Core\Database;
+use YorumKutusu\Api\Controller\Product as ProductController;
 
 class Member extends Controller {
     protected function get() {
@@ -18,7 +19,7 @@ class Member extends Controller {
         $this->mergeAllInfo();
     }
     private function ownerCheck() {
-        $this->ownerBool = ($this->userId==$this->member['member_id'])?true:false;
+        $this->ownerBool = ($this->who=='member' and $this->userId==$this->member['member_id'])?true:false;
     }
     private function prepareMemberInfo() {
         $this->memberInfo = [
@@ -46,6 +47,7 @@ class Member extends Controller {
                 continue;
             }
             $liked = (Database::getRow('SELECT * FROM comment_like WHERE comment_id=? AND member_id=?', [$com['comment_id'],$this->userId]))?true:false;
+            $tags = ProductController::getTags($product['product_id']);
             $rating = Database::getRows('SELECT t.tag_slug, t.tag_name, tr.tag_rating_value FROM tag_rating tr INNER JOIN tag_with_product twp ON twp.tag_with_product_id=tr.tag_with_product_id INNER JOIN tag t ON t.tag_id=twp.tag_id WHERE tr.member_id=? AND twp.product_id=?', [$this->member['member_id'], $product['product_id']]);
             $this->ratingInfo = [];
             foreach($rating as $rate) {
@@ -55,21 +57,23 @@ class Member extends Controller {
                     'ratingValue'=>$rate['tag_rating_value']
                 ];
             }
-            $owner = $com['member_id']==$this->userId;
+            $owner = ($this->who==='member' and $com['member_id']==$this->userId)?true:false;
             $this->commentsInfo[] = [
-                'productID'=>$product['product_id'],
-                'productName'=>$product['product_name'],
-                'productSlug'=>$product['product_slug'],
+                'product'=>[
+                    'id'=>$product['product_id'],
+                    'name'=>$product['product_name'],
+                    'slug'=>$product['product_slug'],
+                    'tags'=>$tags
+                ],
+                'commentID'=>$com['comment_id'],
                 'commentText'=>$com['comment_text'],
                 'commentCreateDateTime'=>$com['comment_create_date_time'],
-                'commentEdited'=>$com['comment_edited'],
+                'commentEdited'=>($com['comment_edited']==="1")?true:false,
                 'commentLastEditDateTime'=>$com['comment_last_edit_date_time'],
                 'commentLikeCount'=>$com['comment_like_count'],
                 'liked'=>$liked,
-                'owner'=>$owner,
-                'rating'=>[
-                    $this->ratingInfo
-                ]
+                'isOwner'=>$owner,
+                'rating'=>$this->ratingInfo
             ];
         }
     }

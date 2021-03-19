@@ -9,14 +9,18 @@ class Product extends Controller {
         $this->checkSortBy();
         $this->getProductInfo();
         if(!$this->data['onlyComment']) {
-            $this->getTags();
+            $this->tagsInfo = $this->getTags($this->productInfo['id']);
         }
         $this->hasComment = null;
         $this->getFollowInfo();
         $this->getPageCount();
         $this->getHiddenComment();
         $this->getReportedComment();
-        $this->getCommentsWithRating();
+
+        $sql = $this->getCommentSql($this->data['type']);
+        //$arr = [$this->productInfo['id']];
+        $this->getCommentsWithRating(['sql'=>$sql, 'arr'=>[$this->productInfo['id']]]);
+
         $this->updateLastSeen();
         $this->mergeAllInfo();
         $this->increaseProductFetchCount();
@@ -51,11 +55,11 @@ class Product extends Controller {
         $additional = ($commentCount%10==0)?0:1;
         $this->pageCount = intval($this->product['product_comment_count']/10)+$additional;
     }
-    private function getTags() {
-        $tags = Database::getRows('SELECT * FROM tag_with_product twp INNER JOIN tag t ON t.tag_id=twp.tag_id WHERE twp.product_id=?', [$this->productInfo['id']]);
-        $this->tagsInfo = [];
+    public function getTags($productID) {
+        $tags = Database::getRows('SELECT * FROM tag_with_product twp INNER JOIN tag t ON t.tag_id=twp.tag_id WHERE twp.product_id=?', [$productID]);
+        $tagsInfo = [];
         foreach($tags as $tag) {
-            $this->tagsInfo[] = [
+            $tagsInfo[] = [
                 'id'=>$tag['tag_id'],
                 'slug'=>$tag['tag_slug'],
                 'tagName'=>$tag['tag_name'],
@@ -63,6 +67,7 @@ class Product extends Controller {
                 'tagPassive'=>$tag['tag_passive']
             ];
         }
+        return $tagsInfo;
     }
     private function getHiddenComment() {
         $this->hiddenComment = [];
@@ -82,15 +87,12 @@ class Product extends Controller {
             }
         }
     }
-    private function getCommentsWithRating() {
-        $this->ownCommentPublished = true;
-        $sql = $this->getCommentSql($this->data['type']);
-        $arr = [$this->productInfo['id']];
-        $comments = Database::getRows($sql, $arr);
+    private function getCommentsWithRating($getRowsPar) {
+        $comments = Database::getRows($getRowsPar['sql'], $getRowsPar['arr']);
         $this->commentsInfo = [];
         foreach($comments as $key=>$com) {
-            $rating = Database::getRows('SELECT t.tag_slug, t.tag_name, tr.tag_rating_value FROM tag_rating tr INNER JOIN tag_with_product twp ON twp.tag_with_product_id=tr.tag_with_product_id INNER JOIN tag t ON t.tag_id=twp.tag_id WHERE tr.member_id=? AND twp.product_id=?', [$com['member_id'], $this->productInfo['id']]);
-            $liked = (isset($this->userId) and Database::getRow('SELECT * FROM comment_like WHERE member_id=? and comment_id=?', [$this->userId, $com['comment_id']]))?true:false;
+            $rating = Database::getRows('SELECT t.tag_slug, t.tag_name, tr.tag_rating_value FROM tag_rating tr INNER JOIN tag_with_product twp ON twp.tag_with_product_id=tr.tag_with_product_id INNER JOIN tag t ON t.tag_id=twp.tag_id WHERE tr.member_id=? AND twp.product_id=?', [$com['member_id'], $com['product_id']]);
+            $liked = ($this->who==='member' and Database::getRow('SELECT * FROM comment_like WHERE member_id=? and comment_id=?', [$this->userId, $com['comment_id']]))?true:false;
             $ratingInfo = [];
             foreach($rating as $rate) {
                 $ratingInfo[] = [
@@ -99,7 +101,7 @@ class Product extends Controller {
                     'ratingValue'=>$rate['tag_rating_value']
                 ];
             }
-            $this->hasComment = (isset($this->userId) and $this->userId==$com['member_id'])?true:false;
+            $this->hasComment = ($this->who==='member' and $this->userId==$com['member_id'])?true:false;
             $this->commentsInfo[] = [
                 'commentID'=>$com['comment_id'],
                 'commentText'=>$com['comment_text'],
@@ -156,6 +158,7 @@ class Product extends Controller {
         }
     }
     private function ownCommentWrapper() {
+        $this->ownCommentPublished = false;
         if($this->who=='guest') {
             return null;
         }
@@ -242,7 +245,7 @@ class Product extends Controller {
                 'request'=>$this->data,
                 'product'=>$this->productInfo,
                 'followed'=>$this->followed,
-                'tags'=>array_values($this->tagsInfo),
+                'tags'=>$this->tagsInfo,
                 'comments'=>$this->commentsInfo,
                 'ownComment'=>$this->ownCommentWrapper(),
                 'ownCommentPublished'=>$this->ownCommentPublished,

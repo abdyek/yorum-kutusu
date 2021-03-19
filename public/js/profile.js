@@ -21,7 +21,8 @@ var Profile = function (_React$Component) {
             username: "",
             slug: "",
             owner: false,
-            email: ""
+            email: "",
+            comments: []
             // setting elementary funcs
         };_this.openSetting = _this.openSetting.bind(_this);
         _this.closeSetting = _this.closeSetting.bind(_this);
@@ -33,6 +34,7 @@ var Profile = function (_React$Component) {
         // set form loading / normal
         _this.setFormLoading = _this.setFormLoading.bind(_this);
         _this.setFormNormal = _this.setFormNormal.bind(_this);
+        _this.reloadFunc = _this.reloadFunc.bind(_this);
         return _this;
     }
 
@@ -41,23 +43,27 @@ var Profile = function (_React$Component) {
         value: function componentDidMount() {
             var _this2 = this;
 
-            this.setFormLoading();
+            //this.setFormLoading();
+            this.setState({
+                form: "loading"
+            });
             var userslug = getPathNames()[1];
             fetch(SITEURL + 'api/member?' + getUrlPar({
                 slug: userslug,
                 sortBy: "like", // !! only now
-                pageNumber: 1, // !! only now
-                onlyComment: false
+                pageNumber: 1 // !! only now
             }), { method: 'GET' }).then(function (response) {
                 if (!response.ok) throw new Error(response.status);else return response.json();
             }).then(function (json) {
                 _this2.setState({
+                    form: "normal",
                     username: json.other.member.username,
                     slug: json.other.member.slug,
                     owner: json.other.member.owner,
-                    email: json.other.member.email
+                    email: json.other.member.email,
+                    comments: normalizer('comment-in-profile', json['other']['comments'])
                 });
-                _this2.setFormNormal();
+                //this.setFormNormal();
             }).catch(function (error) {
                 if (error.message == 404) {
                     _this2.setState({ form: "notFound" });
@@ -107,6 +113,11 @@ var Profile = function (_React$Component) {
             this.setState({ form: "normal" });
         }
     }, {
+        key: "reloadFunc",
+        value: function reloadFunc() {
+            console.log("reloading");
+        }
+    }, {
         key: "render",
         value: function render() {
             if (this.state.form == "normal") {
@@ -133,7 +144,12 @@ var Profile = function (_React$Component) {
                         close: this.closeFollowedProducts,
                         changeContent: this.props.changeContent
                     }),
-                    React.createElement(ProfileComments, null)
+                    React.createElement(ProfileComments, {
+                        form: this.state.form,
+                        comments: this.state.comments,
+                        changeContent: this.props.changeContent,
+                        reloadFunc: this.reloadFunc
+                    })
                 );
             } else if (this.state.form == "loading") {
                 return React.createElement(RowLoadingSpin, { nonSegment: true });
@@ -548,16 +564,45 @@ var ProfileHeader = function (_React$Component7) {
 var ProfileComments = function (_React$Component8) {
     _inherits(ProfileComments, _React$Component8);
 
-    function ProfileComments() {
+    function ProfileComments(props) {
         _classCallCheck(this, ProfileComments);
 
-        return _possibleConstructorReturn(this, (ProfileComments.__proto__ || Object.getPrototypeOf(ProfileComments)).apply(this, arguments));
+        return _possibleConstructorReturn(this, (ProfileComments.__proto__ || Object.getPrototypeOf(ProfileComments)).call(this, props));
     }
 
     _createClass(ProfileComments, [{
         key: "render",
         value: function render() {
-            return React.createElement("div", null);
+            this.comments = [];
+            for (var i = 0; i < this.props.comments.length; i++) {
+                var com = this.props.comments[i];
+                this.comments.push(React.createElement(Comment, {
+                    productID: com.productID,
+                    changeContent: this.props.changeContent,
+                    reloadFunc: this.props.reloadFunc,
+                    tags: com.tags,
+                    key: com.id,
+                    id: com.id,
+                    text: com.text,
+                    type: "product",
+                    slug: com.slug,
+                    likeCount: com.likeCount,
+                    liked: com.liked,
+                    title: com.title,
+                    date: com.date,
+                    lastEditDate: com.lastEditDate,
+                    edited: com.edited,
+                    rating: com.rating,
+                    owner: com.owner,
+                    reported: com.reported,
+                    hidden: com.hidden
+                }));
+            }
+            return React.createElement(
+                "div",
+                null,
+                this.comments
+            );
         }
     }]);
 

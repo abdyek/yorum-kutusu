@@ -165,6 +165,29 @@ function normalizer(key, data) {
             })
         }
         return comments;
+    } else if(key=="comment-in-profile") {
+        let comments = [];
+        for(let i=0;i<data.length;i++) {
+            let com = data[i];
+            comments.push({
+                id:com.commentID,
+                text:com.commentText,
+                likeCount:com.commentLikeCount,
+                liked:com.liked,
+                title:com.product.name,
+                slug:com.product.slug,
+                productID:com.product.id,
+                tags:normalizer('tags', com.product.tags),
+                date:com.commentCreateDateTime,
+                lastEditDate: com.commentLastEditDateTime,
+                edited:com.commentEdited,
+                rating:normalizer('comment-rating', com.rating),
+                owner:com.isOwner,
+                reported:false, // bu ikisi değişecek
+                hidden:false    // bu ikisi değişeck
+            })
+        }
+        return comments;
     } else if(key=="comment-rating") {
         let tags = [];
         let keys = Object.keys(data);

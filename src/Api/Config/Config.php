@@ -244,10 +244,6 @@ namespace YorumKutusu\Api\Config;
                         'pageNumber'=>[
                             'min'=>1,
                             'max'=>11
-                        ],
-                        'onlyComment'=>[
-                            'min'=>0,
-                            'max'=>1
                         ]
                     ],
                     'DELETE'=>[

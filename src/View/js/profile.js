@@ -8,7 +8,8 @@ class Profile extends React.Component {
             username:"",
             slug:"",
             owner:false,
-            email:""
+            email:"",
+            comments:[]
         }
         // setting elementary funcs
         this.openSetting = this.openSetting.bind(this);
@@ -21,26 +22,31 @@ class Profile extends React.Component {
         // set form loading / normal
         this.setFormLoading = this.setFormLoading.bind(this);
         this.setFormNormal = this.setFormNormal.bind(this);
+        this.reloadFunc = this.reloadFunc.bind(this);
     }
     componentDidMount() {
-        this.setFormLoading();
+        //this.setFormLoading();
+        this.setState({
+            form:"loading"
+        });
         const userslug = getPathNames()[1];
         fetch(SITEURL + 'api/member?' + getUrlPar({
             slug:userslug,
             sortBy: "like",     // !! only now
-            pageNumber:1,       // !! only now
-            onlyComment:false
+            pageNumber:1       // !! only now
         }), {method: 'GET'}).then((response)=>{
             if(!response.ok) throw new Error(response.status);
             else return response.json();
         }).then((json)=> {
             this.setState({
+                form:"normal",
                 username:json.other.member.username,
                 slug:json.other.member.slug,
                 owner:json.other.member.owner,
-                email:json.other.member.email
+                email:json.other.member.email,
+                comments: normalizer('comment-in-profile', json['other']['comments']),
             });
-            this.setFormNormal();
+            //this.setFormNormal();
         }).catch((error) => {
             if(error.message==404) {
                 this.setState({form:"notFound"});
@@ -79,6 +85,9 @@ class Profile extends React.Component {
     setFormNormal() {
         this.setState({ form:"normal" });
     }
+    reloadFunc() {
+        console.log("reloading");
+    }
     render() {
         if(this.state.form=="normal") {
             return(
@@ -103,7 +112,12 @@ class Profile extends React.Component {
                         close={this.closeFollowedProducts}
                         changeContent={this.props.changeContent}
                     />
-                    <ProfileComments />
+                    <ProfileComments
+                        form={this.state.form}
+                        comments={this.state.comments}
+                        changeContent={this.props.changeContent}
+                        reloadFunc={this.reloadFunc}
+                    />
                 </div>
             )
         } else if(this.state.form=="loading") {
@@ -336,9 +350,41 @@ class ProfileHeader extends React.Component {
 }
 
 class ProfileComments extends React.Component {
+    constructor(props){
+        super(props);
+    }
     render() {
+        this.comments = [];
+        for(let i=0;i<this.props.comments.length;i++) {
+                let com = this.props.comments[i];
+                this.comments.push(
+                    <Comment
+                        productID={com.productID}
+                        changeContent={this.props.changeContent}
+                        reloadFunc={this.props.reloadFunc}
+                        tags={com.tags}
+                        key={com.id}
+                        id={com.id}
+                        text={com.text}
+                        type="product"
+                        slug={com.slug}
+                        likeCount={com.likeCount}
+                        liked={com.liked}
+                        title={com.title}
+                        date={com.date}
+                        lastEditDate={com.lastEditDate}
+                        edited={com.edited}
+                        rating={com.rating}
+                        owner={com.owner}
+                        reported={com.reported}
+                        hidden={com.hidden}
+                    />
+                )
+        }
         return (
-            <div></div>
+                <div>
+                        {this.comments}
+                </div>
         )
     }
 }
