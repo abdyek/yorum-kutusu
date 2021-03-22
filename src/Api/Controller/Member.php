@@ -7,11 +7,16 @@ use YorumKutusu\Api\Controller\Product as ProductController;
 
 class Member extends Controller {
     protected function get() {
+        if(!is_numeric($this->data['pageNumber'])) {
+            $this->setHttpStatus(400);
+            exit();
+        }
         $this->member = Database::existCheck('SELECT * FROM member WHERE member_slug=? and member_deleted=0', [$this->data['slug']]);
         if(!$this->member) {
             $this->setHttpStatus(404);
             exit();
         }
+        $this->getPageCount();
         $this->ownerCheck();
         $this->prepareMemberInfo();
         $this->prepareCommentsWithRating();
@@ -29,8 +34,10 @@ class Member extends Controller {
         ];
     }
     private function prepareCommentsWithRating() {
-        if(is_string($this->data['pageNumber']) or $this->data['pageNumber']<1) {
+        if($this->data['pageNumber']<1) {
             $this->data['pageNumber'] = 1;
+        } elseif($this->data['pageNumber']>$this->pageCount) {
+            $this->data['pageNumber'] = $this->pageCount;
         }
         $index = ($this->data['pageNumber']-1)*10;
         if($this->data['sortBy']=='like') {
@@ -108,11 +115,18 @@ class Member extends Controller {
             }
         }
     }
+    private function getPageCount() {
+        $count = Database::getRow('SELECT count(*) as c FROM comment WHERE comment_deleted=0 AND member_id=?', [$this->member['member_id']])['c'];
+        $additional = ($count%10==0)?0:1;
+        $this->pageCount = intval($count/10)+$additional;
+    }
     private function mergeAllInfo() {
         $this->success([
             'member'=>$this->memberInfo,
             'comments'=>array_values($this->commentsInfo),
-            'newCommentRequests'=>($this->ownerBool)?$this->commentRequests:[]
+            'newCommentRequests'=>($this->ownerBool)?$this->commentRequests:[],
+            'pageNumber'=>$this->data['pageNumber'],
+            'pageCount'=>$this->pageCount
         ]);
     }
     private function getTagRating($memberId, $productId) {

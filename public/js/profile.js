@@ -15,9 +15,15 @@ var Profile = function (_React$Component) {
         var _this = _possibleConstructorReturn(this, (Profile.__proto__ || Object.getPrototypeOf(Profile)).call(this, props));
 
         _this.state = {
-            form: "normal", // normal, loading, notFound
+            form: "loading", // normal, loading, notFound
+            commentForm: "loading",
+            sortBy: "like",
+            pageNumber: 1,
+            pageCount: 1, // only now
+            options: [],
             settingAreaVisible: false,
             followedProductsVisible: false,
+            navigationForm: "normal", // normal , noComment
             username: "",
             slug: "",
             owner: false,
@@ -35,36 +41,41 @@ var Profile = function (_React$Component) {
         _this.closeFollowedProducts = _this.closeFollowedProducts.bind(_this);
         _this.toggleFollowedProducts = _this.toggleFollowedProducts.bind(_this);
         _this.reloadFunc = _this.reloadFunc.bind(_this);
+        _this.handleChangeSortBy = _this.handleChangeSortBy.bind(_this);
+        _this.handleChangePageNumber = _this.handleChangePageNumber.bind(_this);
         return _this;
     }
 
     _createClass(Profile, [{
         key: "componentDidMount",
         value: function componentDidMount() {
-            this.setState({
-                form: "loading"
-            });
             this.load();
         }
     }, {
         key: "load",
-        value: function load() {
+        value: function load(obj) {
             var _this2 = this;
 
+            obj = obj || [];
+            var sb = obj.sortBy ? obj.sortBy : this.state.sortBy;
+            var pn = obj.pageNumber ? obj.pageNumber : this.state.pageNumber;
             var userslug = getPathNames()[1];
             fetch(SITEURL + 'api/member?' + getUrlPar({
                 slug: userslug,
-                sortBy: "like", // !! only now
-                pageNumber: 1 // !! only now
+                sortBy: sb,
+                pageNumber: pn
             }), { method: 'GET' }).then(function (response) {
                 if (!response.ok) throw new Error(response.status);else return response.json();
             }).then(function (json) {
                 _this2.setState({
                     form: "normal",
+                    commentForm: "normal",
                     username: json.other.member.username,
                     slug: json.other.member.slug,
                     owner: json.other.member.owner,
                     email: json.other.member.email,
+                    pageNumber: json.other.pageNumber,
+                    pageCount: json.other.pageCount,
                     comments: normalizer('comment-in-profile', json['other']['comments']),
                     commentRequests: normalizer('comment-in-profile', json['other']['newCommentRequests'])
                 });
@@ -112,6 +123,26 @@ var Profile = function (_React$Component) {
             this.load();
         }
     }, {
+        key: "handleChangeSortBy",
+        value: function handleChangeSortBy(sort) {
+            console.log(sort);
+            this.setState({
+                commentForm: "loading",
+                sortBy: sort
+            });
+            this.load({ sortBy: sort });
+        }
+    }, {
+        key: "handleChangePageNumber",
+        value: function handleChangePageNumber(num) {
+            console.log("handleChangePageNumber");
+            this.setState({
+                commentForm: "loading",
+                pageNumber: num
+            });
+            this.load({ "pageNumber": num });
+        }
+    }, {
         key: "render",
         value: function render() {
             if (this.state.form == "normal") {
@@ -138,11 +169,38 @@ var Profile = function (_React$Component) {
                         close: this.closeFollowedProducts,
                         changeContent: this.props.changeContent
                     }),
+                    React.createElement(
+                        Row,
+                        { size: "one" },
+                        React.createElement(
+                            Column,
+                            null,
+                            React.createElement(H, { type: "1", text: "Yorumlar" })
+                        )
+                    ),
+                    React.createElement(PageNavigation, {
+                        sortBy: this.state.sortBy,
+                        options: this.state.navigationOptions,
+                        form: this.state.navigationForm,
+                        handleChangeSortBy: this.handleChangeSortBy,
+                        pageCount: this.state.pageCount,
+                        currentPage: this.state.pageNumber,
+                        handleChangePageNumber: this.handleChangePageNumber
+                    }),
                     React.createElement(ProfileComments, {
-                        form: this.state.form,
+                        form: this.state.commentForm,
                         comments: this.state.comments,
                         changeContent: this.props.changeContent,
                         reloadFunc: this.reloadFunc
+                    }),
+                    React.createElement(PageNavigation, {
+                        sortBy: this.state.sortBy,
+                        options: this.state.navigationOptions,
+                        form: this.state.navigationForm,
+                        handleChangeSortBy: this.handleChangeSortBy,
+                        pageCount: this.state.pageCount,
+                        currentPage: this.state.pageNumber,
+                        handleChangePageNumber: this.handleChangePageNumber
                     }),
                     React.createElement(CommentRequest, {
                         owner: this.state.owner,
@@ -573,6 +631,9 @@ var ProfileComments = function (_React$Component8) {
     _createClass(ProfileComments, [{
         key: "render",
         value: function render() {
+            if (this.props.form == "loading") {
+                return React.createElement(RowLoadingSpin, { nonSegment: true });
+            }
             this.comments = [];
             for (var i = 0; i < this.props.comments.length; i++) {
                 var com = this.props.comments[i];
@@ -612,15 +673,6 @@ var ProfileComments = function (_React$Component8) {
             return React.createElement(
                 "div",
                 null,
-                React.createElement(
-                    Row,
-                    { size: "one" },
-                    React.createElement(
-                        Column,
-                        null,
-                        React.createElement(H, { type: "1", text: "Yorumlar" })
-                    )
-                ),
                 this.comments
             );
         }

@@ -44,14 +44,14 @@ var PageNavigation = function (_React$Component) {
         key: "nextPage",
         value: function nextPage() {
             if (this.props.currentPage < this.props.pageCount) {
-                this.selectOption(parseInt(this.state.currentPage) + 1);
+                this.selectOption(parseInt(this.props.currentPage) + 1);
             }
         }
     }, {
         key: "prevPage",
         value: function prevPage() {
             if (this.props.currentPage > 1) {
-                this.selectOption(parseInt(this.state.currentPage) - 1);
+                this.selectOption(parseInt(this.props.currentPage) - 1);
             }
         }
     }, {

@@ -183,8 +183,8 @@ function normalizer(key, data) {
                 edited:com.commentEdited,
                 rating:normalizer('comment-rating', com.rating),
                 owner:com.isOwner,
-                reported:com.reported, // bu ikisi değişecek
-                hidden:com.hidden,    // bu ikisi değişeck
+                reported:com.reported,
+                hidden:com.hidden,
                 commentPublished: com.commentPublished
             })
         }

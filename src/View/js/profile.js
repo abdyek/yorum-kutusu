@@ -2,9 +2,15 @@ class Profile extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            form:"normal", // normal, loading, notFound
+            form:"loading", // normal, loading, notFound
+            commentForm:"loading",
+            sortBy:"like",
+            pageNumber:1,
+            pageCount:1,  // only now
+            options:[],
             settingAreaVisible:false,
             followedProductsVisible:false,
+            navigationForm:"normal",  // normal , noComment
             username:"",
             slug:"",
             owner:false,
@@ -22,29 +28,34 @@ class Profile extends React.Component {
         this.closeFollowedProducts = this.closeFollowedProducts.bind(this);
         this.toggleFollowedProducts = this.toggleFollowedProducts.bind(this);
         this.reloadFunc = this.reloadFunc.bind(this);
+        this.handleChangeSortBy = this.handleChangeSortBy.bind(this);
+        this.handleChangePageNumber = this.handleChangePageNumber.bind(this);
     }
     componentDidMount() {
-        this.setState({
-            form:"loading"
-        });
         this.load();
     }
-    load() {
+    load(obj) {
+        obj = obj || [];
+        const sb = (obj.sortBy)?obj.sortBy:this.state.sortBy;
+        const pn = (obj.pageNumber)?obj.pageNumber:this.state.pageNumber;
         const userslug = getPathNames()[1];
         fetch(SITEURL + 'api/member?' + getUrlPar({
             slug:userslug,
-            sortBy: "like",     // !! only now
-            pageNumber:1       // !! only now
+            sortBy: sb,
+            pageNumber:pn
         }), {method: 'GET'}).then((response)=>{
             if(!response.ok) throw new Error(response.status);
             else return response.json();
         }).then((json)=> {
             this.setState({
                 form:"normal",
+                commentForm:"normal",
                 username:json.other.member.username,
                 slug:json.other.member.slug,
                 owner:json.other.member.owner,
                 email:json.other.member.email,
+                pageNumber:json.other.pageNumber,
+                pageCount:json.other.pageCount,
                 comments: normalizer('comment-in-profile', json['other']['comments']),
                 commentRequests: normalizer('comment-in-profile', json['other']['newCommentRequests'])
             });
@@ -83,6 +94,22 @@ class Profile extends React.Component {
     reloadFunc() {
         this.load();
     }
+    handleChangeSortBy(sort) {
+        console.log(sort);
+        this.setState({
+            commentForm:"loading",
+            sortBy:sort
+        });
+        this.load({sortBy:sort});
+    }
+    handleChangePageNumber(num) {
+        console.log("handleChangePageNumber");
+        this.setState({
+            commentForm:"loading",
+            pageNumber:num
+        });
+        this.load({"pageNumber":num});
+    }
     render() {
         if(this.state.form=="normal") {
             return(
@@ -107,11 +134,34 @@ class Profile extends React.Component {
                         close={this.closeFollowedProducts}
                         changeContent={this.props.changeContent}
                     />
+                    <Row size="one">
+                        <Column>
+                            <H type="1" text="Yorumlar" />
+                        </Column>
+                    </Row>
+                    <PageNavigation
+                        sortBy={this.state.sortBy}
+                        options={this.state.navigationOptions}
+                        form={this.state.navigationForm}
+                        handleChangeSortBy={this.handleChangeSortBy}
+                        pageCount={this.state.pageCount}
+                        currentPage={this.state.pageNumber}
+                        handleChangePageNumber={this.handleChangePageNumber}
+                    />
                     <ProfileComments
-                        form={this.state.form}
+                        form={this.state.commentForm}
                         comments={this.state.comments}
                         changeContent={this.props.changeContent}
                         reloadFunc={this.reloadFunc}
+                    />
+                    <PageNavigation
+                        sortBy={this.state.sortBy}
+                        options={this.state.navigationOptions}
+                        form={this.state.navigationForm}
+                        handleChangeSortBy={this.handleChangeSortBy}
+                        pageCount={this.state.pageCount}
+                        currentPage={this.state.pageNumber}
+                        handleChangePageNumber={this.handleChangePageNumber}
                     />
                     <CommentRequest
                         owner={this.state.owner}
@@ -355,6 +405,11 @@ class ProfileComments extends React.Component {
         super(props);
     }
     render() {
+        if(this.props.form=="loading") {
+            return (
+                <RowLoadingSpin nonSegment={true} />
+            )
+        }
         this.comments = [];
         for(let i=0;i<this.props.comments.length;i++) {
             let com = this.props.comments[i];
@@ -392,11 +447,6 @@ class ProfileComments extends React.Component {
             </Row>;
         return (
             <div>
-                <Row size="one">
-                    <Column>
-                        <H type="1" text="Yorumlar" />
-                    </Column>
-                </Row>
                 {this.comments}
             </div>
         )

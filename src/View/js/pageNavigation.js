@@ -19,12 +19,12 @@ class PageNavigation extends React.Component {
     }
     nextPage() {
         if(this.props.currentPage<this.props.pageCount) {
-            this.selectOption(parseInt(this.state.currentPage)+1);
+            this.selectOption(parseInt(this.props.currentPage)+1);
         }
     }
     prevPage() {
         if(this.props.currentPage>1) {
-            this.selectOption(parseInt(this.state.currentPage)-1);
+            this.selectOption(parseInt(this.props.currentPage)-1);
         }
     }
     render() {
