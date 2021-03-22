@@ -14,8 +14,8 @@ class Product extends Controller {
         $this->hasComment = null;
         $this->getFollowInfo();
         $this->getPageCount();
-        $this->getHiddenComment();
-        $this->getReportedComment();
+        $this->hiddenComment = $this->getHiddenComment($this->userId, $this->who);
+        $this->reportedComment = $this->getReportedComment($this->userId, $this->who);
 
         $sql = $this->getCommentSql($this->data['type']);
         //$arr = [$this->productInfo['id']];
@@ -69,23 +69,25 @@ class Product extends Controller {
         }
         return $tagsInfo;
     }
-    private function getHiddenComment() {
-        $this->hiddenComment = [];
-        if($this->who=='member') {
-            $query = Database::getRows('SELECT comment_id FROM hidden_comment WHERE member_id=?', [$this->userId]);
+    public function getHiddenComment($userId, $who) {
+        $hiddenComment = [];
+        if($who==='member') {
+            $query = Database::getRows('SELECT comment_id FROM hidden_comment WHERE member_id=?', [$userId]);
             foreach($query as $key=>$q) {
-                $this->hiddenComment[] = $q['comment_id'];
+                $hiddenComment[] = $q['comment_id'];
             }
         }
+        return $hiddenComment;
     }
-    private function getReportedComment() {
-        $this->reportedComment = [];
-        if($this->who=='member') {
-            $query = Database::getRows('SELECT comment_id FROM comment_report_request WHERE report_answered=0 and member_id=?', [$this->userId]);
+    public function getReportedComment($userId, $who) {
+        $reportedComment = [];
+        if($who==='member') {
+            $query = Database::getRows('SELECT comment_id FROM comment_report_request WHERE report_answered=0 and member_id=?', [$userId]);
             foreach($query as $q) {
-                $this->reportedComment[] = $q['comment_id'];
+                $reportedComment[] = $q['comment_id'];
             }
         }
+        return $reportedComment;
     }
     private function getCommentsWithRating($getRowsPar) {
         $comments = Database::getRows($getRowsPar['sql'], $getRowsPar['arr']);

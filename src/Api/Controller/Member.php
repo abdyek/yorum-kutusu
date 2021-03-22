@@ -39,6 +39,8 @@ class Member extends Controller {
             $sql = 'SELECT * FROM comment c INNER JOIN member m ON m.member_id = c.member_id  WHERE c.member_id=? AND c.comment_deleted=0 ORDER BY c.comment_create_date_time LIMIT '.$index.', 10';
         }
         $comments = Database::getRows($sql, [$this->member['member_id']]);
+        $this->hiddenComment = Product::getHiddenComment($this->userId, $this->who);
+        $this->reportedComment = Product::getReportedComment($this->userId, $this->who);
         $this->commentsInfo = [];
         foreach($comments as $com) {
             $product = Database::getRow('SELECT product_id, product_name, product_slug FROM product WHERE product_id=? and product_deleted=0', [$com['product_id']]);
@@ -63,6 +65,8 @@ class Member extends Controller {
                 'commentLikeCount'=>$com['comment_like_count'],
                 'liked'=>$liked,
                 'isOwner'=>$this->ownerBool,
+                'reported'=> (in_array($com['comment_id'],$this->reportedComment))?true:false,
+                'hidden'=>(in_array($com['comment_id'], $this->hiddenComment))?true:false,
                 'rating'=>$this->ratingInfo,
                 'commentPublished'=>true,
             ];
