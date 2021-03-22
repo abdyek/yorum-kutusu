@@ -15,7 +15,6 @@ class Member extends Controller {
         $this->ownerCheck();
         $this->prepareMemberInfo();
         $this->prepareCommentsWithRating();
-        //$this->prepareFollowProduct();  --> bu sonra kaldırılacak
         $this->mergeAllInfo();
     }
     private function ownerCheck() {
@@ -48,17 +47,8 @@ class Member extends Controller {
             }
             $liked = (Database::getRow('SELECT * FROM comment_like WHERE comment_id=? AND member_id=?', [$com['comment_id'],$this->userId]))?true:false;
             $tags = ProductController::getTags($product['product_id']);
-            $rating = Database::getRows('SELECT t.tag_slug, t.tag_name, tr.tag_rating_value FROM tag_rating tr INNER JOIN tag_with_product twp ON twp.tag_with_product_id=tr.tag_with_product_id INNER JOIN tag t ON t.tag_id=twp.tag_id WHERE tr.member_id=? AND twp.product_id=?', [$this->member['member_id'], $product['product_id']]);
-            $this->ratingInfo = [];
-            foreach($rating as $rate) {
-                $this->ratingInfo[] = [
-                    'slug'=>$rate['tag_slug'],
-                    'tagName'=>$rate['tag_name'],
-                    'ratingValue'=>$rate['tag_rating_value']
-                ];
-            }
-            $owner = ($this->who==='member' and $com['member_id']==$this->userId)?true:false;
-            $this->commentsInfo[] = [
+            $this->ratingInfo = $this->getTagRating($this->member['member_id'], $product['product_id']);
+            $this->commentsInfo[$com['comment_id']] = [
                 'product'=>[
                     'id'=>$product['product_id'],
                     'name'=>$product['product_name'],
@@ -72,19 +62,66 @@ class Member extends Controller {
                 'commentLastEditDateTime'=>$com['comment_last_edit_date_time'],
                 'commentLikeCount'=>$com['comment_like_count'],
                 'liked'=>$liked,
-                'isOwner'=>$owner,
-                'rating'=>$this->ratingInfo
+                'isOwner'=>$this->ownerBool,
+                'rating'=>$this->ratingInfo,
+                'commentPublished'=>true,
             ];
         }
-    }
-    private function prepareFollowProduct() {
-        // bu işi followProduct'ın get'i ile çözdüm
+        if($this->ownerBool AND $this->member['member_restricted']==='1') {
+            //$request = Database::getRows('SELECT * FROM comment_request WHERE member_id=? AND cancelled=0 AND comment_request_answered=0', [$this->userId]);
+            $request = Database::getRows('SELECT cr.member_id, cr.product_id, cr.comment_id, cr.comment_text, cr.comment_request_date_time, p.product_name, p.product_slug FROM comment_request cr INNER JOIN product p ON p.product_id=cr.product_id WHERE cr.member_id=1 AND cancelled=0 AND comment_request_answered=0', [$this->userId]);
+            $commentIDs = array_keys($this->commentsInfo);
+            $this->commentRequests = [];
+            foreach($request as $com) {
+                $comId = $com['comment_id'];
+                $tags = ProductController::getTags($com['product_id']);
+                $ratingInfo = $this->getTagRating($this->member['member_id'], $com['product_id']);
+                if($comId===NULL) {
+                    $this->commentRequests[] = [
+                        'product'=>[
+                            'id'=>$com['product_id'],
+                            'name'=>$com['product_name'],
+                            'slug'=>$com['product_slug'],
+                            'tags'=>$tags
+                        ],
+                        'commentID'=>null,
+                        'commentText'=>$com['comment_text'],
+                        'commentCreateDateTime'=>$com['comment_request_date_time'],
+                        'commentEdited'=>false,
+                        'commentLastEditDateTime'=>null,
+                        'commentLikeCount'=>0,
+                        'liked'=>false,
+                        'isOwner'=>true,
+                        'rating'=>$ratingInfo,
+                        'commentPublished'=>false,
+                    ];
+                } else if(in_array($comId, $commentIDs)) {
+                    $this->commentsInfo[$comId]['commentPublished'] = false;
+                    $this->commentsInfo[$comId]['commentText'] = $com['comment_text'];
+                    $this->commentsInfo[$comId]['commentEdited'] = true;
+                    $this->commentsInfo[$comId]['commentLastEditDateTime'] = $com['comment_request_date_time'];
+                }
+            }
+        }
     }
     private function mergeAllInfo() {
         $this->success([
             'member'=>$this->memberInfo,
-            'comments'=>$this->commentsInfo
+            'comments'=>array_values($this->commentsInfo),
+            'newCommentRequests'=>($this->ownerBool)?$this->commentRequests:[]
         ]);
+    }
+    private function getTagRating($memberId, $productId) {
+        $rating = Database::getRows('SELECT t.tag_slug, t.tag_name, tr.tag_rating_value FROM tag_rating tr INNER JOIN tag_with_product twp ON twp.tag_with_product_id=tr.tag_with_product_id INNER JOIN tag t ON t.tag_id=twp.tag_id WHERE tr.member_id=? AND twp.product_id=?', [$memberId, $productId]);
+        $ratingInfo = [];
+        foreach($rating as $rate) {
+            $ratingInfo[] = [
+                'slug'=>$rate['tag_slug'],
+                'tagName'=>$rate['tag_name'],
+                'ratingValue'=>$rate['tag_rating_value']
+            ];
+        }
+        return $ratingInfo;
     }
     protected function delete() {
         if($this->who=='member') {

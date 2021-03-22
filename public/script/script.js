@@ -184,7 +184,8 @@ function normalizer(key, data) {
                 rating:normalizer('comment-rating', com.rating),
                 owner:com.isOwner,
                 reported:false, // bu ikisi değişecek
-                hidden:false    // bu ikisi değişeck
+                hidden:false,    // bu ikisi değişeck
+                commentPublished: com.commentPublished
             })
         }
         return comments;

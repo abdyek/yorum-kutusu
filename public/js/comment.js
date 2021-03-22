@@ -183,7 +183,18 @@ var Comment = function (_React$Component) {
                             React.createElement(
                                 RaisedSegment,
                                 { otherClass: "comment" },
-                                React.createElement(TopOfComment, { text: this.props.text, slug: this.props.slug, title: this.props.title, owner: this.props.owner, handleOpenEditArea: this.openEditArea, handleOpenDeleteArea: this.openDeleteArea, changeContent: this.props.changeContent, type: this.props.type }),
+                                React.createElement(TopOfComment, {
+                                    text: this.props.text,
+                                    slug: this.props.slug,
+                                    title: this.props.title,
+                                    owner: this.props.owner,
+                                    handleOpenEditArea: this.openEditArea,
+                                    handleOpenDeleteArea: this.openDeleteArea,
+                                    changeContent: this.props.changeContent,
+                                    type: this.props.type,
+                                    bottomComment: this.props.bottomComment !== undefined ? this.props.bottomComment : false,
+                                    ownCommentPublished: this.props.ownCommentPublished !== undefined ? this.props.ownCommentPublished : null
+                                }),
                                 React.createElement(BottomOfComment, {
                                     likeCount: this.state.likeCount,
                                     liked: this.state.liked,

@@ -22,7 +22,8 @@ var Profile = function (_React$Component) {
             slug: "",
             owner: false,
             email: "",
-            comments: []
+            comments: [],
+            commentRequests: []
         };
         _this.load = _this.load.bind(_this);
         // setting elementary funcs
@@ -64,7 +65,8 @@ var Profile = function (_React$Component) {
                     slug: json.other.member.slug,
                     owner: json.other.member.owner,
                     email: json.other.member.email,
-                    comments: normalizer('comment-in-profile', json['other']['comments'])
+                    comments: normalizer('comment-in-profile', json['other']['comments']),
+                    commentRequests: normalizer('comment-in-profile', json['other']['newCommentRequests'])
                 });
             }).catch(function (error) {
                 if (error.message == 404) {
@@ -139,6 +141,12 @@ var Profile = function (_React$Component) {
                     React.createElement(ProfileComments, {
                         form: this.state.form,
                         comments: this.state.comments,
+                        changeContent: this.props.changeContent,
+                        reloadFunc: this.reloadFunc
+                    }),
+                    React.createElement(CommentRequest, {
+                        owner: this.state.owner,
+                        comments: this.state.commentRequests,
                         changeContent: this.props.changeContent,
                         reloadFunc: this.reloadFunc
                     })
@@ -587,7 +595,9 @@ var ProfileComments = function (_React$Component8) {
                     rating: com.rating,
                     owner: com.owner,
                     reported: com.reported,
-                    hidden: com.hidden
+                    hidden: com.hidden,
+                    bottomComment: com.owner,
+                    ownCommentPublished: com.commentPublished
                 }));
             }
             this.comments = this.comments.length ? this.comments : React.createElement(
@@ -619,8 +629,83 @@ var ProfileComments = function (_React$Component8) {
     return ProfileComments;
 }(React.Component);
 
-var OwnerButtons = function (_React$Component9) {
-    _inherits(OwnerButtons, _React$Component9);
+var CommentRequest = function (_React$Component9) {
+    _inherits(CommentRequest, _React$Component9);
+
+    function CommentRequest() {
+        _classCallCheck(this, CommentRequest);
+
+        return _possibleConstructorReturn(this, (CommentRequest.__proto__ || Object.getPrototypeOf(CommentRequest)).apply(this, arguments));
+    }
+
+    _createClass(CommentRequest, [{
+        key: "render",
+        value: function render() {
+            if (this.props.owner) {
+                this.requests = [];
+                for (var i = 0; i < this.props.comments.length; i++) {
+                    var com = this.props.comments[i];
+                    this.requests.push(React.createElement(Comment, {
+                        productID: com.productID,
+                        changeContent: this.props.changeContent,
+                        reloadFunc: this.props.reloadFunc,
+                        tags: com.tags,
+                        key: com.id,
+                        id: com.id,
+                        text: com.text,
+                        type: "product",
+                        slug: com.slug,
+                        likeCount: com.likeCount,
+                        liked: com.liked,
+                        title: com.title,
+                        date: com.date,
+                        lastEditDate: com.lastEditDate,
+                        edited: com.edited,
+                        rating: com.rating,
+                        owner: com.owner,
+                        reported: com.reported,
+                        hidden: com.hidden,
+                        bottomComment: com.owner,
+                        ownCommentPublished: com.commentPublished
+                    }));
+                }
+                return React.createElement(
+                    "div",
+                    null,
+                    React.createElement(
+                        Row,
+                        { size: "one" },
+                        React.createElement(
+                            Column,
+                            null,
+                            React.createElement(H, { type: "2", text: "Hen\xFCz Onaylanmam\u0131\u015F Yeni Yorumlar" })
+                        )
+                    ),
+                    React.createElement(
+                        "div",
+                        null,
+                        this.requests.length ? this.requests : React.createElement(
+                            Row,
+                            { size: "one" },
+                            React.createElement(
+                                Column,
+                                null,
+                                React.createElement(BasicMessageWithColor, { color: "yellow", message: "Yorum yok" })
+                            )
+                        )
+                    )
+                );
+            } else {
+                return "";
+            }
+        }
+    }]);
+
+    return CommentRequest;
+}(React.Component);
+
+var OwnerButtons = function (_React$Component10) {
+    _inherits(OwnerButtons, _React$Component10);
 
     function OwnerButtons() {
         _classCallCheck(this, OwnerButtons);
@@ -669,8 +754,8 @@ var OwnerButtons = function (_React$Component9) {
     return OwnerButtons;
 }(React.Component);
 
-var SettingArea = function (_React$Component10) {
-    _inherits(SettingArea, _React$Component10);
+var SettingArea = function (_React$Component11) {
+    _inherits(SettingArea, _React$Component11);
 
     function SettingArea() {
         _classCallCheck(this, SettingArea);
@@ -736,8 +821,8 @@ var SettingArea = function (_React$Component10) {
     return SettingArea;
 }(React.Component);
 
-var ProfileSettings = function (_React$Component11) {
-    _inherits(ProfileSettings, _React$Component11);
+var ProfileSettings = function (_React$Component12) {
+    _inherits(ProfileSettings, _React$Component12);
 
     function ProfileSettings() {
         _classCallCheck(this, ProfileSettings);
@@ -776,24 +861,24 @@ var ProfileSettings = function (_React$Component11) {
     return ProfileSettings;
 }(React.Component);
 
-var ChangeEmail = function (_React$Component12) {
-    _inherits(ChangeEmail, _React$Component12);
+var ChangeEmail = function (_React$Component13) {
+    _inherits(ChangeEmail, _React$Component13);
 
     function ChangeEmail(props) {
         _classCallCheck(this, ChangeEmail);
 
-        var _this14 = _possibleConstructorReturn(this, (ChangeEmail.__proto__ || Object.getPrototypeOf(ChangeEmail)).call(this, props));
+        var _this15 = _possibleConstructorReturn(this, (ChangeEmail.__proto__ || Object.getPrototypeOf(ChangeEmail)).call(this, props));
 
-        _this14.emailInputs = [{
+        _this15.emailInputs = [{
             name: "Yeni E-posta",
             state: "newEmail1"
         }, {
             name: "Yeni E-posta Tekrar",
             state: "newEmail2"
         }];
-        _this14.state = {
+        _this15.state = {
             form: "normal",
-            email: _this14.props.email,
+            email: _this15.props.email,
             newEmail1: "",
             newEmail2: "",
             password: "",
@@ -802,22 +887,22 @@ var ChangeEmail = function (_React$Component12) {
             formMessageHeader: "",
             formMessageTextArr: []
         };
-        _this14.send = _this14.send.bind(_this14);
-        _this14.changedSuccessfully = _this14.changedSuccessfully.bind(_this14);
-        _this14.checkInputs = _this14.checkInputs.bind(_this14);
-        _this14.changeEmailInput = _this14.changeEmailInput.bind(_this14);
-        _this14.changePassword = _this14.changePassword.bind(_this14);
-        _this14.setFormMessageList = _this14.setFormMessageList.bind(_this14);
-        _this14.setFormMessageText = _this14.setFormMessageText.bind(_this14);
-        _this14.setLoading = _this14.setLoading.bind(_this14);
-        _this14.setNormal = _this14.setNormal.bind(_this14);
-        return _this14;
+        _this15.send = _this15.send.bind(_this15);
+        _this15.changedSuccessfully = _this15.changedSuccessfully.bind(_this15);
+        _this15.checkInputs = _this15.checkInputs.bind(_this15);
+        _this15.changeEmailInput = _this15.changeEmailInput.bind(_this15);
+        _this15.changePassword = _this15.changePassword.bind(_this15);
+        _this15.setFormMessageList = _this15.setFormMessageList.bind(_this15);
+        _this15.setFormMessageText = _this15.setFormMessageText.bind(_this15);
+        _this15.setLoading = _this15.setLoading.bind(_this15);
+        _this15.setNormal = _this15.setNormal.bind(_this15);
+        return _this15;
     }
 
     _createClass(ChangeEmail, [{
         key: "send",
         value: function send() {
-            var _this15 = this;
+            var _this16 = this;
 
             if (this.checkInputs()) {
                 this.setLoading();
@@ -833,9 +918,9 @@ var ChangeEmail = function (_React$Component12) {
                 }).then(function (response) {
                     if (!response.ok) throw new Error(response.status);else return response.json();
                 }).then(function (json) {
-                    _this15.changedSuccessfully();
-                    var newEmail = _this15.state.newEmail1;
-                    _this15.setState({
+                    _this16.changedSuccessfully();
+                    var newEmail = _this16.state.newEmail1;
+                    _this16.setState({
                         form: "normal",
                         email: newEmail,
                         newEmail1: "",
@@ -843,8 +928,8 @@ var ChangeEmail = function (_React$Component12) {
                         password: ""
                     });
                 }).catch(function (error) {
-                    _this15.failed(error.message);
-                    _this15.setState({
+                    _this16.failed(error.message);
+                    _this16.setState({
                         form: "normal"
                     });
                 });
@@ -1018,8 +1103,8 @@ var ChangeEmail = function (_React$Component12) {
     return ChangeEmail;
 }(React.Component);
 
-var FormField = function (_React$Component13) {
-    _inherits(FormField, _React$Component13);
+var FormField = function (_React$Component14) {
+    _inherits(FormField, _React$Component14);
 
     function FormField(props) {
         _classCallCheck(this, FormField);
@@ -1047,15 +1132,15 @@ var FormField = function (_React$Component13) {
     return FormField;
 }(React.Component);
 
-var ChangePassword = function (_React$Component14) {
-    _inherits(ChangePassword, _React$Component14);
+var ChangePassword = function (_React$Component15) {
+    _inherits(ChangePassword, _React$Component15);
 
     function ChangePassword(props) {
         _classCallCheck(this, ChangePassword);
 
-        var _this17 = _possibleConstructorReturn(this, (ChangePassword.__proto__ || Object.getPrototypeOf(ChangePassword)).call(this, props));
+        var _this18 = _possibleConstructorReturn(this, (ChangePassword.__proto__ || Object.getPrototypeOf(ChangePassword)).call(this, props));
 
-        _this17.state = {
+        _this18.state = {
             form: "normal", // normal, loading
             password: "",
             newPassword1: "",
@@ -1065,15 +1150,15 @@ var ChangePassword = function (_React$Component14) {
             formMessageHeader: "",
             formMessageTextArr: []
         };
-        _this17.changedSuccessfully = _this17.changedSuccessfully.bind(_this17);
-        _this17.failed = _this17.failed.bind(_this17);
-        _this17.setFormMessageList = _this17.setFormMessageList.bind(_this17);
-        _this17.setFormMessageText = _this17.setFormMessageText.bind(_this17);
-        _this17.setLoading = _this17.setLoading.bind(_this17);
-        _this17.send = _this17.send.bind(_this17);
-        _this17.checkInputs = _this17.checkInputs.bind(_this17);
-        _this17.changeInput = _this17.changeInput.bind(_this17);
-        return _this17;
+        _this18.changedSuccessfully = _this18.changedSuccessfully.bind(_this18);
+        _this18.failed = _this18.failed.bind(_this18);
+        _this18.setFormMessageList = _this18.setFormMessageList.bind(_this18);
+        _this18.setFormMessageText = _this18.setFormMessageText.bind(_this18);
+        _this18.setLoading = _this18.setLoading.bind(_this18);
+        _this18.send = _this18.send.bind(_this18);
+        _this18.checkInputs = _this18.checkInputs.bind(_this18);
+        _this18.changeInput = _this18.changeInput.bind(_this18);
+        return _this18;
     }
 
     _createClass(ChangePassword, [{
@@ -1122,7 +1207,7 @@ var ChangePassword = function (_React$Component14) {
     }, {
         key: "send",
         value: function send() {
-            var _this18 = this;
+            var _this19 = this;
 
             if (this.checkInputs()) {
                 this.setLoading();
@@ -1138,16 +1223,16 @@ var ChangePassword = function (_React$Component14) {
                 }).then(function (response) {
                     if (!response.ok) throw new Error(response.status);else return response.json();
                 }).then(function (json) {
-                    _this18.changedSuccessfully();
-                    _this18.setState({
+                    _this19.changedSuccessfully();
+                    _this19.setState({
                         form: "normal",
                         password: "",
                         newPassword1: "",
                         newPassword2: ""
                     });
                 }).catch(function (error) {
-                    _this18.failed(error.message);
-                    _this18.setState({
+                    _this19.failed(error.message);
+                    _this19.setState({
                         form: "normal"
                     });
                 });
@@ -1246,8 +1331,8 @@ var ChangePassword = function (_React$Component14) {
     return ChangePassword;
 }(React.Component);
 
-var FormMessageList = function (_React$Component15) {
-    _inherits(FormMessageList, _React$Component15);
+var FormMessageList = function (_React$Component16) {
+    _inherits(FormMessageList, _React$Component16);
 
     function FormMessageList() {
         _classCallCheck(this, FormMessageList);
@@ -1294,16 +1379,16 @@ var FormMessageList = function (_React$Component15) {
     return FormMessageList;
 }(React.Component);
 
-var FormButton = function (_React$Component16) {
-    _inherits(FormButton, _React$Component16);
+var FormButton = function (_React$Component17) {
+    _inherits(FormButton, _React$Component17);
 
     function FormButton(props) {
         _classCallCheck(this, FormButton);
 
-        var _this20 = _possibleConstructorReturn(this, (FormButton.__proto__ || Object.getPrototypeOf(FormButton)).call(this, props));
+        var _this21 = _possibleConstructorReturn(this, (FormButton.__proto__ || Object.getPrototypeOf(FormButton)).call(this, props));
 
-        _this20.click = _this20.click.bind(_this20);
-        return _this20;
+        _this21.click = _this21.click.bind(_this21);
+        return _this21;
     }
 
     _createClass(FormButton, [{

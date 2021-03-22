@@ -9,7 +9,8 @@ class Profile extends React.Component {
             slug:"",
             owner:false,
             email:"",
-            comments:[]
+            comments:[],
+            commentRequests:[]
         }
         this.load = this.load.bind(this);
         // setting elementary funcs
@@ -45,6 +46,7 @@ class Profile extends React.Component {
                 owner:json.other.member.owner,
                 email:json.other.member.email,
                 comments: normalizer('comment-in-profile', json['other']['comments']),
+                commentRequests: normalizer('comment-in-profile', json['other']['newCommentRequests'])
             });
         }).catch((error) => {
             if(error.message==404) {
@@ -108,6 +110,12 @@ class Profile extends React.Component {
                     <ProfileComments
                         form={this.state.form}
                         comments={this.state.comments}
+                        changeContent={this.props.changeContent}
+                        reloadFunc={this.reloadFunc}
+                    />
+                    <CommentRequest
+                        owner={this.state.owner}
+                        comments={this.state.commentRequests}
                         changeContent={this.props.changeContent}
                         reloadFunc={this.reloadFunc}
                     />
@@ -371,6 +379,8 @@ class ProfileComments extends React.Component {
                     owner={com.owner}
                     reported={com.reported}
                     hidden={com.hidden}
+                    bottomComment={com.owner}
+                    ownCommentPublished={com.commentPublished}
                 />
             )
         }
@@ -390,6 +400,62 @@ class ProfileComments extends React.Component {
                 {this.comments}
             </div>
         )
+    }
+}
+
+class CommentRequest extends React.Component {
+    render() {
+        if(this.props.owner) {
+            this.requests = [];
+            for(let i=0;i<this.props.comments.length;i++) {
+                let com = this.props.comments[i];
+                this.requests.push(
+                    <Comment
+                        productID={com.productID}
+                        changeContent={this.props.changeContent}
+                        reloadFunc={this.props.reloadFunc}
+                        tags={com.tags}
+                        key={com.id}
+                        id={com.id}
+                        text={com.text}
+                        type="product"
+                        slug={com.slug}
+                        likeCount={com.likeCount}
+                        liked={com.liked}
+                        title={com.title}
+                        date={com.date}
+                        lastEditDate={com.lastEditDate}
+                        edited={com.edited}
+                        rating={com.rating}
+                        owner={com.owner}
+                        reported={com.reported}
+                        hidden={com.hidden}
+                        bottomComment={com.owner}
+                        ownCommentPublished={com.commentPublished}
+                    />
+                )
+            }
+            return (
+                <div>
+                    <Row size="one">
+                        <Column>
+                            <H type="2" text="Henüz Onaylanmamış Yeni Yorumlar" />
+                        </Column>
+                    </Row>
+                    <div>
+                        {(this.requests.length)?this.requests:
+                            <Row size="one">
+                                <Column>
+                                    <BasicMessageWithColor color="yellow" message="Yorum yok" />
+                                </Column>
+                            </Row>
+                        }
+                    </div>
+                </div>
+            )
+        } else {
+            return ("")
+        }
     }
 }
 

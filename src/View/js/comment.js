@@ -135,7 +135,18 @@ class Comment extends React.Component {
                     <Row size="one">
                         <Column>
                             <RaisedSegment otherClass="comment">
-                                <TopOfComment text={this.props.text} slug={this.props.slug} title={this.props.title} owner={this.props.owner} handleOpenEditArea={this.openEditArea} handleOpenDeleteArea={this.openDeleteArea} changeContent={this.props.changeContent} type={this.props.type}/>
+                                <TopOfComment
+                                    text={this.props.text}
+                                    slug={this.props.slug}
+                                    title={this.props.title}
+                                    owner={this.props.owner}
+                                    handleOpenEditArea={this.openEditArea}
+                                    handleOpenDeleteArea={this.openDeleteArea}
+                                    changeContent={this.props.changeContent}
+                                    type={this.props.type}
+                                    bottomComment={(this.props.bottomComment!==undefined)?this.props.bottomComment:false}
+                                    ownCommentPublished={(this.props.ownCommentPublished!==undefined)?this.props.ownCommentPublished:null}
+                                />
                                 <BottomOfComment
                                     likeCount={this.state.likeCount}
                                     liked={this.state.liked}

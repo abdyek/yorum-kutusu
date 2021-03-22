@@ -159,7 +159,7 @@ class Product extends Controller {
     }
     private function ownCommentWrapper() {
         $this->ownCommentPublished = false;
-        if($this->who=='guest') {
+        if($this->who!='member') {
             return null;
         }
         $this->memberInfo = Database::getRow('SELECT member_username, member_slug, member_restricted FROM member WHERE member_id=?', [$this->userId]);
