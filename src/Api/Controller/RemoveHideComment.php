@@ -4,7 +4,7 @@ namespace YorumKutusu\Api\Controller;
 use YorumKutusu\Api\Core\Controller;
 use YorumKutusu\Api\Core\Database;
 
-class RemoveHideComment extends Request {
+class RemoveHideComment extends Controller {
     protected function post() {
         $this->availableCheck();
         $this->removeIt();
