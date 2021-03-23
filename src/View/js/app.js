@@ -427,6 +427,8 @@ class Content extends React.Component {
                 return (
                     <ForgotMyPassword changeContent={this.props.changeContent} />
                 )
+            case "none":
+                return ("")
             default:
                 return (
                     <div>{"Böyle bir sayfa yok" + this.state.content} </div>
@@ -503,17 +505,35 @@ class App extends React.Component {
         if(direct) {
             const cont = this.contentFromSlug[href];
             window.history.pushState({content:cont}, "title", SITEURL + href);
-            this.setState({
-                "content":this.contentFromSlug[href]
-            })
+            if(this.state.content==cont) {
+                this.setState({"content":"none"});
+                setTimeout(function() {
+                    this.setState({
+                        "content":cont
+                    });
+                }.bind(this), 50);
+            } else {
+                this.setState({
+                    "content":cont
+                });
+            }
         } else {
             const pathNames = getPathNames(href);
             const page = pathNames[0];
             const cont = this.contentFromSlug[page];
             window.history.pushState({content:cont}, "title", href);
-            this.setState({
-                "content":cont
-            });
+            if(this.state.content==cont) {
+                this.setState({"content":"none"});
+                setTimeout(function() {
+                    this.setState({
+                        "content":cont
+                    });
+                }.bind(this), 50);
+            } else {
+                this.setState({
+                    "content":cont
+                });
+            }
         }
         this.updateUnreadComments();
     }

@@ -10,7 +10,7 @@ class ProductApproval extends Controller {
         $this->success(['productRequest'=> $this->reqArr]);
     }
     private function prepareRequest() {
-        $this->request = Database::getRows('SELECT * FROM product_request pr INNER JOIN member m ON m.member_id=pr.member_id WHERE pr.cancelled=1 AND pr.product_request_answered=0');
+        $this->request = Database::getRows('SELECT * FROM product_request pr INNER JOIN member m ON m.member_id=pr.member_id WHERE pr.cancelled=0 AND pr.product_request_answered=0');
         $this->reqArr = [];
         foreach($this->request as $req) {
             if($req['product_id']) {

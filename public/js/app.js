@@ -612,6 +612,8 @@ var Content = function (_React$Component8) {
                     return React.createElement(EditProduct, { changeContent: this.props.changeContent });
                 case "forgotMyPassword":
                     return React.createElement(ForgotMyPassword, { changeContent: this.props.changeContent });
+                case "none":
+                    return "";
                 default:
                     return React.createElement(
                         "div",
@@ -708,17 +710,35 @@ var App = function (_React$Component9) {
             if (direct) {
                 var cont = this.contentFromSlug[href];
                 window.history.pushState({ content: cont }, "title", SITEURL + href);
-                this.setState({
-                    "content": this.contentFromSlug[href]
-                });
+                if (this.state.content == cont) {
+                    this.setState({ "content": "none" });
+                    setTimeout(function () {
+                        this.setState({
+                            "content": cont
+                        });
+                    }.bind(this), 50);
+                } else {
+                    this.setState({
+                        "content": cont
+                    });
+                }
             } else {
                 var pathNames = getPathNames(href);
                 var page = pathNames[0];
                 var _cont = this.contentFromSlug[page];
                 window.history.pushState({ content: _cont }, "title", href);
-                this.setState({
-                    "content": _cont
-                });
+                if (this.state.content == _cont) {
+                    this.setState({ "content": "none" });
+                    setTimeout(function () {
+                        this.setState({
+                            "content": _cont
+                        });
+                    }.bind(this), 50);
+                } else {
+                    this.setState({
+                        "content": _cont
+                    });
+                }
             }
             this.updateUnreadComments();
         }
