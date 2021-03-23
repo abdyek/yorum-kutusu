@@ -87,7 +87,7 @@ function setCookie(key, value) {
     let time = now.getTime();
     let expireTime = time + 31556926000;
     now.setTime(expireTime);
-    document.cookie = key+'='+value+';expires='+now.toUTCString()+';path=/';
+    document.cookie = key+'='+value+';expires='+now.toUTCString()+';path=/;samesite=strict';
 }
 
 function getCookie(cname) {

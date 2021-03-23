@@ -30,7 +30,14 @@ class LoginAsAdmin extends Controller {
             'remote_addr'=>$_SERVER['REMOTE_ADDR'],
             'iss'    => 'http://www.yorumkutusu.com/api',
         ]); 
-        setcookie('jwt', $token, time() + 31557600 , NULL, NULL, NULL, TRUE); 
+        setcookie('jwt', $token, [
+            'expires' => time() + 31557600 ,
+            /* 'path' => '/',
+            'domain' => 'domain.com', */
+            'secure' => false,
+            'httponly' => true,
+            'samesite' => 'Strict',
+        ]);
         $this->response(['jwt'=>$token, 'userID'=>$userid, 'who'=>'admin']);
     }
 }
