@@ -186,6 +186,14 @@ CREATE TABLE `reset_password` (
   `deleted` int(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE `confirm_email` (
+  `confirm_email_id` int(11) NOT NULL,
+  `member_id` int(11) NOT NULL,
+  `confirm_code` varchar(10) NOT NULL,
+  `confirm_email_date_time` datetime NOT NULL DEFAULT current_timestamp(),
+  `trial` int(2) NOT NULL DEFAULT 0,
+  `deleted` int(1) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `comment` (
   `comment_id` int(11) NOT NULL,
@@ -506,6 +514,9 @@ ALTER TABLE `reset_password`
   ADD PRIMARY KEY (`reset_password_id`),
   ADD KEY `member_id` (`member_id`);
 
+ALTER TABLE `confirm_email`
+  ADD PRIMARY KEY (`confirm_email_id`),
+  ADD KEY `member_id` (`member_id`);
 
 ALTER TABLE `comment`
   ADD PRIMARY KEY (`comment_id`),
@@ -699,6 +710,9 @@ ALTER TABLE `member_password_change_history`
 ALTER TABLE `reset_password`
   MODIFY `reset_password_id` int(11) NOT NULL AUTO_INCREMENT;
 
+ALTER TABLE `confirm_email`
+  MODIFY `confirm_email_id` int(11) NOT NULL AUTO_INCREMENT;
+
 
 ALTER TABLE `comment`
   MODIFY `comment_id` int(11) NOT NULL AUTO_INCREMENT;
@@ -842,6 +856,9 @@ ALTER TABLE `member_password_change_history`
 
 ALTER TABLE `reset_password`
   ADD CONSTRAINT `reset_password_fk_1` FOREIGN KEY (`member_id`) REFERENCES `member` (`member_id`);
+
+ALTER TABLE `confirm_email`
+  ADD CONSTRAINT `confirm_email_fk_1` FOREIGN KEY (`member_id`) REFERENCES `member` (`member_id`);
 
 ALTER TABLE `comment`
   ADD CONSTRAINT `comment_fk_1` FOREIGN KEY (`member_id`) REFERENCES `member` (`member_id`),

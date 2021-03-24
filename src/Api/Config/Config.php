@@ -418,20 +418,19 @@ namespace YorumKutusu\Api\Config;
                     ]
                 ]
             ],
-            'validateEmail'=>[
-                'methods'=>['POST', 'GET'],
+            'confirmEmail'=>[
+                'methods'=>['POST', 'PUT'],
                 'authorization'=>[
                     'POST'=>['member'],
-                    'GET'=>['member'],
+                    'PUT'=>['member'],
                 ],
                 'keys'=>[
-                    'POST'=>[
-                        'code'=>[
-                            'min'=>6,
-                            'max'=>6
-                        ]
-                    ],
-                    'GET'=>[
+                    'POST'=>[ ],
+                    'PUT'=>[
+                        'confirmCode'=>[
+                            'min'=>0,
+                            'max'=>20
+                        ],
                     ]
                 ]
             ],
