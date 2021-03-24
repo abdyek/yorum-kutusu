@@ -197,28 +197,7 @@ class FollowedProductsArea extends React.Component {
             form:"loading",
             loadMoreHidden:true,
             pageNumber:1,
-            followProduct: [
-                /*
-                {
-                    productID:0,
-                    productSlug:"iphone-5s", 
-                    productName:"Iphone 5s",
-                    newComment: "5"
-                },
-                {
-                    productID:2,
-                    productSlug:"mahmut-efendi-kahveleri", 
-                    productName:"Mahmut Efendi Kahveleri",
-                    newComment: "5"
-                },
-                {
-                    productID:12,
-                    productSlug:"starBucks-sumatra", 
-                    productName:"StarBucks Sumatra",
-                    newComment: "99"
-                }
-                */
-            ]
+            followProduct: [ ]
         };
         this.load = this.load.bind(this);
     }
@@ -293,6 +272,7 @@ class FollowedProductsTable extends React.Component {
                             changeContent={this.props.changeContent}
                             slug={this.props.info[i].productSlug}
                             name={this.props.info[i].productName}
+                            startingPage={this.props.info[i].startingPage}
                         />
                     </td>
                     <td>{this.props.info[i].newComment}</td>
@@ -320,7 +300,7 @@ class FollowedProductsCell extends React.Component {
     }
     goProduct(e) {
         e.preventDefault();
-        this.props.changeContent(SITEURL + 'urun/' + this.props.slug);
+        this.props.changeContent(SITEURL + 'urun/' + this.props.slug + '/time/' + this.props.startingPage);
     }
     render() {
         return(

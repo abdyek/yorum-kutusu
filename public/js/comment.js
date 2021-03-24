@@ -193,7 +193,8 @@ var Comment = function (_React$Component) {
                                     changeContent: this.props.changeContent,
                                     type: this.props.type,
                                     bottomComment: this.props.bottomComment !== undefined ? this.props.bottomComment : false,
-                                    ownCommentPublished: this.props.ownCommentPublished !== undefined ? this.props.ownCommentPublished : null
+                                    ownCommentPublished: this.props.ownCommentPublished !== undefined ? this.props.ownCommentPublished : null,
+                                    unread: this.props.unread
                                 }),
                                 React.createElement(BottomOfComment, {
                                     likeCount: this.state.likeCount,
@@ -369,6 +370,7 @@ var TopOfComment = function (_React$Component3) {
             var _this5 = this;
 
             this.bottomComment = this.props.bottomComment || false;
+            this.unread = this.props.unread ? React.createElement("i", { className: "fa fa-asterisk unread-comment", "aria-hidden": "true" }) : "";
             return React.createElement(
                 "div",
                 null,
@@ -415,7 +417,11 @@ var TopOfComment = function (_React$Component3) {
                                     ),
                                     !isMobile() ? "Sil" : ""
                                 )
-                            ) : ""
+                            ) : React.createElement(
+                                "span",
+                                null,
+                                this.unread
+                            )
                         )
                     )
                 ),
@@ -1663,7 +1669,8 @@ var Comments = function (_React$Component14) {
                         rating: com.rating,
                         owner: com.owner,
                         reported: com.reported,
-                        hidden: com.hidden
+                        hidden: com.hidden,
+                        unread: com.unread
                     }));
                 }
                 return React.createElement(

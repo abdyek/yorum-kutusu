@@ -17,8 +17,6 @@ var Product = function (_React$Component) {
         _this.state = {
             form: "loading",
             specialInfo: {},
-            navigationType: "all",
-            navigationOptions: [],
             sortBy: "time",
             followButtonDisabled: false,
             followed: false,
@@ -56,25 +54,16 @@ var Product = function (_React$Component) {
         value: function manageSlugs() {
             var pathNames = getPathNames();
             this.productSlug = pathNames[1];
-            if (pathNames[2] == "unread") {
-                this.pageType = "unread";
-                this.setState({
-                    navigationType: "unread"
-                });
-            } else {
-                this.pageType = "all";
-                this.sortBy = pathNames[2] ? pathNames[2] : "time";
-                this.pageNumber = pathNames[3] ? pathNames[3] : 1;
-                if (this.sortBy != "time" && this.sortBy != "like") {
-                    this.sortBy = "time";
-                }
-                this.setState({
-                    sortBy: this.sortBy
-                });
-                this.refreshUrl();
+            this.pageType = "all";
+            this.sortBy = pathNames[2] ? pathNames[2] : "time";
+            this.pageNumber = pathNames[3] ? pathNames[3] : 1;
+            if (this.sortBy != "time" && this.sortBy != "like") {
+                this.sortBy = "time";
             }
-            var navigationType = "all"; // all, spacial
-            // not: buradaki değer atamalar ve değişkenlerin bir kısmı deneme amaçlı, setState içindeki hemen hemen hepsi api tarafından gelecek
+            this.setState({
+                sortBy: this.sortBy
+            });
+            this.refreshUrl();
         }
     }, {
         key: "detectBottomCommentForm",
@@ -161,21 +150,12 @@ var Product = function (_React$Component) {
     }, {
         key: "load",
         value: function load() {
-            if (this.pageType == "all") {
-                this.fetchProduct({
-                    "productSlug": this.productSlug,
-                    "type": this.sortBy,
-                    "pageNumber": this.pageNumber,
-                    "onlyComment": false
-                });
-            } else if (this.pageType == "unread") {
-                this.fetchProduct({
-                    "productSlug": this.productSlug,
-                    "type": "unread",
-                    "pageNumber": 1,
-                    "onlyComment": false
-                });
-            }
+            this.fetchProduct({
+                "productSlug": this.productSlug,
+                "type": this.sortBy,
+                "pageNumber": this.pageNumber,
+                "onlyComment": false
+            });
         }
     }, {
         key: "reloadComment",
@@ -250,7 +230,6 @@ var Product = function (_React$Component) {
         key: "showAllComments",
         value: function showAllComments() {
             this.setState({
-                navigationType: "all",
                 sortBy: this.sortBy,
                 pageNumber: 1
             });
@@ -331,16 +310,13 @@ var Product = function (_React$Component) {
                     "div",
                     null,
                     React.createElement(ProductInfo, { tags: this.state.tagsInfo, productName: this.state.productName, changeContent: this.props.changeContent, followToggle: this.followToggle, followed: this.state.followed, followButtonDisabled: this.state.followButtonDisabled }),
-                    React.createElement(Navigation, {
-                        type: this.state.navigationType,
+                    React.createElement(PageNavigation, {
                         sortBy: this.state.sortBy,
-                        navigationOptions: this.state.navigationOptions,
                         form: this.state.commentsForm,
                         handleChangeSortBy: this.changeSortBy,
                         pageCount: this.state.pageCount,
                         currentPage: this.state.pageNumber,
-                        handleChangePageNumber: this.changePageNumber,
-                        showAllComments: this.showAllComments
+                        handleChangePageNumber: this.changePageNumber
                     }),
                     React.createElement(Comments, {
                         comments: this.state.comments,
@@ -350,16 +326,13 @@ var Product = function (_React$Component) {
                         reloadFunc: this.reloadAllComment,
                         productID: this.state.productID
                     }),
-                    React.createElement(Navigation, {
-                        type: this.state.navigationType,
+                    React.createElement(PageNavigation, {
                         sortBy: this.state.sortBy,
-                        navigationOptions: this.state.navigationOptions,
                         form: this.state.commentsForm,
                         handleChangeSortBy: this.changeSortBy,
                         pageCount: this.state.pageCount,
                         currentPage: this.state.pageNumber,
-                        handleChangePageNumber: this.changePageNumber,
-                        showAllComments: this.showAllComments
+                        handleChangePageNumber: this.changePageNumber
                     }),
                     React.createElement(BottomComment, {
                         form: this.state.bottomCommentForm,
@@ -389,49 +362,16 @@ var Product = function (_React$Component) {
     return Product;
 }(React.Component);
 
-var Navigation = function (_React$Component2) {
-    _inherits(Navigation, _React$Component2);
-
-    function Navigation() {
-        _classCallCheck(this, Navigation);
-
-        return _possibleConstructorReturn(this, (Navigation.__proto__ || Object.getPrototypeOf(Navigation)).apply(this, arguments));
-    }
-
-    _createClass(Navigation, [{
-        key: "render",
-        value: function render() {
-            if (this.props.type == "all") {
-                return React.createElement(PageNavigation, {
-                    sortBy: this.props.sortBy,
-                    options: this.props.navigationOptions,
-                    form: this.props.form,
-                    handleChangeSortBy: this.props.handleChangeSortBy,
-                    pageCount: this.props.pageCount,
-                    currentPage: this.props.currentPage,
-                    handleChangePageNumber: this.props.handleChangePageNumber
-                });
-            } else if (this.props.type == "unread") {
-                return React.createElement(UnreadNavigation, {
-                    showAllComments: this.props.showAllComments
-                });
-            }
-        }
-    }]);
-
-    return Navigation;
-}(React.Component);
-
-var ProductInfo = function (_React$Component3) {
-    _inherits(ProductInfo, _React$Component3);
+var ProductInfo = function (_React$Component2) {
+    _inherits(ProductInfo, _React$Component2);
 
     function ProductInfo(props) {
         _classCallCheck(this, ProductInfo);
 
-        var _this7 = _possibleConstructorReturn(this, (ProductInfo.__proto__ || Object.getPrototypeOf(ProductInfo)).call(this, props));
+        var _this6 = _possibleConstructorReturn(this, (ProductInfo.__proto__ || Object.getPrototypeOf(ProductInfo)).call(this, props));
 
-        _this7.followButton = _this7.followButton.bind(_this7);
-        return _this7;
+        _this6.followButton = _this6.followButton.bind(_this6);
+        return _this6;
     }
 
     _createClass(ProductInfo, [{
@@ -498,73 +438,16 @@ var ProductInfo = function (_React$Component3) {
     return ProductInfo;
 }(React.Component);
 
-var UnreadNavigation = function (_React$Component4) {
-    _inherits(UnreadNavigation, _React$Component4);
-
-    function UnreadNavigation() {
-        _classCallCheck(this, UnreadNavigation);
-
-        return _possibleConstructorReturn(this, (UnreadNavigation.__proto__ || Object.getPrototypeOf(UnreadNavigation)).apply(this, arguments));
-    }
-
-    _createClass(UnreadNavigation, [{
-        key: "render",
-        value: function render() {
-            return React.createElement(
-                Row,
-                { size: "one" },
-                React.createElement(
-                    Column,
-                    null,
-                    React.createElement(
-                        "div",
-                        { className: "ui big message" },
-                        React.createElement(
-                            Row,
-                            { size: "two" },
-                            React.createElement(
-                                Column,
-                                null,
-                                "Okunmam\u0131\u015F 127 yorumunuzdan ilk 10'u g\xF6steriliyor"
-                            ),
-                            React.createElement(
-                                Column,
-                                null,
-                                React.createElement(
-                                    FloatRight,
-                                    null,
-                                    React.createElement(
-                                        "button",
-                                        { className: "ui olive small button", onClick: this.props.showAllComments },
-                                        "Sonraki"
-                                    ),
-                                    React.createElement(
-                                        "button",
-                                        { className: "ui olive small button", onClick: this.props.showAllComments },
-                                        "B\xFCt\xFCn Yorumlar\u0131 G\xF6ster"
-                                    )
-                                )
-                            )
-                        )
-                    )
-                )
-            );
-        }
-    }]);
-
-    return UnreadNavigation;
-}(React.Component);
-
-var EditProductButton = function (_React$Component5) {
-    _inherits(EditProductButton, _React$Component5);
+var EditProductButton = function (_React$Component3) {
+    _inherits(EditProductButton, _React$Component3);
 
     function EditProductButton(props) {
         _classCallCheck(this, EditProductButton);
 
-        var _this9 = _possibleConstructorReturn(this, (EditProductButton.__proto__ || Object.getPrototypeOf(EditProductButton)).call(this, props));
+        var _this7 = _possibleConstructorReturn(this, (EditProductButton.__proto__ || Object.getPrototypeOf(EditProductButton)).call(this, props));
 
-        _this9.goEditProduct = _this9.goEditProduct.bind(_this9);
-        return _this9;
+        _this7.goEditProduct = _this7.goEditProduct.bind(_this7);
+        return _this7;
     }
 
     _createClass(EditProductButton, [{

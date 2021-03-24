@@ -14,9 +14,12 @@ class Product extends Controller {
         $this->hasComment = null;
         $this->getFollowInfo();
         $this->getPageCount();
-        $this->hiddenComment = $this->getHiddenComment($this->userId, $this->who);
-        $this->reportedComment = $this->getReportedComment($this->userId, $this->who);
-
+        $this->hiddenComment = [];
+        $this->reportedComment = [];
+        if($this->who==="member") {
+            $this->hiddenComment = $this->getHiddenComment($this->userId, $this->who);
+            $this->reportedComment = $this->getReportedComment($this->userId, $this->who);
+        }
         $sql = $this->getCommentSql($this->data['type']);
         //$arr = [$this->productInfo['id']];
         $this->getCommentsWithRating(['sql'=>$sql, 'arr'=>[$this->productInfo['id']]]);
@@ -26,7 +29,7 @@ class Product extends Controller {
         $this->increaseProductFetchCount();
     }
     private function checkSortBy() {
-        if(!in_array($this->data['type'], ['time', 'like', 'unread'])) {
+        if(!in_array($this->data['type'], ['time', 'like'])) {
             $this->setHttpStatus(400);
             exit();
         }
@@ -45,9 +48,11 @@ class Product extends Controller {
     }
     private function getFollowInfo() {
         $this->followed = false;
+        $this->lastSeen = null;
         if($this->who=="member") {
-            $this->productFollowQuery = Database::getRow('SELECT product_follow_id, last_seen_date_time FROM product_follow WHERE product_id=? AND member_id=?', [$this->productInfo['id'],$this->userId]);
+            $this->productFollowQuery = Database::existCheck('SELECT product_follow_id, last_seen_date_time FROM product_follow WHERE product_id=? AND member_id=?', [$this->productInfo['id'],$this->userId]);
             $this->followed = ($this->productFollowQuery)?true:false;
+            $this->lastSeen = ($this->productFollowQuery)?$this->productFollowQuery['last_seen_date_time']:null;
         }
     }
     private function getPageCount() {
@@ -120,7 +125,8 @@ class Product extends Controller {
                     'username'=>$com['member_username'],
                     'slug'=>$com['member_slug'],
                 ],
-                'rating'=>$ratingInfo
+                'rating'=>$ratingInfo,
+                'unread'=>($this->followed and $com['comment_create_date_time']>$this->lastSeen)?true:false
                 
             ];
         }
@@ -153,10 +159,10 @@ class Product extends Controller {
         }
     }
     private function updateLastSeen() {
-        if($this->who=='member' and ($this->data['type']=='time' or $this->data['type']=='unread') and count($this->commentsInfo)){
+        if($this->who=='member' and $this->data['type']=='time' and count($this->commentsInfo)){
             $time = end($this->commentsInfo)['commentCreateDateTime'];
-            Database::executeWithErr('UPDATE product_follow SET new_comment_count=(new_comment_count-(SELECT count(*) FROM comment WHERE product_id=? AND comment_deleted=0 AND comment_create_date_time>last_seen_date_time AND comment_create_date_time<=?)) WHERE member_id=?', [$this->productInfo['id'], $time, $this->userId]);
-            Database::execute('UPDATE product_follow SET last_seen_date_time=? WHERE member_id=? AND last_seen_date_time<?', [$time, $this->userId, $time]);
+            Database::executeWithErr('UPDATE product_follow SET new_comment_count=(new_comment_count-(SELECT count(*) FROM comment WHERE product_id=? AND comment_deleted=0 AND comment_create_date_time>last_seen_date_time AND comment_create_date_time<=?)) WHERE member_id=? AND product_id=?', [$this->productInfo['id'], $time, $this->userId, $this->productInfo['id']]);
+            Database::executeWithErr('UPDATE product_follow SET last_seen_date_time=? WHERE member_id=? AND product_id=? AND last_seen_date_time<?', [$time, $this->productInfo['id'], $this->userId, $time]);
         }
     }
     private function ownCommentWrapper() {

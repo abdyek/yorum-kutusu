@@ -134,34 +134,10 @@ function normalizer(key, data) {
                 lastEditDate: com.commentLastEditDateTime,
                 edited:com.commentEdited,
                 rating:normalizer('comment-rating', com.rating),
-                // tag 'dı rating yaptım
-                /*
-                tags:{3:{
-                                passive:false,
-                                text:"Batarya",
-                                color:"yellow",
-                                rateValue: "5",
-                                slug:"batarya"
-                        },
-                        4:{
-                                passive:false,
-                                text:"Kamera",
-                                color:"orange",
-                                rateValue: "4",
-                                slug:"kamera"
-                        },
-                        5:{
-                                passive:false,
-                                text:"Tasarım",
-                                color:"",
-                                rateValue: "-",
-                                slug:"tasarim"
-                        }
-                },
-                */
                 owner:com.isOwner,
                 reported:com.reported,
-                hidden:com.hidden
+                hidden:com.hidden,
+                unread:com.unread
             })
         }
         return comments;

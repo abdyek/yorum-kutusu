@@ -4,8 +4,6 @@ class Product extends React.Component {
         this.state = {
             form:"loading",
             specialInfo:{},
-            navigationType:"all",
-            navigationOptions: [],
             sortBy:"time",
             followButtonDisabled:false,
             followed:false,
@@ -37,25 +35,16 @@ class Product extends React.Component {
     manageSlugs() {
         const pathNames = getPathNames();
         this.productSlug = pathNames[1];
-        if(pathNames[2]=="unread") {
-            this.pageType = "unread";
-            this.setState({
-                navigationType:"unread"
-            });
-        } else {
-            this.pageType = "all";
-            this.sortBy = (pathNames[2])?pathNames[2]:"time";
-            this.pageNumber = (pathNames[3])?pathNames[3]:1;
-            if(this.sortBy!="time" && this.sortBy!="like") {
-                this.sortBy = "time";
-            }
-            this.setState({
-                sortBy:this.sortBy
-            });
-            this.refreshUrl();
+        this.pageType = "all";
+        this.sortBy = (pathNames[2])?pathNames[2]:"time";
+        this.pageNumber = (pathNames[3])?pathNames[3]:1;
+        if(this.sortBy!="time" && this.sortBy!="like") {
+            this.sortBy = "time";
         }
-        let navigationType= "all";  // all, spacial
-        // not: buradaki değer atamalar ve değişkenlerin bir kısmı deneme amaçlı, setState içindeki hemen hemen hepsi api tarafından gelecek
+        this.setState({
+            sortBy:this.sortBy
+        });
+        this.refreshUrl();
     }
     detectBottomCommentForm(ownComment) {
         if(isMember()) {
@@ -132,21 +121,12 @@ class Product extends React.Component {
         // burası ne kadar sağlıklı oldu emin değilim
     }
     load() {
-        if(this.pageType=="all") {
-            this.fetchProduct({
-                "productSlug":this.productSlug,
-                "type":this.sortBy,
-                "pageNumber":this.pageNumber,
-                "onlyComment":false
-            });
-        } else if(this.pageType=="unread") {
-            this.fetchProduct({
-                "productSlug":this.productSlug,
-                "type":"unread",
-                "pageNumber":1,
-                "onlyComment":false
-            });
-        }
+        this.fetchProduct({
+            "productSlug":this.productSlug,
+            "type":this.sortBy,
+            "pageNumber":this.pageNumber,
+            "onlyComment":false
+        });
     }
     reloadComment() {
         this.fetchComment();
@@ -208,7 +188,6 @@ class Product extends React.Component {
 	}
 	showAllComments() {
 		this.setState({
-			navigationType:"all",
 			sortBy:this.sortBy,
 			pageNumber:1
 		});
@@ -275,16 +254,13 @@ class Product extends React.Component {
                 <div>
                     <ProductInfo tags={this.state.tagsInfo} productName={this.state.productName} changeContent={this.props.changeContent} followToggle={this.followToggle} followed={this.state.followed} followButtonDisabled={this.state.followButtonDisabled}/>
 
-                    <Navigation
-                        type={this.state.navigationType}
+                    <PageNavigation
                         sortBy={this.state.sortBy}
-                        navigationOptions={this.state.navigationOptions}
                         form={this.state.commentsForm}
                         handleChangeSortBy={this.changeSortBy}
                         pageCount={this.state.pageCount}
                         currentPage={this.state.pageNumber}
                         handleChangePageNumber={this.changePageNumber}
-                        showAllComments={this.showAllComments}
                     />
                     <Comments
                         comments={this.state.comments}
@@ -294,16 +270,13 @@ class Product extends React.Component {
                         reloadFunc={this.reloadAllComment}
                         productID={this.state.productID}
                     />
-                    <Navigation
-                        type={this.state.navigationType}
+                    <PageNavigation
                         sortBy={this.state.sortBy}
-                        navigationOptions={this.state.navigationOptions}
                         form={this.state.commentsForm}
                         handleChangeSortBy={this.changeSortBy}
                         pageCount={this.state.pageCount}
                         currentPage={this.state.pageNumber}
                         handleChangePageNumber={this.changePageNumber}
-                        showAllComments={this.showAllComments}
                     />
                     <BottomComment
                         form={this.state.bottomCommentForm}
@@ -330,30 +303,6 @@ class Product extends React.Component {
         } else if(this.state.form=="notFound") {
             return (
                 <ProductNotFound changeContent={this.props.changeContent}/>
-            )
-        }
-    }
-}
-
-class Navigation extends React.Component {
-    render() {
-        if(this.props.type=="all") {
-            return (
-                <PageNavigation
-                    sortBy={this.props.sortBy}
-                    options={this.props.navigationOptions}
-                    form={this.props.form}
-                    handleChangeSortBy={this.props.handleChangeSortBy}
-                    pageCount={this.props.pageCount}
-                    currentPage={this.props.currentPage}
-                    handleChangePageNumber={this.props.handleChangePageNumber}
-                />
-            )
-        } else if(this.props.type=="unread") {
-            return (
-                <UnreadNavigation
-                    showAllComments={this.props.showAllComments}
-                />
             )
         }
     }
@@ -401,30 +350,6 @@ class ProductInfo extends React.Component {
                     </Column>
                 </Row>
             </div>
-        )
-    }
-}
-
-class UnreadNavigation extends React.Component {
-    render() {
-        return(
-            <Row size="one">
-                <Column>
-                    <div className="ui big message">
-                        <Row size="two">
-                            <Column>
-                                Okunmamış 127 yorumunuzdan ilk 10'u gösteriliyor
-                            </Column>
-                            <Column>
-                                <FloatRight>
-                                    <button className="ui olive small button" onClick={this.props.showAllComments}>Sonraki</button>
-                                    <button className="ui olive small button" onClick={this.props.showAllComments}>Bütün Yorumları Göster</button>
-                                </FloatRight>
-                            </Column>
-                        </Row>
-                    </div>
-                </Column>
-            </Row>
         )
     }
 }

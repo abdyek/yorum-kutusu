@@ -275,3 +275,6 @@ label {
     color:#eee !important;
 }
 
+.unread-comment {
+    font-size:2rem !important;
+}

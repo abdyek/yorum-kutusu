@@ -62,16 +62,19 @@ use \PDO as PDO;
             }
             return $rows;
         }
-        public static function getRow($sql, $parameters=NULL) {
+         */
+        public static function getRowWithErr($sql, $parameters=NULL) {
             $rows = self::$db->prepare($sql);
             $rows->execute($parameters);
             $row = $rows->fetch(PDO::FETCH_ASSOC);
-            if($rows->errorInfo()[1]) {
-                return [false, $rows->errorInfo()];
+            if(!$rows) {
+                echo json_encode([
+                    'err'=>$rows->errorInfo()
+                ]);
+                exit();
             }
             return $row;
         }
-        */
 
         // other useful database functions
         public function existCheck($sql, $arr) {

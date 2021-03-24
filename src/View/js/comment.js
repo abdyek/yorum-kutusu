@@ -146,6 +146,7 @@ class Comment extends React.Component {
                                     type={this.props.type}
                                     bottomComment={(this.props.bottomComment!==undefined)?this.props.bottomComment:false}
                                     ownCommentPublished={(this.props.ownCommentPublished!==undefined)?this.props.ownCommentPublished:null}
+                                    unread={this.props.unread}
                                 />
                                 <BottomOfComment
                                     likeCount={this.state.likeCount}
@@ -271,6 +272,7 @@ class TopOfComment extends React.Component{
     }
     render() {
         this.bottomComment = this.props.bottomComment || false;
+        this.unread = (this.props.unread)?<i className="fa fa-asterisk unread-comment" aria-hidden="true"></i>:"";
         return (
             <div>
                 <Row size="two" nonStackable={true}>
@@ -296,7 +298,7 @@ class TopOfComment extends React.Component{
                                         {(!isMobile())?"Sil":""}
                                     </button>
                                 </div>
-                                :""
+                                :<span>{this.unread}</span>
                             }
                         </FloatRight>
                     </Column>
@@ -1145,6 +1147,7 @@ class Comments extends React.Component {
                                         owner={com.owner}
                                         reported={com.reported}
                                         hidden={com.hidden}
+                                        unread={com.unread}
                                     />
 				)
 			}

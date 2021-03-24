@@ -253,28 +253,7 @@ var FollowedProductsArea = function (_React$Component2) {
             form: "loading",
             loadMoreHidden: true,
             pageNumber: 1,
-            followProduct: [
-                /*
-                {
-                    productID:0,
-                    productSlug:"iphone-5s", 
-                    productName:"Iphone 5s",
-                    newComment: "5"
-                },
-                {
-                    productID:2,
-                    productSlug:"mahmut-efendi-kahveleri", 
-                    productName:"Mahmut Efendi Kahveleri",
-                    newComment: "5"
-                },
-                {
-                    productID:12,
-                    productSlug:"starBucks-sumatra", 
-                    productName:"StarBucks Sumatra",
-                    newComment: "99"
-                }
-                */
-            ]
+            followProduct: []
         };
         _this3.load = _this3.load.bind(_this3);
         return _this3;
@@ -382,7 +361,8 @@ var FollowedProductsTable = function (_React$Component3) {
                         React.createElement(FollowedProductsCell, {
                             changeContent: this.props.changeContent,
                             slug: this.props.info[i].productSlug,
-                            name: this.props.info[i].productName
+                            name: this.props.info[i].productName,
+                            startingPage: this.props.info[i].startingPage
                         })
                     ),
                     React.createElement(
@@ -441,7 +421,7 @@ var FollowedProductsCell = function (_React$Component4) {
         key: "goProduct",
         value: function goProduct(e) {
             e.preventDefault();
-            this.props.changeContent(SITEURL + 'urun/' + this.props.slug);
+            this.props.changeContent(SITEURL + 'urun/' + this.props.slug + '/time/' + this.props.startingPage);
         }
     }, {
         key: "render",

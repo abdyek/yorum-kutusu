@@ -67,7 +67,8 @@ class FollowProduct extends Controller {
                     'productID'=>$fp['product_id'],
                     'productSlug'=>$fp['product_slug'],
                     'productName'=>$fp['product_name'],
-                    'newComment'=>$fp['new_comment_count']
+                    'newComment'=>$fp['new_comment_count'],
+                    'startingPage'=>$this->getStartingPage($fp['product_id'], $fp['last_seen_date_time'])
                 ];
             }
             $this->success([
@@ -76,6 +77,21 @@ class FollowProduct extends Controller {
                 'more'=>$more
             ]);
         }
+    }
+    private function getStartingPage($productID, $lastSeen) {
+        //$numRow = Database::getRowWithErr(' SET @row_number = 0; SELECT num FROM (SELECT (@row_number:=@row_number + 1) AS num, comment_id, comment_text, member_id, comment_create_date_time FROM comment WHERE comment_deleted=0 AND product_id=? ORDER BY comment_create_date_time ASC) allcomments WHERE allcomments.comment_create_date_time > ? LIMIT 1', [$productID, $lastSeen]);
+        //return ($numRow)?$numRow['num']:15;
+        // böyle bir çözüm buldum ancak phpmyadmin'de çalışan sql kodları burada çalışmıyor. Performansı artırmaya yönelik ileride bu mantığın çalışan halini yapabilirsin
+
+        $numRows = Database::getRows('SELECT comment_id, comment_create_date_time FROM comment WHERE comment_deleted=0 AND product_id=? ORDER BY comment_create_date_time ASC;', [$productID]);
+        $num = 0;
+        foreach($numRows as $row) {
+            $num++;
+            if($row['comment_create_date_time'] < $lastSeen) {
+                break;
+            }
+        }
+        return intval($num/10) + 1;
     }
     private function fetchAllCommentCount() {
         $this->allCommentCount = Database::getRow('SELECT sum(new_comment_count) as c FROM product_follow WHERE member_id=?', [$this->userId])['c'];
