@@ -162,7 +162,7 @@ class Product extends Controller {
         if($this->who=='member' and $this->data['type']=='time' and count($this->commentsInfo)){
             $time = end($this->commentsInfo)['commentCreateDateTime'];
             Database::executeWithErr('UPDATE product_follow SET new_comment_count=(new_comment_count-(SELECT count(*) FROM comment WHERE product_id=? AND comment_deleted=0 AND comment_create_date_time>last_seen_date_time AND comment_create_date_time<=?)) WHERE member_id=? AND product_id=?', [$this->productInfo['id'], $time, $this->userId, $this->productInfo['id']]);
-            Database::executeWithErr('UPDATE product_follow SET last_seen_date_time=? WHERE member_id=? AND product_id=? AND last_seen_date_time<?', [$time, $this->productInfo['id'], $this->userId, $time]);
+            Database::executeWithErr('UPDATE product_follow SET last_seen_date_time=? WHERE member_id=? AND product_id=? AND last_seen_date_time<?', [$time, $this->userId, $this->productInfo['id'], $time]);
         }
     }
     private function ownCommentWrapper() {
