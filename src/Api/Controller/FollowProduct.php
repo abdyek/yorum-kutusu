@@ -59,7 +59,7 @@ class FollowProduct extends Controller {
             ]);
         } else {
             $lineCount = $this->data['pageNumber'] * 10;
-            $followingProduct = Database::getRows('SELECT p.product_id, p.product_slug, p.product_name, pw.last_seen_date_time, pw.new_comment_count FROM product_follow pw INNER JOIN product p ON pw.product_id = p.product_id WHERE p.product_deleted=0 AND pw.member_id=? ORDER BY pw.new_comment_count DESC LIMIT '.$lineCount, [$this->userId]);
+            $followingProduct = Database::getRows('SELECT p.product_id, p.product_slug, p.product_name, p.product_comment_count, pw.last_seen_date_time, pw.new_comment_count FROM product_follow pw INNER JOIN product p ON pw.product_id = p.product_id WHERE p.product_deleted=0 AND pw.member_id=? ORDER BY pw.new_comment_count DESC LIMIT '.$lineCount, [$this->userId]);
             $more = (Database::getRow('SELECT count(*) as c FROM product_follow WHERE member_id=?', [$this->userId])['c']>$lineCount)?true:false;
             $arr = [];
             foreach($followingProduct as $fp) {
@@ -68,7 +68,7 @@ class FollowProduct extends Controller {
                     'productSlug'=>$fp['product_slug'],
                     'productName'=>$fp['product_name'],
                     'newComment'=>$fp['new_comment_count'],
-                    'startingPage'=>$this->getStartingPage($fp['product_id'], $fp['last_seen_date_time'])
+                    'startingPage'=>$this->getStartingPage($fp['product_comment_count'], $fp['new_comment_count'])
                 ];
             }
             $this->success([
@@ -78,20 +78,12 @@ class FollowProduct extends Controller {
             ]);
         }
     }
-    private function getStartingPage($productID, $lastSeen) {
-        //$numRow = Database::getRowWithErr(' SET @row_number = 0; SELECT num FROM (SELECT (@row_number:=@row_number + 1) AS num, comment_id, comment_text, member_id, comment_create_date_time FROM comment WHERE comment_deleted=0 AND product_id=? ORDER BY comment_create_date_time ASC) allcomments WHERE allcomments.comment_create_date_time > ? LIMIT 1', [$productID, $lastSeen]);
-        //return ($numRow)?$numRow['num']:15;
-        // böyle bir çözüm buldum ancak phpmyadmin'de çalışan sql kodları burada çalışmıyor. Performansı artırmaya yönelik ileride bu mantığın çalışan halini yapabilirsin
-
-        $numRows = Database::getRows('SELECT comment_id, comment_create_date_time FROM comment WHERE comment_deleted=0 AND product_id=? ORDER BY comment_create_date_time ASC;', [$productID]);
-        $num = 0;
-        foreach($numRows as $row) {
-            $num++;
-            if($row['comment_create_date_time'] < $lastSeen) {
-                break;
-            }
+    private function getStartingPage($commentCount, $newCommentCount) {
+        if($newCommentCount=="0") {
+            return 1;
         }
-        return intval($num/10) + 1;
+        $oldCommentCount = $commentCount - $newCommentCount;
+        return intval($oldCommentCount/10) + 1;
     }
     private function fetchAllCommentCount() {
         $this->allCommentCount = Database::getRow('SELECT sum(new_comment_count) as c FROM product_follow WHERE member_id=?', [$this->userId])['c'];
