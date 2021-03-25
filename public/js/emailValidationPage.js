@@ -22,7 +22,7 @@ var EmailValidationPage = function (_React$Component) {
             return React.createElement(
                 "div",
                 null,
-                React.createElement(EmailValidation, { newUser: true, changeContent: this.props.changeContent })
+                React.createElement(EmailValidation, { afterLogin: true, changeContent: this.props.changeContent, validated: false })
             );
         }
     }]);

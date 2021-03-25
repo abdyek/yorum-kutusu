@@ -44,7 +44,8 @@ class Login extends Controller {
             'userID'=>$this->member['member_id'],
             'username'=>$this->member['member_username'],
             'slug'=>$this->member['member_slug'],
-            'who'=>'member'
+            'who'=>'member',
+            'confirmedEmail'=>($this->member['member_confirmed_email']==='1')?true:false
         ]);
     }
 

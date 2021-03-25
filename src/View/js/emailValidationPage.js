@@ -3,7 +3,7 @@ class EmailValidationPage extends React.Component {
         document.title = "E-Posta Doğrula";
         return(
             <div>
-                <EmailValidation newUser={true} changeContent={this.props.changeContent} />
+                <EmailValidation afterLogin={true} changeContent={this.props.changeContent} validated={false}/>
             </div>
         )
     }

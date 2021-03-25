@@ -29,7 +29,8 @@ var Profile = function (_React$Component) {
             owner: false,
             email: "",
             comments: [],
-            commentRequests: []
+            commentRequests: [],
+            confirmedEmail: false
         };
         _this.load = _this.load.bind(_this);
         // setting elementary funcs
@@ -74,6 +75,7 @@ var Profile = function (_React$Component) {
                     slug: json.other.member.slug,
                     owner: json.other.member.owner,
                     email: json.other.member.email,
+                    confirmedEmail: json.other.member.confirmedEmail,
                     pageNumber: json.other.pageNumber,
                     pageCount: json.other.pageCount,
                     comments: normalizer('comment-in-profile', json['other']['comments']),
@@ -149,11 +151,11 @@ var Profile = function (_React$Component) {
                 return React.createElement(
                     "div",
                     null,
-                    React.createElement(EmailValidation, { validated: true }),
                     React.createElement(ProfileHeader, {
                         changeContent: this.props.changeContent,
                         memberUsername: this.state.username
                     }),
+                    React.createElement(EmailValidation, { validated: this.state.confirmedEmail }),
                     React.createElement(OwnerButtons, {
                         owner: this.state.owner,
                         settingButton: this.toggleSetting,

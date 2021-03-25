@@ -9,7 +9,7 @@ class ConfirmEmail extends Controller {
     protected function post() {
         // request of new code
         if($this->checkConfirmedBefore()) {
-            $this->success();
+            $this->setHttpStatus(422);
             exit();
         }
         $randStr = Other::generateRandomString(10);

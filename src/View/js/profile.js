@@ -16,7 +16,8 @@ class Profile extends React.Component {
             owner:false,
             email:"",
             comments:[],
-            commentRequests:[]
+            commentRequests:[],
+            confirmedEmail: false
         }
         this.load = this.load.bind(this);
         // setting elementary funcs
@@ -54,10 +55,11 @@ class Profile extends React.Component {
                 slug:json.other.member.slug,
                 owner:json.other.member.owner,
                 email:json.other.member.email,
+                confirmedEmail: json.other.member.confirmedEmail,
                 pageNumber:json.other.pageNumber,
                 pageCount:json.other.pageCount,
                 comments: normalizer('comment-in-profile', json['other']['comments']),
-                commentRequests: normalizer('comment-in-profile', json['other']['newCommentRequests'])
+                commentRequests: normalizer('comment-in-profile', json['other']['newCommentRequests']),
             });
         }).catch((error) => {
             if(error.message==404) {
@@ -114,11 +116,11 @@ class Profile extends React.Component {
         if(this.state.form=="normal") {
             return(
                 <div>
-                    <EmailValidation validated={true}/>
                     <ProfileHeader
                         changeContent={this.props.changeContent}
                         memberUsername={this.state.username}
                     />
+                    <EmailValidation validated={this.state.confirmedEmail}/>
                     <OwnerButtons
                         owner={this.state.owner}
                         settingButton={this.toggleSetting}

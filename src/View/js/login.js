@@ -43,7 +43,7 @@ class LogIn extends React.Component {
         }).then((json)=>{
             this.setState({
                 loading:false,
-                success:true
+                success:true,
             });
             let hash = base64FromObject({
                 'userID':json.userID,
@@ -53,9 +53,11 @@ class LogIn extends React.Component {
             });
             setCookie('user', hash);
             this.props.updateMenu(json.slug);
-            setTimeout(()=>{
+            if(json.confirmedEmail) {
                 this.props.changeContent(' ', true);
-            }, 2000);
+            } else {
+                this.props.changeContent('e-posta-dogrula', true);
+            }
         }).catch((error)=>{
             if(error.message==401) {
                 this.setState({

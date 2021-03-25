@@ -3,7 +3,7 @@ class EmailValidation extends React.Component {
         super(props);
         this.state = {
             // normal, loading, success
-            form:(this.props.validated)?"none":"normal",
+            form:(this.props.validated===false)?"normal":"none",
             topMessage: null,
             code:"",
         };
@@ -19,11 +19,65 @@ class EmailValidation extends React.Component {
         });
     }
     verify() {
-        console.log("doğrulama işlemleri");
-        this.showTopMessage("warning", "hata mesajları falan 2");
+        // put
+        this.setState({
+            form:"loading"
+        });
+        fetch(SITEURL + 'api/confirmEmail', {
+            method: 'PUT',
+            header: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                confirmCode:this.state.code
+            })
+        }).then((response)=>{
+            if(!response.ok) throw new Error(response.status);
+            else return response.json();
+        }).then((json)=>{
+            this.setState({
+                form:"success"
+            });
+        }).catch((error)=>{
+            this.setState({
+                form:"normal"
+            });
+            if(error.message==404) {
+                this.showTopMessage('warning', 'Yanlış doğrulama kodu');
+            } else if(error.message==401) {
+                this.showTopMessage('warning', 'Yeni bir doğrulama e-postası isteyin. Çok fazla hatalı giriş yaptınız!');
+            }
+            // hatalar
+        });
     }
     sendAgain() {
-        this.showTopMessage("warning", "hata mesajları falan");
+        // post
+        this.setState({
+            form:"loading"
+        });
+        fetch(SITEURL + 'api/confirmEmail', {
+            method: 'POST',
+            header: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+            })
+        }).then((response)=>{
+            if(!response.ok) throw new Error(response.status);
+            else return response.json();
+        }).then((json)=>{
+            this.showTopMessage('success', 'E-posta başarılı bir şekilde gönderildi');
+            this.setState({
+                form:"normal"
+            });
+        }).catch((error)=>{
+            this.setState({
+                form:"normal"
+            });
+            if(error.message==422) {
+                this.showTopMessage('success', 'Hali hazırda e-posta doğrulaması yapılmış');
+            }
+        });
     }
     showTopMessage(type, text) {
         this.setState({
@@ -35,29 +89,26 @@ class EmailValidation extends React.Component {
     }
     goHome(e) {
         e.preventDefault();
-        this.props.changeContent(" ");
+        this.props.changeContent(" ", true);
     }
     render() {
         if(this.state.form=="normal") {
             return(
-                <Row size="one">
-                    <Column>
-                        <Segment>
-                            {(this.props.newUser)?
-                                <div className="ui success message">
-                                    <div className="header">
-                                        Başarılı bir şekilde üye oldunuz!
-                                    </div>
-                                    <p>Lütfen e-posta kutunuzu kontrol ediniz. Size gönderdiğimiz mail'deki kodu aşağıdaki kutucuğa giriniz:</p>
+                <Row size="sixteen">
+                    <WideColumn size="four" />
+                    <WideColumn size="eight">
+                        <RaisedSegment otherClass="comment">
+                            <Row size="one">
+                                <Column>
+                                    <H type="3" text="E-posta Doğrula"/>
+                                </Column>
+                            </Row>
+                            <div className="ui negative message">
+                                <div className="header">
+                                    E-posta Adresiniz Doğrulanmadı
                                 </div>
-                            :
-                                <div className="ui negative message">
-                                    <div className="header">
-                                        E-Posta Doğrulama Başarısız
-                                    </div>
-                                    <p>Lütfen e-posta kutunuzu kontrol ediniz. Size gönderdiğimiz mail'deki kodu aşağıdaki kutucuğa giriniz:</p>
-                                </div>
-                            }
+                                <p>E-postanıza gönderdiğimiz doğrulama kodu ile e-postanızı doğrulayabilirsiniz</p>
+                            </div>
                             {(this.state.topMessage)?
                                 <Row size="one">
                                     <Column>
@@ -65,20 +116,17 @@ class EmailValidation extends React.Component {
                                     </Column>
                                 </Row>
                             :""}
-                            <Row size="three">
-                                <Column>
-                                </Column>
+                            <Row size="one">
                                 <Column>
                                     <form className="ui form attached fluid">
                                         <div className="field">
-                                        <label>Kod</label>
-                                        <input placeholder="Kod" type="text" value={this.state.code} onChange={this.changeCode} />
+                                        <label>Doğrulama Kodu</label>
+                                        <input placeholder="Doğrulama Kodu" type="text" value={this.state.code} onChange={this.changeCode} />
                                         </div>
                                     </form>
                                 </Column>
                             </Row>
-                            <Row size="three">
-                                <Column></Column>
+                            <Row size="one">
                                 <Column>
                                     <div>
                                         <button className="ui teal button" onClick={this.sendAgain}>
@@ -92,7 +140,7 @@ class EmailValidation extends React.Component {
                                     </div>
                                 </Column>
                             </Row>
-                            {(this.props.newUser)?
+                            {(this.props.afterLogin)?
                                 <Row size="one">
                                     <Column>
                                         <Center>
@@ -103,21 +151,24 @@ class EmailValidation extends React.Component {
                                     </Column>
                                 </Row>
                             :""}
-                        </Segment>
-                    </Column>
+                        </RaisedSegment>
+                    </WideColumn>
                 </Row>
             )
         } else if(this.state.form=="loading") {
             return(
-                <div>
-                    <RowLoadingSpin />
-                </div>
+                <Row size="sixteen">
+                    <WideColumn size="four"/>
+                    <WideColumn size="eight">
+                        <RowLoadingSpin />
+                    </WideColumn>
+                </Row>
             )
         } else if(this.state.form=="success") {
             return(
                 <Row size="one">
                     <Column>
-                        <BasicMessage type="success" text="E-posta doğrulama başarılı bir şekilde gerçekleşti." />
+                        <BasicMessage type="success" text="E-posta adresiniz başarılı bir şekilde doğrulandı." />
                     </Column>
                 </Row>
             )

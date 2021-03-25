@@ -16,7 +16,7 @@ var EmailValidation = function (_React$Component) {
 
         _this.state = {
             // normal, loading, success
-            form: _this.props.validated ? "none" : "normal",
+            form: _this.props.validated === false ? "normal" : "none",
             topMessage: null,
             code: ""
         };
@@ -38,13 +38,68 @@ var EmailValidation = function (_React$Component) {
     }, {
         key: "verify",
         value: function verify() {
-            console.log("doğrulama işlemleri");
-            this.showTopMessage("warning", "hata mesajları falan 2");
+            var _this2 = this;
+
+            // put
+            this.setState({
+                form: "loading"
+            });
+            fetch(SITEURL + 'api/confirmEmail', {
+                method: 'PUT',
+                header: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    confirmCode: this.state.code
+                })
+            }).then(function (response) {
+                if (!response.ok) throw new Error(response.status);else return response.json();
+            }).then(function (json) {
+                _this2.setState({
+                    form: "success"
+                });
+            }).catch(function (error) {
+                _this2.setState({
+                    form: "normal"
+                });
+                if (error.message == 404) {
+                    _this2.showTopMessage('warning', 'Yanlış doğrulama kodu');
+                } else if (error.message == 401) {
+                    _this2.showTopMessage('warning', 'Yeni bir doğrulama e-postası isteyin. Çok fazla hatalı giriş yaptınız!');
+                }
+                // hatalar
+            });
         }
     }, {
         key: "sendAgain",
         value: function sendAgain() {
-            this.showTopMessage("warning", "hata mesajları falan");
+            var _this3 = this;
+
+            // post
+            this.setState({
+                form: "loading"
+            });
+            fetch(SITEURL + 'api/confirmEmail', {
+                method: 'POST',
+                header: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({})
+            }).then(function (response) {
+                if (!response.ok) throw new Error(response.status);else return response.json();
+            }).then(function (json) {
+                _this3.showTopMessage('success', 'E-posta başarılı bir şekilde gönderildi');
+                _this3.setState({
+                    form: "normal"
+                });
+            }).catch(function (error) {
+                _this3.setState({
+                    form: "normal"
+                });
+                if (error.message == 422) {
+                    _this3.showTopMessage('success', 'Hali hazırda e-posta doğrulaması yapılmış');
+                }
+            });
         }
     }, {
         key: "showTopMessage",
@@ -60,7 +115,7 @@ var EmailValidation = function (_React$Component) {
         key: "goHome",
         value: function goHome(e) {
             e.preventDefault();
-            this.props.changeContent(" ");
+            this.props.changeContent(" ", true);
         }
     }, {
         key: "render",
@@ -68,38 +123,35 @@ var EmailValidation = function (_React$Component) {
             if (this.state.form == "normal") {
                 return React.createElement(
                     Row,
-                    { size: "one" },
+                    { size: "sixteen" },
+                    React.createElement(WideColumn, { size: "four" }),
                     React.createElement(
-                        Column,
-                        null,
+                        WideColumn,
+                        { size: "eight" },
                         React.createElement(
-                            Segment,
-                            null,
-                            this.props.newUser ? React.createElement(
-                                "div",
-                                { className: "ui success message" },
+                            RaisedSegment,
+                            { otherClass: "comment" },
+                            React.createElement(
+                                Row,
+                                { size: "one" },
                                 React.createElement(
-                                    "div",
-                                    { className: "header" },
-                                    "Ba\u015Far\u0131l\u0131 bir \u015Fekilde \xFCye oldunuz!"
-                                ),
-                                React.createElement(
-                                    "p",
+                                    Column,
                                     null,
-                                    "L\xFCtfen e-posta kutunuzu kontrol ediniz. Size g\xF6nderdi\u011Fimiz mail'deki kodu a\u015Fa\u011F\u0131daki kutucu\u011Fa giriniz:"
+                                    React.createElement(H, { type: "3", text: "E-posta Do\u011Frula" })
                                 )
-                            ) : React.createElement(
+                            ),
+                            React.createElement(
                                 "div",
                                 { className: "ui negative message" },
                                 React.createElement(
                                     "div",
                                     { className: "header" },
-                                    "E-Posta Do\u011Frulama Ba\u015Far\u0131s\u0131z"
+                                    "E-posta Adresiniz Do\u011Frulanmad\u0131"
                                 ),
                                 React.createElement(
                                     "p",
                                     null,
-                                    "L\xFCtfen e-posta kutunuzu kontrol ediniz. Size g\xF6nderdi\u011Fimiz mail'deki kodu a\u015Fa\u011F\u0131daki kutucu\u011Fa giriniz:"
+                                    "E-postan\u0131za g\xF6nderdi\u011Fimiz do\u011Frulama kodu ile e-postan\u0131z\u0131 do\u011Frulayabilirsiniz"
                                 )
                             ),
                             this.state.topMessage ? React.createElement(
@@ -113,8 +165,7 @@ var EmailValidation = function (_React$Component) {
                             ) : "",
                             React.createElement(
                                 Row,
-                                { size: "three" },
-                                React.createElement(Column, null),
+                                { size: "one" },
                                 React.createElement(
                                     Column,
                                     null,
@@ -127,17 +178,16 @@ var EmailValidation = function (_React$Component) {
                                             React.createElement(
                                                 "label",
                                                 null,
-                                                "Kod"
+                                                "Do\u011Frulama Kodu"
                                             ),
-                                            React.createElement("input", { placeholder: "Kod", type: "text", value: this.state.code, onChange: this.changeCode })
+                                            React.createElement("input", { placeholder: "Do\u011Frulama Kodu", type: "text", value: this.state.code, onChange: this.changeCode })
                                         )
                                     )
                                 )
                             ),
                             React.createElement(
                                 Row,
-                                { size: "three" },
-                                React.createElement(Column, null),
+                                { size: "one" },
                                 React.createElement(
                                     Column,
                                     null,
@@ -161,7 +211,7 @@ var EmailValidation = function (_React$Component) {
                                     )
                                 )
                             ),
-                            this.props.newUser ? React.createElement(
+                            this.props.afterLogin ? React.createElement(
                                 Row,
                                 { size: "one" },
                                 React.createElement(
@@ -183,9 +233,14 @@ var EmailValidation = function (_React$Component) {
                 );
             } else if (this.state.form == "loading") {
                 return React.createElement(
-                    "div",
-                    null,
-                    React.createElement(RowLoadingSpin, null)
+                    Row,
+                    { size: "sixteen" },
+                    React.createElement(WideColumn, { size: "four" }),
+                    React.createElement(
+                        WideColumn,
+                        { size: "eight" },
+                        React.createElement(RowLoadingSpin, null)
+                    )
                 );
             } else if (this.state.form == "success") {
                 return React.createElement(
@@ -194,7 +249,7 @@ var EmailValidation = function (_React$Component) {
                     React.createElement(
                         Column,
                         null,
-                        React.createElement(BasicMessage, { type: "success", text: "E-posta do\u011Frulama ba\u015Far\u0131l\u0131 bir \u015Fekilde ger\xE7ekle\u015Fti." })
+                        React.createElement(BasicMessage, { type: "success", text: "E-posta adresiniz ba\u015Far\u0131l\u0131 bir \u015Fekilde do\u011Fruland\u0131." })
                     )
                 );
             } else if (this.state.form == "none") {

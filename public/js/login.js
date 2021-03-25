@@ -75,9 +75,11 @@ var LogIn = function (_React$Component) {
                 });
                 setCookie('user', hash);
                 _this2.props.updateMenu(json.slug);
-                setTimeout(function () {
+                if (json.confirmedEmail) {
                     _this2.props.changeContent(' ', true);
-                }, 2000);
+                } else {
+                    _this2.props.changeContent('e-posta-dogrula', true);
+                }
             }).catch(function (error) {
                 if (error.message == 401) {
                     _this2.setState({

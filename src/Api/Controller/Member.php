@@ -26,11 +26,16 @@ class Member extends Controller {
         $this->ownerBool = ($this->who=='member' and $this->userId==$this->member['member_id'])?true:false;
     }
     private function prepareMemberInfo() {
+        $confirmedEmail = null;
+        if($this->ownerBool) {
+            $confirmedEmail = ($this->member['member_confirmed_email']==='1')?true:false;
+        }
         $this->memberInfo = [
             'username'=>$this->member['member_username'],
             'slug'=>$this->member['member_slug'],
             'owner'=>$this->ownerBool,
-            'email'=>($this->ownerBool)?$this->member['member_email']:null
+            'email'=>($this->ownerBool)?$this->member['member_email']:null,
+            'confirmedEmail'=>$confirmedEmail
         ];
     }
     private function prepareCommentsWithRating() {
