@@ -240,7 +240,7 @@ class Product extends Controller {
                 'owner'=>[
                     'id'=>$this->userId,
                     'username'=>$this->memberInfo['member_username'],
-                    'slug'=>$this->memberInfo['member_username'],
+                    'slug'=>$this->memberInfo['member_slug'],
                 ],
                 'rating'=>$ratingInfo
             ];

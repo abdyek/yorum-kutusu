@@ -78,6 +78,7 @@ var Profile = function (_React$Component) {
                     confirmedEmail: json.other.member.confirmedEmail,
                     pageNumber: json.other.pageNumber,
                     pageCount: json.other.pageCount,
+                    navigationForm: json.other.comments.length ? "normal" : "noComment",
                     comments: normalizer('comment-in-profile', json['other']['comments']),
                     commentRequests: normalizer('comment-in-profile', json['other']['newCommentRequests'])
                 });
