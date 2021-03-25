@@ -1,7 +1,5 @@
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -219,7 +217,7 @@ var Comment = function (_React$Component) {
             } else if (this.state.form == "report") {
                 return React.createElement(ReportArea, { handleCloseReportArea: this.closeReportArea, commentID: this.props.id });
             } else if (this.state.form == "edit") {
-                return React.createElement(EditArea, _defineProperty({ rating: this.props.rating, tags: this.props.tags, handleCancelButton: this.closeEditArea, commentText: this.props.text, owner: this.props.owner, reloadFunc: this.props.reloadFunc, setForm: this.setForm, productID: this.props.productID }, "setForm", this.setForm));
+                return React.createElement(EditArea, { rating: this.props.rating, tags: this.props.tags, handleCancelButton: this.closeEditArea, commentText: this.props.text, owner: this.props.owner, reloadFunc: this.props.reloadFunc, setForm: this.setForm, productID: this.props.productID });
             } else if (this.state.form == "delete") {
                 return React.createElement(DeleteArea, { handleCancelButton: this.closeDeleteArea, runBeforeDelete: this.openLoadingSpin, runAfterDelete: this.makeNone, reloadFunc: this.props.reloadFunc, id: this.props.productID });
             } else if (this.state.form == "message") {
@@ -755,7 +753,7 @@ var ReportArea = function (_React$Component7) {
                             null,
                             React.createElement(
                                 RaisedSegment,
-                                null,
+                                { otherClass: "comment" },
                                 React.createElement(
                                     Row,
                                     { size: "two", nonStackable: true },
@@ -791,7 +789,7 @@ var ReportArea = function (_React$Component7) {
                                             React.createElement(
                                                 "p",
                                                 null,
-                                                "\xC7ok fazla yanl\u0131\u015F geri bildirim yapman\u0131z halinde, ileride yapaca\u011F\u0131n\u0131z geri bildirimler dikkate al\u0131nmayabilir."
+                                                "Yan\u0131lt\u0131c\u0131 geri bildirimler g\xFCvenilirlili\u011Finizi azalt\u0131r"
                                             )
                                         )
                                     )
@@ -845,7 +843,7 @@ var ReportArea = function (_React$Component7) {
                                                 React.createElement(
                                                     "label",
                                                     { "for": "hiddenCommentCheckbox" },
-                                                    "Ayr\u0131ca bu yorumu gizle"
+                                                    "Ayr\u0131ca bu yorumu benden gizle"
                                                 )
                                             )
                                         )
@@ -1144,6 +1142,7 @@ var EditArea = function (_React$Component11) {
         var _this16 = _possibleConstructorReturn(this, (EditArea.__proto__ || Object.getPrototypeOf(EditArea)).call(this, props));
 
         _this16.state = {
+            loading: false,
             commentText: _this16.props.commentText,
             rating: _this16.props.rating,
             tags: _this16.mergeTagAndRating(),
@@ -1208,6 +1207,7 @@ var EditArea = function (_React$Component11) {
         value: function sendComment() {
             var _this17 = this;
 
+            this.setState({ loading: true });
             if (this.props.newComment) {
                 // new comment
                 fetch(SITEURL + 'api/comment', {
@@ -1280,6 +1280,9 @@ var EditArea = function (_React$Component11) {
     }, {
         key: "render",
         value: function render() {
+            if (this.state.loading) {
+                return React.createElement(RowLoadingSpin, null);
+            }
             this.title = this.props.newComment ? "Yorum Yaz" : "Düzenle";
             this.buttonName = this.props.newComment ? "Gönder" : "Düzenle";
             return React.createElement(

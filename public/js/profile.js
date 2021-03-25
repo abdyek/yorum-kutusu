@@ -676,7 +676,7 @@ var CommentRequest = function (_React$Component9) {
     _createClass(CommentRequest, [{
         key: "render",
         value: function render() {
-            if (this.props.owner) {
+            if (this.props.owner && this.props.comments.length) {
                 this.requests = [];
                 for (var i = 0; i < this.props.comments.length; i++) {
                     var com = this.props.comments[i];

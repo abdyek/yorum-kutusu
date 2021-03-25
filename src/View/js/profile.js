@@ -438,7 +438,7 @@ class ProfileComments extends React.Component {
 
 class CommentRequest extends React.Component {
     render() {
-        if(this.props.owner) {
+        if(this.props.owner && this.props.comments.length) {
             this.requests = [];
             for(let i=0;i<this.props.comments.length;i++) {
                 let com = this.props.comments[i];

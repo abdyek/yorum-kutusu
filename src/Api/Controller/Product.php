@@ -172,6 +172,7 @@ class Product extends Controller {
         }
         $this->memberInfo = Database::getRow('SELECT member_username, member_slug, member_restricted FROM member WHERE member_id=?', [$this->userId]);
         if($this->memberInfo['member_restricted']==='0') {
+            $this->ownCommentPublished = true;
             return $this->fetchOwnComment();
         } else {
             return $this->fetchOwnCommentRequest();

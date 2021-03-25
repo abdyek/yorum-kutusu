@@ -175,7 +175,7 @@ class Comment extends React.Component {
             )
         } else if(this.state.form=="edit") {
             return(
-                <EditArea rating={this.props.rating} tags={this.props.tags} handleCancelButton={this.closeEditArea} commentText={this.props.text} owner={this.props.owner} reloadFunc={this.props.reloadFunc} setForm={this.setForm} productID={this.props.productID} setForm={this.setForm}/>
+                <EditArea rating={this.props.rating} tags={this.props.tags} handleCancelButton={this.closeEditArea} commentText={this.props.text} owner={this.props.owner} reloadFunc={this.props.reloadFunc} setForm={this.setForm} productID={this.props.productID} />
             )
         } else if(this.state.form=="delete") {
             return(
@@ -528,7 +528,7 @@ class ReportArea extends React.Component {
                 <div>
                     <Row size="one">
                         <Column>
-                            <RaisedSegment>
+                            <RaisedSegment otherClass="comment">
                                 <Row size="two" nonStackable={true}>
                                     <Column>
                                         <H type="3" text="Geri Bildirim" />
@@ -546,7 +546,7 @@ class ReportArea extends React.Component {
                                                 Bu yorum hakkında geri bildirimde bulunuyorsunuz.
                                             </div>
                                             <p>
-                                                Çok fazla yanlış geri bildirim yapmanız halinde, ileride yapacağınız geri bildirimler dikkate alınmayabilir.
+                                                Yanıltıcı geri bildirimler güvenilirliliğinizi azaltır
                                             </p>
                                         </div>
                                     </Column>
@@ -577,7 +577,7 @@ class ReportArea extends React.Component {
                                         <div className="field">
                                             <div className="ui checkbox">
                                                 <input type="checkbox" id="hiddenCommentCheckbox" checked={this.state.hideComment} onChange={this.toggleHideComment}/>
-                                                <label for="hiddenCommentCheckbox">Ayrıca bu yorumu gizle</label>
+                                                <label for="hiddenCommentCheckbox">Ayrıca bu yorumu benden gizle</label>
                                             </div>
                                         </div>
                                     </Column>
@@ -730,6 +730,7 @@ class EditArea extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            loading:false,
             commentText:this.props.commentText,
             rating:this.props.rating,
             tags:this.mergeTagAndRating(),
@@ -782,6 +783,7 @@ class EditArea extends React.Component {
         });
     }
     sendComment() {
+        this.setState({loading:true});
         if(this.props.newComment) {
             // new comment
             fetch(SITEURL + 'api/comment', {
@@ -852,6 +854,11 @@ class EditArea extends React.Component {
         });
     }
     render() {
+        if(this.state.loading) {
+            return (
+                <RowLoadingSpin />
+            )
+        }
         this.title = (this.props.newComment)?"Yorum Yaz":"Düzenle";
         this.buttonName = (this.props.newComment)?"Gönder":"Düzenle";
         return(
