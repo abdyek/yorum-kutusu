@@ -5,7 +5,7 @@ class EmailValidation extends React.Component {
             // normal, loading, success
             form:(this.props.validated===false)?"normal":"none",
             topMessage: null,
-            code:"",
+            code:this.props.code || "",
         };
         this.changeCode = this.changeCode.bind(this);
         this.verify = this.verify.bind(this);
@@ -166,10 +166,11 @@ class EmailValidation extends React.Component {
             )
         } else if(this.state.form=="success") {
             return(
-                <Row size="one">
-                    <Column>
+                <Row size="sixteen">
+                    <WideColumn size="four"/>
+                    <WideColumn size="eight">
                         <BasicMessage type="success" text="E-posta adresiniz başarılı bir şekilde doğrulandı." />
-                    </Column>
+                    </WideColumn>
                 </Row>
             )
         } else if(this.state.form=="none"){

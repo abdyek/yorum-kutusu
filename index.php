@@ -35,7 +35,7 @@ $router->get('/giris-yap', function() {
     Tool::generatePage('giris-yap');
 });
 
-$router->get('/e-posta-dogrula', function() {
+$router->get('/e-posta-dogrula/:any?', function() {
     Tool::generatePage('e-posta-dogrula');
 });
 

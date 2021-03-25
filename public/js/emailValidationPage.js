@@ -19,10 +19,12 @@ var EmailValidationPage = function (_React$Component) {
         key: "render",
         value: function render() {
             document.title = "E-Posta Doğrula";
+            var pathNames = getPathNames();
+            this.code = pathNames[1] ? pathNames[1] : "";
             return React.createElement(
                 "div",
                 null,
-                React.createElement(EmailValidation, { afterLogin: true, changeContent: this.props.changeContent, validated: false })
+                React.createElement(EmailValidation, { afterLogin: true, changeContent: this.props.changeContent, validated: false, code: this.code })
             );
         }
     }]);

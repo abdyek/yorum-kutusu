@@ -17,6 +17,7 @@ class ConfirmEmail extends Controller {
         Database::executeWithErr('INSERT INTO confirm_email (member_id, confirm_code) VALUES(?,?)', [$this->userId, $randStr]);
         Other::sendMail();
         // ^ code and front-end link is here
+        // link example is localhost/yorum-kutusu/e-posta-dogrula/IAbsAQl4IP
         $this->success();
     }
     private function checkConfirmedBefore() {

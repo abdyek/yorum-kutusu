@@ -18,7 +18,7 @@ var EmailValidation = function (_React$Component) {
             // normal, loading, success
             form: _this.props.validated === false ? "normal" : "none",
             topMessage: null,
-            code: ""
+            code: _this.props.code || ""
         };
         _this.changeCode = _this.changeCode.bind(_this);
         _this.verify = _this.verify.bind(_this);
@@ -245,10 +245,11 @@ var EmailValidation = function (_React$Component) {
             } else if (this.state.form == "success") {
                 return React.createElement(
                     Row,
-                    { size: "one" },
+                    { size: "sixteen" },
+                    React.createElement(WideColumn, { size: "four" }),
                     React.createElement(
-                        Column,
-                        null,
+                        WideColumn,
+                        { size: "eight" },
                         React.createElement(BasicMessage, { type: "success", text: "E-posta adresiniz ba\u015Far\u0131l\u0131 bir \u015Fekilde do\u011Fruland\u0131." })
                     )
                 );
