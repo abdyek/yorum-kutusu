@@ -9,6 +9,7 @@ class Signup extends Controller {
     protected function post() {
         $this->formatToUsername();
         if(!Other::checkUsername($this->data['username'])) {
+            $this->setHttpStatus(422);
             $this->responseWithMessage(4);
             exit();
         }

@@ -54,6 +54,13 @@ var Signup = function (_React$Component) {
             var _this2 = this;
 
             e.preventDefault();
+            this.checkEmailValidation(this.state.emailText);
+            this.checkUsernamePattern(this.state.usernameText);
+            this.checkPasswordPattern(this.state.passwordText);
+            this.checkPasswordVerification();
+            if (this.state.emailPatternWarn || this.state.usernamePatternWarn || this.state.passwordPatternWarn || this.state.passwordVerificationWarn) {
+                return;
+            }
             this.setForm('loading');
             fetch(SITEURL + 'api/signup', {
                 method: 'POST',
@@ -85,7 +92,14 @@ var Signup = function (_React$Component) {
                 } else if (error.message == 500) {
                     _this2.setState({
                         form: "normal",
-                        message: "500 - Sunucu hatası"
+                        message: "500 - Sunucu hatası",
+                        messageColor: "red"
+                    });
+                } else if (error.message == 400) {
+                    _this2.setState({
+                        form: "normal",
+                        message: "400 - Geçersiz istek",
+                        messageColor: "red"
                     });
                 }
             });
@@ -143,11 +157,22 @@ var Signup = function (_React$Component) {
         key: "checkUsernamePattern",
         value: function checkUsernamePattern(value) {
             var len = value.length;
+            var letter = "qwertyuıopğüasdfghjklşizxcvbnmöç";
+            var number = "1234567890";
+            var space = " ";
+            var allChars = letter + letter.toUpperCase() + number + space;
             var enabled = void 0;
-            if (len > 60) {
+            if (len > 60 || len < 1) {
                 enabled = true;
             } else {
                 enabled = false;
+            }
+            // I will change it with regex
+            for (var i = 0; i < len; i++) {
+                if (allChars.indexOf(value[i]) === -1) {
+                    enabled = true;
+                    break;
+                }
             }
             this.setState({
                 usernamePatternWarn: enabled
@@ -231,7 +256,31 @@ var Signup = function (_React$Component) {
                                     ),
                                     React.createElement("input", { type: "text", name: "id", placeholder: "kullan\u0131c\u0131 ad\u0131", value: this.state.usernameText, onChange: this.changeUsername })
                                 ),
-                                this.state.usernamePatternWarn ? React.createElement(BasicMessageWithColor, { color: "yellow", message: "Geçersiz Kullanıcı Adı" }) : "",
+                                this.state.usernamePatternWarn ?
+                                //<BasicMessageWithColor color={"yellow"} message={"Geçersiz Kullanıcı Adı"}/>:""
+                                React.createElement(
+                                    "div",
+                                    { className: "ui yellow message" },
+                                    React.createElement(
+                                        "div",
+                                        { className: "header" },
+                                        "Ge\xE7ersiz kullan\u0131c\u0131 ad\u0131"
+                                    ),
+                                    React.createElement(
+                                        "ul",
+                                        { className: "list" },
+                                        React.createElement(
+                                            "li",
+                                            null,
+                                            "Kullan\u0131c\u0131 ad\u0131 uzunlu\u011Fu [1-60] karakter olmal\u0131"
+                                        ),
+                                        React.createElement(
+                                            "li",
+                                            null,
+                                            "Kullan\u0131c\u0131 ad\u0131 sadece b\xFCy\xFCk-k\xFC\xE7\xFCk harflerden, bo\u015Fluktan ve rakamlardan olu\u015Fmal\u0131"
+                                        )
+                                    )
+                                ) : "",
                                 React.createElement(
                                     "div",
                                     { className: "field signupInput" },
@@ -242,7 +291,7 @@ var Signup = function (_React$Component) {
                                     ),
                                     React.createElement("input", { type: "password", name: "password", placeholder: "parola", value: this.state.passwordText, onChange: this.changePassword })
                                 ),
-                                this.state.passwordPatternWarn ? React.createElement(BasicMessageWithColor, { color: "yellow", message: "Geçersiz Parola" }) : "",
+                                this.state.passwordPatternWarn ? React.createElement(BasicMessageWithColor, { color: "yellow", message: "Parola uzunluğu [10-40] karakter olmalı" }) : "",
                                 React.createElement(
                                     "div",
                                     { className: "field signupInput" },

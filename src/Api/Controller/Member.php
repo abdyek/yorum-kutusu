@@ -84,8 +84,8 @@ class Member extends Controller {
             ];
         }
         if($this->ownerBool AND $this->member['member_restricted']==='1') {
-            //$request = Database::getRows('SELECT * FROM comment_request WHERE member_id=? AND cancelled=0 AND comment_request_answered=0', [$this->userId]);
-            $request = Database::getRows('SELECT cr.member_id, cr.product_id, cr.comment_id, cr.comment_text, cr.comment_request_date_time, p.product_name, p.product_slug FROM comment_request cr INNER JOIN product p ON p.product_id=cr.product_id WHERE cr.member_id=1 AND cancelled=0 AND comment_request_answered=0', [$this->userId]);
+            $request = Database::getRows('SELECT cr.member_id, cr.product_id, cr.comment_id, cr.comment_text, cr.comment_request_date_time, p.product_name, p.product_slug FROM comment_request cr INNER JOIN product p ON p.product_id=cr.product_id WHERE cr.member_id=? AND cancelled=0 AND comment_request_answered=0', [$this->userId]);
+            // ^ bu ürün isteklerine eklenen yorumları göstermeyecektir (ki zaten onu şimdilik kullanmıyoruz)
             $commentIDs = array_keys($this->commentsInfo);
             $this->commentRequests = [];
             foreach($request as $com) {

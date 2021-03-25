@@ -33,6 +33,13 @@ class Signup extends React.Component {
     }
     signUpClick(e) {
         e.preventDefault();
+        this.checkEmailValidation(this.state.emailText);
+        this.checkUsernamePattern(this.state.usernameText);
+        this.checkPasswordPattern(this.state.passwordText);
+        this.checkPasswordVerification();
+        if(this.state.emailPatternWarn || this.state.usernamePatternWarn || this.state.passwordPatternWarn || this.state.passwordVerificationWarn) {
+            return;
+        }
         this.setForm('loading');
         fetch(SITEURL + 'api/signup', {
             method: 'POST',
@@ -65,8 +72,15 @@ class Signup extends React.Component {
             } else if(error.message==500) {
                 this.setState({
                     form:"normal",
-                    message: "500 - Sunucu hatası"
-                })
+                    message: "500 - Sunucu hatası",
+                    messageColor:"red"
+                });
+            } else if(error.message==400) {
+                this.setState({
+                    form:"normal",
+                    message: "400 - Geçersiz istek",
+                    messageColor:"red"
+                });
             }
         });
     }
@@ -109,11 +123,22 @@ class Signup extends React.Component {
     }
     checkUsernamePattern(value) {
         const len = value.length;
+        const letter = "qwertyuıopğüasdfghjklşizxcvbnmöç";
+        const number = "1234567890";
+        const space = " ";
+        const allChars = letter + letter.toUpperCase() + number + space;
         let enabled;
-        if(len>60) {
+        if(len>60 || len<1) {
             enabled = true;
         } else {
             enabled = false;
+        }
+        // I will change it with regex
+        for(let i=0;i<len;i++) {
+            if(allChars.indexOf(value[i])===-1) {
+                enabled = true;
+                break;
+            }
         }
         this.setState({
             usernamePatternWarn:enabled
@@ -171,14 +196,24 @@ class Signup extends React.Component {
                                     <input type="text" name="id" placeholder="kullanıcı adı"value={this.state.usernameText} onChange={this.changeUsername} />
                                 </div>
                                 {(this.state.usernamePatternWarn)?
-                                    <BasicMessageWithColor color={"yellow"} message={"Geçersiz Kullanıcı Adı"}/>:""
+                                    //<BasicMessageWithColor color={"yellow"} message={"Geçersiz Kullanıcı Adı"}/>:""
+                                    <div className="ui yellow message">
+                                        <div className="header">
+                                            Geçersiz kullanıcı adı
+                                        </div>
+                                        <ul className="list">
+                                            <li>Kullanıcı adı uzunluğu [1-60] karakter olmalı</li>
+                                            <li>Kullanıcı adı sadece büyük-küçük harflerden, boşluktan ve rakamlardan oluşmalı</li>
+                                        </ul>
+                                    </div>
+                                    :""
                                 }
                                 <div className="field signupInput">
                                     <label>Parola</label>
                                     <input type="password" name="password" placeholder="parola" value={this.state.passwordText} onChange={this.changePassword}/>
                                 </div>
                                 {(this.state.passwordPatternWarn)?
-                                    <BasicMessageWithColor color={"yellow"} message={"Geçersiz Parola"}/>:""
+                                    <BasicMessageWithColor color={"yellow"} message={"Parola uzunluğu [10-40] karakter olmalı"}/>:""
                                 }
                                 <div className="field signupInput">
                                     <label>Parola Tekrar</label>
