@@ -110,7 +110,7 @@ var Product = function (_React$Component) {
                 console.log(error);
                 if (error.message == 404) {
                     _this2.setState({ form: "notFound" });
-                } else {}
+                }
             });
         }
     }, {

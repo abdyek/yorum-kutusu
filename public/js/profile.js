@@ -317,14 +317,18 @@ var FollowedProductsArea = function (_React$Component2) {
                             React.createElement(
                                 Column,
                                 null,
-                                React.createElement(FollowedProductsTable, {
-                                    changeContent: this.props.changeContent,
-                                    info: this.state.followProduct
-                                }),
-                                React.createElement(FollowedProductsLoadMore, {
-                                    hidden: this.state.loadMoreHidden,
-                                    load: this.load
-                                })
+                                this.state.followProduct.length ? React.createElement(
+                                    "div",
+                                    null,
+                                    React.createElement(FollowedProductsTable, {
+                                        changeContent: this.props.changeContent,
+                                        info: this.state.followProduct
+                                    }),
+                                    React.createElement(FollowedProductsLoadMore, {
+                                        hidden: this.state.loadMoreHidden,
+                                        load: this.load
+                                    })
+                                ) : React.createElement(BasicMessageWithColor, { color: "yellow", message: "Takip edilen hi\xE7bir \xFCr\xFCn yok" })
                             )
                         )
                     );

@@ -17,35 +17,35 @@ var TagPicker = function (_React$Component) {
 
         _this.items;
         _this.state = {
-            tags: {
-                3: {
-                    passive: false,
-                    text: "Batarya",
-                    color: "yellow",
-                    rateValue: "-",
-                    slug: "batarya"
-                },
-                4: {
-                    passive: false,
-                    text: "Kamera",
-                    color: "orange",
-                    rateValue: "-",
-                    slug: "kamera"
-                },
-                5: {
-                    passive: false,
-                    text: "Tasarım",
-                    color: "",
-                    rateValue: "-",
-                    slug: "tasarim"
-                },
-                99: {
-                    passive: true,
-                    text: "Pasif Etiket",
-                    color: "",
-                    rateValue: "-",
-                    slug: "pasif-etiket"
-                }
+            tags: {/*
+                   3:{
+                     passive:false,
+                     text:"Batarya",
+                     color:"yellow",
+                     rateValue: "-",
+                     slug:"batarya"
+                   },
+                   4:{
+                     passive:false,
+                     text:"Kamera",
+                     color:"orange",
+                     rateValue: "-",
+                     slug:"kamera"
+                   },
+                   5:{
+                     passive:false,
+                     text:"Tasarım",
+                     color:"",
+                     rateValue: "-",
+                     slug:"tasarim"
+                   },
+                   99:{
+                     passive:true,
+                     text:"Pasif Etiket",
+                     color:"",
+                     rateValue: "-",
+                     slug:"pasif-etiket"
+                   }*/
             },
             selectedTags: _this.props.selectedTags,
             searchInput: "",
@@ -225,11 +225,11 @@ var Tag = function (_React$Component2) {
         key: "handleOnClick",
         value: function handleOnClick(e) {
             e.preventDefault();
-            if (this.props.noParameter) {
+            /* if(this.props.noParameter) {
                 this.props.handleOnClick(e);
             } else {
-                this.props.handleOnClick(e.target.href, e);
-            }
+                this.props.handleOnClick(e.target.href,e);
+            } */
         }
     }, {
         key: "render",

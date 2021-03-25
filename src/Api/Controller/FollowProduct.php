@@ -87,5 +87,6 @@ class FollowProduct extends Controller {
     }
     private function fetchAllCommentCount() {
         $this->allCommentCount = Database::getRow('SELECT sum(new_comment_count) as c FROM product_follow WHERE member_id=?', [$this->userId])['c'];
+        $this->allCommentCount = ($this->allCommentCount)?$this->allCommentCount:0;
     }
 }

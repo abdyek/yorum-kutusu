@@ -4,7 +4,7 @@ class TagPicker extends React.Component {
         super(props);
         this.items;
         this.state = {
-            tags:{
+            tags:{/*
                 3:{
                     passive:false,
                     text:"Batarya",
@@ -32,7 +32,7 @@ class TagPicker extends React.Component {
                     color:"",
                     rateValue: "-",
                     slug:"pasif-etiket"
-                }
+                }*/
             },
             selectedTags: this.props.selectedTags,
             searchInput: "",
@@ -157,11 +157,11 @@ class Tag extends React.Component {
     }
     handleOnClick(e) {
         e.preventDefault();
-        if(this.props.noParameter) {
+        /* if(this.props.noParameter) {
             this.props.handleOnClick(e);
         } else {
             this.props.handleOnClick(e.target.href,e);
-        }
+        } */
     }
     render() {
         if(this.props.passive) {

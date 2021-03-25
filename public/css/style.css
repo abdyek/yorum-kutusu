@@ -278,3 +278,7 @@ label {
 .unread-comment {
     font-size:2rem !important;
 }
+
+.tags a {
+    cursor:default !important;
+}

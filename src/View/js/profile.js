@@ -239,6 +239,8 @@ class FollowedProductsArea extends React.Component {
                         </Row>
                         <Row>
                             <Column>
+                    {(this.state.followProduct.length)?
+                        <div>
                                  <FollowedProductsTable
                                     changeContent={this.props.changeContent}
                                     info={this.state.followProduct}
@@ -247,6 +249,9 @@ class FollowedProductsArea extends React.Component {
                                     hidden={this.state.loadMoreHidden}
                                     load={this.load}
                                 />
+                        </div>:<BasicMessageWithColor color="yellow" message="Takip edilen hiçbir ürün yok"/>
+
+                    }
                             </Column>
                         </Row>
                     </div>

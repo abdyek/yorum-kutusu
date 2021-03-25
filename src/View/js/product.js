@@ -86,8 +86,6 @@ class Product extends React.Component {
             console.log(error);
             if(error.message==404) {
                 this.setState({form:"notFound"});
-            } else {
-
             }
         });
     }
