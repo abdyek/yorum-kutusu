@@ -113,7 +113,7 @@ class Comment extends Controller {
     private function commitRating($forPut=false) {
         $tags = isset($this->data['rating'])?$this->data['rating']:[];
         foreach($tags as $key=>$val) {
-            $twpID = Database::getRow('SELECT tag_with_product_id FROM tag_with_product twp INNER JOIN tag t ON t.tag_id=twp.tag_id WHERE t.tag_name=? AND twp.product_id=?', [$key, $this->data['productID']])['tag_with_product_id'];
+            $twpID = Database::getRow('SELECT tag_with_product_id FROM tag_with_product twp INNER JOIN tag t ON t.tag_id=twp.tag_id WHERE t.tag_slug=? AND twp.product_id=?', [$key, $this->data['productID']])['tag_with_product_id'];
             $check = Database::existCheck('SELECT tag_rating_value FROM tag_rating WHERE tag_with_product_id=? AND member_id=?', [$twpID,$this->userId]);
             if($check and $check['tag_rating_value']==$val) {
                 continue;

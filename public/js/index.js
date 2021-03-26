@@ -9,34 +9,17 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var Index = function (_React$Component) {
     _inherits(Index, _React$Component);
 
-    function Index(props) {
+    function Index() {
         _classCallCheck(this, Index);
 
-        var _this = _possibleConstructorReturn(this, (Index.__proto__ || Object.getPrototypeOf(Index)).call(this, props));
-
-        _this.changeContent = _this.changeContent.bind(_this);
-        return _this;
+        return _possibleConstructorReturn(this, (Index.__proto__ || Object.getPrototypeOf(Index)).apply(this, arguments));
     }
 
     _createClass(Index, [{
-        key: "changeContent",
-        value: function changeContent(e) {
-            e.preventDefault();
-            this.props.changeContent(e.target.href);
-        }
-    }, {
         key: "render",
         value: function render() {
-            return React.createElement(
-                "div",
-                null,
-                React.createElement(
-                    "a",
-                    { href: "giris-yap", onClick: this.changeContent },
-                    "Giri\u015F Yap"
-                ),
-                React.createElement(H, { type: "1", text: "buras\u0131 ana sayfa" })
-            );
+            this.props.changeContent(SITEURL + 'urun/yorumkutusu');
+            return "";
         }
     }]);
 
