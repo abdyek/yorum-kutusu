@@ -429,7 +429,7 @@ var TopOfComment = function (_React$Component3) {
                     React.createElement(
                         Column,
                         null,
-                        React.createElement(Message, { header: "Yorum Henüz Görünür Değil", type: "teal", message: "Y\xF6netici onay\u0131ndan sonra g\xF6r\xFCn\xFCr olacak" })
+                        React.createElement(Message, { header: "Yorum/Düzenleme Henüz Görünür Değil", type: "teal", message: "Y\xF6netici onay\u0131ndan sonra g\xF6r\xFCn\xFCr olacak" })
                     )
                 ) : "",
                 React.createElement(
@@ -542,7 +542,11 @@ var LikeButton = function (_React$Component5) {
     _createClass(LikeButton, [{
         key: "render",
         value: function render() {
-            this.disabled = this.props.likeButtonDisabled ? " disabled" : "";
+            if (this.props.id === null) {
+                this.disabled = " disabled";
+            } else {
+                this.disabled = this.props.likeButtonDisabled ? " disabled" : "";
+            }
             this.buttonClass = this.props.liked ? "ui blue button" : "ui button";
             return React.createElement(
                 "button",
@@ -1596,7 +1600,7 @@ var BottomComment = function (_React$Component13) {
                                     tags: normalizer('comment-rating', this.props.ownComment.rating),
                                     owner: true,
                                     changeContent: this.props.changeContent,
-                                    id: this.props.ownComment.id
+                                    id: this.props.ownComment.commentID
                                 })
                             )
                         )

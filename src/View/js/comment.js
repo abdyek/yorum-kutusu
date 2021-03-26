@@ -306,7 +306,7 @@ class TopOfComment extends React.Component{
                 {(this.bottomComment && this.props.ownCommentPublished==false)?
                     <Row size="one">
                         <Column>
-                            <Message header={"Yorum Henüz Görünür Değil"} type="teal" message="Yönetici onayından sonra görünür olacak"/>
+                            <Message header={"Yorum/Düzenleme Henüz Görünür Değil"} type="teal" message="Yönetici onayından sonra görünür olacak"/>
                         </Column>
                     </Row>:""
                 }
@@ -366,7 +366,11 @@ class LikeButton extends React.Component {
         super(props);
     }
     render() {
-        this.disabled = (this.props.likeButtonDisabled)?" disabled":"";
+        if(this.props.id===null) {
+            this.disabled = " disabled";
+        } else {
+            this.disabled = (this.props.likeButtonDisabled)?" disabled":"";
+        }
         this.buttonClass = (this.props.liked)? "ui blue button": "ui button";
         return(
             <button className={this.buttonClass + this.disabled} onClick={this.props.likeToggle}>
@@ -1075,7 +1079,7 @@ class BottomComment extends React.Component {
                                     tags={normalizer('comment-rating', this.props.ownComment.rating)}
                                     owner={true}
                                     changeContent={this.props.changeContent}
-                                    id={this.props.ownComment.id}
+                                    id={this.props.ownComment.commentID}
                                 />
                             </RaisedSegment>
                         </Column>

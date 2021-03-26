@@ -171,6 +171,7 @@ class Product extends Controller {
             return null;
         }
         $this->memberInfo = Database::getRow('SELECT member_username, member_slug, member_restricted FROM member WHERE member_id=?', [$this->userId]);
+        $this->com = Database::existCheck('SELECT * FROM comment WHERE member_id=? AND product_id=? AND comment_deleted=0', [$this->userId, $this->productInfo['id']]);
         if($this->memberInfo['member_restricted']==='0') {
             $this->ownCommentPublished = true;
             return $this->fetchOwnComment();
@@ -180,10 +181,10 @@ class Product extends Controller {
         return null;
     }
     private function fetchOwnComment() {
-        $com = Database::existCheck('SELECT * FROM comment WHERE member_id=? AND product_id=? AND comment_deleted=0', [$this->userId, $this->productInfo['id']]);
-        if(!$com){
+        $com = $this->com;
+        if($com) {
             return null;
-        }
+        } 
         $liked = (Database::getRow('SELECT * FROM comment_like WHERE member_id=? and comment_id=?', [$this->userId, $com['comment_id']]))?true:false;
         $rating = Database::getRows('SELECT t.tag_slug, t.tag_name, tr.tag_rating_value FROM tag_rating tr INNER JOIN tag_with_product twp ON twp.tag_with_product_id=tr.tag_with_product_id INNER JOIN tag t ON t.tag_id=twp.tag_id WHERE tr.member_id=? AND twp.product_id=?', [$this->userId, $this->productInfo['id']]);
         $ratingInfo = [];
@@ -228,7 +229,7 @@ class Product extends Controller {
                 ];
             }
             return [
-                'commentID'=>$comment['comment_id'],
+                'commentID'=>($this->com)?$this->com['comment_id']:null,
                 'commentText'=>$comment['comment_text'],
                 'commentCreateDateTime'=>($comment['comment_id']===null)?$comment['comment_request_date_time']:$publishedComment['comment_create_date_time'],
                 'commentEdited'=>($comment['comment_id']===null)?false:true,
