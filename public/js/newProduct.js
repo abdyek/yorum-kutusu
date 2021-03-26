@@ -27,7 +27,6 @@ var NewProduct = function (_React$Component) {
     }, {
         key: "render",
         value: function render() {
-            document.title = "Yeni Ürün Oluştur";
             return React.createElement(
                 "div",
                 null,

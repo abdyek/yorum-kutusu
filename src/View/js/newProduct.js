@@ -5,7 +5,6 @@ class NewProduct extends React.Component {
         }
     }
     render() {
-	document.title = "Yeni Ürün Oluştur";
         return (
             <div>
                 <Row size="one">

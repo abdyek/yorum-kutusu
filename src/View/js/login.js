@@ -92,7 +92,6 @@ class LogIn extends React.Component {
         })
     }
     render() {
-        document.title = "Giriş Yap";
         if(this.state.success) {
             return (
                 <div>

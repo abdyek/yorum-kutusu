@@ -219,7 +219,6 @@ var Signup = function (_React$Component) {
     }, {
         key: "render",
         value: function render() {
-            document.title = "Üye Ol";
             if (this.state.form == "normal") {
                 return React.createElement(
                     "div",

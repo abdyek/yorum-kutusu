@@ -27,7 +27,6 @@ var Index = function (_React$Component) {
     }, {
         key: "render",
         value: function render() {
-            document.title = "Ana Sayfa";
             return React.createElement(
                 "div",
                 null,

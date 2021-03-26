@@ -377,8 +377,71 @@ class Footer extends React.Component {
 }
 
 class Content extends React.Component {
+    constructor(props) {
+        super(props);
+        this.pages = {
+            index:{
+                title:"Ana Sayfa",
+            },
+            profile:{
+                title:"Profil",
+                guest:"login"
+            },
+            product:{
+                title:"Ürün"
+            },
+            newProduct:{
+                title:"Yeni Ürün Oluştur",
+                guest:"login"
+            },
+            login:{
+                title:"Giriş Yap",
+                member:"index"
+            },
+            signup:{
+                title:"Üye Ol",
+                member:"index"
+            },
+            filter:{
+                title: "Filtrele",
+                guest:"login"
+            },
+            emailValidationPage:{
+                title:"E-posta Doğrula",
+                guest:"login"
+            },
+            editProduct:{
+                title:"Ürün Düzenle",
+                guest:"login"
+            },
+            forgotMyPassword:{
+                title:"Parolamı Unuttum",
+                member:"index"
+            }
+        }
+        this.setTitle = this.setTitle.bind(this);
+    }
+    setTitle(con) {
+        let content = con || this.props.content;
+        if(Object.keys(this.pages).indexOf(content)!=-1) {
+            document.title = this.pages[content].title;
+        }
+    }
     render() {
-        switch(this.props.content) {
+        let content = this.props.content;
+        if(isMember()) {
+            // member
+            if(this.pages[this.props.content] && this.pages[this.props.content].member) {
+                content = this.pages[this.props.content].member
+            }
+        } else {
+            // guest
+            if(this.pages[this.props.content] && this.pages[this.props.content].guest) {
+                content = this.pages[this.props.content].guest
+            }
+        }
+        this.setTitle(content);
+        switch(content) {
             case "index":
                 return (
                     <Index changeContent={this.props.changeContent} />

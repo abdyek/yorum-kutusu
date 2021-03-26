@@ -207,7 +207,6 @@ var ForgotMyPassword = function (_React$Component) {
     }, {
         key: 'render',
         value: function render() {
-            document.title = "Parolami Unuttum";
             if (this.state.form == "sendEmailButton") {
                 return React.createElement(
                     Row,

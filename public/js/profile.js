@@ -149,6 +149,7 @@ var Profile = function (_React$Component) {
         key: "render",
         value: function render() {
             if (this.state.form == "normal") {
+                document.title = this.state.username;
                 return React.createElement(
                     "div",
                     null,
@@ -215,6 +216,7 @@ var Profile = function (_React$Component) {
             } else if (this.state.form == "loading") {
                 return React.createElement(RowLoadingSpin, { nonSegment: true });
             } else if (this.state.form == "notFound") {
+                document.title = "Üye yok";
                 return React.createElement(
                     Row,
                     { size: "one" },

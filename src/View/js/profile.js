@@ -115,6 +115,7 @@ class Profile extends React.Component {
     }
     render() {
         if(this.state.form=="normal") {
+            document.title = this.state.username;
             return(
                 <div>
                     <ProfileHeader
@@ -177,6 +178,7 @@ class Profile extends React.Component {
         } else if(this.state.form=="loading") {
             return(<RowLoadingSpin nonSegment={true} />)
         } else if(this.state.form=="notFound") {
+            document.title = "Üye yok"
             return(
                 <Row size="one">
                     <Column>

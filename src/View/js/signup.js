@@ -175,7 +175,6 @@ class Signup extends React.Component {
         });
     }
     render() {
-        document.title = "Üye Ol";
         if(this.state.form=="normal") {
             return(
                 <div>

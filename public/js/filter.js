@@ -158,7 +158,6 @@ var Filter = function (_React$Component) {
     }, {
         key: 'render',
         value: function render() {
-            document.title = "Filtrele";
             if (this.state.loading) {
                 return React.createElement(RowLoadingSpin, { nonSegment: true });
             } else {

@@ -133,7 +133,6 @@ class Filter extends React.Component {
         */
     }
     render() {
-        document.title="Filtrele";
         if(this.state.loading) {
             return (
                 <RowLoadingSpin nonSegment={true} />

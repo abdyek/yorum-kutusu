@@ -168,7 +168,6 @@ class ForgotMyPassword extends React.Component {
         });
     }
     render() {
-        document.title="Parolami Unuttum";
         if(this.state.form=="sendEmailButton") {
             return (
                 <Row size="sixteen">

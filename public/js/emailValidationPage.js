@@ -18,7 +18,6 @@ var EmailValidationPage = function (_React$Component) {
     _createClass(EmailValidationPage, [{
         key: "render",
         value: function render() {
-            document.title = "E-Posta Doğrula";
             var pathNames = getPathNames();
             this.code = pathNames[1] ? pathNames[1] : "";
             return React.createElement(

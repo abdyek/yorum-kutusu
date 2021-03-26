@@ -574,16 +574,80 @@ var Footer = function (_React$Component7) {
 var Content = function (_React$Component8) {
     _inherits(Content, _React$Component8);
 
-    function Content() {
+    function Content(props) {
         _classCallCheck(this, Content);
 
-        return _possibleConstructorReturn(this, (Content.__proto__ || Object.getPrototypeOf(Content)).apply(this, arguments));
+        var _this13 = _possibleConstructorReturn(this, (Content.__proto__ || Object.getPrototypeOf(Content)).call(this, props));
+
+        _this13.pages = {
+            index: {
+                title: "Ana Sayfa"
+            },
+            profile: {
+                title: "Profil",
+                guest: "login"
+            },
+            product: {
+                title: "Ürün"
+            },
+            newProduct: {
+                title: "Yeni Ürün Oluştur",
+                guest: "login"
+            },
+            login: {
+                title: "Giriş Yap",
+                member: "index"
+            },
+            signup: {
+                title: "Üye Ol",
+                member: "index"
+            },
+            filter: {
+                title: "Filtrele",
+                guest: "login"
+            },
+            emailValidationPage: {
+                title: "E-posta Doğrula",
+                guest: "login"
+            },
+            editProduct: {
+                title: "Ürün Düzenle",
+                guest: "login"
+            },
+            forgotMyPassword: {
+                title: "Parolamı Unuttum",
+                member: "index"
+            }
+        };
+        _this13.setTitle = _this13.setTitle.bind(_this13);
+        return _this13;
     }
 
     _createClass(Content, [{
+        key: "setTitle",
+        value: function setTitle(con) {
+            var content = con || this.props.content;
+            if (Object.keys(this.pages).indexOf(content) != -1) {
+                document.title = this.pages[content].title;
+            }
+        }
+    }, {
         key: "render",
         value: function render() {
-            switch (this.props.content) {
+            var content = this.props.content;
+            if (isMember()) {
+                // member
+                if (this.pages[this.props.content] && this.pages[this.props.content].member) {
+                    content = this.pages[this.props.content].member;
+                }
+            } else {
+                // guest
+                if (this.pages[this.props.content] && this.pages[this.props.content].guest) {
+                    content = this.pages[this.props.content].guest;
+                }
+            }
+            this.setTitle(content);
+            switch (content) {
                 case "index":
                     return React.createElement(Index, { changeContent: this.props.changeContent });
                     break;

@@ -247,7 +247,7 @@ class Product extends React.Component {
     }
     render() {
         if(this.state.form=="normal") {
-	        document.title = this.state.productName;
+	    document.title = this.state.productName;
             return(
                 <div>
                     <ProductInfo tags={this.state.tagsInfo} productName={this.state.productName} changeContent={this.props.changeContent} followToggle={this.followToggle} followed={this.state.followed} followButtonDisabled={this.state.followButtonDisabled}/>
@@ -294,7 +294,6 @@ class Product extends React.Component {
                 </div>
             )
         } else if(this.state.form=="loading") {
-	    document.title = "Ürün";
             return(
                 <RowLoadingSpin nonSegment={true}/>
             )

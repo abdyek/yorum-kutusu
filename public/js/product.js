@@ -351,7 +351,6 @@ var Product = function (_React$Component) {
                     React.createElement(EditProductButton, { changeContent: this.props.changeContent, productSlug: this.state.productSlug })
                 );
             } else if (this.state.form == "loading") {
-                document.title = "Ürün";
                 return React.createElement(RowLoadingSpin, { nonSegment: true });
             } else if (this.state.form == "notFound") {
                 return React.createElement(ProductNotFound, { changeContent: this.props.changeContent });

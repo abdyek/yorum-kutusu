@@ -8,7 +8,6 @@ class Index extends React.Component {
         this.props.changeContent(e.target.href);
     }
     render() {
-        document.title = "Ana Sayfa";
         return(
             <div>
                 <a href="giris-yap" onClick={this.changeContent}>
