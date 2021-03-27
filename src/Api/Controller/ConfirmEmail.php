@@ -12,13 +12,24 @@ class ConfirmEmail extends Controller {
             $this->setHttpStatus(422);
             exit();
         }
-        $randStr = Other::generateRandomString(10);
         $this->deleteConfirm();
-        Database::executeWithErr('INSERT INTO confirm_email (member_id, confirm_code) VALUES(?,?)', [$this->userId, $randStr]);
-        Other::sendMail();
-        // ^ code and front-end link is here
-        // link example is localhost/yorum-kutusu/e-posta-dogrula/IAbsAQl4IP
+        $code = $this->insertConfirm($this->userId);
+        $member = Database::getRow('SELECT member_username, member_email FROM member WHERE member_id=?', [$this->userId]);
+        $htmlBody = 'Doğrulama Kodu: <b>'.$code.'</b><br/>Bağlantıyı kullanarak e-posta doğrulama alanına geçebilirsiniz <a href="http://www.yorumkutusu.com/e-posta-dogrula/'.$code.'">Tıklayınız</a>';
+        $altBody = 'Doğrulama kodu: ' . $code . 'Bağlantıyı kullanarak e-posta doğrulama alanına geçebilirsiniz http://www.yorumkutusu.com/e-posta-dogrula/'.$code;
+        Other::sendMail($member['member_email'], $member['member_username'], 'E-posta Doğrulama', $htmlBody, $altBody);
+        // ^ code and front-end link is here, link example is localhost/yorum-kutusu/e-posta-dogrula/IAbsAQl4IP
         $this->success();
+    }
+    public static function insertConfirm($userId) {
+        $randStr = Other::generateRandomString(10);
+        Database::executeWithErr('INSERT INTO confirm_email (member_id, confirm_code) VALUES(?,?)', [$userId, $randStr]);
+        /*
+        $member = Database::getRow('SELECT member_username, member_email FROM member WHERE member_id=?', [$userId]);
+        $email = $member['member_email'];
+        $username = $member['member_username'];
+         */
+        return $randStr;
     }
     private function checkConfirmedBefore() {
         return Database::getRow('SELECT member_confirmed_email AS c FROM member WHERE member_id=?', [$this->userId])['c']==='1';

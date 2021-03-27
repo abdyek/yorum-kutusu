@@ -14,13 +14,15 @@ class ForgotMyPassword extends Controller {
         $this->success();
     }
     private function memberCheck() {
-        $this->member = Database::existCheck('SELECT member_id FROM member WHERE member_deleted=0 AND member_email=? AND member_username=?', [$this->data['eMail'], $this->data['username']]);
+        $this->member = Database::existCheck('SELECT * FROM member WHERE member_deleted=0 AND member_email=? AND member_username=?', [$this->data['eMail'], $this->data['username']]);
     }
     private function saveAccount() {
         $randStr = Other::generateRandomString(10);
         $this->deleteRecovery();
         Database::execute('INSERT INTO reset_password (member_id, recovery_code) VALUES(?,?)', [$this->member['member_id'], $randStr]);
-        Other::sendMail();
+        $htmlBody = 'Kurtarma Kodu: <b>' . $randStr . '</b><br/>'. 'Bağlantıyı kullanarak kurtarma alanına gidebilirsiniz <a href="http://www.yorumkutusu.com/parolami-unuttum?email='.$this->member['member_email'].'&recoveryCode='.$randStr.'&username='.$this->member['member_username'].'">Tıklayın</a>';
+        $altBody = 'Kurtarma Kodu: ' . $randStr;
+        Other::sendMail($this->member['member_email'], $this->member['member_username'], 'Parolamı Unuttum', $htmlBody, $altBody);
         // here is an example to send url from user http://localhost/yorum-kutusu/parolami-unuttum?email=yunusemrebulut123@gmail.com&recoveryCode=123212121&username=mahmut
         // all is completed for front-end, only send url as this
     }

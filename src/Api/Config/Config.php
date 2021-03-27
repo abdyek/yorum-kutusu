@@ -7,6 +7,10 @@ namespace YorumKutusu\Api\Config;
         const DBPW = '';
         const SITEURL = "http://localhost/yorum-kutusu/";
         const JWT_EXP = 31536000; // 1 yıllık token geçerliliği
+        const SMTPHOST = 'rd-station.guzelhosting.com';
+        const EMAILUSERNAME = 'noreply@yorumkutusu.com';
+        const EMAILPASSWORD = 'huzurver99';
+        const SMTPPORT = 587;
         const PAGEURL = [
             'ana-sayfa'=>[
                 'title'=>'Ana Sayfa',

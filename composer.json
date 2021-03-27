@@ -3,7 +3,8 @@
     "description": "Ürün Yorumlama Üzerine Web Application",
     "require": {
         "izniburak/router": "^1.5",
-        "adhocore/jwt": "^1.0"
+        "adhocore/jwt": "^1.0",
+        "phpmailer/phpmailer": "^6.2"
     },
     "autoload":{
         "psr-4":{

@@ -4,6 +4,7 @@ namespace YorumKutusu\Api\Controller;
 use YorumKutusu\Api\Core\Controller;
 use YorumKutusu\Api\Core\Database;
 use YorumKutusu\Api\Core\Other as Other;
+use YorumKutusu\Api\Controller\ConfirmEmail;
 
 class Signup extends Controller {
     protected function post() {
@@ -44,7 +45,10 @@ class Signup extends Controller {
             $this->responseWithMessage(5);
             exit();
         }
-        Other::sendMail();
+        $code = ConfirmEmail::insertConfirm($this->member['member_id']);
+        $htmlBody = '<h1>Yorum Kutusu\'na Hoş Geldiniz</h1>Doğrulama Kodu: <b>'.$code.'</b><br/>Bağlantıyı kullanarak e-posta doğrulama alanına geçebilirsiniz <a href="http://www.yorumkutusu.com/e-posta-dogrula/'.$code.'">Tıklayınız</a>';
+        $altBody = 'Doğrulama kodu: ' . $code . 'Bağlantıyı kullanarak e-posta doğrulama alanına geçebilirsiniz http://www.yorumkutusu.com/e-posta-dogrula/'.$code;
+        Other::sendMail($this->member['member_email'], $this->member['member_username'], 'Hoş Geldiniz', $htmlBody, $altBody);
         $this->success();
     }
     private function formatToUsername() {
@@ -78,9 +82,9 @@ class Signup extends Controller {
         return $query;
     }
     private function addEmailHistory() {
-        $memberID = Database::getRow('SELECT member_id FROM member WHERE member_username=?', [$this->data['username']])['member_id'];
+        $this->member = Database::getRow('SELECT * FROM member WHERE member_username=?', [$this->data['username']]);
         $this->code = Other::generateVerificationCode();
-        $query = Database::executeWithError('INSERT INTO member_email_history (member_id, member_email, code, member_confirmed_email) VALUES(?,?,?,?)', [$memberID ,$this->data['eMail'], $this->code, 0]);
+        $query = Database::executeWithError('INSERT INTO member_email_history (member_id, member_email, code, member_confirmed_email) VALUES(?,?,?,?)', [$this->member['member_id'] ,$this->data['eMail'], $this->code, 0]);
         if(!$query[0]) {
             Database::execute('DELETE FROM member WHERE member_username=?', [$this->data['username']]);
         }
