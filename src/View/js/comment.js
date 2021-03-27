@@ -442,7 +442,6 @@ class ReportArea extends React.Component {
             if(!response.ok) throw new Error(response.status);
             else return response.json();
         }).then((json)=>{
-            console.log(json);
             this.setState({
                 form:"normal",
                 options:json['other']['reportOptions']
@@ -849,7 +848,6 @@ class EditArea extends React.Component {
         }
     }
     selectOption(e, slug) {
-        console.log(slug + " - " +  e.target.value);
         let temp = this.state.tags;
         temp[slug].value = e.target.value;
         temp[slug].color = getRatingColor(e.target.value);

@@ -236,9 +236,7 @@ var SearchBarForProduct = function (_React$Component3) {
                         results: json.other.products
                     });
                 }
-            }).catch(function (error) {
-                console.log(error);
-            });
+            }).catch(function (error) {});
         }
     }, {
         key: "prepareATags",
@@ -349,9 +347,7 @@ var SearchBarForTag = function (_React$Component4) {
                     results: json.other.tags
                 });
                 _this8.checkAvailableTag(json.other.tags);
-            }).catch(function (error) {
-                console.log(error);
-            });
+            }).catch(function (error) {});
         }
     }, {
         key: "prepareATags",

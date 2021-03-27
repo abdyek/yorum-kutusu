@@ -107,7 +107,6 @@ var Product = function (_React$Component) {
                     _this2.refreshUrl();
                 }
             }).catch(function (error) {
-                console.log(error);
                 if (error.message == 404) {
                     _this2.setState({ form: "notFound" });
                 }
@@ -136,9 +135,7 @@ var Product = function (_React$Component) {
                     pageCount: json['other']['pageCount']
                 });
                 _this3.refreshUrl();
-            }).catch(function (error) {
-                console.log(error);
-            });
+            }).catch(function (error) {});
         }
     }, {
         key: "refreshUrl",
@@ -190,9 +187,7 @@ var Product = function (_React$Component) {
                     pageCount: json['other']['pageCount']
                 });
                 _this4.refreshUrl();
-            }).catch(function (error) {
-                console.log(error);
-            });
+            }).catch(function (error) {});
         }
     }, {
         key: "changeSortBy",

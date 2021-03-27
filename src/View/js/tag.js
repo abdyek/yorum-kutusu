@@ -53,7 +53,6 @@ class TagPicker extends React.Component {
     componentDidMount() {
         if(firstLoading==false) {
             this.slugs = getSlugs("filtrele");
-            console.log(this.slugs);
             // eğer linkteki slug etiketleri varsa onları state içindeki selectedTags'a ekliyoruz burada. sonrasında da ürün yenileme isteği çekiyoruz
             this.props.filterChangeLoading(true);
             // bu kontrol esnasında kullanıcıya loading ekranını gösteriyoruz
@@ -61,10 +60,8 @@ class TagPicker extends React.Component {
         }
     }
     refreshTags() {
-        console.log("etiket yenileme isteği buraya");
     }
     refreshProduct() {
-        console.log("ürün yenileme isteği buraya");
     }
     deleteTag(e) {
         let selectedTags = this.state.selectedTags;
@@ -97,7 +94,6 @@ class TagPicker extends React.Component {
         });
     }
     selectTag(e) {
-        //console.log(e.target.attributes.name.value);
         let value = e.target.attributes.name.value
         let selectedTags = this.state.selectedTags;
         selectedTags[value] = this.state.tags[value];

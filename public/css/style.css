@@ -282,3 +282,16 @@ label {
 .tags a {
     cursor:default !important;
 }
+
+.report-text-count {
+    margin-right:1rem;
+}
+
+.tags-in-list {
+    margin-top:0.5rem;
+    padding-left: 1rem;
+}
+
+.tags-in-list .list {
+    cursor:default;
+}

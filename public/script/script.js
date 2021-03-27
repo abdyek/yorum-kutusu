@@ -11,7 +11,7 @@ const turkishChars = {
     "ç": "c"
 };
 
-function getRatingColor(value) {
+const getRatingColor = function(value) {
     if(value=="-") {
         return "";
     } else if(value>=0 && value<3) {
@@ -27,7 +27,7 @@ function getRatingColor(value) {
     }
 }
 
-function getUrlPar(data) {
+const getUrlPar = function(data) {
     let keys = Object.keys(data);
     for(let i=0;i<keys.length;i++) {
         if(data[keys[i]]===false) {
@@ -39,7 +39,7 @@ function getUrlPar(data) {
     return Object.entries(data).map(e => e.join('=')).join('&');
 }
 
-function getSlugs(pageName) {
+const getSlugs = function (pageName) {
     let slugs = window.location.href.split(pageName)[1].split(",");
     slugs[0] = (slugs[0][0]=="/")?slugs[0].substr(1):slugs[0];
     let lastSlugs = slugs[slugs.length-1];
@@ -48,7 +48,7 @@ function getSlugs(pageName) {
     return slugs;
 }
 
-function getSlugsExtra(pageName) {
+const getSlugsExtra = function(pageName) {
     let afterPageName = window.location.href.split(pageName)[1];
     let slugs = afterPageName.split("/");
     let valuableSlugs = [];
@@ -60,11 +60,11 @@ function getSlugsExtra(pageName) {
     return valuableSlugs;
 }
 
-function isMember() {
+const isMember = function() {
     return (getCookie('user') && getCookie('user')!='null');
 }
 
-function getPathNames(href) {
+const getPathNames = function(href) {
     href = href || window.location.href;
     const url = new URL(href);
     const pathname = url.pathname;
@@ -82,7 +82,7 @@ function getPathNames(href) {
     return ret;
 }
 
-function setCookie(key, value) {
+const setCookie = function(key, value) {
     let now = new Date();
     let time = now.getTime();
     let expireTime = time + 31556926000;
@@ -90,7 +90,7 @@ function setCookie(key, value) {
     document.cookie = key+'='+value+';expires='+now.toUTCString()+';path=/;samesite=strict';
 }
 
-function getCookie(cname) {
+const getCookie = function(cname) {
     let name = cname + "=";
     let decodedCookie = decodeURIComponent(document.cookie);
     let ca = decodedCookie.split(';');
@@ -106,16 +106,16 @@ function getCookie(cname) {
     return "";
 }
 
-function isMobile() {
+const isMobile = function() {
     return (window.innerWidth<768)?true: false
 }
 
-function validateEmail(email) {
+const validateEmail = function(email) {
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(email).toLowerCase());
 }
 
-function normalizer(key, data) {
+const normalizer = function(key, data) {
     if(key=='comments') {
         let comments = [];
         for(let i=0;i<data.length;i++) {
@@ -229,38 +229,38 @@ function normalizer(key, data) {
 
 }
 
-function getUserInfo() {
+const getUserInfo = function() {
     if(!isMember()) {
         return null;
     }
     return objectFromBase64(getCookie('user'));
 }
 
-function encode_utf8(s) {
+const encode_utf8 = function(s) {
   return unescape(encodeURIComponent(s));
 }
 
-function decode_utf8(s) {
+const decode_utf8 = function(s) {
   return decodeURIComponent(escape(s));
 }
 
-function base64FromObject(obj) {
+const base64FromObject = function(obj) {
     let stringified = JSON.stringify(obj);
     let encodedUTF8 = encode_utf8(stringified);
     return btoa(encodedUTF8);
 }
 
-function objectFromBase64(encoded) {
+const objectFromBase64 = function(encoded) {
     let decoded = atob(encoded);
     let decodedUTF8 = decode_utf8(decoded);
     return JSON.parse(decodedUTF8);
 }
 
-function isFloat(n){
+const isFloat = function(n){
     return Number(n) === n && n % 1 !== 0;
 }
 
-function generateProductSlug(productName) {
+const generateProductSlug = function(productName) {
     productName = productName.toLowerCase();
     let slug = "";
     for(let i=0;i<productName.length;i++) {

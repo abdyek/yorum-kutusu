@@ -98,7 +98,6 @@ class Profile extends React.Component {
         this.load();
     }
     handleChangeSortBy(sort) {
-        console.log(sort);
         this.setState({
             commentForm:"loading",
             sortBy:sort
@@ -106,7 +105,6 @@ class Profile extends React.Component {
         this.load({sortBy:sort});
     }
     handleChangePageNumber(num) {
-        console.log("handleChangePageNumber");
         this.setState({
             commentForm:"loading",
             pageNumber:num

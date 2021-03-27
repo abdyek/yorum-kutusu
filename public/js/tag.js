@@ -70,7 +70,6 @@ var TagPicker = function (_React$Component) {
         value: function componentDidMount() {
             if (firstLoading == false) {
                 this.slugs = getSlugs("filtrele");
-                console.log(this.slugs);
                 // eğer linkteki slug etiketleri varsa onları state içindeki selectedTags'a ekliyoruz burada. sonrasında da ürün yenileme isteği çekiyoruz
                 this.props.filterChangeLoading(true);
                 // bu kontrol esnasında kullanıcıya loading ekranını gösteriyoruz
@@ -79,14 +78,10 @@ var TagPicker = function (_React$Component) {
         }
     }, {
         key: "refreshTags",
-        value: function refreshTags() {
-            console.log("etiket yenileme isteği buraya");
-        }
+        value: function refreshTags() {}
     }, {
         key: "refreshProduct",
-        value: function refreshProduct() {
-            console.log("ürün yenileme isteği buraya");
-        }
+        value: function refreshProduct() {}
     }, {
         key: "deleteTag",
         value: function deleteTag(e) {
@@ -128,7 +123,6 @@ var TagPicker = function (_React$Component) {
     }, {
         key: "selectTag",
         value: function selectTag(e) {
-            //console.log(e.target.attributes.name.value);
             var value = e.target.attributes.name.value;
             var selectedTags = this.state.selectedTags;
             selectedTags[value] = this.state.tags[value];

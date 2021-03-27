@@ -83,7 +83,6 @@ class Product extends React.Component {
                 this.refreshUrl();
             }
         }).catch((error) => {
-            console.log(error);
             if(error.message==404) {
                 this.setState({form:"notFound"});
             }
@@ -110,7 +109,6 @@ class Product extends React.Component {
             });
             this.refreshUrl();
         }).catch((error) => {
-            console.log(error);
         });
     }
     refreshUrl() {
@@ -155,7 +153,6 @@ class Product extends React.Component {
             });
             this.refreshUrl();
         }).catch((error) => {
-            console.log(error);
         });
     }
 	changeSortBy(value) {

@@ -141,7 +141,6 @@ class SearchBarForProduct extends React.Component {
                 });
             }
         }).catch((error) => {
-            console.log(error);
         });
     }
     prepareATags() {
@@ -231,7 +230,6 @@ class SearchBarForTag extends React.Component {
             });
             this.checkAvailableTag(json.other.tags);
         }).catch((error) => {
-            console.log(error);
         });
     }
     prepareATags() {

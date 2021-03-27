@@ -649,7 +649,6 @@ var ReportArea = function (_React$Component7) {
             }).then(function (response) {
                 if (!response.ok) throw new Error(response.status);else return response.json();
             }).then(function (json) {
-                console.log(json);
                 _this10.setState({
                     form: "normal",
                     options: json['other']['reportOptions']
@@ -1273,7 +1272,6 @@ var EditArea = function (_React$Component11) {
     }, {
         key: "selectOption",
         value: function selectOption(e, slug) {
-            console.log(slug + " - " + e.target.value);
             var temp = this.state.tags;
             temp[slug].value = e.target.value;
             temp[slug].color = getRatingColor(e.target.value);

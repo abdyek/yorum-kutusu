@@ -33,7 +33,6 @@ class Filter extends React.Component {
             }
         })
         this.slugs = getSlugs("filtrele");
-        console.log(this.slugs);
         // yüklenecek olası ürün
         // ^ buradaki slug'lardan ürün ve etiket bilgisi döndüren endpoint'e istek atacaksın, gelen değerlerle state'i güncelleyeceksin
         /*

@@ -128,7 +128,6 @@ var Profile = function (_React$Component) {
     }, {
         key: "handleChangeSortBy",
         value: function handleChangeSortBy(sort) {
-            console.log(sort);
             this.setState({
                 commentForm: "loading",
                 sortBy: sort
@@ -138,7 +137,6 @@ var Profile = function (_React$Component) {
     }, {
         key: "handleChangePageNumber",
         value: function handleChangePageNumber(num) {
-            console.log("handleChangePageNumber");
             this.setState({
                 commentForm: "loading",
                 pageNumber: num
