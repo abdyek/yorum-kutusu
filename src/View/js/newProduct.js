@@ -505,7 +505,7 @@ class TagWithClose extends React.Component {
     render() {
         this.color = this.props.color || "";
         return (
-            <div className="TagWithClose">
+            <div className="tag-with-close">
                 <a className={"ui "+this.color+" large label"}>
                     {this.props.name}
                 </a>

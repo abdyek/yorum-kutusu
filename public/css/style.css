@@ -295,3 +295,13 @@ label {
 .tags-in-list .list {
     cursor:default;
 }
+
+.tag-with-close {
+    float:left;
+}
+
+.tag-with-close a {
+    cursor:default;
+}
+
+

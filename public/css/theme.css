@@ -92,9 +92,8 @@ header {
     color:#eee !important;
 }
 
-.tagWithClose {
-    color:#CCC !important;
-    cursor:pointer !important;
+.tag-with-close i {
+    color:#eee;
 }
 
 .commentTitles {

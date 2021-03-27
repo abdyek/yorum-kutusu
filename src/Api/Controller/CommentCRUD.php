@@ -8,7 +8,6 @@ use YorumKutusu\Api\Model\Comment as CommentModel;
 
 class CommentCRUD extends Controller {
     protected function delete() {
-        // ^ NOT COMPLETED
         $this->comment = Database::existCheck('SELECT * FROM comment WHERE comment_deleted=0 AND comment_id=?', [$this->data['commentID']]);
         if(!$this->comment) {
             $this->setHttpStatus(404);
@@ -17,11 +16,10 @@ class CommentCRUD extends Controller {
         $this->deleteComment();
         $this->addHistory();
         $this->removeCommentRequest();
-        $this->removeRating();
-        $this->removeHiddenComment();
-        $this->decreaseNewCommentCount();
-        Product::decreaseCommentCount($this->comment['product_id']);
-        Comment::decreaseNewCommentCount($this->comment['product_id'], $this->comment['comment_last_edit_date_time']);
+        CommentModel::removeRating($this->comment['product_id'], $this->comment['member_id']);
+        CommentModel::removeHiddenComment($this->comment['comment_id']);
+        ProductModel::decreaseCommentCount($this->comment['product_id']);
+        CommentModel::decreaseNewCommentCount($this->comment['product_id'], $this->comment['comment_last_edit_date_time']);
         $this->success();
     }
     private function deleteComment() {
@@ -32,14 +30,5 @@ class CommentCRUD extends Controller {
     }
     private function removeCommentRequest() {
         Database::executeWithErr('UPDATE comment_request SET cancelled=1 WHERE member_id=? AND product_id=?', [$this->comment['member_id'], $this->comment['product_id']]);
-    }
-    private function removeRating() {
-        // not completed
-    }
-    private function removeHiddenComment() {
-        // not completed
-    }
-    private function decreaseNewCommentCount() {
-        // not completed
     }
 }

@@ -678,7 +678,7 @@ var TagWithClose = function (_React$Component4) {
             this.color = this.props.color || "";
             return React.createElement(
                 "div",
-                { className: "TagWithClose" },
+                { className: "tag-with-close" },
                 React.createElement(
                     "a",
                     { className: "ui " + this.color + " large label" },
