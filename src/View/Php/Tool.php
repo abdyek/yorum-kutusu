@@ -11,6 +11,10 @@ class Tool {
         $path = __DIR__ . '/Template.php';
         include $path;
     }
+    public static function generateAdminPage() {
+        $path = __DIR__ . '/AdminPage.php';
+        include $path;
+    }
 }
 
 ?>

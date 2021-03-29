@@ -1,5 +1,7 @@
-window.history.pushState({content: firstContent}, "", "");
-let firstLoading = true;
+if(typeof firstContent!=="undefined") {
+    window.history.pushState({content: firstContent}, "", "");
+    let firstLoading = true;
+}
 
 const currentYear = "21";
 const turkishChars = {

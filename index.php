@@ -68,4 +68,9 @@ $router->get('/test/api', function() {
     $main = new YorumKutusu\Test\Main();
 });
 
+// Admin
+$router->get('/yonet', function() {
+    Tool::generateAdminPage();
+});
+
 $router->run();

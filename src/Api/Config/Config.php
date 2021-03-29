@@ -749,6 +749,15 @@ namespace YorumKutusu\Api\Config;
                         ],
                     ]
                 ]
+            ],
+            'who'=>[
+                'methods'=>['POST'],
+                'authorization'=>[
+                    'POST'=>['guest', 'admin', 'member']
+                ],
+                'keys'=>[
+                    'POST'=>[]
+                ]
             ]
         ];
     }
