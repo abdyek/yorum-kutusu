@@ -58,6 +58,8 @@ class CommentRequest extends Controller {
             } else {
                 Database::executeWithErr('UPDATE comment SET comment_text=?, comment_edited=1, comment_last_edit_date_time=? WHERE comment_id=?', [$this->commentRequest['comment_text'], $this->commentRequest['comment_request_date_time'],$this->commentRequest['comment_id']]);
             }
+        } else {
+            CommentModel::removeRating($this->commentRequest['product_id'], $this->commentRequest['member_id']);
         }
         $this->success();
     }
