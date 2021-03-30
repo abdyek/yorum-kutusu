@@ -596,12 +596,26 @@ namespace YorumKutusu\Api\Config;
                 ]
             ],
             'productApproval'=>[
-                'methods'=>['GET'],
+                'methods'=>['GET', 'POST', 'DELETE'],
                 'authorization'=>[
-                    'GET'=>['admin']
+                    'GET'=>['admin'],
+                    'POST'=>['admin'],
+                    'DELETE'=>['admin'],
                 ],
                 'keys'=>[
                     'GET'=>[
+                    ],
+                    'POST'=>[
+                        'productRequestID'=>[
+                            'min'=>1,
+                            'max'=>11
+                        ]
+                    ],
+                    'DELETE'=>[
+                        'productRequestID'=>[
+                            'min'=>1,
+                            'max'=>11
+                        ]
                     ]
                 ]
             ],
@@ -697,27 +711,6 @@ namespace YorumKutusu\Api\Config;
                         'tags'=>[
                             'min'=>0,
                             'max'=>10
-                        ]
-                    ]
-                ]
-            ],
-            'newProductApproval'=>[
-                'methods'=>['POST', 'DELETE'],
-                'authorization'=>[
-                    'POST'=>['admin'],
-                    'DELETE'=>['admin']
-                ],
-                'keys'=>[
-                    'POST'=>[
-                        'productRequestID'=>[
-                            'min'=>1,
-                            'max'=>11
-                        ]
-                    ],
-                    'DELETE'=>[
-                        'productRequestID'=>[
-                            'min'=>1,
-                            'max'=>11
                         ]
                     ]
                 ]
