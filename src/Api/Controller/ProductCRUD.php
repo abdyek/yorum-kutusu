@@ -3,6 +3,7 @@
 namespace YorumKutusu\Api\Controller;
 use YorumKutusu\Api\Core\Controller;
 use YorumKutusu\Api\Core\Database;
+use YorumKutusu\Api\Model\Product as ProductModel;
 
 class ProductCRUD extends Controller {
     protected function post() {
@@ -29,7 +30,11 @@ class ProductCRUD extends Controller {
         return true;
     }
     private function createProduct() {
-        Database::execute('INSERT INTO product (admin_id, product_name, product_slug) VALUES(?,?,?)',[$this->userId, $this->data['productName'], $this->data['productSlug']]);
+        ProductModel::create([
+            'adminId'=>$this->userId,
+            'productName'=>$this->data['productName'],
+            'productSlug'=>$this->data['productSlug'],
+        ]);
         $this->product = Database::getRow('SELECT * FROM product WHERE product_slug=?', [$this->data['productSlug']]);
     }
     private function createTwp() {
@@ -82,7 +87,7 @@ class ProductCRUD extends Controller {
             ]);
         }
         // update (need delete old)
-        Database::execute('DELETE FROM tag_with_product WHERE product_id=?', [$this->data['productID']]);
+        Database::executeWithErr('DELETE FROM tag_with_product WHERE product_id=?', [$this->data['productID']]);
         $this->createTwp();
     }
 

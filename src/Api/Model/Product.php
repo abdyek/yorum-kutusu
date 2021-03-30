@@ -21,4 +21,10 @@ class Product {
             $productCreatedByMember,
         ]);
     }
+    public static function update($object) {
+        Database::execute('UPDATE product SET product_name=?, product_slug=? WHERE product_id=?', [$object['productName'], $object['productSlug'], $object['productId']]);
+    }
+    public static function get($slug) {
+        return Database::existCheck('SELECT * FROM product WHERE product_slug=?', [$slug]);
+    }
 }

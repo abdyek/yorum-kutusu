@@ -125,7 +125,6 @@ class Comment extends Controller {
                 }
                 continue;
             }
-            Database::execute('INSERT INTO tag_rating_history (tag_with_product_id, member_id, tag_rating_value) VAlUES(?,?,?)', [$twpID,$this->userId, $val]);
             Database::execute('INSERT INTO tag_rating (tag_with_product_id, member_id, tag_rating_value) VAlUES(?,?,?)', [$twpID,$this->userId, $val]);
             CommentModel::updateRateValue($twpID, $val, $check);
         }

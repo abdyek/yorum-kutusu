@@ -269,14 +269,6 @@ CREATE TABLE `tag_rating` (
   `tag_rating_value` int(2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE `tag_rating_history` (
-  `tag_rating_history_id` int(11) NOT NULL,
-  `tag_with_product_id` int(11) NOT NULL,
-  `member_id` int(11) NOT NULL,
-  `tag_rating_date_time` datetime NOT NULL DEFAULT current_timestamp(),
-  `tag_rating_value` int(2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
 
 CREATE TABLE `product_follow` (
   `product_follow_id` int(11) NOT NULL,
@@ -562,11 +554,6 @@ ALTER TABLE `tag_rating`
   ADD KEY `tag_with_product_id` (`tag_with_product_id`), 
   ADD KEY `member_id` (`member_id`);
 
-ALTER TABLE `tag_rating_history`
-  ADD PRIMARY KEY (`tag_rating_history_id`),
-  ADD KEY `tag_with_product_id` (`tag_with_product_id`), 
-  ADD KEY `member_id` (`member_id`);
-
 
 ALTER TABLE `product_follow`
   ADD PRIMARY KEY (`product_follow_id`),
@@ -738,9 +725,6 @@ ALTER TABLE `comment_like_history`
 ALTER TABLE `tag_rating`
   MODIFY `tag_rating_id` int(11) NOT NULL AUTO_INCREMENT;
 
-ALTER TABLE `tag_rating_history`
-  MODIFY `tag_rating_history_id` int(11) NOT NULL AUTO_INCREMENT;
-
 
 ALTER TABLE `product_follow`
   MODIFY `product_follow_id` int(11) NOT NULL AUTO_INCREMENT;
@@ -895,10 +879,6 @@ ALTER TABLE `tag_rating`
   ADD CONSTRAINT `tag_rating_fk_1` FOREIGN KEY (`tag_with_product_id`) REFERENCES `tag_with_product` (`tag_with_product_id`),
   ADD CONSTRAINT `tag_rating_fk_2` FOREIGN KEY (`tag_with_product_request_id`) REFERENCES `tag_with_product_request` (`tag_with_product_request_id`),
   ADD CONSTRAINT `tag_rating_fk_3` FOREIGN KEY (`member_id`) REFERENCES `member` (`member_id`);
-
-ALTER TABLE `tag_rating_history`
-  ADD CONSTRAINT `tag_rating_history_fk_1` FOREIGN KEY (`tag_with_product_id`) REFERENCES `tag_with_product` (`tag_with_product_id`),
-  ADD CONSTRAINT `tag_rating_history_fk_2` FOREIGN KEY (`member_id`) REFERENCES `member` (`member_id`);
 
 ALTER TABLE `product_follow`
   ADD CONSTRAINT `product_follow_fk_1` FOREIGN KEY (`member_id`) REFERENCES `member` (`member_id`),

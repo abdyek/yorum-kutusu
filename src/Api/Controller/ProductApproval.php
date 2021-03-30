@@ -5,6 +5,11 @@ use YorumKutusu\Api\Core\Controller;
 use YorumKutusu\Api\Core\Database;
 use YorumKutusu\Api\Config\Config;
 use YorumKutusu\Api\Model\ProductApproval as ProductApprovalModel;
+use YorumKutusu\Api\Model\Product as ProductModel;
+use YorumKutusu\Api\Model\TagWithProductRequest as TagWithProductRequestModel;
+use YorumKutusu\Api\Model\TagWithProduct as TagWithProductModel;
+use YorumKutusu\Api\Model\Tag as TagModel;
+use YorumKutusu\Api\Model\Rating as RatingModel;
 
 class ProductApproval extends Controller {
     protected function get() {
@@ -116,10 +121,25 @@ class ProductApproval extends Controller {
         $this->checkRequest();
         if($this->request['product_id']) {
             // update;
-            //$this->
+            ProductModel::update([
+                'productName'=>$this->request['product_name'],
+                'productSlug'=>$this->request['product_slug'],
+                'productId'=>$this->request['product_id'],
+            ]);
+            $this->productId = $this->request['product_id'];
         } else {
-            // new product
+            ProductModel::create([
+                'adminId'=>$this->userId,
+                'productName'=>$this->request['product_name'],
+                'productSlug'=>$this->request['product_slug'],
+                'memberId'=>$this->request['member_id'],
+            ]);
+            $product = ProductModel::get($this->request['product_slug']);
+            $this->productId = $product['product_id'];
         }
+        $this->manageTWP();
+        $this->deleteProductRequest(1);
+        $this->deleteTWPRequest(1);
         $this->success();
     }
     private function checkRequest() {
@@ -129,25 +149,53 @@ class ProductApproval extends Controller {
             exit();
         }
     }
+    private function manageTWP() {
+        RatingModel::deleteWithProductId($this->productId);
+        TagWithProductModel::free($this->productId);
+        $twpR = TagWithProductRequestModel::gets($this->data['productRequestID']);
+        foreach($twpR as $twpr) {
+            $tagId = $twpr['tag_id'];
+            if($tagId==null) {
+                // ilk önce tag oluşturulup sonra eklecek
+                TagModel::create([
+                    'memberId'=>$this->request['member_id'],
+                    'adminId'=>$this->userId,
+                    'createdFor'=>$this->productId,
+                    'tagName'=>$twpr['tag_name'],
+                    'tagSlug'=>$twpr['tag_slug'],
+                    'tagPassive'=>true  // bu şimdilik, bunun bilgisini adminden almam gerekiyor
+                ]);
+                $newTag = TagModel::get($twpr['tag_slug']);
+                $tagId = $newTag['tag_id'];
+            }
+            TagWithProductModel::attach([
+                'tagId'=>$tagId,
+                'productId'=>$this->productId,
+                'adminId'=>$this->userId,
+                'memberId'=>$this->request['member_id'],
+            ]);
+        }
+    }
     protected function delete() {
         $this->checkRequest();
-        $this->deleteProductRequest();
-        $this->deleteTWPRequest();
+        $this->deleteProductRequest(0);
+        $this->deleteTWPRequest(0);
         $this->success();
     }
-    private function deleteProductRequest() {
+    private function deleteProductRequest($accepted) {
         $this->adminNote = (isset($this->data['adminNote']))?$this->data['adminNote']:Config::ADMIN_NOTES['newProductRequestDeleteNote'];
         Database::executeWithErr('UPDATE product_request SET product_request_answered=1, admin_note=? WHERE product_request_id=?', [
             $this->adminNote,
             $this->data['productRequestID']
         ]);
-        Database::executeWithErr('INSERT INTO product_request_response (product_request_id, admin_id, accepted, admin_note) VALUES(?,?,0,?)', [
+        Database::executeWithErr('INSERT INTO product_request_response (product_request_id, admin_id, accepted, admin_note) VALUES(?,?,?,?)', [
             $this->data['productRequestID'],
             $this->userId,
+            $accepted,
             $this->adminNote
         ]);
     }
-    private function deleteTWPRequest() {
+    private function deleteTWPRequest($allowed) {
         Database::executeWithErr('UPDATE tag_with_product_request SET tag_with_product_request_answered=1, admin_note=? WHERE product_request_id=?', [
             $this->adminNote,
             $this->data['productRequestID']
@@ -156,9 +204,10 @@ class ProductApproval extends Controller {
             $this->data['productRequestID']
         ]);
         foreach($TWPRequest as $twp) {
-            Database::executeWithErr('INSERT INTO tag_with_product_request_response (tag_with_product_request_id, admin_id, allowed_or_denied, admin_note) VALUES(?,?,0,?)', [
+            Database::executeWithErr('INSERT INTO tag_with_product_request_response (tag_with_product_request_id, admin_id, allowed_or_denied, admin_note) VALUES(?,?,?,?)', [
                 $twp['tag_with_product_request_id'],
                 $this->userId,
+                $allowed,
                 $this->adminNote
             ]);
         }
