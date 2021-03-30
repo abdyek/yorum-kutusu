@@ -196,7 +196,7 @@ class Tags extends React.Component {
         }
         return(
             <div>
-                <div class="tags">
+                <div className="tags">
                     {this.tags}
                 </div>
             </div>

@@ -464,11 +464,11 @@ var EditProductButton = function (_React$Component3) {
                     null,
                     React.createElement(
                         "button",
-                        { "class": "ui teal button", onClick: this.goEditProduct },
+                        { className: "ui teal button", onClick: this.goEditProduct },
                         React.createElement(
                             "i",
-                            { "class": "icon" },
-                            React.createElement("i", { "class": "fa fa-pencil-square-o", "aria-hidden": "true" })
+                            { className: "icon" },
+                            React.createElement("i", { className: "fa fa-pencil-square-o", "aria-hidden": "true" })
                         ),
                         "D\xFCzenle"
                     )

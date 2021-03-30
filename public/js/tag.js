@@ -282,7 +282,7 @@ var Tags = function (_React$Component3) {
                 null,
                 React.createElement(
                     "div",
-                    { "class": "tags" },
+                    { className: "tags" },
                     this.tags
                 )
             );

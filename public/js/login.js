@@ -135,10 +135,10 @@ var LogIn = function (_React$Component) {
                             { size: "eight" },
                             React.createElement(
                                 "div",
-                                { "class": "ui blue message" },
+                                { className: "ui blue message" },
                                 React.createElement(
                                     "div",
-                                    { "class": "header" },
+                                    { className: "header" },
                                     "Ba\u015Far\u0131l\u0131 bir \u015Fekilde giri\u015F yapt\u0131n\u0131z"
                                 ),
                                 "Bir ka\xE7 saniye i\xE7erisinde ana sayfaya y\xF6nlendirileceksiniz"

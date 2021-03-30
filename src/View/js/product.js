@@ -364,9 +364,9 @@ class EditProductButton extends React.Component {
         return(
             <Row size="one">
                 <Column>
-                    <button class="ui teal button" onClick={this.goEditProduct}>
-                        <i class="icon">
-                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                    <button className="ui teal button" onClick={this.goEditProduct}>
+                        <i className="icon">
+                            <i className="fa fa-pencil-square-o" aria-hidden="true"></i>
                         </i>
                         Düzenle
                     </button>

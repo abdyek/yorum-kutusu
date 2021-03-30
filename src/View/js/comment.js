@@ -1173,7 +1173,7 @@ class Comments extends React.Component {
 			return(
 				<Row size="one">
 					<Column>
-						<div class="ui big yellow message">
+						<div className="ui big yellow message">
                                                     Yorum yok, ilk yorum senden olsun!
 						</div>
 					</Column>

@@ -98,8 +98,8 @@ class LogIn extends React.Component {
                     <Row size="sixteen">
                         <WideColumn size="four" />
                         <WideColumn size="eight">
-                            <div class="ui blue message">
-                                <div class="header">
+                            <div className="ui blue message">
+                                <div className="header">
                                     Başarılı bir şekilde giriş yaptınız
                                 </div>
                                 Bir kaç saniye içerisinde ana sayfaya yönlendirileceksiniz
