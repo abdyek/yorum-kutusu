@@ -12,11 +12,11 @@ class LoginAsAdmin extends Controller {
         http_response_code(401);
     }
     private function checkAdmin() {
-        $query = Database::getRow('SELECT * FROM admin WHERE admin_email=? and admin_inactive=0', [$this->data['email']]);
-        if($query) {
-            $hash = $query['admin_password_hash'];
+        $this->query = Database::existCheck('SELECT * FROM admin WHERE admin_email=? and admin_inactive=0', [$this->data['email']]);
+        if($this->query) {
+            $hash = $this->query['admin_password_hash'];
             if(password_verify($this->data['password'], $hash)) {
-                $this->sendToken($query['admin_id'], 'admin');
+                $this->sendToken($this->query['admin_id'], 'admin');
                 exit();
             }
         }
@@ -38,6 +38,12 @@ class LoginAsAdmin extends Controller {
             'httponly' => true,
             'samesite' => 'Strict',
         ]);
-        $this->response(['jwt'=>$token, 'userID'=>$userid, 'who'=>'admin']);
+        $this->response([
+            'jwt'=>$token,
+            'id'=>$userid,
+            'username'=>$this->query['admin_username'],
+            'email'=>$this->query['admin_email'],
+            'who'=>'admin'
+        ]);
     }
 }

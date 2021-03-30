@@ -12,7 +12,7 @@ class CommentRequest extends Controller {
         $this->success(['request'=>$this->reqArr]);
     }
     private function prepareRequest() {
-        $request = Database::getRows('SELECT * FROM comment_request cr INNER JOIN member m ON cr.member_id=m.member_id WHERE cr.cancelled=0 AND cr.comment_request_answered=0 AND cr.product_request_id IS NULL');
+        $request = Database::getRows('SELECT * FROM comment_request cr INNER JOIN member m ON cr.member_id=m.member_id INNER JOIN product p ON p.product_id=cr.product_id WHERE cr.cancelled=0 AND cr.comment_request_answered=0 AND cr.product_request_id IS NULL');
         $this->reqArr = [];
         foreach($request as $req) {
             $update = false;
@@ -20,13 +20,24 @@ class CommentRequest extends Controller {
                 $update = true;
             }
             $this->reqArr[] = [
-                'commentRequestID'=>$req['comment_request_id'],
-                'memberID'=>$req['member_id'],
-                'productRequestID'=>$req['product_request_id'],
-                'productID'=>$req['product_id'],
-                'commentID'=>$req['comment_id'],
-                'commentText'=>$req['comment_text'],
-                'commentRequestDateTime'=>$req['comment_request_date_time'],
+                'id'=>$req['comment_request_id'],
+                'member'=>[
+                    'id'=>$req['member_id'],
+                    'username'=>$req['member_username'],
+                    'slug'=>$req['member_slug'],
+                    'email'=>$req['member_email'],
+                ],
+                'product'=>[
+                    'id'=>$req['product_id'],
+                    'name'=>$req['product_name'],
+                    'slug'=>$req['product_slug'],
+                    //'requestId'=>$req['product_request_id'],
+                ],
+                'comment'=>[
+                    'id'=>$req['comment_id'],
+                    'text'=>$req['comment_text'],
+                    'dateTime'=>$req['comment_request_date_time'],
+                ],
                 'update'=>$update
             ];
         }

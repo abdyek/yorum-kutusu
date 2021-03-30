@@ -39,13 +39,21 @@ Vue.component('login', {
     data: function() {
         return {
             email:"",
-            password:""
+            password:"",
         }
+    },
+    computed: {
+        ...Vuex.mapState([
+            'message'
+        ]),
     },
     methods: {
         ...Vuex.mapActions([
             'setEntered',
             'setLoading',
+            'setUsername',
+            'setEmail',
+            'setMessage',
         ]),
         login() {
             this.setLoading(true);
@@ -63,13 +71,14 @@ Vue.component('login', {
                 else return response.json();
             }).then((json)=>{
                 this.setEntered(true);
+                this.setUsername(json.username);
+                this.setEmail(json.email);
                 this.setLoading(false);
             }).catch((error)=>{
-                if(error.message==401) {
-                    
-                }
+                this.setLoading(false);
+                this.setMessage("Bir hata oldu : " +error.message);
             });
-        }
+        },
     },
     template: `
         <div>
@@ -79,6 +88,11 @@ Vue.component('login', {
                     <row>
                         <column>
                             <h1 class="textAlignCenter">Yönetici Girişi</h1>
+                        </column>
+                    </row>
+                    <row v-if="this.message.length">
+                        <column>
+                            {{this.message}}
                         </column>
                     </row>
                     <row>
@@ -121,11 +135,21 @@ Vue.component('task-wrapper', {
             default:"name"
         },
     },
+    methods: {
+        load() {
+            this.$emit('handleLoad');
+        }
+    },
     template: `
         <div>
-            <row>
+            <row size="two">
                 <column>
-                    <h1>{{name}}</h1>
+                    <h2>{{name}}</h2>
+                </column>
+                <column>
+                    <float-right>
+                        <customable-button type="teal" name="Yükle" @handleClick="load"></customable-button>
+                    </float-right>
                 </column>
             </row>
             <row>
@@ -138,10 +162,106 @@ Vue.component('task-wrapper', {
 });
 
 Vue.component('comment-request', {
+    data: function() {
+        return {
+            commentRequest: [],
+            empty:false,
+            message:"",
+        };
+    },
+    methods: {
+        load() {
+            fetch(SITEURL + 'api/commentRequest', {method: 'GET'}).then((response)=>{
+                if(!response.ok) throw new Error(response.status);
+                else return response.json();
+            }).then((json)=> {
+                if(json.other.request.length) {
+                    this.commentRequest = json.other.request;
+                    this.message = "";
+                } else {
+                    this.message = "(yok)";
+                }
+            }).catch((error) => {
+                this.message = "Bir hata oldu :" + error.messagek
+            });
+        }
+    },
     template: `
-        <task-wrapper name="Yorum İstekleri">
-            yorum istekleri buraya gelecek
+        <task-wrapper name="Yorum İstekleri" @handleLoad="load">
+            <row v-if="this.message.length">
+                <column>
+                    <center><h2>{{message}}</h2></center>
+                </column>
+            </row>
+            <comment-request-line v-for="request in commentRequest" :member="request.member" :key="request.id" :id="request.id" :product="request.product" :comment="request.comment">
+            </comment-request-line>
         </task-wrapper>
+    `
+});
+
+Vue.component('comment-request-line', {
+    props:['id', 'member', 'product', 'comment'],
+    data: function() {
+        return {
+            note:"Teşekkürler",
+            message:""
+        }
+    },
+    methods: {
+        decision(allow) {
+            fetch(SITEURL + 'api/commentRequest', {
+                method: 'POST',
+                header: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    commentRequestID:this.id,
+                    allow: allow,
+                    adminNote: this.note
+                })
+            }).then((response)=>{
+                if(!response.ok) throw new Error(response.status);
+                else return response.json();
+            }).then((json)=>{
+                this.setMessage("Başarılı");
+            }).catch((error)=>{
+                this.setMessage("Bir hata oldu :" + error.message);
+            });
+        },
+        setMessage(message) {
+            this.message = message;
+        }
+    },
+    template: `
+        <div>
+            <div v-if="this.message.length">
+                {{message}}
+            </div>
+            <div v-else>
+                <h3>{{id}}</h3>  
+                <b>Üye</b>
+                <div>{{member.username}} ({{member.slug}} - {{member.email}})</div>
+                <b>Ürün</b>
+                <div>{{product.name}} ({{product.slug}})</div>
+                <b>Yorum</b>
+                <div>id : {{comment.id}}<br/> {{comment.text}} <br/> {{comment.dateTime}} </div>
+                <row>
+                    <column>
+                        <textarea v-model="note"></textarea>
+                    </column>
+                </row>
+                <row size="two">
+                    <column>
+                        <customable-button name="Onayla" type="green" @handleClick="decision(true)"></customable-button>
+                    </column>
+                    <column>
+                        <float-right>
+                            <customable-button name="Reddet" type="red" @handleClick="decision(false)"></customable-button>
+                        </float-right>
+                    </column>
+                </row>
+            </div>
+        </div>
     `
 });
 
@@ -156,8 +276,7 @@ Vue.component('admin-info', {
         <div>
             <row size="two">
                 <column>
-                    <h2>{{username}}</h2>
-                    <h3>{{email}}</h3>
+                    <h2>{{username}} ({{email}})</h2>
                 </column>
                 <column>
                     <logout></logout>

@@ -5,6 +5,7 @@ const state = {
     loading:true,
     username:'',
     email:'',
+    message:"",
 };
 
 const getters = {
@@ -23,6 +24,9 @@ const mutations = {
     },
     setEmail(state, value) {
         state.email = value;
+    },
+    setMessage(state, value) {
+        state.message = value;
     }
 };
 
@@ -38,6 +42,9 @@ const actions = {
     },
     setEmail({commit}, value) {
         commit('setEmail', value);
+    },
+    setMessage({commit}, value) {
+        commit('setMessage', value);
     },
 };
 
