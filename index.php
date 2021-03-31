@@ -44,9 +44,9 @@ $router->get('/e-posta-dogrula/:any?', function() {
     Tool::generatePage('e-posta-dogrula');
 });
 
-$router->get('/filtrele/:any?', function() {
+/* $router->get('/filtrele/:any?', function() {
     Tool::generatePage('filtrele');
-});
+}); */
 
 $router->get('/urun-duzenle/:slug', function() {
     Tool::generatePage('urun-duzenle');
@@ -69,9 +69,9 @@ $router->any('/api/:string', function($controller) {
 });
 
 // Test
-$router->get('/test/api', function() {
+/* $router->get('/test/api', function() {
     $main = new YorumKutusu\Test\Main();
-});
+}); */
 
 // Admin
 $router->get('/yonet', function() {
