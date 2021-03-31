@@ -124,6 +124,7 @@ Vue.component('all-task', {
     template: `
         <div>
             <comment-request></comment-request>
+            <product-request></product-request>
         </div>
     `
 });
@@ -237,7 +238,7 @@ Vue.component('comment-request-line', {
             <div v-if="this.message.length">
                 {{message}}
             </div>
-            <div v-else>
+            <div v-else class="margin-top-bottom-2rem">
                 <h3>{{id}}</h3>  
                 <b>Üye</b>
                 <div>{{member.username}} ({{member.slug}} - {{member.email}})</div>
@@ -260,6 +261,149 @@ Vue.component('comment-request-line', {
                         </float-right>
                     </column>
                 </row>
+                <br />
+            </div>
+        </div>
+    `
+});
+
+Vue.component('product-request', {
+    data: function() {
+        return {
+            productRequest: [],
+            message:""
+        }
+    },
+    methods: {
+        load() {
+            fetch(SITEURL + 'api/productApproval', {method: 'GET'}).then((response)=>{
+                if(!response.ok) throw new Error(response.status);
+                else return response.json();
+            }).then((json)=> {
+                if(json.other.productRequest.length) {
+                    this.productRequest = json.other.productRequest;
+                    this.message = "";
+                } else {
+                    this.message = "(yok)";
+                }
+            }).catch((error) => {
+                this.message = "Bir hata oldu :" + error.messagek
+            });
+        }
+    },
+    template: `
+        <task-wrapper name="Ürün İstekleri" @handleLoad="load">
+            <row v-if="this.message.length">
+                <column>
+                    <center><h2>{{message}}</h2></center>
+                </column>
+            </row>
+            <product-request-line v-for="request in productRequest" :key="request.request.id" :request="request"></product-request-line>
+        </task-wrapper>
+    `
+});
+
+Vue.component('product-request-line', {
+    props:{
+        request: {
+            type:Object,
+            default:Object(),
+        },
+    },
+    methods: {
+        allow() {
+            
+        }
+    },
+    template: `
+        <div class="margin-top-bottom-2rem">
+            <h3>{{request.request.id}}</h3>
+            <b>Üye</b>
+            <div>{{request.member.username}} ({{request.member.slug}} - {{request.member.email}})</div>
+            <b>İstek Türü: {{request.request.type}}</b>
+            <div v-if="request.request.type==='new'">
+                <b>name: </b>{{request.newProduct.name}}<br/>
+                <b>slug: </b>{{request.newProduct.slug}}<br/>
+            </div>
+            <div v-else>
+                <b>id: </b>{{request.availableProduct.id}}<br />
+                <b>name: </b>{{request.availableProduct.name}}==><b>{{request.update.name}}</b><br />
+                <b>slug: </b>{{request.availableProduct.slug}}==><b>{{request.update.slug}}</b><br />
+            </div>
+            <div><b>Etiketler</b></div>
+            <tag-area v-for="twp in request.tagWithProduct" :key="twp.twpRequestID" :twp="twp" :requestId="request.request.id"></tag-area>
+        </div>
+    `
+});
+
+Vue.component('tag-area', {
+    props: {
+        twp: {
+            type:Object,
+        },
+        requestId: {
+            type:String
+        },
+    },
+    computed: {
+        ...Vuex.mapState([
+            'newTags'
+        ]),
+    },
+    data: function() {
+        return {
+            passive:false
+        };
+    },
+    methods: {
+        ...Vuex.mapActions([
+            'addNewTag',
+            'setNewTagPassiveActive',
+        ]),
+        makeActive() {
+            this.setNewTagPassiveActive({
+                'id':this.requestId,
+                'slug':this.twp.newTag.slug,
+                'value':false
+            });
+            this.passive = false;
+        },
+        makePassive() {
+            this.setNewTagPassiveActive({
+                'id':this.requestId,
+                'slug':this.twp.newTag.slug,
+                'value':true
+            });
+            this.passive = true;
+        }
+    },
+    created() {
+        if(this.twp.type==='new') {
+            this.addNewTag({
+                'id': this.requestId,
+                'slug': this.twp.newTag.slug
+            });
+        }
+    },
+    //this.newTags[this.requestId][this.twp.newTag.slug]"
+    template:`
+        <div class="padding-left-2rem margin-top-bottom-2rem">
+            <b>Tür:</b>{{twp.type}}
+            <div v-if="twp.type==='available'">
+                <b>id:</b>{{twp.tag.id}}<br/>
+                <b>name:</b>{{twp.tag.name}}<br/>
+                <b>slug:</b>{{twp.tag.slug}}<br/>
+                <b>passive:</b>{{twp.tag.passive}}<br/>
+            </div>
+            <div v-else>
+                <b>name:</b>{{twp.newTag.name}}<br/>
+                <b>slug:</b>{{twp.newTag.slug}}<br/>
+                <div v-if="this.passive">
+                    <customable-button name="Pasif" type="orange" @handleClick="makeActive"></customable-button>
+                </div>
+                <div v-else>
+                    <customable-button name="Aktif" type="green" @handleClick="makePassive"></customable-button>
+                </div>
             </div>
         </div>
     `

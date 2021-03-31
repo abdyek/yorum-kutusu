@@ -1,3 +1,8 @@
+body {
+    padding-top:2rem;
+    font-size:1.5rem;
+}
+
 .floatRight {
     float:right;
 }
@@ -6,3 +11,11 @@
     text-align:center;
 }
 
+.padding-left-2rem {
+    padding-left:2rem;
+}
+
+.margin-top-bottom-2rem {
+    margin-top:2rem;
+    margin-bottom:2rem;
+}

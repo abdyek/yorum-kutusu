@@ -32,13 +32,14 @@ class ProductApproval extends Controller {
         $this->reqArr[] = [
             'request'=>[
                 'type'=>'update',
-                'productRequestID'=>$req['product_request_id'],
-                'productRequestDateTime'=>$req['product_request_date_time'],
+                'id'=>$req['product_request_id'],
+                'dateTime'=>$req['product_request_date_time'],
             ],
             'member'=>[
                 'id'=>$req['member_id'],
                 'username'=>$req['member_username'],
-                'slug'=>$req['member_slug']
+                'slug'=>$req['member_slug'],
+                'email'=>$req['member_email'],
             ],
             'availableProduct'=>$this->prepareProduct($req['product_id']),
             'update'=>[
@@ -52,20 +53,21 @@ class ProductApproval extends Controller {
         $twp = $this->prepareTWPRequest($req['product_request_id']);
         $this->reqArr[] = [
             'request'=>[
-                'type'=>'newProduct',
-                'productRequestID'=>$req['product_request_id'],
-                'productRequestDateTime'=>$req['product_request_date_time'],
+                'type'=>'new',
+                'id'=>$req['product_request_id'],
+                'dateTime'=>$req['product_request_date_time'],
             ],
             'member'=>[
                 'id'=>$req['member_id'],
                 'username'=>$req['member_username'],
                 'slug'=>$req['member_slug'],
+                'email'=>$req['member_email'],
             ],
             'newProduct'=>[
                 'name'=>$req['product_name'],
                 'slug'=>$req['product_slug'],
-                'tagWithProduct'=>$twp
-            ]
+            ],
+            'tagWithProduct'=>$twp
         ];
         
     }
@@ -103,11 +105,10 @@ class ProductApproval extends Controller {
     private function prepareTag($tagID) {
         $tag = Database::existCheck('SELECT * FROM tag WHERE tag_id=?', [$tagID]);
         return [
-            'tagID'=>$tag['tag_id'],
-            'tagName'=>$tag['tag_name'],
-            'tagSlug'=>$tag['tag_slug'],
-            'tagPassive'=>$tag['tag_passive'],
-            'tagProductCount'=>$tag['tag_product_count']
+            'id'=>$tag['tag_id'],
+            'name'=>$tag['tag_name'],
+            'slug'=>$tag['tag_slug'],
+            'passive'=>($tag['tag_passive']==='1')?true:false,
         ];
     }
     private function showDBErr() {

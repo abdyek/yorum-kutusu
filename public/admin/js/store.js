@@ -6,6 +6,7 @@ const state = {
     username:'',
     email:'',
     message:"",
+    newTags:{},
 };
 
 const getters = {
@@ -27,6 +28,15 @@ const mutations = {
     },
     setMessage(state, value) {
         state.message = value;
+    },
+    addNewTag(state, object) {
+        if(!state.newTags[object['id']]) {
+            state.newTags[object['id']] = {};
+        }
+        state.newTags[object['id']][object['slug']] = false;
+    },
+    setNewTagPassiveActive(state, object) {
+        state.newTags[object['id']][object['slug']] = object['value'];
     }
 };
 
@@ -45,6 +55,12 @@ const actions = {
     },
     setMessage({commit}, value) {
         commit('setMessage', value);
+    },
+    addNewTag({commit}, object) {
+        commit('addNewTag', object);
+    },
+    setNewTagPassiveActive({commit}, object) {
+        commit('setNewTagPassiveActive', object);
     },
 };
 
