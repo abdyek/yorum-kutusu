@@ -12,7 +12,7 @@ class CommentRequest extends Controller {
         $this->success(['request'=>$this->reqArr]);
     }
     private function prepareRequest() {
-        $request = Database::getRows('SELECT * FROM comment_request cr INNER JOIN member m ON cr.member_id=m.member_id INNER JOIN product p ON p.product_id=cr.product_id WHERE cr.cancelled=0 AND cr.comment_request_answered=0 AND cr.product_request_id IS NULL');
+        $request = Database::getRows('SELECT * FROM comment_request cr INNER JOIN member m ON cr.member_id=m.member_id INNER JOIN product p ON p.product_id=cr.product_id WHERE cr.cancelled=0 AND cr.comment_request_answered=0 AND cr.product_request_id IS NULL LIMIT 10');
         $this->reqArr = [];
         foreach($request as $req) {
             $update = false;

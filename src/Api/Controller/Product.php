@@ -26,7 +26,7 @@ class Product extends Controller {
 
         $this->updateLastSeen();
         $this->mergeAllInfo();
-        $this->increaseProductFetchCount();
+        //$this->increaseProductFetchCount();
     }
     private function checkSortBy() {
         if(!in_array($this->data['type'], ['time', 'like'])) {

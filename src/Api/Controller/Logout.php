@@ -11,7 +11,12 @@ class Logout extends Controller {
     protected function post() {
         if(isset($_COOKIE['jwt'])){
             unset($_COOKIE['jwt']);
-            setcookie('jwt',null, -1);
+            setcookie('jwt', null, [
+                'expires' => -1 ,
+                'secure' => false,
+                'httponly' => true,
+                'samesite' => 'Strict',
+            ]);
         }
         $this->success();
     }

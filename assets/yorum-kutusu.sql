@@ -958,13 +958,10 @@ INSERT INTO `admin` (`admin_id`, `admin_username`, `admin_email`, `admin_passwor
 (1, 'Yönetici', 'yunusemrebulut123@gmail.com', '$2y$10$3D7g28zGR4XAlLqetEDTM.Fz/7g1/VEeHDOa/aKByT/bBsHxIANuS', 0, 1);
 
 INSERT INTO `member` (`member_id`, `member_username`, `member_slug`, `member_first_email`, `member_email`, `member_password_hash`, `member_create_date_time`, `member_password_change_count`, `member_confirmed_email`, `member_deleted`, `request_pointer`, `member_restricted`, `point`) VALUES
-(1, 'Yorum Kutusu', 'yorumkutusu', 'info@yorumkutusu.com', 'info@yorumkutusu.com', '$2y$10$TUkUcVjoDVHA48in9Z.7bel76B3p6OfXQOfD2xdfZRP0W1olxcRyS', '2021-03-26 19:47:12', 0, 1, 0, 1, 1, 0);
+(1, 'Yorum Kutusu', 'yorumkutusu', 'info@yorumkutusu.com', 'info@yorumkutusu.com', '$2y$10$TUkUcVjoDVHA48in9Z.7bel76B3p6OfXQOfD2xdfZRP0W1olxcRyS', '2021-03-26 19:47:12', 0, 1, 0, 1, 0, 0);
 
 INSERT INTO `confirm_email` (`confirm_email_id`, `member_id`, `confirm_code`, `confirm_email_date_time`, `trial`, `deleted`) VALUES
 (1, 1, 'vPjBnq5cJ2', '2021-03-26 19:48:51', 0, 1);
-
-INSERT INTO `member_email_history` (`member_email_history_id`, `member_id`, `member_email`, `change_date_time`, `confirmed_email_date_time`, `code`, `member_confirmed_email`) VALUES
-(1, 1, 'info@yorumkutusu.com', '2021-03-26 19:47:12', '2021-03-26 19:49:02', 682151, 1);
 
 INSERT INTO `product` (`product_id`, `admin_id`, `member_id`, `product_name`, `product_slug`, `product_deleted`, `product_created_by_member`, `product_create_date_time`, `product_comment_count`, `product_follow_count`, `history_pointer`) VALUES
 (1, 1, NULL, 'Yorum Kutusu', 'yorumkutusu', 0, 0, '2021-03-26 19:57:34', 1, 0, 1);
@@ -981,6 +978,3 @@ INSERT INTO `tag_with_product` (`tag_with_product_id`, `tag_id`, `product_id`, `
 
 INSERT INTO `comment` (`comment_id`, `member_id`, `product_id`, `admin_id`, `comment_text`, `comment_create_date_time`, `comment_edited`, `comment_deleted`, `comment_last_edit_date_time`, `comment_like_count`, `history_pointer`) VALUES
 (1, 1, 1, NULL, 'Yorum Kutusu\'na Hoş Geldiniz!\nSitemiz hakkında istek, öneri, şikayet ve hata bildiriminde bulunabilirsiniz.', '2021-03-26 20:42:05', 0, 0, NULL, 0, 0);
-
-INSERT INTO `member_restricted_history` (`member_restricted_history_id`, `admin_id`, `member_id`, `member_restricted_history_date_time`, `restricted`, `admin_note`) VALUES
-(1, 1, 1, '2021-03-26 20:31:58', 0, 'Kısıtı kaldırıldı');

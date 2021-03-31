@@ -29,7 +29,7 @@
         </div>
     </div>
     <script src="https://unpkg.com/vuex@3.6.2/dist/vuex.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
     <script src="<?php echo Config::SITEURL ?>public/script/script.js"></script>
     <script src="<?php echo Config::SITEURL ?>public/admin/js/components.js"></script>
     <script src="<?php echo Config::SITEURL ?>public/admin/js/store.js"></script>
