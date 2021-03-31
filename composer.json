@@ -2,7 +2,7 @@
     "name":"abdyek/yorum-kutusu",
     "description": "Ürün Yorumlama Üzerine Web Application",
     "require": {
-        "izniburak/router": "^1.5",
+        "izniburak/router": "^2.0",
         "adhocore/jwt": "^1.0",
         "phpmailer/phpmailer": "^6.2"
     },

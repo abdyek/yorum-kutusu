@@ -10,11 +10,14 @@ if (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] === "off") {
 require 'vendor/autoload.php';
 
 use YorumKutusu\View\Php\Tool;
+use Buki\Router\Router;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 date_default_timezone_set('Europe/Istanbul');
 // bunu nereye yerleştiricem bilmiyorum, şimdilik burada dursun
 
-$router = new Buki\Router();
+$router = new Router;
 
 $router->get('/', function() {
     Tool::generatePage('ana-sayfa');
