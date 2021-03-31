@@ -310,28 +310,94 @@ Vue.component('product-request-line', {
             default:Object(),
         },
     },
+    computed: {
+        ...Vuex.mapState([
+            'newTags'
+        ]),
+    },
+    data: function() {
+        return {
+            message:"",
+            success:false,
+        }
+    },
     methods: {
         allow() {
-            
+            console.log(this.newTags);
+            fetch(SITEURL + 'api/productApproval', {
+                method: 'POST',
+                header: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    productRequestID: this.request.request.id,
+                    newTags:this.newTags[this.request.request.id],
+                })
+            }).then((response)=>{
+                if(!response.ok) throw new Error(response.status);
+                else return response.json();
+            }).then((json)=>{
+                this.message="";
+                this.success=true;
+            }).catch((error)=>{
+                this.message = "Bir hata oldu: " + error.message;
+            });
+        },
+        deny() {
+            fetch(SITEURL + 'api/productApproval', {
+                method: 'DELETE',
+                header: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    productRequestID: this.request.request.id,
+                })
+            }).then((response)=>{
+                if(!response.ok) throw new Error(response.status);
+                else return response.json();
+            }).then((json)=>{
+                this.message="";
+                this.success=true;
+            }).catch((error)=>{
+                this.message = "Bir hata oldu: " + error.message;
+            });
         }
     },
     template: `
         <div class="margin-top-bottom-2rem">
-            <h3>{{request.request.id}}</h3>
-            <b>Üye</b>
-            <div>{{request.member.username}} ({{request.member.slug}} - {{request.member.email}})</div>
-            <b>İstek Türü: {{request.request.type}}</b>
-            <div v-if="request.request.type==='new'">
-                <b>name: </b>{{request.newProduct.name}}<br/>
-                <b>slug: </b>{{request.newProduct.slug}}<br/>
+            <div v-if="success">
+                Başarılı
             </div>
             <div v-else>
-                <b>id: </b>{{request.availableProduct.id}}<br />
-                <b>name: </b>{{request.availableProduct.name}}==><b>{{request.update.name}}</b><br />
-                <b>slug: </b>{{request.availableProduct.slug}}==><b>{{request.update.slug}}</b><br />
+                <div v-if="message.length">
+                    <basic-message :message="message"></basic-message>
+                </div>
+                <h3>{{request.request.id}}</h3>
+                <b>Üye</b>
+                <div>{{request.member.username}} ({{request.member.slug}} - {{request.member.email}})</div>
+                <b>İstek Türü: {{request.request.type}}</b>
+                <div v-if="request.request.type==='new'">
+                    <b>name: </b>{{request.newProduct.name}}<br/>
+                    <b>slug: </b>{{request.newProduct.slug}}<br/>
+                </div>
+                <div v-else>
+                    <b>id: </b>{{request.availableProduct.id}}<br />
+                    <b>name: </b>{{request.availableProduct.name}}==><b>{{request.update.name}}</b><br />
+                    <b>slug: </b>{{request.availableProduct.slug}}==><b>{{request.update.slug}}</b><br />
+                </div>
+                <div><b>Etiketler</b></div>
+                <tag-area v-for="twp in request.tagWithProduct" :key="twp.twpRequestID" :twp="twp" :requestId="request.request.id"></tag-area>
+                <row size="two">
+                    <column>
+                        <customable-button type="green" name="Onayla" @handleClick="allow"></customable-button>
+                    </column>
+                    <column>
+                        <float-right>
+                            <customable-button type="red" name="Reddet" @handleClick="deny"></customable-button>
+                        </float-right>
+                    </column>
+                </row>
             </div>
-            <div><b>Etiketler</b></div>
-            <tag-area v-for="twp in request.tagWithProduct" :key="twp.twpRequestID" :twp="twp" :requestId="request.request.id"></tag-area>
         </div>
     `
 });
@@ -344,11 +410,6 @@ Vue.component('tag-area', {
         requestId: {
             type:String
         },
-    },
-    computed: {
-        ...Vuex.mapState([
-            'newTags'
-        ]),
     },
     data: function() {
         return {
@@ -385,7 +446,6 @@ Vue.component('tag-area', {
             });
         }
     },
-    //this.newTags[this.requestId][this.twp.newTag.slug]"
     template:`
         <div class="padding-left-2rem margin-top-bottom-2rem">
             <b>Tür:</b>{{twp.type}}

@@ -164,7 +164,7 @@ class ProductApproval extends Controller {
                     'createdFor'=>$this->productId,
                     'tagName'=>$twpr['tag_name'],
                     'tagSlug'=>$twpr['tag_slug'],
-                    'tagPassive'=>true  // bu şimdilik, bunun bilgisini adminden almam gerekiyor
+                    'tagPassive'=>($this->data['newTags'][$twpr['tag_slug']])?1:0,
                 ]);
                 $newTag = TagModel::get($twpr['tag_slug']);
                 $tagId = $newTag['tag_id'];
