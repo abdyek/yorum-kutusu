@@ -8,7 +8,7 @@ use \PDO as PDO;
         private static $db;
         public static function connect() {
             try {
-                self::$db = new PDO('mysql:host=localhost;dbname='.Config::DBNAME.';charset=utf8', Config::DBID, Config::DBPW);
+                self::$db = new PDO('mysql:host='.Config::DBHOST.';dbname='.Config::DBNAME.';charset=utf8', Config::DBID, Config::DBPW);
             } catch (PDOException $e){
                 print $e->getMessage();
             }

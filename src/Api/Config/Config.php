@@ -2,10 +2,11 @@
 
 namespace YorumKutusu\Api\Config;
     class Config {
-        const DBNAME = 'yorumkut_main';
-        const DBID = 'root';
+        const DBNAME = 'yorum-kutusu';                                  // yorumkut_main
+        const DBHOST = 'localhost';                                     // rd-station.guzelhosting.com
+        const DBID = 'root';                                            // yorumkut_user
         const DBPW = '';
-        const SITEURL = "https://yorumkutusu.com/";
+        const SITEURL = "https://localhost/";                          // https://yorumkutusu.com/
         const JWT_EXP = 31536000; // 1 yıllık token geçerliliği
         const SMTPHOST = 'rd-station.guzelhosting.com';
         const EMAILUSERNAME = 'noreply@yorumkutusu.com';
