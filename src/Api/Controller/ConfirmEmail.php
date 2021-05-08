@@ -15,8 +15,8 @@ class ConfirmEmail extends Controller {
         $this->deleteConfirm();
         $code = $this->insertConfirm($this->userId);
         $member = Database::getRow('SELECT member_username, member_email FROM member WHERE member_id=?', [$this->userId]);
-        $htmlBody = 'Doğrulama Kodu: <b>'.$code.'</b><br/>Bağlantıyı kullanarak e-posta doğrulama alanına geçebilirsiniz <a href="http://www.yorumkutusu.com/e-posta-dogrula/'.$code.'">Tıklayınız</a>';
-        $altBody = 'Doğrulama kodu: ' . $code . 'Bağlantıyı kullanarak e-posta doğrulama alanına geçebilirsiniz http://www.yorumkutusu.com/e-posta-dogrula/'.$code;
+        $htmlBody = 'Doğrulama Kodu: <b>'.$code.'</b><br/>Bağlantıyı kullanarak e-posta doğrulama alanına geçebilirsiniz <a href="http://yorumkutusu.com/e-posta-dogrula/'.$code.'">Tıklayınız</a>';
+        $altBody = 'Doğrulama kodu: ' . $code . 'Bağlantıyı kullanarak e-posta doğrulama alanına geçebilirsiniz http://yorumkutusu.com/e-posta-dogrula/'.$code;
         Other::sendMail($member['member_email'], $member['member_username'], 'E-posta Doğrulama', $htmlBody, $altBody);
         // ^ code and front-end link is here, link example is localhost/yorum-kutusu/e-posta-dogrula/IAbsAQl4IP
         $this->success();

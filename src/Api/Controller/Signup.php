@@ -46,8 +46,8 @@ class Signup extends Controller {
             exit();
         }
         $code = ConfirmEmail::insertConfirm($this->member['member_id']);
-        $htmlBody = '<h1>Yorum Kutusu\'na Hoş Geldiniz</h1>Doğrulama Kodu: <b>'.$code.'</b><br/>Bağlantıyı kullanarak e-posta doğrulama alanına geçebilirsiniz <a href="http://www.yorumkutusu.com/e-posta-dogrula/'.$code.'">Tıklayınız</a>';
-        $altBody = 'Doğrulama kodu: ' . $code . 'Bağlantıyı kullanarak e-posta doğrulama alanına geçebilirsiniz http://www.yorumkutusu.com/e-posta-dogrula/'.$code;
+        $htmlBody = '<h1>Yorum Kutusu\'na Hoş Geldiniz</h1>Doğrulama Kodu: <b>'.$code.'</b><br/>Bağlantıyı kullanarak e-posta doğrulama alanına geçebilirsiniz <a href="http://yorumkutusu.com/e-posta-dogrula/'.$code.'">Tıklayınız</a>';
+        $altBody = 'Doğrulama kodu: ' . $code . 'Bağlantıyı kullanarak e-posta doğrulama alanına geçebilirsiniz http://yorumkutusu.com/e-posta-dogrula/'.$code;
         Other::sendMail($this->member['member_email'], $this->member['member_username'], 'Hoş Geldiniz', $htmlBody, $altBody);
         $this->success();
     }

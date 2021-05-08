@@ -3,6 +3,7 @@
 namespace YorumKutusu\Api\Controller;
 use YorumKutusu\Api\Core\Controller;
 use YorumKutusu\Api\Core\Database;
+use YorumKutusu\Api\Core\Other;
 
 class ChangePassword extends Controller{
     protected function post() {
