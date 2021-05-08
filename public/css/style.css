@@ -215,6 +215,10 @@ footer{
     margin-bottom: 0.6rem;
 }
 
+.tags > a {
+    margin: 0.2rem !important;
+}
+
 /* seçimi iptal etmek için dokunun uyarısı */
 .info-span {
     color: grey !important;
@@ -297,6 +301,7 @@ label {
 }
 
 .tag-with-close {
+    margin: 0.2rem 0;
     float:left;
 }
 
