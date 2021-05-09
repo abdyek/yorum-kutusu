@@ -752,6 +752,15 @@ namespace YorumKutusu\Api\Config;
                 'keys'=>[
                     'POST'=>[]
                 ]
+            ],
+            'userInfo'=>[
+                'methods'=>['GET'],
+                'authorization'=>[
+                    'GET'=>['guest', 'admin', 'member']
+                ],
+                'keys'=>[
+                    'GET'=>[]
+                ]
             ]
         ];
     }

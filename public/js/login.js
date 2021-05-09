@@ -88,11 +88,7 @@ var LogIn = function (_React$Component) {
                         messageColor: "red"
                     });
                 } else if (error.message == 403) {
-                    _this2.setState({
-                        loading: false,
-                        message: "Zaten giriş yapılmış!",
-                        messageColor: "red"
-                    });
+                    location.reload();
                 }
             });
         }

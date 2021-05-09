@@ -34,6 +34,14 @@ class Menu extends React.Component {
                     </FloatRight>
                 </div>
             )
+        } else if(this.props.form==="loading") {
+                return (
+                    <div id="menu">
+                        <FloatRight>
+                            <button className="ui blue loading button">Giriş Yap</button> 
+                        </FloatRight>
+                    </div>
+                )
         } else if(this.props.form==="account") {
             if(this.props.unreadCommentsCount!==0) {
                 return (
@@ -504,9 +512,12 @@ class App extends React.Component {
         let userInfo = getUserInfo();
         this.state = {
             content:this.props.content,
-            form:(userInfo)?"account":"login", // login, account
-            userSlug:(userInfo)?userInfo['slug']:"",
-            unreadCommentsCount: (userInfo)?userInfo["unreadComments"]:0
+            form:"loading", //(userInfo)?"account":"login", // login, account, loading
+            who: "guest",
+            userId:"",
+            userSlug: "", //(userInfo)?userInfo['slug']:"",
+            username: "",
+            unreadCommentsCount: "" //(userInfo)?userInfo["unreadComments"]:0,
         };
         this.contentFromSlug = {
             " ":"index",
@@ -527,11 +538,43 @@ class App extends React.Component {
                 "content":this.contentFromSlug[page]
             });
         }.bind(this);
+        this.checkLogin();
         this.updateMenu = this.updateMenu.bind(this);
         this.updateUnreadComments = this.updateUnreadComments.bind(this);
         this.changeContent = this.changeContent.bind(this);
         this.logout = this.logout.bind(this);
         this.changeHeader = this.changeHeader.bind(this);
+        this.checkLogin = this.checkLogin.bind(this);
+    }
+    checkLogin() {
+        fetch(SITEURL + 'api/userInfo', {method: 'GET'}).then((response)=>{
+            if(!response.ok) throw new Error(response.status);
+            else return response.json();
+        }).then((json)=>{
+            if(json.other.who==='member') {
+                this.setState({
+                    form:"account",
+                    unreadCommentsCount: json.other.info.unreadComments,
+                    userSlug: json.other.info.slug,
+                    username: json.other.info.username
+                });
+                let userInfo = getUserInfo();
+                if(!userInfo) {
+                    let hash = base64FromObject({
+                        'userID':json.other.info.userId,
+                        'username':json.other.info.username,
+                        'slug':json.other.info.slug,
+                        'unreadComments':json.other.info.unreadComments,
+                    });
+                    setCookie('user', hash);
+                    this.changeContent(' ', true);
+                }
+            } else if(json.other.who==='guest') {
+                this.setState({
+                    form:"login"
+                });
+            }
+        }).catch((error) => {});
     }
     updateMenu(slug) {
         this.setState({

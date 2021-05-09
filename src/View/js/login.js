@@ -66,11 +66,7 @@ class LogIn extends React.Component {
                     messageColor:"red"
                 });
             } else if(error.message==403) {
-                this.setState({
-                    loading:false,
-                    message: "Zaten giriş yapılmış!",
-                    messageColor:"red"
-                });
+                location.reload();
             }
         });
     }

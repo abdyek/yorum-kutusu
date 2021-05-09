@@ -73,6 +73,20 @@ var Menu = function (_React$Component) {
                         )
                     )
                 );
+            } else if (this.props.form === "loading") {
+                return React.createElement(
+                    "div",
+                    { id: "menu" },
+                    React.createElement(
+                        FloatRight,
+                        null,
+                        React.createElement(
+                            "button",
+                            { className: "ui blue loading button" },
+                            "Giri\u015F Yap"
+                        )
+                    )
+                );
             } else if (this.props.form === "account") {
                 if (this.props.unreadCommentsCount !== 0) {
                     return React.createElement(
@@ -699,9 +713,12 @@ var App = function (_React$Component9) {
         var userInfo = getUserInfo();
         _this14.state = {
             content: _this14.props.content,
-            form: userInfo ? "account" : "login", // login, account
-            userSlug: userInfo ? userInfo['slug'] : "",
-            unreadCommentsCount: userInfo ? userInfo["unreadComments"] : 0
+            form: "loading", //(userInfo)?"account":"login", // login, account, loading
+            who: "guest",
+            userId: "",
+            userSlug: "", //(userInfo)?userInfo['slug']:"",
+            username: "",
+            unreadCommentsCount: "" //(userInfo)?userInfo["unreadComments"]:0,
         };
         _this14.contentFromSlug = {
             " ": "index",
@@ -722,15 +739,50 @@ var App = function (_React$Component9) {
                 "content": this.contentFromSlug[page]
             });
         }.bind(_this14);
+        _this14.checkLogin();
         _this14.updateMenu = _this14.updateMenu.bind(_this14);
         _this14.updateUnreadComments = _this14.updateUnreadComments.bind(_this14);
         _this14.changeContent = _this14.changeContent.bind(_this14);
         _this14.logout = _this14.logout.bind(_this14);
         _this14.changeHeader = _this14.changeHeader.bind(_this14);
+        _this14.checkLogin = _this14.checkLogin.bind(_this14);
         return _this14;
     }
 
     _createClass(App, [{
+        key: "checkLogin",
+        value: function checkLogin() {
+            var _this15 = this;
+
+            fetch(SITEURL + 'api/userInfo', { method: 'GET' }).then(function (response) {
+                if (!response.ok) throw new Error(response.status);else return response.json();
+            }).then(function (json) {
+                if (json.other.who === 'member') {
+                    _this15.setState({
+                        form: "account",
+                        unreadCommentsCount: json.other.info.unreadComments,
+                        userSlug: json.other.info.slug,
+                        username: json.other.info.username
+                    });
+                    var userInfo = getUserInfo();
+                    if (!userInfo) {
+                        var hash = base64FromObject({
+                            'userID': json.other.info.userId,
+                            'username': json.other.info.username,
+                            'slug': json.other.info.slug,
+                            'unreadComments': json.other.info.unreadComments
+                        });
+                        setCookie('user', hash);
+                        _this15.changeContent(' ', true);
+                    }
+                } else if (json.other.who === 'guest') {
+                    _this15.setState({
+                        form: "login"
+                    });
+                }
+            }).catch(function (error) {});
+        }
+    }, {
         key: "updateMenu",
         value: function updateMenu(slug) {
             this.setState({
@@ -742,7 +794,7 @@ var App = function (_React$Component9) {
     }, {
         key: "updateUnreadComments",
         value: function updateUnreadComments() {
-            var _this15 = this;
+            var _this16 = this;
 
             if (isMember()) {
                 fetch(SITEURL + 'api/followProduct?' + getUrlPar({
@@ -750,7 +802,7 @@ var App = function (_React$Component9) {
                 }), { method: 'GET' }).then(function (response) {
                     if (!response.ok) throw new Error(response.status);else return response.json();
                 }).then(function (json) {
-                    _this15.setState({
+                    _this16.setState({
                         unreadCommentsCount: json.other.allCommentCount
                     });
                     var userInfo = getUserInfo();
@@ -805,7 +857,7 @@ var App = function (_React$Component9) {
     }, {
         key: "logout",
         value: function logout() {
-            var _this16 = this;
+            var _this17 = this;
 
             fetch(SITEURL + 'api/logout', {
                 method: 'POST',
@@ -815,11 +867,11 @@ var App = function (_React$Component9) {
             }).then(function (response) {
                 if (!response.ok) throw new Error(response.status);else return response.json();
             }).then(function (json) {
-                _this16.setState({
+                _this17.setState({
                     form: "login"
                 });
                 setCookie('user', null);
-                _this16.changeContent(' ', true);
+                _this17.changeContent(' ', true);
             }).catch(function (error) {});
         }
     }, {
